@@ -2,21 +2,109 @@
 The configurator is here to register routes in a fastapi app,
 with dependency injection.
 """
+import importlib
 import logging
+from enum import Enum
+from types import ModuleType
+from typing import Any, Callable, Coroutine, Dict, List, Optional, Sequence, Type, Union
 
-from fastapi import FastAPI
-from venusian import Scanner  # type: ignore
+import venusian  # type: ignore
+from fastapi import Depends, FastAPI, Response
+from fastapi.datastructures import Default, DefaultPlaceholder
+from fastapi.routing import APIRoute
+from fastapi.types import IncEx
+from fastapi.utils import generate_unique_id
+from starlette.responses import HTMLResponse
 
 log = logging.getLogger(__name__)
+VENUSIAN_CATEGORY = "fastlife"
 
 
-class Configurator(Scanner):
-    app: FastAPI
-
+class Configurator:
     def __init__(self) -> None:
-        super().__init__(  # type: ignore
-            app=FastAPI(docs_url=None, redoc_url=None),
-        )
+        self._app = FastAPI(docs_url=None, redoc_url=None)
+        self.scanner = venusian.Scanner(fastlife=self)
 
-    def get_app(self):
-        return self.app
+    def get_app(self) -> FastAPI:
+        return self._app
+
+    def include(self, module: str | ModuleType) -> "Configurator":
+        if isinstance(module, str):
+            module = importlib.import_module(module)
+        self.scanner.scan(module, categories=[VENUSIAN_CATEGORY])  # type: ignore
+        return self
+
+    def add_route(
+        self,
+        path: str,
+        endpoint: Callable[..., Coroutine[Any, Any, Response]],
+        *,
+        response_model: Any = Default(None),
+        status_code: Optional[int] = None,
+        tags: Optional[List[Union[str, Enum]]] = None,
+        dependencies: Optional[Sequence[Depends]] = None,  # type: ignore
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        response_description: str = "Successful Response",
+        responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
+        deprecated: Optional[bool] = None,
+        methods: Optional[List[str]] = None,
+        operation_id: Optional[str] = None,
+        response_model_include: Optional[IncEx] = None,
+        response_model_exclude: Optional[IncEx] = None,
+        response_model_by_alias: bool = True,
+        response_model_exclude_unset: bool = False,
+        response_model_exclude_defaults: bool = False,
+        response_model_exclude_none: bool = False,
+        include_in_schema: bool = True,
+        response_class: Union[Type[Response], DefaultPlaceholder] = Default(
+            HTMLResponse
+        ),
+        name: Optional[str] = None,
+        openapi_extra: Optional[Dict[str, Any]] = None,
+        generate_unique_id_function: Callable[[APIRoute], str] = Default(
+            generate_unique_id
+        ),
+    ) -> "Configurator":
+        self._app.add_api_route(
+            path,
+            endpoint,
+            response_model=response_model,
+            status_code=status_code,
+            tags=tags,
+            dependencies=dependencies,  # type: ignore
+            summary=summary,
+            description=description,
+            response_description=response_description,
+            responses=responses,
+            deprecated=deprecated,
+            methods=methods,
+            operation_id=operation_id,
+            response_model_include=response_model_include,
+            response_model_exclude=response_model_exclude,
+            response_model_by_alias=response_model_by_alias,
+            response_model_exclude_unset=response_model_exclude_unset,
+            response_model_exclude_defaults=response_model_exclude_defaults,
+            response_model_exclude_none=response_model_exclude_none,
+            include_in_schema=include_in_schema,
+            response_class=response_class,
+            name=name,
+            openapi_extra=openapi_extra,
+            generate_unique_id_function=generate_unique_id_function,
+        )
+        return self
+
+
+def configure(
+    wrapped: Callable[[Configurator], None]
+) -> Callable[[Configurator], None]:
+    """Decorator used to attach route in a submodule while using the confirator.scan"""
+
+    def callback(
+        scanner: venusian.Scanner, name: str, ob: Callable[[venusian.Scanner], None]
+    ) -> None:
+        if hasattr(scanner, "fastlife"):
+            ob(scanner.fastlife)  # type: ignore
+
+    venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+    return wrapped
