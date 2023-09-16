@@ -1,8 +1,8 @@
 import pytest
 from fastapi import FastAPI
-from fastapi.testclient import TestClient
 
 from fastlife import Configurator
+from fastlife.testing import WebTestClient
 
 
 @pytest.fixture
@@ -14,4 +14,4 @@ async def app():
 
 @pytest.fixture
 def client(app: FastAPI):
-    return TestClient(app)
+    return WebTestClient(app)

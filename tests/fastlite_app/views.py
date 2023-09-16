@@ -5,7 +5,15 @@ from fastlife.configurator.configurator import configure
 
 
 async def hello_world() -> Response:
-    return Response("Hello World!")
+    return Response(
+        """<!DOCTYPE html>
+    <html>
+        <body>
+            <h1>Hello World!</h1>
+        </body>
+    <html>
+    """
+    )
 
 
 @configure
