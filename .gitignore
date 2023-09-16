@@ -1,0 +1,11 @@
+dist
+build
+docs/_build
+*.py[co]
+.vscode
+.pytest_cache
+.mypy_cache
+.coverage
+junit
+htmlcov
+coverage.xml
