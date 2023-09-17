@@ -9,8 +9,10 @@ from types import ModuleType
 from typing import Any, Callable, Coroutine, List, Optional, Union
 
 import venusian  # type: ignore
-from fastapi import FastAPI, Response
+from fastapi import Depends, FastAPI, Response
 from fastapi.datastructures import Default
+
+from fastlife.security.csrf import check_csrf
 
 from .settings import Settings
 
@@ -23,7 +25,9 @@ class Configurator:
         from .registry import initialize_registry  # XXX circular import
 
         initialize_registry(settings)
-        self._app = FastAPI(docs_url=None, redoc_url=None)
+        self._app = FastAPI(
+            dependencies=[Depends(check_csrf)], docs_url=None, redoc_url=None
+        )
         self.scanner = venusian.Scanner(fastlife=self)
 
     def get_app(self) -> FastAPI:

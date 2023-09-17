@@ -36,7 +36,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
 
     def get_csrf_token(self, request: Request) -> Callable[..., str]:
         def get_csrf_token() -> str:
-            return request.cookies.get("csrf_token", "")
+            return request.scope.get("csrf_token", "")
 
         return get_csrf_token
 

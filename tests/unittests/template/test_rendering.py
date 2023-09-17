@@ -23,13 +23,7 @@ async def test_jinja2_renderer():
 
 @pytest.mark.parametrize(
     "params",
-    [
-        {
-            "request": {
-                "headers": [("cookie", "csrf_token=xxxCsrfTokenxxx")],
-            }
-        }
-    ],
+    [{"request": {"csrf_token": "xxxCsrfTokenxxx"}}],
 )
 async def test_get_csrf_token(dummy_request_param: Request):
     renderer = Jinja2TemplateRenderer(template_path)

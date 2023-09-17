@@ -3,7 +3,7 @@ from typing import Any, Callable, Coroutine
 from fastapi import Depends, Request, Response
 
 from fastlife.configurator.registry import Registry
-from fastlife.security.csrf import create_csrf_token
+from fastlife.security.csrf import COOKIE_NAME, create_csrf_token
 
 TemplateEngineHandler = Coroutine[Any, Any, Response]
 Template = Callable[..., TemplateEngineHandler]
@@ -18,11 +18,14 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
         _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Template:
         async def parametrizer(**kwargs: Any) -> Response:
+            request.scope["csrf_token"] = (
+                request.cookies.get(COOKIE_NAME) or _create_csrf_token()
+            )
             data = await reg.renderer.render_page(request, template, **kwargs)
             resp = Response(data, headers={"Content-Type": content_type})
             resp.set_cookie(
-                "csrf_token",
-                request.cookies.get("csrf_token") or _create_csrf_token(),
+                COOKIE_NAME,
+                request.scope["csrf_token"],
                 secure=request.url.scheme == "https",
                 samesite="strict",
                 max_age=60 * 15,

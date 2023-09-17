@@ -13,13 +13,17 @@ class WebForm:
         self._client = client
         self._form = form
         self._origin = origin
-        self._formdata: dict[str, str] = {}  # TODO fill from the form values
+        self._formdata: dict[str, str] = {}
+        inputs = self._form.find_all("input")
+        for input in inputs:
+            if input.attrs.get("type") == "checkbox" and "checked" not in input.attrs:
+                continue
+            self._formdata[input.attrs["name"]] = input.attrs.get("value", "")
+        # field select, textearea...
 
-    def __setattr__(self, fieldname: str, value: str) -> Any:
-        if fieldname.startswith("_"):
-            self.__dict__[fieldname] = value
-            return
-        assert self._form.find("input", {"name": fieldname}) is not None
+    def set(self, fieldname: str, value: str) -> Any:
+        if fieldname not in self._formdata:
+            raise ValueError(f"{fieldname} does not exists")
         self._formdata[fieldname] = value
 
     def button(self, text: str) -> "WebForm":
@@ -117,10 +121,14 @@ class WebTestClient:
         self.testclient.cookies = value
 
     def get(self, url: str) -> WebResponse:
+        resp = self.testclient.get(url, follow_redirects=False)
+        if "set-cookie" in resp.headers:
+            for name, cookie in resp.cookies.items():
+                self.testclient.cookies.set(name, cookie)
         return WebResponse(
             self,
             url,
-            self.testclient.get(url, follow_redirects=False),
+            resp,
         )
 
     def post(self, url: str, data: Mapping[str, Any]) -> WebResponse:

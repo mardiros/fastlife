@@ -46,8 +46,12 @@ def dummy_request_param(params: Mapping[str, Any]) -> Request:
             (key.encode("latin-1"), val.encode("latin-1"))
             for key, val in headers.items()
         )
+    body = req_params.pop("body", None)
     scope.update(req_params)
-    return Request(scope)
+    req = Request(scope)
+    if body:
+        req._body = body.encode("utf-8")  # type: ignore
+    return req
 
 
 @pytest.fixture()
