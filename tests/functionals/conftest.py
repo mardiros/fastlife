@@ -9,7 +9,9 @@ from fastlife.testing import WebTestClient
 
 @pytest.fixture
 async def app():
-    conf = Configurator(Settings(template_search_path="tests.fastlife_app:templates"))
+    conf = Configurator(
+        Settings(template_search_path="fastlife:templates,tests.fastlife_app:templates")
+    )
     conf.include("tests.fastlife_app.views")
     yield conf.get_app()
     cleanup_registry()

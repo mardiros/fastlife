@@ -1,4 +1,8 @@
 {% extends "layout.jinja2" %}
 {% block body %}
-    <h1>Hello {{ name|default("World!") }}</h1>
+<h1>Hello {{ name|default("World!") }}</h1>
+
+{% call form() %}
+{{ input(name="name") }}
+{% endcall %}
 {% endblock %}

@@ -7,7 +7,7 @@ template_path = str(Path(__file__).parent / "jinja2")
 
 def test_build_searchpath(root_dir: Path):
     path_list = build_searchpath("fastlife:templates,/tmp")
-    path = str((root_dir / "src" / "fastlife" / "templates").resolve())
+    path = str(root_dir / "src" / "fastlife" / "templates")
     assert path_list == [path, "/tmp"]
 
 
