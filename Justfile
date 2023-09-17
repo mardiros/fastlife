@@ -1,4 +1,4 @@
-package := 'blacksmith'
+package := 'fastlife'
 default_test_suite := 'tests/unittests'
 
 install:
