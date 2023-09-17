@@ -9,12 +9,6 @@
 </h2>
 {% endmacro %}
 
-{% macro form() %}
-<form class="space-y-4 md:space-y-6" hx-post="" method="post">
-  {{ caller() }}
-</form>
-{% endmacro %}
-
 {% macro link(label, href, target="#maincontent", swap="innerHTML") %}
 <a href="{{href}}" hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{innerHTML}}" hx-push-url="true"
   class="cursor-pointer px-4 py-2 text-sm font-medium text-neutral-900 bg-white border-t border-b border-neutral-200 hover:bg-neutral-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white dark:hover:text-white dark:hover:bg-neutral-600 dark:focus:ring-primary-500 dark:focus:text-white">
@@ -56,4 +50,11 @@
 <div>
   <input type="hidden" name="{{name}}" value="{{value}}">
 </div>
+{% endmacro %}
+
+{% macro form() %}
+<form class="space-y-4 md:space-y-6" hx-post="" method="post">
+  {{ hidden("csrf", get_csrf_token()) }}
+  {{ caller() }}
+</form>
 {% endmacro %}

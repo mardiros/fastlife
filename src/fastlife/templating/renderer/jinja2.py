@@ -1,6 +1,7 @@
-from typing import Any, Sequence
+from typing import Any, Callable, Sequence
 
-from jinja2 import Environment, FileSystemLoader
+from fastapi import Request
+from jinja2 import Environment, FileSystemLoader, Template
 
 from fastlife.shared_utils.resolver import resolve_path
 
@@ -27,7 +28,47 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
             enable_async=True,
         )
 
+    def _get_template(self, template: str, **kwargs: Any) -> Template:
+        return self.env.get_template(
+            template,
+            globals={**kwargs},
+        )
+
+    def get_csrf_token(self, request: Request) -> Callable[..., str]:
+        def get_csrf_token() -> str:
+            return request.cookies.get("csrf_token", "")
+        return get_csrf_token
+
+    async def render_page(self, request: Request, template: str, **kwargs: Any) -> str:
+        """
+        Render the the template to build a full page or only a block, in case of
+        htmx request containing a HX-Target.
+        """
+        tpl = self._get_template(
+            template, request=request, get_csrf_token=self.get_csrf_token(request)
+        )
+
+        if "HX-Target" in request.headers:
+            block_name = request.headers["HX-Target"]
+            # We render the hx-target as a Jinja2 block of the page,
+            # we use low lever functions here to build only whats we need.
+            # Fist, we need to push the macros in the context has it is done in the
+            # base.jinja2 for compatibility.
+            macros = self._get_template("macros.jinja2", request=request)
+            ctx = tpl.new_context(kwargs)
+            render_macros = macros.root_render_func(ctx)
+            # the typing of Jinja2 async is wrong here
+            gen_blocks = await self._render_block(render_macros)  # type: ignore
+            # Now we build the block without the layout.
+            render_block = tpl.blocks[block_name]
+            gen_blocks = render_block(ctx)  # type: ignore
+            return await self._render_block(gen_blocks)  # type: ignore
+        else:
+            # we render the full page
+            ret = await tpl.render_async(**kwargs)
+        return ret
+
     async def render_template(self, template: str, **kwargs: Any) -> str:
-        tpl = self.env.get_template(template)
+        tpl = self._get_template(template)
         ret = await tpl.render_async(**kwargs)
         return ret

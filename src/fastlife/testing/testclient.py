@@ -131,5 +131,6 @@ class WebTestClient:
                 url,
                 content=urlencode(data),
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
-                follow_redirects=False),
+                follow_redirects=False,
+            ),
         )
