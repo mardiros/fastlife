@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 from fastapi import Request
+
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer, build_searchpath
 
 template_path = str(Path(__file__).parent / "jinja2")
