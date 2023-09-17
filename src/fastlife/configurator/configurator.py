@@ -6,22 +6,23 @@ import importlib
 import logging
 from enum import Enum
 from types import ModuleType
-from typing import Any, Callable, Coroutine, Dict, List, Optional, Sequence, Type, Union
+from typing import Any, Callable, Coroutine, List, Optional, Union
 
 import venusian  # type: ignore
-from fastapi import Depends, FastAPI, Response
-from fastapi.datastructures import Default, DefaultPlaceholder
-from fastapi.routing import APIRoute
-from fastapi.types import IncEx
-from fastapi.utils import generate_unique_id
-from starlette.responses import HTMLResponse
+from fastapi import FastAPI, Response
+from fastapi.datastructures import Default
+
+from .settings import Settings
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
 
 
 class Configurator:
-    def __init__(self) -> None:
+    def __init__(self, settings: Settings) -> None:
+        from .registry import initialize_registry  # XXX circular import
+
+        initialize_registry(settings)
         self._app = FastAPI(docs_url=None, redoc_url=None)
         self.scanner = venusian.Scanner(fastlife=self)
 
@@ -42,29 +43,29 @@ class Configurator:
         response_model: Any = Default(None),
         status_code: Optional[int] = None,
         tags: Optional[List[Union[str, Enum]]] = None,
-        dependencies: Optional[Sequence[Depends]] = None,  # type: ignore
+        # dependencies: Optional[Sequence[Depends]] = None,  # type: ignore
         summary: Optional[str] = None,
         description: Optional[str] = None,
-        response_description: str = "Successful Response",
-        responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
+        # response_description: str = "Successful Response",
+        # responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
         deprecated: Optional[bool] = None,
         methods: Optional[List[str]] = None,
         operation_id: Optional[str] = None,
-        response_model_include: Optional[IncEx] = None,
-        response_model_exclude: Optional[IncEx] = None,
-        response_model_by_alias: bool = True,
-        response_model_exclude_unset: bool = False,
-        response_model_exclude_defaults: bool = False,
-        response_model_exclude_none: bool = False,
-        include_in_schema: bool = True,
-        response_class: Union[Type[Response], DefaultPlaceholder] = Default(
-            HTMLResponse
-        ),
+        # response_model_include: Optional[IncEx] = None,
+        # response_model_exclude: Optional[IncEx] = None,
+        # response_model_by_alias: bool = True,
+        # response_model_exclude_unset: bool = False,
+        # response_model_exclude_defaults: bool = False,
+        # response_model_exclude_none: bool = False,
+        # include_in_schema: bool = True,
+        # response_class: Union[Type[Response], DefaultPlaceholder] = Default(
+        #     HTMLResponse
+        # ),
         name: Optional[str] = None,
-        openapi_extra: Optional[Dict[str, Any]] = None,
-        generate_unique_id_function: Callable[[APIRoute], str] = Default(
-            generate_unique_id
-        ),
+        # openapi_extra: Optional[Dict[str, Any]] = None,
+        # generate_unique_id_function: Callable[[APIRoute], str] = Default(
+        #     generate_unique_id
+        # ),
     ) -> "Configurator":
         self._app.add_api_route(
             path,
@@ -72,25 +73,25 @@ class Configurator:
             response_model=response_model,
             status_code=status_code,
             tags=tags,
-            dependencies=dependencies,  # type: ignore
+            # dependencies=dependencies,
             summary=summary,
             description=description,
-            response_description=response_description,
-            responses=responses,
+            # response_description=response_description,
+            # responses=responses,
             deprecated=deprecated,
             methods=methods,
             operation_id=operation_id,
-            response_model_include=response_model_include,
-            response_model_exclude=response_model_exclude,
-            response_model_by_alias=response_model_by_alias,
-            response_model_exclude_unset=response_model_exclude_unset,
-            response_model_exclude_defaults=response_model_exclude_defaults,
-            response_model_exclude_none=response_model_exclude_none,
-            include_in_schema=include_in_schema,
-            response_class=response_class,
+            # response_model_include=response_model_include,
+            # response_model_exclude=response_model_exclude,
+            # response_model_by_alias=response_model_by_alias,
+            # response_model_exclude_unset=response_model_exclude_unset,
+            # response_model_exclude_defaults=response_model_exclude_defaults,
+            # response_model_exclude_none=response_model_exclude_none,
+            # include_in_schema=include_in_schema,
+            # response_class=response_class,
             name=name,
-            openapi_extra=openapi_extra,
-            generate_unique_id_function=generate_unique_id_function,
+            # openapi_extra=openapi_extra,
+            # generate_unique_id_function=generate_unique_id_function,
         )
         return self
 

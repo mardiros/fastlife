@@ -1,5 +1,6 @@
 from pathlib import Path
-from fastlife.template.jinja2 import Jinja2TemplateRenderer, build_searchpath
+
+from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer, build_searchpath
 
 template_path = str(Path(__file__).parent / "jinja2")
 
@@ -8,7 +9,10 @@ def test_build_searchpath():
     path_list = build_searchpath("fastlife:templates,/tmp")
     path = str(
         (
-            Path(__file__).parent.parent.parent.parent / "src" / "fastlife" / "templates"
+            Path(__file__).parent.parent.parent.parent
+            / "src"
+            / "fastlife"
+            / "templates"
         ).resolve()
     )
     assert path_list == [path, "/tmp"]

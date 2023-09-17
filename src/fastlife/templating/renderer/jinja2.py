@@ -1,11 +1,10 @@
+import importlib.util
 from pathlib import Path
 from typing import Any, Sequence
-from .renderer import AbstractTemplateRenderer
 
 from jinja2 import Environment, FileSystemLoader
 
-
-import importlib.util
+from .abstract import AbstractTemplateRenderer
 
 
 def build_searchpath(template_search_path: str) -> Sequence[str]:

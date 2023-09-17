@@ -1,3 +1,3 @@
-from .configurator import Configurator
+from .configurator import Configurator, configure
 
-__all__ = ["Configurator"]
+__all__ = ["Configurator", "configure"]
