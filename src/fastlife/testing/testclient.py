@@ -1,5 +1,6 @@
 import re
 from typing import Any, Mapping
+from urllib.parse import urlencode
 
 import bs4
 import httpx
@@ -26,9 +27,12 @@ class WebForm:
         return self
 
     def submit(self) -> "WebResponse":
-        assert self._form.attrs.get("hx-ext") == "json-enc"
-        target = self._form.attrs.get("hx-post") or self._origin
-        return self._client.post(target, json=self._formdata)  # type: ignore
+        target = (
+            self._form.attrs.get("hx-post")
+            or self._form.attrs.get("post")
+            or self._origin
+        )
+        return self._client.post(target, data=self._formdata)
 
 
 class WebResponse:
@@ -119,9 +123,13 @@ class WebTestClient:
             self.testclient.get(url, follow_redirects=False),
         )
 
-    def post(self, url: str, json: Mapping[str, Any]) -> WebResponse:
+    def post(self, url: str, data: Mapping[str, Any]) -> WebResponse:
         return WebResponse(
             self,
             url,
-            self.testclient.post(url, json=json, follow_redirects=False),
+            self.testclient.post(
+                url,
+                content=urlencode(data),
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+                follow_redirects=False),
         )
