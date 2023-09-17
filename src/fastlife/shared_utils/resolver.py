@@ -1,4 +1,5 @@
 import importlib.util
+from pathlib import Path
 from typing import Any
 
 
@@ -19,3 +20,13 @@ def resolve(value: str) -> Any:
         raise ValueError(f"Attribute {attr_name} not found in module {module_name}.")
 
     return attr
+
+
+def resolve_path(value: str) -> str:
+    package_name, resource_name = value.split(":", 1)
+    spec = importlib.util.find_spec(package_name)
+    if not spec or not spec.origin:
+        raise ValueError(f"{value} not found")
+    package_path = spec.origin
+    full_path = Path(package_path).parent / resource_name
+    return str(full_path)

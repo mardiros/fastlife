@@ -1,8 +1,8 @@
 from typing import Annotated
 
 from fastapi import Depends
-from fastlife.shared_utils.resolver import resolve
 
+from fastlife.shared_utils.resolver import resolve
 from fastlife.templating.renderer import AbstractTemplateRenderer
 
 from .settings import Settings

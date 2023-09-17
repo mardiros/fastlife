@@ -5,16 +5,9 @@ from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer, build_se
 template_path = str(Path(__file__).parent / "jinja2")
 
 
-def test_build_searchpath():
+def test_build_searchpath(root_dir: Path):
     path_list = build_searchpath("fastlife:templates,/tmp")
-    path = str(
-        (
-            Path(__file__).parent.parent.parent.parent
-            / "src"
-            / "fastlife"
-            / "templates"
-        ).resolve()
-    )
+    path = str((root_dir / "src" / "fastlife" / "templates").resolve())
     assert path_list == [path, "/tmp"]
 
 

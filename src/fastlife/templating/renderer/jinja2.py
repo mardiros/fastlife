@@ -1,8 +1,8 @@
-import importlib.util
-from pathlib import Path
 from typing import Any, Sequence
 
 from jinja2 import Environment, FileSystemLoader
+
+from fastlife.shared_utils.resolver import resolve_path
 
 from .abstract import AbstractTemplateRenderer
 
@@ -13,14 +13,7 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
 
     for path in paths:
         if ":" in path:
-            package_name, resource_name = path.split(":", 1)
-            spec = importlib.util.find_spec(package_name)
-            if spec:
-                package_path = spec.origin
-                if not package_path:
-                    raise ValueError(f"{path} not found")
-                full_path = Path(package_path).parent / resource_name
-                searchpath.append(str(full_path))
+            searchpath.append(resolve_path(path))
         else:
             searchpath.append(path)
     return searchpath
