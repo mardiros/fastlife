@@ -2,7 +2,7 @@ import secrets
 
 from fastapi import Request
 
-COOKIE_NAME = "csrf_token"
+CSRF_TOKEN_NAME = "csrf_token"
 
 
 class CSRFAttack(Exception):
@@ -20,12 +20,12 @@ async def check_csrf(request: Request) -> bool:
     ):
         return True
 
-    cookie = request.cookies.get("csrf_token")
+    cookie = request.cookies.get(CSRF_TOKEN_NAME)
     if not cookie:
         raise CSRFAttack("CSRF token did not match")
 
     form_data = await request.form()
-    value = form_data.get("csrf_token")
+    value = form_data.get(CSRF_TOKEN_NAME)
     if value != cookie:
         raise CSRFAttack("CSRF token did not match")
 
