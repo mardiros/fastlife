@@ -3,7 +3,7 @@ from typing import Any, Mapping, MutableMapping, MutableSequence
 import pytest
 from fastapi import Request
 
-from fastlife.shared_utils.form_data import (
+from fastlife.request.form_data import (
     unflatten_mapping_form_data,
     unflatten_sequence_form_data,
     unflatten_struct,

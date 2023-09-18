@@ -1,5 +1,16 @@
-from typing import Annotated, Any, Mapping, MutableMapping, MutableSequence, Sequence
+from typing import (
+    Annotated,
+    Any,
+    Callable,
+    Mapping,
+    MutableMapping,
+    MutableSequence,
+    Sequence,
+    Type,
+    TypeVar,
+)
 
+from pydantic import BaseModel
 from fastapi import Depends, Request
 
 from fastlife.security.csrf import CSRF_TOKEN_NAME
@@ -70,3 +81,13 @@ async def unflatten_sequence_form_data(request: Request) -> Sequence[str]:
 
 MappingFormData = Annotated[Mapping[str, Any], Depends(unflatten_mapping_form_data)]
 SequenceFormData = Annotated[Sequence[str], Depends(unflatten_sequence_form_data)]
+
+
+T = TypeVar("T", bound=BaseModel)
+
+
+def FormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
+    def form_model(data: MappingFormData) -> T:
+        return cls(**data)
+
+    return Depends(form_model)

@@ -1,8 +1,14 @@
 from typing import Annotated
 
-from fastapi import Form, Response
+from pydantic import BaseModel, Field
+from fastapi import Response
 
 from fastlife import Configurator, Template, configure, template
+from fastlife.request.form_data import FormModel
+
+
+class Person(BaseModel):
+    name: str = Field(...)
 
 
 async def hello_world(
@@ -13,9 +19,9 @@ async def hello_world(
 
 async def hello_name(
     template: Annotated[Template, template("hello_world.jinja2")],
-    name: Annotated[str, Form()],
+    person: Annotated[Person, FormModel(Person)],
 ) -> Response:
-    return await template(name=name)
+    return await template(name=person.name)
 
 
 @configure
