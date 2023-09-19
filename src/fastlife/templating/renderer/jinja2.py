@@ -55,7 +55,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
             # we use low lever functions here to build only whats we need.
             # Fist, we need to push the macros in the context has it is done in the
             # base.jinja2 for compatibility.
-            macros = self._get_template("macros.jinja2", request=request)
+            macros = self._get_template("globals.jinja2", request=request)
             ctx = tpl.new_context(kwargs)
             render_macros = macros.root_render_func(ctx)
             # the typing of Jinja2 async is wrong here
