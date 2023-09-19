@@ -1,7 +1,9 @@
-from typing import Any, Callable, Sequence
+from typing import Any, AsyncGenerator, Callable, Mapping, Sequence, Type
 
 from fastapi import Request
 from jinja2 import Environment, FileSystemLoader, Template
+from markupsafe import Markup
+from pydantic import BaseModel
 
 from fastlife.shared_utils.resolver import resolve_path
 
@@ -40,6 +42,14 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
 
         return get_csrf_token
 
+    async def _render_block(self, gen_blocks: AsyncGenerator[str, None]) -> str:
+        # the typing of Jinja2 async is wrong. It says there is Iterator[str]
+        # insead of Asyngenerator[str, None]
+        blocks: list[str] = []
+        async for value in gen_blocks:
+            blocks.append(value)
+        return self.env.concat(blocks)  # type: ignore
+
     async def render_page(self, request: Request, template: str, **kwargs: Any) -> str:
         """
         Render the the template to build a full page or only a block, in case of
@@ -48,7 +58,6 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         tpl = self._get_template(
             template, request=request, get_csrf_token=self.get_csrf_token(request)
         )
-
         if "HX-Target" in request.headers:
             block_name = request.headers["HX-Target"]
             # We render the hx-target as a Jinja2 block of the page,
@@ -73,3 +82,8 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         tpl = self._get_template(template)
         ret = await tpl.render_async(**kwargs)
         return ret
+
+    async def render_admin_fieldset(
+        self, model: Type[BaseModel], value: Mapping[str, Any]
+    ) -> Markup:
+        return Markup("")

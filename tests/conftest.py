@@ -24,7 +24,7 @@ def python_path(root_dir: Path) -> None:
 def dummy_request_param(params: Mapping[str, Any]) -> Request:
     scope = {
         "type": "http",
-        "headers": [("User-Agent", "Mozilla/5.0"), ("Accept", "text/html")],
+        "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
         "router": APIRouter(),
         "query_string": b"",
         "scheme": "http",
@@ -43,7 +43,7 @@ def dummy_request_param(params: Mapping[str, Any]) -> Request:
             **headers,
         }
         req_params["headers"] = list(
-            (key.encode("latin-1"), val.encode("latin-1"))
+            (key.lower().encode("latin-1"), val.encode("latin-1"))
             for key, val in headers.items()
         )
     body = req_params.pop("body", None)
