@@ -1,16 +1,17 @@
 from pathlib import Path
+from typing import Any, Callable, Mapping
 
+import bs4
 import pytest
 from fastapi import Request
+from pydantic import BaseModel, Field
 
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer, build_searchpath
 
-template_path = str(Path(__file__).parent / "jinja2")
 
-
-@pytest.fixture()
-def renderer():
-    return Jinja2TemplateRenderer(template_path)
+class Person(BaseModel):
+    first_name: str = Field(...)
+    last_name: str = Field(...)
 
 
 def test_build_searchpath(root_dir: Path):
@@ -20,7 +21,7 @@ def test_build_searchpath(root_dir: Path):
 
 
 async def test_jinja2_renderer(renderer: Jinja2TemplateRenderer):
-    page = await renderer.render_template("hello_world.jinja2", title="say hello")
+    page = await renderer.render_template("hello_world.jinja2", page_title="say hello")
     assert "<title>say hello</title>" in page
     assert "<h1>Hello World!</h1>" in page
 
@@ -53,3 +54,51 @@ async def test_get_csrf_token(
 ):
     page = await renderer.render_page(dummy_request_param, "csrf_token.jinja2")
     assert "xxxCsrfTokenxxx" in page
+
+
+@pytest.mark.parametrize(
+    "params",
+    [
+        pytest.param(
+            {
+                "request": {"headers": {"HX-Target": "body"}, "csrf_token": "xxx"},
+                "kwargs": {"model": Person},
+                "expected_inputs": {
+                    "csrf_token": ("hidden", "xxx"),
+                    "payload.first_name": ("text", ""),
+                    "payload.last_name": ("text", ""),
+                },
+            },
+            id="empty form",
+        ),
+        pytest.param(
+            {
+                "request": {"headers": {"HX-Target": "body"}, "csrf_token": "xxx"},
+                "kwargs": {
+                    "model": Person,
+                    "form_data": {"payload": {"first_name": "Bob"}},
+                },
+                "expected_inputs": {
+                    "csrf_token": ("hidden", "xxx"),
+                    "payload.first_name": ("text", "Bob"),
+                    "payload.last_name": ("text", ""),
+                },
+            },
+            id="load form data",
+        ),
+    ],
+)
+async def test_render_pydantic_form(
+    params: Mapping[str, Any],
+    dummy_request_param: Request,
+    renderer: Jinja2TemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    page = await renderer.render_page(
+        dummy_request_param, "pydantic_form.jinja2", **params["kwargs"]
+    )
+    html = soup(page)
+    inputs = {
+        tag["name"]: (tag["type"], tag["value"]) for tag in html.find_all("input")
+    }
+    assert inputs == params["expected_inputs"]

@@ -1,0 +1,6 @@
+{% extends "layout.jinja2" %}
+{% block body %}
+{% call form() %}
+{{ pydantic_form(model, form_data) }}
+{% endcall %}
+{% endblock %}

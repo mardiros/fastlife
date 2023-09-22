@@ -1,10 +1,13 @@
+{% extends "base.jinja2" %}
+{% block base %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>{{title}}</title>
+    <title>{{ page_title }}</title>
   </head>
   <body>
     {% block body %}{% endblock %}
   </body>
 </html>
+{% endblock %}

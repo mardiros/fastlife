@@ -1,4 +1,4 @@
-from typing import Any, AsyncGenerator, Callable, Mapping, Sequence, Type
+from typing import Any, AsyncGenerator, Callable, Mapping, Optional, Sequence, Type
 
 from fastapi import Request
 from jinja2 import Environment, FileSystemLoader, Template
@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from fastlife.shared_utils.resolver import resolve_path
 
 from .abstract import AbstractTemplateRenderer
+from .widgets.factory import WidgetFactory
 
 
 def build_searchpath(template_search_path: str) -> Sequence[str]:
@@ -56,7 +57,10 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         htmx request containing a HX-Target.
         """
         tpl = self._get_template(
-            template, request=request, get_csrf_token=self.get_csrf_token(request)
+            template,
+            request=request,
+            get_csrf_token=self.get_csrf_token(request),
+            pydantic_form=self.pydantic_form,
         )
         if "HX-Target" in request.headers:
             block_name = request.headers["HX-Target"]
@@ -83,7 +87,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         ret = await tpl.render_async(**kwargs)
         return ret
 
-    async def render_admin_fieldset(
-        self, model: Type[BaseModel], value: Mapping[str, Any]
+    async def pydantic_form(
+        self, model: Type[BaseModel], form_data: Optional[Mapping[str, Any]]
     ) -> Markup:
-        return Markup("")
+        return await WidgetFactory(self).get_markup(model, form_data or {})

@@ -1,7 +1,7 @@
 from typing import Annotated
 
-from pydantic import BaseModel, Field
 from fastapi import Response
+from pydantic import BaseModel, Field
 
 from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import FormModel
@@ -24,7 +24,15 @@ async def hello_name(
     return await template(name=person.name)
 
 
+async def autoform(
+    template: Annotated[Template, template("autoform.jinja2")],
+):
+    return await template(model=Person)
+
+
 @configure
 def includeme(config: Configurator):
     config.add_route("/", hello_world, methods=["GET"])
     config.add_route("/", hello_name, methods=["POST"])
+
+    config.add_route("/autoform", autoform, methods=["GET"])

@@ -10,8 +10,8 @@ from typing import (
     TypeVar,
 )
 
-from pydantic import BaseModel
 from fastapi import Depends, Request
+from pydantic import BaseModel
 
 from fastlife.security.csrf import CSRF_TOKEN_NAME
 

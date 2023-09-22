@@ -1,0 +1,12 @@
+{% extends "layout.jinja2" %}
+
+{% block maincontent %}
+<div hx-target="#maincontent" hx-swap="innerHTML">
+
+    {% call form() %}
+    {{ render_model_fieldset(model, form_data) }}
+    {{ button("Submit") }}
+    {% endcall %}
+
+</div>
+{% endblock %}

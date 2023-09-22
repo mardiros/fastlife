@@ -7,7 +7,9 @@
     <title>{{title}}</title>
   </head>
   <body>
-    {% block body %}{% endblock %}
+    <div id="maincontent" hx-target="this" hx-swap="innerHTML">
+    {% block maincontent %}{% endblock %}
+    </div>
   </body>
 </html>
 {% endblock %}

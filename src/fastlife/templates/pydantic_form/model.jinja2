@@ -1,0 +1,10 @@
+<details open>
+  <summary>
+    <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
+  </summary>
+  <div>
+    {% for child in children_widget %}
+    {{ child }}
+    {% endfor %}
+  </div>
+</details>
