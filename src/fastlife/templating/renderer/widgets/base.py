@@ -28,7 +28,7 @@ class Widget(abc.ABC):
     ):
         self.name = name
         self.title = title or name.split(".")[-1]
-        self.id = id or f"{name}_{secrets.token_urlsafe(4)}"
+        self.id = id or f"{name}-{secrets.token_urlsafe(4)}".replace('_', '-')
 
     @abc.abstractmethod
     def get_template(self) -> str:

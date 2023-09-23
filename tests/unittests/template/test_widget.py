@@ -4,6 +4,7 @@ import pytest
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.text import TextWidget
+from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 
 
 @pytest.mark.parametrize(
@@ -49,6 +50,23 @@ from fastlife.templating.renderer.widgets.text import TextWidget
                     {
                         "tag": "input",
                         "attrs": {"id": "name-id", "name": "name"},
+                    },
+                ],
+            },
+            id="text",
+        ),
+        pytest.param(
+            {
+                "widget": BooleanWidget(
+                    "bared_foot",
+                    title="Bared Foot",
+                    id="bared-foot-id",
+                ),
+                "expected_tags": [
+                    {"tag": "label", "text": "Bared Foot", "for": "bared-foot-id"},
+                    {
+                        "tag": "input",
+                        "attrs": {"id": "bared-foot-id", "name": "bared_foot"},
                     },
                 ],
             },
