@@ -58,6 +58,22 @@ from fastlife.templating.renderer.widgets.text import TextWidget
         ),
         pytest.param(
             {
+                "widget": TextWidget(
+                    "email_address",
+                    title="Email",
+                    input_type="email",
+                ),
+                "expected_tags": [
+                    {
+                        "tag": "input",
+                        "attrs": {"name": "email_address", "type": "email"},
+                    },
+                ],
+            },
+            id="email",
+        ),
+        pytest.param(
+            {
                 "widget": BooleanWidget(
                     "bared_foot",
                     title="Bared Foot",

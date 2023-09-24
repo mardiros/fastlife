@@ -4,7 +4,7 @@ from typing import Any, Callable, Mapping, Optional
 import bs4
 import pytest
 from fastapi import Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer, build_searchpath
 
@@ -13,7 +13,7 @@ class Person(BaseModel):
     first_name: str = Field(...)
     last_name: str = Field(...)
     admin: bool = Field(...)
-    email: Optional[str] = Field(...)
+    email: Optional[EmailStr] = Field(...)
     phone: str | None = Field(...)
 
 
@@ -71,7 +71,7 @@ async def test_get_csrf_token(
                     "payload.admin": ("checkbox", "False"),
                     "payload.first_name": ("text", ""),
                     "payload.last_name": ("text", ""),
-                    "payload.email": ("text", ""),
+                    "payload.email": ("email", ""),
                     "payload.phone": ("text", ""),
                 },
             },
@@ -89,7 +89,7 @@ async def test_get_csrf_token(
                     "payload.admin": ("checkbox", "True"),
                     "payload.first_name": ("text", "Bob"),
                     "payload.last_name": ("text", ""),
-                    "payload.email": ("text", ""),
+                    "payload.email": ("email", ""),
                     "payload.phone": ("text", ""),
                 },
             },

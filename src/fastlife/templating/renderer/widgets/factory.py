@@ -4,7 +4,7 @@ from typing import Any, Mapping, Optional, Type, Union, get_origin
 from xmlrpc.client import boolean
 
 from markupsafe import Markup
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from pydantic.fields import FieldInfo
 
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
@@ -63,6 +63,9 @@ class WidgetFactory:
 
         if issubclass(typ, (bool)):
             return self.build_boolean(name, typ, field, value or False, required)
+
+        if issubclass(typ, EmailStr):
+            return self.build_emailtype(name, typ, field, value or "", required)
 
         if issubclass(typ, (int, str, float, Decimal)):
             return self.build_simpletype(name, typ, field, value or "", required)
@@ -128,6 +131,24 @@ class WidgetFactory:
     ) -> Widget:
         return BooleanWidget(
             field_name, title=field.title, value=value, required=required
+        )
+
+    def build_emailtype(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: FieldInfo,
+        value: str | int | float,
+        required: bool,
+    ) -> Widget:
+        return TextWidget(
+            field_name,
+            title=field.title,
+            placeholder=str(field.examples[0]) if field.examples else None,
+            help_text=field.description,
+            value=str(value),
+            required=required,
+            input_type="email",
         )
 
     def build_simpletype(
