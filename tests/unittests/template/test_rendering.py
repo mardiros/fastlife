@@ -12,6 +12,7 @@ from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer, build_se
 class Person(BaseModel):
     first_name: str = Field(...)
     last_name: str = Field(...)
+    admin: bool = Field(...)
 
 
 def test_build_searchpath(root_dir: Path):
@@ -65,6 +66,7 @@ async def test_get_csrf_token(
                 "kwargs": {"model": Person},
                 "expected_inputs": {
                     "csrf_token": ("hidden", "xxx"),
+                    "payload.admin": ("checkbox", "False"),
                     "payload.first_name": ("text", ""),
                     "payload.last_name": ("text", ""),
                 },
@@ -76,10 +78,11 @@ async def test_get_csrf_token(
                 "request": {"headers": {"HX-Target": "body"}, "csrf_token": "xxx"},
                 "kwargs": {
                     "model": Person,
-                    "form_data": {"payload": {"first_name": "Bob"}},
+                    "form_data": {"payload": {"first_name": "Bob", "admin": True}},
                 },
                 "expected_inputs": {
                     "csrf_token": ("hidden", "xxx"),
+                    "payload.admin": ("checkbox", "True"),
                     "payload.first_name": ("text", "Bob"),
                     "payload.last_name": ("text", ""),
                 },

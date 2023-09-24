@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
+from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 
 from .base import Widget, get_title
 from .model import ModelWidget
@@ -47,8 +48,12 @@ class WidgetFactory:
 
         assert field is not None
 
+        if issubclass(typ, (bool)):
+            return self.build_boolean(name, typ, field, value or False)
+
         if issubclass(typ, (int, str, float, Decimal)):
             return self.build_simpletype(name, typ, field, value or "")
+
         raise NotImplementedError(f"{typ} not implemented")
 
     def build_model(
@@ -73,6 +78,15 @@ class WidgetFactory:
             title=get_title(typ),
             children_widget=list(ret.values()),
         )
+
+    def build_boolean(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: FieldInfo,
+        value: bool,
+    ) -> Widget:
+        return BooleanWidget(field_name, title=field.title, value=value)
 
     def build_simpletype(
         self,
