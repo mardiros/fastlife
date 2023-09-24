@@ -14,6 +14,7 @@ class Person(BaseModel):
     last_name: str = Field(...)
     admin: bool = Field(...)
     email: Optional[str] = Field(...)
+    phone: str | None = Field(...)
 
 
 def test_build_searchpath(root_dir: Path):
@@ -71,6 +72,7 @@ async def test_get_csrf_token(
                     "payload.first_name": ("text", ""),
                     "payload.last_name": ("text", ""),
                     "payload.email": ("text", ""),
+                    "payload.phone": ("text", ""),
                 },
             },
             id="empty form",
@@ -88,6 +90,7 @@ async def test_get_csrf_token(
                     "payload.first_name": ("text", "Bob"),
                     "payload.last_name": ("text", ""),
                     "payload.email": ("text", ""),
+                    "payload.phone": ("text", ""),
                 },
             },
             id="load form data",

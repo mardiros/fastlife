@@ -1,5 +1,5 @@
 from decimal import Decimal
-from types import NoneType
+from types import NoneType, UnionType
 from typing import Any, Mapping, Optional, Type, Union, get_origin
 from xmlrpc.client import boolean
 
@@ -50,7 +50,10 @@ class WidgetFactory:
         if type_origin:
             assert field is not None
 
-            if type_origin is Union:
+            if (
+                type_origin is Union  # Optional[T]
+                or type_origin is UnionType  # T | None
+            ):
                 return self.build_union(name, typ, field, value, required)
 
         if issubclass(typ, BaseModel):
@@ -105,7 +108,7 @@ class WidgetFactory:
             if typ is NoneType:
                 required = False
                 continue
-            types.append(typ)
+            types.append(typ)  # type: ignore
 
         if not required and len(types) == 1:
             return self.build(
