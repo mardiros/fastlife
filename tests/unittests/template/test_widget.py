@@ -1,11 +1,22 @@
+import re
 from typing import Any, Mapping
 
 import pytest
+from pydantic import BaseModel
 
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
+from fastlife.templating.renderer.widgets.union import UnionWidget
+
+
+class Foo(BaseModel):
+    name: str
+
+
+class Bar(BaseModel):
+    label: str
 
 
 @pytest.mark.parametrize(
@@ -89,6 +100,15 @@ from fastlife.templating.renderer.widgets.text import TextWidget
             },
             id="text",
         ),
+        pytest.param(
+            {
+                "widget": UnionWidget(None, [Foo, Bar]),
+                "expected_tags": [
+                    {"tag": "a", "text": "Foo"},
+                    {"tag": "a", "text": "Bar"},
+                ],
+            },
+        ),
     ],
 )
 async def test_widget(
@@ -98,9 +118,12 @@ async def test_widget(
     resp = await widget.to_html(renderer)
     html = soup(resp)
     for expected_tag in params["expected_tags"]:
-        tag = html.find(expected_tag["tag"])
+        string = (
+            re.compile(rf"\s*{expected_tag.get('text')}\s*")
+            if "text" in expected_tag
+            else None
+        )
+        tag = html.find(expected_tag["tag"], string=string)
         assert tag is not None, f"{expected_tag} in {resp}"
         for attr, val in expected_tag.get("attrs", {}).items():
             assert tag.attrs.get(attr) == val, tag.attrs
-        if params.get("text"):
-            assert tag.string == params["text"]

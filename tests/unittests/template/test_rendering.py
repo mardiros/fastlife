@@ -15,6 +15,7 @@ class Person(BaseModel):
     admin: bool = Field(...)
     email: Optional[EmailStr] = Field(...)
     phone: str | None = Field(...)
+    parent: Optional["Person"] = Field(...)
 
 
 def test_build_searchpath(root_dir: Path):

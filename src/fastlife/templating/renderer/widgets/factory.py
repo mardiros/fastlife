@@ -13,6 +13,11 @@ from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from .base import Widget, get_title
 from .model import ModelWidget
 from .text import TextWidget
+from .union import UnionWidget
+
+
+def is_complex_type(typ: Type[Any]) -> bool:
+    return get_origin(typ) or issubclass(typ, BaseModel)
 
 
 class WidgetFactory:
@@ -113,13 +118,22 @@ class WidgetFactory:
                 continue
             types.append(typ)  # type: ignore
 
-        if not required and len(types) == 1:
+        if (
+            not required
+            and len(types) == 1
+            # if the optional type is a complex type,
+            and not is_complex_type(types[0])
+        ):
             return self.build(
                 types[0], name=field_name, field=field, value=value, required=True
             )
-        breakpoint()
-        raise NotImplementedError
-        # return widget
+
+        widget = UnionWidget(
+            child=None,
+            children_types=types,
+        )
+
+        return widget
 
     def build_boolean(
         self,

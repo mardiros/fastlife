@@ -1,0 +1,12 @@
+{% from "globals.jinja2" import link %}
+<div>
+    {% if widget.child %}
+    {{ widget.child }}
+    {% else %}
+    {% for typ in types %}
+    <span hx-target="{{typ.id}}">
+        {{ link(typ.title, href="#FIXME", target="#"+typ.id, push_url=false) }}
+    </span>
+    {% endfor %}
+    {% endif %}
+</div>
