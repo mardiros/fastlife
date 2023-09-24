@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, Optional
 
 import bs4
 import pytest
@@ -13,6 +13,7 @@ class Person(BaseModel):
     first_name: str = Field(...)
     last_name: str = Field(...)
     admin: bool = Field(...)
+    email: Optional[str] = Field(...)
 
 
 def test_build_searchpath(root_dir: Path):
@@ -69,6 +70,7 @@ async def test_get_csrf_token(
                     "payload.admin": ("checkbox", "False"),
                     "payload.first_name": ("text", ""),
                     "payload.last_name": ("text", ""),
+                    "payload.email": ("text", ""),
                 },
             },
             id="empty form",
@@ -85,6 +87,7 @@ async def test_get_csrf_token(
                     "payload.admin": ("checkbox", "True"),
                     "payload.first_name": ("text", "Bob"),
                     "payload.last_name": ("text", ""),
+                    "payload.email": ("text", ""),
                 },
             },
             id="load form data",

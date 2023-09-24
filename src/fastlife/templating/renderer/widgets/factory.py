@@ -1,5 +1,7 @@
 from decimal import Decimal
-from typing import Any, Mapping, Optional, Type
+from types import NoneType
+from typing import Any, Mapping, Optional, Type, Union, get_origin
+from xmlrpc.client import boolean
 
 from markupsafe import Markup
 from pydantic import BaseModel
@@ -42,17 +44,25 @@ class WidgetFactory:
         name: str = "",
         value: Any,
         field: Optional[FieldInfo] = None,
+        required: boolean = True,
     ) -> Widget:
+        type_origin = get_origin(typ)
+        if type_origin:
+            assert field is not None
+
+            if type_origin is Union:
+                return self.build_union(name, typ, field, value, required)
+
         if issubclass(typ, BaseModel):
-            return self.build_model(name, typ, field, value or {})
+            return self.build_model(name, typ, field, value or {}, required)
 
         assert field is not None
 
         if issubclass(typ, (bool)):
-            return self.build_boolean(name, typ, field, value or False)
+            return self.build_boolean(name, typ, field, value or False, required)
 
         if issubclass(typ, (int, str, float, Decimal)):
-            return self.build_simpletype(name, typ, field, value or "")
+            return self.build_simpletype(name, typ, field, value or "", required)
 
         raise NotImplementedError(f"{typ} not implemented")
 
@@ -62,6 +72,7 @@ class WidgetFactory:
         typ: Type[BaseModel],
         field: Optional[FieldInfo],
         value: Mapping[str, Any],
+        required: bool,
     ) -> Widget:
         ret: dict[str, Any] = {}
         for key, field in typ.model_fields.items():
@@ -77,7 +88,32 @@ class WidgetFactory:
             field_name,
             title=get_title(typ),
             children_widget=list(ret.values()),
+            required=required,
         )
+
+    def build_union(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: FieldInfo,
+        value: Any,
+        required: bool,
+    ) -> Widget:
+        types: list[Type[Any]] = []
+        required = True
+        for typ in field_type.__args__:  # type: ignore
+            if typ is NoneType:
+                required = False
+                continue
+            types.append(typ)
+
+        if not required and len(types) == 1:
+            return self.build(
+                types[0], name=field_name, field=field, value=value, required=True
+            )
+        breakpoint()
+        raise NotImplementedError
+        # return widget
 
     def build_boolean(
         self,
@@ -85,8 +121,11 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo,
         value: bool,
+        required: bool,
     ) -> Widget:
-        return BooleanWidget(field_name, title=field.title, value=value)
+        return BooleanWidget(
+            field_name, title=field.title, value=value, required=required
+        )
 
     def build_simpletype(
         self,
@@ -94,6 +133,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo,
         value: str | int | float,
+        required: bool,
     ) -> Widget:
         return TextWidget(
             field_name,
@@ -101,4 +141,5 @@ class WidgetFactory:
             placeholder=str(field.examples[0]) if field.examples else None,
             help_text=field.description,
             value=str(value),
+            required=required,
         )

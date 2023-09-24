@@ -1,10 +1,11 @@
 from typing import Any, Mapping
+
 import pytest
 
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
-from fastlife.templating.renderer.widgets.text import TextWidget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
+from fastlife.templating.renderer.widgets.text import TextWidget
 
 
 @pytest.mark.parametrize(

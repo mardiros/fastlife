@@ -1,9 +1,9 @@
-import pytest
 from pathlib import Path
+
 import bs4
+import pytest
 
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
-
 
 template_path = str(Path(__file__).parent / "jinja2")
 

@@ -1,4 +1,5 @@
 from typing import Sequence
+from xmlrpc.client import boolean
 
 from markupsafe import Markup
 
@@ -8,8 +9,15 @@ from .base import Widget
 
 
 class ModelWidget(Widget):
-    def __init__(self, name: str, *, title: str, children_widget: Sequence[Widget]):
-        super().__init__(name, title)
+    def __init__(
+        self,
+        name: str,
+        *,
+        title: str,
+        children_widget: Sequence[Widget],
+        required: boolean
+    ):
+        super().__init__(name, title, required=required)
         self.children_widget = children_widget
 
     def get_template(self) -> str:

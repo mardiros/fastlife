@@ -15,9 +15,8 @@ class TextWidget(Widget):
         id: Optional[str] = None,
         help_text: Optional[str] = None,
     ) -> None:
-        super().__init__(name, title, id)
+        super().__init__(name, title, id, required=required)
         self.placeholder = placeholder or ""
-        self.required = required
         self.value = value
         self.help_text = help_text
 

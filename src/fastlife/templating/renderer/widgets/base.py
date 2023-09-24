@@ -24,11 +24,16 @@ class Widget(abc.ABC):
     "Unique id for the widget"
 
     def __init__(
-        self, name: str, title: Optional[str] = None, id: Optional[str] = None
+        self,
+        name: str,
+        title: Optional[str] = None,
+        id: Optional[str] = None,
+        required: bool = False,
     ):
         self.name = name
         self.title = title or name.split(".")[-1]
-        self.id = id or f"{name}-{secrets.token_urlsafe(4)}".replace('_', '-')
+        self.id = id or f"{name}-{secrets.token_urlsafe(4)}".replace("_", "-")
+        self.required = required
 
     @abc.abstractmethod
     def get_template(self) -> str:
