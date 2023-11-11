@@ -21,9 +21,13 @@ class TypeWrapper:
 class UnionWidget(Widget):
     def __init__(
         self,
+        name: str,
+        *,
+        title: str,
         child: Optional[Sequence[Widget]],
         children_types: Sequence[Type[BaseModel]],
     ):
+        super().__init__(name, title=title)
         self.child = child
         self.children_types = children_types
 

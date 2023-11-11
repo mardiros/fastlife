@@ -102,7 +102,9 @@ class Bar(BaseModel):
         ),
         pytest.param(
             {
-                "widget": UnionWidget(None, [Foo, Bar]),
+                "widget": UnionWidget(
+                    "foobar", title="Foo Bar", child=None, children_types=[Foo, Bar]
+                ),
                 "expected_tags": [
                     {"tag": "a", "text": "Foo"},
                     {"tag": "a", "text": "Bar"},

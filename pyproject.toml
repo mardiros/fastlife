@@ -17,6 +17,8 @@ pydantic-settings = "^2.0.3"
 python-multipart = "^0.0.6"
 venusian = "^3.0.0"
 markupsafe = "^2.1.3"
+uvicorn = "^0.23.2"
+hypercorn = "^0.14.4"
 
 [tool.poetry.group.dev.dependencies]
 beautifulsoup4 = "^4.12.2"
@@ -29,6 +31,8 @@ pytest-asyncio = "^0.21.0"
 pytest-cov = "^4.1.0"
 types-beautifulsoup4 = "^4.12.0.6"
 email-validator = "^2.0.0.post2"
+uvicorn = "^0.23.2"
+pytest-playwright = "^0.4.3"
 
 [tool.pyright]
 include = ["src"]

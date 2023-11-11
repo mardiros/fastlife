@@ -129,8 +129,11 @@ class WidgetFactory:
             )
 
         widget = UnionWidget(
+            field_name,
+            title="",  # we can't set a title on a union type, right ?
             child=None,
-            children_types=types,
+            # we assume those types are BaseModel
+            children_types=types,  # type: ignore
         )
 
         return widget

@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import Response
 from pydantic import BaseModel, Field
@@ -7,8 +7,19 @@ from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import FormModel
 
 
+class Dog(BaseModel):
+    nick: str = Field(...)
+    breed: Literal["Labrador", "Golden Retriever", "Bulldog"]
+
+
+class Cat(BaseModel):
+    nick: str = Field(...)
+    breed: Literal["Persian", "Siamese", "Ragdoll"]
+
+
 class Person(BaseModel):
     name: str = Field(...)
+    pet: Dog | Cat | None = Field(default=None)
 
 
 async def hello_world(

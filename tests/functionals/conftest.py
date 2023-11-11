@@ -1,22 +1,41 @@
+import asyncio
+import multiprocessing
+
 import pytest
-from fastapi import FastAPI
+from hypercorn.asyncio import serve
+from hypercorn.config import Config
+from playwright.sync_api import Browser, Page
 
 from fastlife import Configurator
 from fastlife.configurator.configurator import Settings
-from fastlife.configurator.registry import cleanup_registry
-from fastlife.testing import WebTestClient
 
 
-@pytest.fixture
 async def app():
     conf = Configurator(
         Settings(template_search_path="fastlife:templates,tests.fastlife_app:templates")
     )
     conf.include("tests.fastlife_app.views")
-    yield conf.get_app()
-    cleanup_registry()
+    app = conf.get_app()
+    config = Config()
+    config.bind = ["0.0.0.0:8888"]
+    await serve(app, config)  # type: ignore
 
 
-@pytest.fixture
-def client(app: FastAPI):
-    return WebTestClient(app)
+def serve_app():
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(app())
+
+
+@pytest.fixture()
+def app_launcher():
+    subprocess = multiprocessing.Process(target=serve_app)
+    subprocess.start()
+    yield
+    subprocess.terminate()
+
+
+@pytest.fixture()
+def client(app_launcher, browser: Browser) -> Page:
+    page = browser.new_page()
+    page.goto("http://localhost:8888/")
+    return page
