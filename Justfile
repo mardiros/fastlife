@@ -1,5 +1,6 @@
 package := 'fastlife'
-default_test_suite := 'tests/unittests'
+default_unittest_suite := 'tests/unittests'
+default_functest_suite := 'tests/functionals'
 
 install:
     poetry install
@@ -16,20 +17,24 @@ lint:
 
 test: lint mypy unittest functest
 
-unittest test_suite=default_test_suite:
+unittest test_suite=default_unittest_suite:
     poetry run pytest -sxv {{test_suite}}
 
 lf:
     poetry run pytest -sxvvv --lf
 
-cov test_suite=default_test_suite:
+cov test_suite=default_unittest_suite:
     rm -f .coverage
     rm -rf htmlcov
     poetry run pytest --cov-report=html --cov={{package}} {{test_suite}}
     xdg-open htmlcov/index.html
 
-functest:
-    poetry run pytest -sxv tests/functionals
+functest test_suite=default_functest_suite:
+    poetry run pytest -sxv {{test_suite}}
+
+funcdevtest:
+    PYTHONPATH=. poetry run python tests/fastlife_app/entrypoint.py
+    firefox http://0.0.0.0:8888
 
 mypy:
     poetry run mypy src/ tests/
