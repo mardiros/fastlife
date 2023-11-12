@@ -5,6 +5,7 @@ from jinja2 import Environment, FileSystemLoader, Template
 from markupsafe import Markup
 from pydantic import BaseModel
 
+from fastlife.configurator.settings import Settings
 from fastlife.shared_utils.resolver import resolve_path
 
 from .abstract import AbstractTemplateRenderer
@@ -24,10 +25,11 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
 
 
 class Jinja2TemplateRenderer(AbstractTemplateRenderer):
-    def __init__(self, template_search_path: str) -> None:
+    def __init__(self, settings: Settings) -> None:
         super().__init__()
+        self.route_prefix = settings.fastlife_route_prefix
         self.env = Environment(
-            loader=FileSystemLoader(build_searchpath(template_search_path)),
+            loader=FileSystemLoader(build_searchpath(settings.template_search_path)),
             enable_async=True,
         )
 
@@ -88,6 +90,11 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         return ret
 
     async def pydantic_form(
-        self, model: Type[BaseModel], form_data: Optional[Mapping[str, Any]]
+        self,
+        model: Type[BaseModel],
+        form_data: Optional[Mapping[str, Any]],
+        name: Optional[str] = None,
     ) -> Markup:
-        return await WidgetFactory(self).get_markup(model, form_data or {})
+        return await WidgetFactory(self).get_markup(
+            model, form_data or {}, name or "payload"
+        )

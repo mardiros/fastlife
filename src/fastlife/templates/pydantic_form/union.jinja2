@@ -1,20 +1,24 @@
-{% from "globals.jinja2" import link %}
-<div>
+{% from "globals.jinja2" import button %}
+<div id="{{widget.id}}">
     {% if widget.child %}
     {{ widget.child }}
     {% else %}
-
-    <details>
+    <details open>
         <summary>
             <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
         </summary>
         <div>
             {% for typ in types %}
-            <span hx-target="{{typ.id}}">
-                {{ link(typ.title, href="#FIXME", target="#"+typ.id, push_url=false) }}
-            </span>
+            {{
+            button(
+            typ.title,
+            type="button",
+            target="#"+widget.id,
+            get=typ.get_url(name=widget.name)
+            )
+            }}
             {% endfor %}
-            {% endif %}
         </div>
     </details>
+    {% endif %}
 </div>

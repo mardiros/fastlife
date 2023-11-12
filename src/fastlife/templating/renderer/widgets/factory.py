@@ -1,6 +1,6 @@
 from decimal import Decimal
 from types import NoneType, UnionType
-from typing import Any, Mapping, Optional, Type, Union, get_origin
+from typing import Any, Literal, Mapping, Optional, Type, Union, get_origin
 from xmlrpc.client import boolean
 
 from markupsafe import Markup
@@ -61,7 +61,10 @@ class WidgetFactory:
             ):
                 return self.build_union(name, typ, field, value, required)
 
-        if issubclass(typ, BaseModel):
+            if type_origin is Literal:
+                return self.build_literal(name, typ, field, value, required)
+
+        if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
             return self.build_model(name, typ, field, value or {}, required)
 
         assert field is not None
@@ -166,6 +169,22 @@ class WidgetFactory:
             value=str(value),
             required=required,
             input_type="email",
+        )
+
+    def build_literal(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: FieldInfo,
+        value: str | int | float,
+        required: bool,
+    ) -> Widget:
+        return self.build_simpletype(
+            field_name,
+            field_type,
+            field,
+            value or "",
+            required,
         )
 
     def build_simpletype(

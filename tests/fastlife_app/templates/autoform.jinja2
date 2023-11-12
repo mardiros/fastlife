@@ -1,12 +1,10 @@
 {% extends "layout.jinja2" %}
 
 {% block maincontent %}
-<div hx-target="#maincontent" hx-swap="innerHTML">
-
+<div>
     {% call form() %}
     {{ pydantic_form(model, form_data) }}
     {{ button("Submit") }}
     {% endcall %}
-
 </div>
 {% endblock %}

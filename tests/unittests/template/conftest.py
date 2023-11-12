@@ -3,6 +3,7 @@ from pathlib import Path
 import bs4
 import pytest
 
+from fastlife.configurator.settings import Settings
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 
 template_path = str(Path(__file__).parent / "jinja2")
@@ -10,7 +11,8 @@ template_path = str(Path(__file__).parent / "jinja2")
 
 @pytest.fixture()
 def renderer():
-    return Jinja2TemplateRenderer(f"{template_path},fastlife:templates")
+    settings = Settings(template_search_path=f"{template_path},fastlife:templates")
+    return Jinja2TemplateRenderer(settings)
 
 
 @pytest.fixture()

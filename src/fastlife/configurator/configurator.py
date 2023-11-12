@@ -6,7 +6,7 @@ import importlib
 import logging
 from enum import Enum
 from types import ModuleType
-from typing import Any, Callable, Coroutine, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
 import venusian  # type: ignore
 from fastapi import Depends, FastAPI, Response
@@ -16,19 +16,25 @@ from fastlife.security.csrf import check_csrf
 
 from .settings import Settings
 
+if TYPE_CHECKING:
+    from .registry import AppRegistry
+
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
 
 
 class Configurator:
+    registry: "AppRegistry"
+
     def __init__(self, settings: Settings) -> None:
         from .registry import initialize_registry  # XXX circular import
 
-        initialize_registry(settings)
+        self.registry = initialize_registry(settings)
         self._app = FastAPI(
             dependencies=[Depends(check_csrf)], docs_url=None, redoc_url=None
         )
         self.scanner = venusian.Scanner(fastlife=self)
+        self.include("fastlife.views")
 
     def get_app(self) -> FastAPI:
         return self._app

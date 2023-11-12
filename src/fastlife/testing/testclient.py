@@ -77,7 +77,7 @@ class WebResponse:
         return body
 
     def by_text(self, text: str, *, node_name: str | None = None) -> bs4.Tag | None:
-        nodes = self.html_body.find_all(string=re.compile(rf"\s*{text}\s*"))
+        nodes = self.html.find_all(string=re.compile(rf"\s*{text}\s*"))
         for node in nodes:
             if isinstance(node, bs4.NavigableString):
                 node = node.parent
@@ -89,6 +89,14 @@ class WebResponse:
                     node = node.parent
 
         return None
+
+    def by_label_text(self, text: str) -> bs4.Tag | None:
+        label = self.by_text(text, node_name="label")
+        assert label is not None
+        assert label.attrs.get("for") is not None
+        resp = self.html.find(id=label.attrs["for"])
+        assert not isinstance(resp, bs4.NavigableString)
+        return resp
 
     @property
     def form(self) -> WebForm:

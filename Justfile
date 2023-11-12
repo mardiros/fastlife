@@ -34,7 +34,7 @@ functest test_suite=default_functest_suite:
 
 funcdevtest:
     PYTHONPATH=. poetry run python tests/fastlife_app/entrypoint.py
-    firefox http://0.0.0.0:8888
+    firefox http://0.0.0.0:8888/autoform
 
 mypy:
     poetry run mypy src/ tests/

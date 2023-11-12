@@ -32,7 +32,9 @@ class Widget(abc.ABC):
     ):
         self.name = name
         self.title = title or name.split(".")[-1]
-        self.id = id or f"{name}-{secrets.token_urlsafe(4)}".replace("_", "-")
+        self.id = id or f"{name}-{secrets.token_urlsafe(4)}".replace("_", "-").replace(
+            ".", "-"
+        )
         self.required = required
 
     @abc.abstractmethod

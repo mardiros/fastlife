@@ -8,7 +8,7 @@ from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
-from fastlife.templating.renderer.widgets.union import UnionWidget
+from fastlife.templating.renderer.widgets.union import TypeWrapper, UnionWidget
 
 
 class Foo(BaseModel):
@@ -17,6 +17,15 @@ class Foo(BaseModel):
 
 class Bar(BaseModel):
     label: str
+
+
+def test_typewrapper():
+    tw = TypeWrapper(Foo, route_prefix="/_")
+    assert tw.fullname == "tests.unittests.template.test_widget:Foo"
+    assert (
+        tw.get_url("placeholder") == "/_/pydantic-form/widgets/"
+        "tests.unittests.template.test_widget:Foo?name=placeholder"
+    )
 
 
 @pytest.mark.parametrize(
@@ -106,8 +115,8 @@ class Bar(BaseModel):
                     "foobar", title="Foo Bar", child=None, children_types=[Foo, Bar]
                 ),
                 "expected_tags": [
-                    {"tag": "a", "text": "Foo"},
-                    {"tag": "a", "text": "Bar"},
+                    {"tag": "button", "text": "Foo"},
+                    {"tag": "button", "text": "Bar"},
                 ],
             },
         ),

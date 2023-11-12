@@ -9,22 +9,25 @@ from .settings import Settings
 
 
 class AppRegistry:
+    settings: Settings
     renderer: AbstractTemplateRenderer
 
     def __init__(self, settings: Settings) -> None:
         TemplateRenderer = resolve(settings.template_renderer_class)
-        self.renderer = TemplateRenderer(settings.template_search_path)
+        self.settings = settings
+        self.renderer = TemplateRenderer(settings)
 
 
 DEFAULT_REGISTRY: AppRegistry = None  # type: ignore
 
 
-def initialize_registry(settings: Settings) -> None:
+def initialize_registry(settings: Settings) -> AppRegistry:
     global DEFAULT_REGISTRY
     if DEFAULT_REGISTRY is not None:
         raise ValueError("Registry is already set")
     AppRegistryCls = resolve(settings.registry_class)
     DEFAULT_REGISTRY = AppRegistryCls(settings)  # type: ignore
+    return DEFAULT_REGISTRY
 
 
 def cleanup_registry() -> None:
