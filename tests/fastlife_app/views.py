@@ -24,7 +24,9 @@ async def autoform(
     template: Annotated[Template, template("autoform.jinja2")],
     person: Annotated[Optional[Person], OptionalFormModel(Person)],
 ):
-    return await template(model=Person)
+    return await template(
+        model=Person, form_data={"payload": person.model_dump()} if person else {}
+    )
 
 
 @configure

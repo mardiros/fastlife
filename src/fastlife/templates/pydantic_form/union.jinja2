@@ -1,14 +1,15 @@
 {% from "globals.jinja2" import button %}
 <div id="{{widget.id}}">
-    {% if widget.child %}
-        ------------------------------
-    {{ widget.child }}
-    {% else %}
     <details open>
         <summary>
             <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
         </summary>
+        {% if child %}
+        {{ child }}
+        {% else %}
+
         <div hx-sync="this">
+
             {% for typ in types %}
             {{
             button(
@@ -20,6 +21,6 @@
             }}
             {% endfor %}
         </div>
+        {% endif %}
     </details>
-    {% endif %}
 </div>

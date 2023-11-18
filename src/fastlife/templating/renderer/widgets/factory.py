@@ -4,7 +4,7 @@ from typing import Any, Literal, Mapping, Optional, Type, Union, get_origin
 from xmlrpc.client import boolean
 
 from markupsafe import Markup
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ValidationError
 from pydantic.fields import FieldInfo
 
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
@@ -131,11 +131,26 @@ class WidgetFactory:
             return self.build(
                 types[0], name=field_name, field=field, value=value, required=True
             )
+        child = None
+        if value:
+            for typ in types:
+                try:
+                    typ(**value)
+                except ValidationError:
+                    pass
+                else:
+                    child = self.build(
+                        typ,
+                        name=field_name,
+                        field=field,
+                        value=value,
+                        required=required,
+                    )
 
         widget = UnionWidget(
             field_name,
             title="",  # we can't set a title on a union type, right ?
-            child=None,
+            child=child,
             # we assume those types are BaseModel
             children_types=types,  # type: ignore
         )

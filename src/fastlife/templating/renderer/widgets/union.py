@@ -32,7 +32,7 @@ class UnionWidget(Widget):
         name: str,
         *,
         title: str,
-        child: Optional[Sequence[Widget]],
+        child: Optional[Widget],
         children_types: Sequence[Type[BaseModel]],
     ):
         super().__init__(name, title=title)
@@ -47,11 +47,12 @@ class UnionWidget(Widget):
 
     async def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version"""
+        child = Markup(await self.child.to_html(renderer)) if self.child else ""
         return Markup(
             await renderer.render_template(
                 self.get_template(),
                 widget=self,
                 types=self.build_types(renderer.route_prefix),
-                child=self.child,
+                child=child,
             )
         )
