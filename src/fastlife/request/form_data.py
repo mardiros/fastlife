@@ -5,6 +5,7 @@ from typing import (
     Mapping,
     MutableMapping,
     MutableSequence,
+    Optional,
     Sequence,
     Type,
     TypeVar,
@@ -89,5 +90,14 @@ T = TypeVar("T", bound=BaseModel)
 def FormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
     def form_model(data: MappingFormData) -> T:
         return cls(**data)
+
+    return Depends(form_model)
+
+
+def OptionalFormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
+    def form_model(data: MappingFormData) -> Optional[T]:
+        if data:
+            return cls(**data["payload"])
+        return None
 
     return Depends(form_model)

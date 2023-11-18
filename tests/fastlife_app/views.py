@@ -1,9 +1,9 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import Response
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.request.form_data import FormModel
+from fastlife.request.form_data import FormModel, OptionalFormModel
 from tests.fastlife_app.models import Person
 
 
@@ -22,6 +22,7 @@ async def hello_name(
 
 async def autoform(
     template: Annotated[Template, template("autoform.jinja2")],
+    person: Annotated[Optional[Person], OptionalFormModel(Person)],
 ):
     return await template(model=Person)
 
@@ -31,4 +32,4 @@ def includeme(config: Configurator):
     config.add_route("/", hello_world, methods=["GET"])
     config.add_route("/", hello_name, methods=["POST"])
 
-    config.add_route("/autoform", autoform, methods=["GET"])
+    config.add_route("/autoform", autoform, methods=["GET", "POST"])
