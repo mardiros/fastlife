@@ -9,6 +9,7 @@ from pydantic.fields import FieldInfo
 
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
+from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 
 from .base import Widget, get_title
 from .model import ModelWidget
@@ -174,17 +175,17 @@ class WidgetFactory:
     def build_literal(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: Type[Any],  # a literal actually
         field: FieldInfo,
         value: str | int | float,
         required: bool,
     ) -> Widget:
-        return self.build_simpletype(
+        return DropDownWidget(
             field_name,
-            field_type,
-            field,
-            value or "",
-            required,
+            title=field.title,
+            options=field_type.__args__,  # type: ignore
+            value=str(value),
+            required=required,
         )
 
     def build_simpletype(

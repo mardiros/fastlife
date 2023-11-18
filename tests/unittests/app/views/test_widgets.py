@@ -11,7 +11,19 @@ def test_show_widget(client: WebTestClient):
     assert input.attrs["name"] == "pet.nick"
     assert input.attrs["value"] == ""
 
-    input = resp.by_label_text("breed")
-    assert input is not None
-    assert input.attrs["name"] == "pet.breed"
-    assert input.attrs["value"] == ""
+    select = resp.by_label_text("breed")
+    assert select is not None
+    assert select.name == "select"
+    assert select.attrs["name"] == "pet.breed"
+    children = [
+        (
+            str(opt.attrs["value"]),  # type: ignore
+            opt.text,
+        )
+        for opt in select.find_all("option")
+    ]
+    assert children == [
+        ("Labrador", "Labrador"),
+        ("Golden Retriever", "Golden Retriever"),
+        ("Bulldog", "Bulldog"),
+    ]

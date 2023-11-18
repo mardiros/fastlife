@@ -13,4 +13,4 @@ def test_union_type_replace_button_by_form(client: Page):
 
     client.get_by_role("button", name="Dog").click()
     client.get_by_label("nick").fill("marvin")
-    client.get_by_label("breed").fill("Labrador")
+    client.get_by_label("breed").select_option("Labrador")

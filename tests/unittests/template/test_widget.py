@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
+from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
 from fastlife.templating.renderer.widgets.union import TypeWrapper, UnionWidget
 
@@ -117,6 +118,28 @@ def test_typewrapper():
                 "expected_tags": [
                     {"tag": "button", "text": "Foo"},
                     {"tag": "button", "text": "Bar"},
+                ],
+            },
+        ),
+        pytest.param(
+            {
+                "widget": DropDownWidget(
+                    "foobar",
+                    title="Sides",
+                    id="side-id",
+                    options=["Rice", "Fries", "Salad"],
+                    value="Salad",
+                ),
+                "expected_tags": [
+                    {"tag": "label", "for": "side-id", "text": "Sides"},
+                    {"tag": "select", "id": "side-id"},
+                    {"tag": "option", "text": "Rice", "attrs": {"value": "Rice"}},
+                    {"tag": "option", "text": "Fries", "attrs": {"value": "Fries"}},
+                    {
+                        "tag": "option",
+                        "text": "Salad",
+                        "attrs": {"value": "Salad", "selected": ""},
+                    },
                 ],
             },
         ),
