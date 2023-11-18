@@ -7,14 +7,14 @@
         <summary>
             <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
         </summary>
-        <div>
+        <div hx-sync="this">
             {% for typ in types %}
             {{
             button(
             typ.title,
             type="button",
-            target="#"+widget.id,
-            get=typ.get_url(name=widget.name)
+            target="closest div",
+            get=typ.get_url(name=widget.name),
             )
             }}
             {% endfor %}
