@@ -17,6 +17,11 @@ lint:
 
 test: lint mypy unittest functest
 
+buildcss:
+    poetry run tailwindcss \
+        -i tests/fastlife_app/assets/styles/main.css \
+        -o tests/fastlife_app/static/css/main.css
+
 unittest test_suite=default_unittest_suite:
     poetry run pytest -sxv {{test_suite}}
 

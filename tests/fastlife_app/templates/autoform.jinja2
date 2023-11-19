@@ -1,7 +1,7 @@
 {% extends "layout.jinja2" %}
 
 {% block maincontent %}
-<div>
+<div class="max-w-screen-lg mx-auto px-5 bg-white min-h-sceen">
     {% call form() %}
     {{ pydantic_form(model, form_data) }}
     {{ button("Submit") }}

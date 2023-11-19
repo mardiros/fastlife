@@ -5,12 +5,14 @@ with dependency injection.
 import importlib
 import logging
 from enum import Enum
+from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
 
 import venusian  # type: ignore
 from fastapi import Depends, FastAPI, Response
 from fastapi.datastructures import Default
+from fastapi.staticfiles import StaticFiles
 
 from fastlife.security.csrf import check_csrf
 
@@ -103,6 +105,13 @@ class Configurator:
             # openapi_extra=openapi_extra,
             # generate_unique_id_function=generate_unique_id_function,
         )
+        return self
+
+    def add_static_route(
+        self, route_path: str, directory: Path, name: str = "static"
+    ) -> "Configurator":
+        """Mount a directory to an http endpoint."""
+        self._app.mount(route_path, StaticFiles(directory=directory), name=name)
         return self
 
 

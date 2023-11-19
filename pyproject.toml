@@ -33,6 +33,7 @@ types-beautifulsoup4 = "^4.12.0.6"
 email-validator = "^2.0.0.post2"
 uvicorn = "^0.23.2"
 pytest-playwright = "^0.4.3"
+pytailwindcss = "^0.2.0"
 
 [tool.pyright]
 include = ["src"]

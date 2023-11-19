@@ -12,6 +12,7 @@ async def app():
         Settings(template_search_path="fastlife:templates,tests.fastlife_app:templates")
     )
     conf.include("tests.fastlife_app.views")
+    conf.include("tests.fastlife_app.static")
     app = conf.get_app()
     config = Config()
     config.bind = ["0.0.0.0:8888"]
