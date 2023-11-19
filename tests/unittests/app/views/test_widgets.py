@@ -3,7 +3,7 @@ from fastlife.testing import WebTestClient
 
 def test_show_widget(client: WebTestClient):
     resp = client.get(
-        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog?name=pet"
+        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog?name=pet&token=xxx"
     )
 
     input = resp.by_label_text("nick")

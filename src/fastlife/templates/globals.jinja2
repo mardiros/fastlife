@@ -10,19 +10,32 @@
 {% endmacro %}
 
 {% macro link(label, href, target="#maincontent", swap="innerHTML show:body:top", push_url=true) %}
-<a href="{{href}}" hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url %}hx-push-url="true"
-  {%- endif %}
+<a href="{{href}}" hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url %}hx-push-url="true" {%-
+  endif %}
   class="cursor-pointer px-4 py-2 text-sm font-medium text-neutral-900 bg-white border-t border-b border-neutral-200 hover:bg-neutral-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white dark:hover:text-white dark:hover:bg-neutral-600 dark:focus:ring-primary-500 dark:focus:text-white">
   {{- label -}}
   {%- if caller %}{{ caller() }}{% endif -%}
 </a>
 {% endmacro %}
 
-{% macro button(title, type="submit", full_width=false, name="action", value="submit", target="", get="") %}
-<button type="{{type}}" name="{{name}}" value="{{value}}"
-  {% if target %}hx-target="{{target}}"{% endif %}
-  {% if get %}hx-get="{{get}}"{% endif %}
-  class="{% if full_width %}w-full {% endif %}text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+{% macro button(
+title,
+type="submit",
+id="",
+name="action",
+value="submit",
+onclick="",
+target="",
+get="",
+select="",
+full_width=false,
+hidden=false
+) %}
+<button type="{{type}}" {%if id %}id="{{id}}" {%endif%}name="{{name}}" value="{{value}}" {% if target %}hx-target="{{target}}" {% endif %} {% if select
+  %}hx-select="{{select}}" {% endif %} {% if get %}hx-get="{{get}}" {% endif %} {% if onclick %}onclick="{{onclick}}" {%
+  endif %}
+  class="{% if full_width %}w-full {% endif %}text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+  {% if hidden %}hidden{% endif %}>
   {{- title -}}
 </button>
 {% endmacro %}

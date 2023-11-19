@@ -12,11 +12,11 @@ class TextWidget(Widget):
         placeholder: Optional[str] = None,
         required: bool = False,
         value: str = "",
-        id: Optional[str] = None,
+        token: Optional[str] = None,
         help_text: Optional[str] = None,
         input_type: str = "text"
     ) -> None:
-        super().__init__(name, title, id, required=required)
+        super().__init__(name, title=title, token=token, required=required)
         self.placeholder = placeholder or ""
         self.value = value
         self.help_text = help_text

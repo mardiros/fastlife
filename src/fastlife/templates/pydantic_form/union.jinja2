@@ -1,26 +1,37 @@
 {% from "globals.jinja2" import button %}
 <div id="{{widget.id}}">
     <details open>
-        <summary>
+        <summary class="justify-between items-center font-medium cursor-pointer">
             <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
         </summary>
-        {% if child %}
-        {{ child }}
-        {% else %}
-
-        <div hx-sync="this">
-
+        <div hx-sync="this" id="{{widget.id}}-child">
+            {% if child %}
+            {{ child }}
+            {% else %}
             {% for typ in types %}
             {{
             button(
             typ.title,
             type="button",
             target="closest div",
-            get=typ.get_url(name=widget.name),
+            get=typ.url,
+            onclick="document.getElementById('"+ widget.id  +"-remove-btn').hidden = false",
             )
             }}
             {% endfor %}
+            {% endif %}
         </div>
-        {% endif %}
+        {{
+        button(
+        "remove",
+        type="button",
+        id=widget.id + "-remove-btn",
+        target="#" + widget.id + "-child",
+        select="#" + widget.id + "-child",
+        get=parent_type.url,
+        hidden=not child,
+        onclick="document.getElementById('"+ widget.id  +"-remove-btn').hidden = true",
+        )
+        }}
     </details>
 </div>

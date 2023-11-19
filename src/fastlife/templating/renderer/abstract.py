@@ -22,7 +22,8 @@ class AbstractTemplateRenderer(abc.ABC):
     async def pydantic_form(
         self,
         model: Type[BaseModel],
-        form_data: Optional[Mapping[str, Any]],
-        name: Optional[str],
+        form_data: Optional[Mapping[str, Any]] = None,
+        name: Optional[str] = None,
+        token: Optional[str] = None,
     ) -> Markup:
         ...

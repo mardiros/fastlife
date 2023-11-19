@@ -13,11 +13,12 @@ class ModelWidget(Widget):
         self,
         name: str,
         *,
-        title: str,
         children_widget: Sequence[Widget],
-        required: boolean
+        required: boolean,
+        title: str,
+        token: str,
     ):
-        super().__init__(name, title, required=required)
+        super().__init__(name, title=title, required=required, token=token)
         self.children_widget = children_widget
 
     def get_template(self) -> str:

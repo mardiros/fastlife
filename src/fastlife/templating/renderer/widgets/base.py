@@ -20,22 +20,23 @@ class Widget(abc.ABC):
     "variable name, nested variables have dots"
     title: str
     "Human title for the widget"
-    id: str
-    "Unique id for the widget"
 
     def __init__(
         self,
         name: str,
+        *,
         title: Optional[str] = None,
-        id: Optional[str] = None,
+        token: Optional[str] = None,
         required: bool = False,
     ):
         self.name = name
         self.title = title or name.split(".")[-1]
-        self.id = id or f"{name}-{secrets.token_urlsafe(4)}".replace("_", "-").replace(
-            ".", "-"
-        )
+        self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.required = required
+
+    @property
+    def id(self) -> str:
+        return f"{self.name}-{self.token}".replace("_", "-").replace(".", "-")
 
     @abc.abstractmethod
     def get_template(self) -> str:

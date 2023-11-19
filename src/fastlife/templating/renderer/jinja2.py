@@ -92,9 +92,10 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
     async def pydantic_form(
         self,
         model: Type[BaseModel],
-        form_data: Optional[Mapping[str, Any]],
+        form_data: Optional[Mapping[str, Any]] = None,
         name: Optional[str] = None,
+        token: Optional[str] = None,
     ) -> Markup:
-        return await WidgetFactory(self).get_markup(
+        return await WidgetFactory(self, token).get_markup(
             model, form_data or {}, name or "payload"
         )

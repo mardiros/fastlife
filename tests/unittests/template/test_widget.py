@@ -20,12 +20,16 @@ class Bar(BaseModel):
     label: str
 
 
+class Foobar(BaseModel):
+    foobar: Foo | Bar
+
+
 def test_typewrapper():
-    tw = TypeWrapper(Foo, route_prefix="/_")
+    tw = TypeWrapper(Foo, route_prefix="/_", name="placeholder", token="aaa")
     assert tw.fullname == "tests.unittests.template.test_widget:Foo"
     assert (
-        tw.get_url("placeholder") == "/_/pydantic-form/widgets/"
-        "tests.unittests.template.test_widget:Foo?name=placeholder"
+        tw.url == "/_/pydantic-form/widgets/"
+        "tests.unittests.template.test_widget:Foo?name=placeholder&token=aaa"
     )
 
 
@@ -65,7 +69,7 @@ def test_typewrapper():
                 "widget": TextWidget(
                     "name",
                     title="Name",
-                    id="name-id",
+                    token="id",
                 ),
                 "expected_tags": [
                     {"tag": "label", "text": "Name", "for": "name-id"},
@@ -98,7 +102,7 @@ def test_typewrapper():
                 "widget": BooleanWidget(
                     "bared_foot",
                     title="Bared Foot",
-                    id="bared-foot-id",
+                    token="id",
                 ),
                 "expected_tags": [
                     {"tag": "label", "text": "Bared Foot", "for": "bared-foot-id"},
@@ -113,7 +117,12 @@ def test_typewrapper():
         pytest.param(
             {
                 "widget": UnionWidget(
-                    "foobar", title="Foo Bar", child=None, children_types=[Foo, Bar]
+                    "foobar",
+                    title="Foo Bar",
+                    child=None,
+                    children_types=[Foo, Bar],
+                    parent_type=Foobar,
+                    token="abc",
                 ),
                 "expected_tags": [
                     {"tag": "button", "text": "Foo"},
@@ -126,7 +135,7 @@ def test_typewrapper():
                 "widget": DropDownWidget(
                     "foobar",
                     title="Sides",
-                    id="side-id",
+                    token="id",
                     options=["Rice", "Fries", "Salad"],
                     value="Salad",
                 ),

@@ -8,10 +8,13 @@ from fastlife.shared_utils.resolver import resolve
 
 
 async def show_widget(
-    typ: str, reg: Registry, name: Optional[str] = Query(...)
+    typ: str,
+    reg: Registry,
+    name: Optional[str] = Query(...),
+    token: Optional[str] = Query(...),
 ) -> Response:
     model_cls = resolve(typ)
-    data = await reg.renderer.pydantic_form(model_cls, None, name)
+    data = await reg.renderer.pydantic_form(model_cls, None, name, token)
     resp = Response(data, headers={"Content-Type": "text/html"})
     return resp
 

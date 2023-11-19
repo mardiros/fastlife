@@ -10,12 +10,11 @@ class BooleanWidget(Widget):
         *,
         title: Optional[str],
         value: bool = False,
-        id: Optional[str] = None,
         required: bool = False,
+        token: str,
     ) -> None:
-        super().__init__(name, title, id, required=required)
+        super().__init__(name, title=title, required=required, token=token)
         self.value = value
-        self.id = id or name  # fixme
 
     def get_template(self) -> str:
         return "pydantic_form/boolean.jinja2"

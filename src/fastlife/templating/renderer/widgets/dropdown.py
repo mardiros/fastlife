@@ -12,10 +12,10 @@ class DropDownWidget(Widget):
         options: Sequence[Tuple[str, str]] | Sequence[str],
         required: bool = False,
         value: str = "",
-        id: Optional[str] = None,
+        token: Optional[str] = None,
         help_text: Optional[str] = None,
     ) -> None:
-        super().__init__(name, title, id, required=required)
+        super().__init__(name, title=title, token=token, required=required)
         self.options = (
             list(zip(options, options))
             if options and not isinstance(options[0], tuple)

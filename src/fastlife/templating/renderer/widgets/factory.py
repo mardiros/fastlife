@@ -1,3 +1,4 @@
+import secrets
 from decimal import Decimal
 from types import NoneType, UnionType
 from typing import Any, Literal, Mapping, Optional, Type, Union, get_origin
@@ -22,8 +23,9 @@ def is_complex_type(typ: Type[Any]) -> bool:
 
 
 class WidgetFactory:
-    def __init__(self, renderer: AbstractTemplateRenderer):
+    def __init__(self, renderer: AbstractTemplateRenderer, token: Optional[str] = None):
         self.renderer = renderer
+        self.token = token or secrets.token_urlsafe(4).replace("_", "-")
 
     async def get_markup(
         self,
@@ -51,6 +53,7 @@ class WidgetFactory:
         value: Any,
         field: Optional[FieldInfo] = None,
         required: boolean = True,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:
@@ -60,24 +63,28 @@ class WidgetFactory:
                 type_origin is Union  # Optional[T]
                 or type_origin is UnionType  # T | None
             ):
-                return self.build_union(name, typ, field, value, required)
+                return self.build_union(name, typ, field, value, required, parent)
 
             if type_origin is Literal:
-                return self.build_literal(name, typ, field, value, required)
+                return self.build_literal(name, typ, field, value, required, parent)
 
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
-            return self.build_model(name, typ, field, value or {}, required)
+            return self.build_model(name, typ, field, value or {}, required, parent)
 
         assert field is not None
 
         if issubclass(typ, (bool)):
-            return self.build_boolean(name, typ, field, value or False, required)
+            return self.build_boolean(
+                name, typ, field, value or False, required, parent
+            )
 
         if issubclass(typ, EmailStr):
-            return self.build_emailtype(name, typ, field, value or "", required)
+            return self.build_emailtype(name, typ, field, value or "", required, parent)
 
         if issubclass(typ, (int, str, float, Decimal)):
-            return self.build_simpletype(name, typ, field, value or "", required)
+            return self.build_simpletype(
+                name, typ, field, value or "", required, parent
+            )
 
         raise NotImplementedError(f"{typ} not implemented")
 
@@ -88,6 +95,7 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Mapping[str, Any],
         required: bool,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         ret: dict[str, Any] = {}
         for key, field in typ.model_fields.items():
@@ -97,13 +105,18 @@ class WidgetFactory:
             if field.annotation is None:
                 raise ValueError(f"Missing annotation for {field} in {child_key}")
             ret[key] = self.build(
-                field.annotation, name=child_key, field=field, value=value.get(key)
+                field.annotation,
+                name=child_key,
+                field=field,
+                value=value.get(key),
+                parent=typ,
             )
         return ModelWidget(
             field_name,
-            title=get_title(typ),
             children_widget=list(ret.values()),
             required=required,
+            title=get_title(typ),
+            token=self.token,
         )
 
     def build_union(
@@ -113,6 +126,7 @@ class WidgetFactory:
         field: FieldInfo,
         value: Any,
         required: bool,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         types: list[Type[Any]] = []
         required = True
@@ -149,10 +163,12 @@ class WidgetFactory:
 
         widget = UnionWidget(
             field_name,
-            title="",  # we can't set a title on a union type, right ?
-            child=child,
             # we assume those types are BaseModel
+            child=child,
             children_types=types,  # type: ignore
+            parent_type=parent,  # type: ignore
+            title="",  # we can't set a title on a union type, right ?
+            token=self.token,
         )
 
         return widget
@@ -164,9 +180,14 @@ class WidgetFactory:
         field: FieldInfo,
         value: bool,
         required: bool,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return BooleanWidget(
-            field_name, title=field.title, value=value, required=required
+            field_name,
+            required=required,
+            title=field.title,
+            token=self.token,
+            value=value,
         )
 
     def build_emailtype(
@@ -176,15 +197,17 @@ class WidgetFactory:
         field: FieldInfo,
         value: str | int | float,
         required: bool,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return TextWidget(
             field_name,
-            title=field.title,
-            placeholder=str(field.examples[0]) if field.examples else None,
             help_text=field.description,
-            value=str(value),
-            required=required,
             input_type="email",
+            placeholder=str(field.examples[0]) if field.examples else None,
+            required=required,
+            title=field.title,
+            token=self.token,
+            value=str(value),
         )
 
     def build_literal(
@@ -194,13 +217,15 @@ class WidgetFactory:
         field: FieldInfo,
         value: str | int | float,
         required: bool,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return DropDownWidget(
             field_name,
-            title=field.title,
             options=field_type.__args__,  # type: ignore
-            value=str(value),
             required=required,
+            title=field.title,
+            token=self.token,
+            value=str(value),
         )
 
     def build_simpletype(
@@ -210,12 +235,14 @@ class WidgetFactory:
         field: FieldInfo,
         value: str | int | float,
         required: bool,
+        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return TextWidget(
             field_name,
-            title=field.title,
-            placeholder=str(field.examples[0]) if field.examples else None,
             help_text=field.description,
-            value=str(value),
+            placeholder=str(field.examples[0]) if field.examples else None,
             required=required,
+            title=field.title,
+            token=self.token,
+            value=str(value),
         )
