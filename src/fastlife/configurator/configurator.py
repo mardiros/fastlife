@@ -33,7 +33,9 @@ class Configurator:
 
         self.registry = initialize_registry(settings)
         self._app = FastAPI(
-            dependencies=[Depends(check_csrf)], docs_url=None, redoc_url=None
+            dependencies=[Depends(check_csrf(self.registry))],
+            docs_url=None,
+            redoc_url=None,
         )
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")

@@ -13,21 +13,22 @@ from typing import (
 
 from fastapi import Depends, Request
 from pydantic import BaseModel
-from fastlife.configurator.registry import Registry
 
-from fastlife.security.csrf import CSRF_TOKEN_NAME
+from fastlife.configurator.registry import Registry
 
 
 def unflatten_struct(
     flatten_input: Mapping[str, Any],
     unflattened_output: MutableMapping[str, Any] | MutableSequence[Any],
     level: int = 0,
+    *,
+    csrf_token_name: Optional[str] = None,
 ) -> Mapping[str, Any] | Sequence[Any]:
     # we sort to ensure that list index are ordered
     formkeys = sorted(flatten_input.keys())
 
     for key in formkeys:
-        if key == CSRF_TOKEN_NAME and level == 0:
+        if csrf_token_name is not None and key == csrf_token_name:
             continue
         lkey, sep, rest = key.partition(".")
 
@@ -55,14 +56,18 @@ def unflatten_struct(
                 unflattened_output.append([] if sub_child_is_list else {})
 
             unflatten_struct(
-                {rest: flatten_input[key]}, unflattened_output[vkey], level + 1
+                {rest: flatten_input[key]},
+                unflattened_output[vkey],
+                level + 1,
             )
 
         elif isinstance(unflattened_output, dict):
             if lkey not in unflattened_output:
                 unflattened_output[lkey] = [] if child_is_list else {}
             unflatten_struct(
-                {rest: flatten_input[key]}, unflattened_output[lkey], level + 1
+                {rest: flatten_input[key]},
+                unflattened_output[lkey],
+                level + 1,
             )
         else:
             raise ValueError(type(unflattened_output))
@@ -70,15 +75,23 @@ def unflatten_struct(
     return unflattened_output
 
 
-async def unflatten_mapping_form_data(request: Request) -> Mapping[str, Any]:
+async def unflatten_mapping_form_data(
+    request: Request, reg: Registry
+) -> Mapping[str, Any]:
     form_data = await request.form()
-    return unflatten_struct(form_data, {})  # type: ignore
+    return unflatten_struct(
+        form_data, {}, csrf_token_name=reg.settings.csrf_token_name
+    )  # type: ignore
 
 
-async def unflatten_sequence_form_data(request: Request) -> Sequence[str]:
+async def unflatten_sequence_form_data(
+    request: Request, reg: Registry
+) -> Sequence[str]:
     form_data = await request.form()
     # Could raise a value error !
-    return unflatten_struct(form_data, [])  # type: ignore
+    return unflatten_struct(
+        form_data, [], csrf_token_name=reg.settings.csrf_token_name
+    )  # type: ignore
 
 
 MappingFormData = Annotated[Mapping[str, Any], Depends(unflatten_mapping_form_data)]

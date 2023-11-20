@@ -33,6 +33,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
             enable_async=True,
         )
         self.form_data_model_prefix = settings.form_data_model_prefix
+        self.csrf_token_name = settings.csrf_token_name
 
     def _get_template(self, template: str, **kwargs: Any) -> Template:
         return self.env.get_template(
@@ -42,7 +43,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
 
     def get_csrf_token(self, request: Request) -> Callable[..., str]:
         def get_csrf_token() -> str:
-            return request.scope.get("csrf_token", "")
+            return request.scope.get(self.csrf_token_name, "")
 
         return get_csrf_token
 
@@ -62,6 +63,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         tpl = self._get_template(
             template,
             request=request,
+            get_csrf_token_name=lambda: self.csrf_token_name,
             get_csrf_token=self.get_csrf_token(request),
             pydantic_form=self.pydantic_form,
         )
