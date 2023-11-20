@@ -32,6 +32,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
             loader=FileSystemLoader(build_searchpath(settings.template_search_path)),
             enable_async=True,
         )
+        self.form_data_model_prefix = settings.form_data_model_prefix
 
     def _get_template(self, template: str, **kwargs: Any) -> Template:
         return self.env.get_template(
@@ -97,5 +98,5 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         token: Optional[str] = None,
     ) -> Markup:
         return await WidgetFactory(self, token).get_markup(
-            model, form_data or {}, name or "payload"
+            model, form_data or {}, name or self.form_data_model_prefix
         )

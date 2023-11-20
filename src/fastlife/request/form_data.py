@@ -13,6 +13,7 @@ from typing import (
 
 from fastapi import Depends, Request
 from pydantic import BaseModel
+from fastlife.configurator.registry import Registry
 
 from fastlife.security.csrf import CSRF_TOKEN_NAME
 
@@ -88,16 +89,16 @@ T = TypeVar("T", bound=BaseModel)
 
 
 def FormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
-    def form_model(data: MappingFormData) -> T:
-        return cls(**data)
+    def form_model(data: MappingFormData, registry: Registry) -> T:
+        return cls(**data[registry.settings.form_data_model_prefix])
 
     return Depends(form_model)
 
 
 def OptionalFormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
-    def form_model(data: MappingFormData) -> Optional[T]:
+    def form_model(data: MappingFormData, registry: Registry) -> Optional[T]:
         if data:
-            return cls(**data["payload"])
+            return cls(**data[registry.settings.form_data_model_prefix])
         return None
 
     return Depends(form_model)

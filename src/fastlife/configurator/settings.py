@@ -11,3 +11,4 @@ class Settings(BaseSettings):
     template_renderer_class: str = Field(
         default="fastlife.templating.renderer.jinja2:Jinja2TemplateRenderer"
     )
+    form_data_model_prefix: str = Field(default="payload")

@@ -3,6 +3,6 @@
 <h1>Hello {{ name|default("World") }}!</h1>
 
 {% call form() %}
-{{ input(name="name") }}
+{{ input(name="payload.name") }}
 {% endcall %}
 {% endblock %}

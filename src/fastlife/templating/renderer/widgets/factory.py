@@ -31,7 +31,7 @@ class WidgetFactory:
         self,
         base: Type[BaseModel],
         form_data: Mapping[str, Any],
-        prefix: str = "payload",
+        prefix: str,
     ) -> Markup:
         return await self.get_widget(base, form_data, prefix=prefix).to_html(
             self.renderer
