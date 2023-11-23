@@ -1,8 +1,9 @@
 {% extends "layout.jinja2" %}
 {% block maincontent %}
-<h1>Hello {{ name|default("World") }}!</h1>
+<h1>Hello {{ person.name|default("World") }}!</h1>
 
 {% call form() %}
-{{ input(name="payload.name") }}
+{{ input(name="person.name", label="name") }}
+{{ button("Submit") }}
 {% endcall %}
 {% endblock %}

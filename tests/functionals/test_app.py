@@ -6,6 +6,10 @@ def test_has_title(client: Page):
 
     locator = client.locator("h1")
     expect(locator).to_have_text("Hello World!")
+    client.get_by_label("name").fill("Nick")
+    client.get_by_role("button", name="Submit").click()
+    locator = client.locator("h1")
+    expect(locator).to_have_text("Hello Nick!")
 
 
 def test_union_type_replace_button_by_form(client: Page):

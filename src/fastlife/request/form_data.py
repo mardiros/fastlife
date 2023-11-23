@@ -99,19 +99,17 @@ SequenceFormData = Annotated[Sequence[str], Depends(unflatten_sequence_form_data
 
 
 T = TypeVar("T", bound=BaseModel)
+"""Template type for form serialized model"""
 
 
-def FormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
-    def form_model(data: MappingFormData, registry: Registry) -> T:
-        return cls(**data[registry.settings.form_data_model_prefix])
+def model(cls: Type[T], name: Optional[str] = None) -> Callable[[Mapping[str, Any]], T]:
+    """
+    Build a model, a class of type T based on Pydandic Base Model from a form payload.
+    """
 
-    return Depends(form_model)
-
-
-def OptionalFormModel(cls: Type[T]) -> Callable[[Mapping[str, Any]], T]:
-    def form_model(data: MappingFormData, registry: Registry) -> Optional[T]:
+    def to_model(data: MappingFormData, registry: Registry) -> Optional[T]:
         if data:
-            return cls(**data[registry.settings.form_data_model_prefix])
+            return cls(**data[name or registry.settings.form_data_model_prefix])
         return None
 
-    return Depends(form_model)
+    return Depends(to_model)

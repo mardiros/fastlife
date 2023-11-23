@@ -3,26 +3,20 @@ from typing import Annotated, Optional
 from fastapi import Response
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.request.form_data import FormModel, OptionalFormModel
+from fastlife.request.form_data import model
 from tests.fastlife_app.models import Person
 
 
 async def hello_world(
     template: Annotated[Template, template("hello_world.jinja2")],
+    person: Annotated[Optional[Person], model(Person, "person")],
 ) -> Response:
-    return await template()
-
-
-async def hello_name(
-    template: Annotated[Template, template("hello_world.jinja2")],
-    person: Annotated[Person, FormModel(Person)],
-) -> Response:
-    return await template(name=person.name)
+    return await template(person=person)
 
 
 async def autoform(
     template: Annotated[Template, template("autoform.jinja2")],
-    person: Annotated[Optional[Person], OptionalFormModel(Person)],
+    person: Annotated[Optional[Person], model(Person)],
 ):
     return await template(
         model=Person, form_data={"payload": person.model_dump()} if person else {}
@@ -31,7 +25,5 @@ async def autoform(
 
 @configure
 def includeme(config: Configurator):
-    config.add_route("/", hello_world, methods=["GET"])
-    config.add_route("/", hello_name, methods=["POST"])
-
+    config.add_route("/", hello_world, methods=["GET", "POST"])
     config.add_route("/autoform", autoform, methods=["GET", "POST"])
