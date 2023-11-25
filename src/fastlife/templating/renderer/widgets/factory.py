@@ -55,7 +55,6 @@ class WidgetFactory:
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:
-            assert field is not None
             if is_union(typ):
                 return self.build_union(name, typ, field, value, required, parent)
 
@@ -122,7 +121,7 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: FieldInfo,
+        field: Optional[FieldInfo],
         value: Any,
         required: bool,
         parent: Optional[Type[Any]] = None,
@@ -176,7 +175,7 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: FieldInfo,
+        field: Optional[FieldInfo],
         value: Optional[Sequence[Any]],
         required: bool,
         parent: Optional[Type[Any]] = None,
@@ -195,8 +194,8 @@ class WidgetFactory:
         ]
         return SequenceWidget(
             field_name,
-            help_text=field.description,
-            title=field.title,
+            help_text=field.description if field else "",
+            title=field.title if field else "",
             items=items,
             item_type=typ,  # type: ignore
             token=self.token,

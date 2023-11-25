@@ -4,7 +4,7 @@ from fastapi import Query, Response
 
 from fastlife import Configurator, configure
 from fastlife.configurator.registry import Registry
-from fastlife.shared_utils.resolver import resolve
+from fastlife.shared_utils.resolver import resolve_extended
 
 
 async def show_widget(
@@ -13,7 +13,7 @@ async def show_widget(
     name: Optional[str] = Query(...),
     token: Optional[str] = Query(...),
 ) -> Response:
-    model_cls = resolve(typ)
+    model_cls = resolve_extended(typ)
     data = await reg.renderer.pydantic_form(model_cls, None, name, token)
     resp = Response(data, headers={"Content-Type": "text/html"})
     return resp

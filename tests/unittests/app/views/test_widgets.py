@@ -12,6 +12,16 @@ def test_show_widget_builtins_str(typ: str, client: WebTestClient):
     assert input.attrs["value"] == ""
 
 
+@pytest.mark.parametrize("typ", ["str", "int", "float"])
+def test_show_widget_unions(typ: str, client: WebTestClient):
+    resp = client.get(
+        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog|"
+        "tests.fastlife_app.models:Cat?name=pet&token=xxx"
+    )
+    assert resp.by_text("Dog", node_name="button") is not None
+    assert resp.by_text("Cat", node_name="button") is not None
+
+
 def test_show_widget_base_model(client: WebTestClient):
     resp = client.get(
         "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog?name=pet&token=xxx"

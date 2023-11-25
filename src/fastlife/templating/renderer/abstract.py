@@ -3,7 +3,6 @@ from typing import Any, Mapping, Optional, Type
 
 from fastapi import Request
 from markupsafe import Markup
-from pydantic import BaseModel
 
 
 class AbstractTemplateRenderer(abc.ABC):
@@ -21,7 +20,7 @@ class AbstractTemplateRenderer(abc.ABC):
     @abc.abstractmethod
     async def pydantic_form(
         self,
-        model: Type[BaseModel],
+        model: Type[Any],
         form_data: Optional[Mapping[str, Any]] = None,
         name: Optional[str] = None,
         token: Optional[str] = None,

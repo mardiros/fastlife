@@ -1,6 +1,6 @@
 import importlib.util
 from pathlib import Path
-from typing import Any
+from typing import Any, Type, Union
 
 
 def resolve(value: str) -> Any:
@@ -20,6 +20,13 @@ def resolve(value: str) -> Any:
         raise ValueError(f"Attribute {attr_name} not found in module {module_name}.")
 
     return attr
+
+
+def resolve_extended(value: str) -> Type[Any]:
+    values = value.split("|")
+    if len(values) == 1:
+        return resolve(value)
+    return Union[tuple([resolve(t) for t in values])]  # type: ignore
 
 
 def resolve_path(value: str) -> str:
