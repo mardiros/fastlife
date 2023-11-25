@@ -4,6 +4,7 @@ from typing import Any, Optional, Type
 
 from markupsafe import Markup
 
+from fastlife.shared_utils.infer import is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 
 
@@ -11,7 +12,7 @@ def get_title(typ: Type[Any]) -> str:
     return getattr(
         getattr(typ, "__meta__", None),
         "title",
-        typ.__name__,
+        getattr(typ, "__name__", ""),
     )
 
 
@@ -45,3 +46,39 @@ class Widget(abc.ABC):
     async def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version"""
         return Markup(await renderer.render_template(self.get_template(), widget=self))
+
+
+def _get_fullname(typ: Type[Any]) -> str:
+    if is_union(typ):
+        typs = [_get_fullname(t) for t in typ.__args__]  # type: ignore
+        return "|".join(typs)  # type: ignore
+    return f"{typ.__module__}:{typ.__name__}"
+
+
+class TypeWrapper:
+    def __init__(self, typ: Type[Any], route_prefix: str, name: str, token: str):
+        self.typ = typ
+        self.route_prefix = route_prefix
+        self.name = name
+        self.title = get_title(typ)
+        self.token = token
+
+    @property
+    def fullname(self) -> str:
+        return _get_fullname(self.typ)
+
+    @property
+    def url(self) -> str:
+        ret = (
+            f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
+            f"?name={self.name}&token={self.token}"
+        )
+        return ret
+
+    def clone(self, name: str) -> "TypeWrapper":
+        return TypeWrapper(
+            typ=self.typ,
+            route_prefix=self.route_prefix,
+            name=name,
+            token=self.token,
+        )

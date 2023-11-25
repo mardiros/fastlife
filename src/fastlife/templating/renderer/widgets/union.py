@@ -5,27 +5,7 @@ from pydantic import BaseModel
 
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 
-from .base import Widget, get_title
-
-
-class TypeWrapper:
-    def __init__(self, typ: Type[BaseModel], route_prefix: str, name: str, token: str):
-        self.typ = typ
-        self.route_prefix = route_prefix
-        self.name = name
-        self.title = get_title(typ)
-        self.token = token
-
-    @property
-    def fullname(self) -> str:
-        return f"{self.typ.__module__}:{self.typ.__name__}"
-
-    @property
-    def url(self) -> str:
-        return (
-            f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
-            f"?name={self.name}&token={self.token}"
-        )
+from .base import TypeWrapper, Widget
 
 
 class UnionWidget(Widget):

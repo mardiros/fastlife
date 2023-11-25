@@ -16,6 +16,7 @@ class Person(BaseModel):
     email: Optional[EmailStr] = Field(...)
     phone: str | None = Field(...)
     parent: Optional["Person"] = Field(...)
+    skills: list[str] = Field(default_factory=list)
 
 
 def test_build_searchpath(root_dir: Path):
@@ -83,7 +84,13 @@ async def test_get_csrf_token(
                 "request": {"headers": {"HX-Target": "body"}, "csrf_token": "xxx"},
                 "kwargs": {
                     "model": Person,
-                    "form_data": {"payload": {"first_name": "Bob", "admin": True}},
+                    "form_data": {
+                        "payload": {
+                            "first_name": "Bob",
+                            "admin": True,
+                            "skills": ["flute", "guitar"],
+                        }
+                    },
                 },
                 "expected_inputs": {
                     "csrf_token": ("hidden", "xxx"),
@@ -92,6 +99,8 @@ async def test_get_csrf_token(
                     "payload.last_name": ("text", ""),
                     "payload.email": ("email", ""),
                     "payload.phone": ("text", ""),
+                    "payload.skills.0": ("text", "flute"),
+                    "payload.skills.1": ("text", "guitar"),
                 },
             },
             id="load form data",

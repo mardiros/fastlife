@@ -1,0 +1,22 @@
+{% from "globals.jinja2" import button %}
+<details open>
+  <summary>
+    <h4 class="inline mb-2 text-base font-bold text-neutral-900 dark:text-white">{{widget.title}}</h4>
+  </summary>
+  <div>
+    <div>
+      {% for child in children_widgets %}
+      {{ child }}
+      {% endfor%}
+    </div> {{
+    button(
+    "Add",
+    type="button",
+    target="previous",
+    swap="beforeend",
+    id=widget.id + "-add-" + children_widgets|length|string,
+    get=type.clone(type.name + "." + children_widgets|length|string).url,
+    )
+    }}
+  </div>
+</details>

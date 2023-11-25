@@ -1,25 +1,23 @@
 import secrets
+from collections.abc import MutableSequence, Sequence
 from decimal import Decimal
-from types import NoneType, UnionType
-from typing import Any, Literal, Mapping, Optional, Type, Union, get_origin
-from xmlrpc.client import boolean
+from types import NoneType
+from typing import Any, Literal, Mapping, Optional, Type, get_origin
 
 from markupsafe import Markup
 from pydantic import BaseModel, EmailStr, ValidationError
 from pydantic.fields import FieldInfo
 
+from fastlife.shared_utils.infer import is_complex_type, is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
+from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 
 from .base import Widget, get_title
 from .model import ModelWidget
 from .text import TextWidget
 from .union import UnionWidget
-
-
-def is_complex_type(typ: Type[Any]) -> bool:
-    return get_origin(typ) or issubclass(typ, BaseModel)
 
 
 class WidgetFactory:
@@ -29,7 +27,7 @@ class WidgetFactory:
 
     async def get_markup(
         self,
-        base: Type[BaseModel],
+        base: Type[Any],
         form_data: Mapping[str, Any],
         prefix: str,
     ) -> Markup:
@@ -39,7 +37,7 @@ class WidgetFactory:
 
     def get_widget(
         self,
-        base: Type[BaseModel],
+        base: Type[Any],
         form_data: Mapping[str, Any],
         prefix: str,
     ) -> Widget:
@@ -52,26 +50,27 @@ class WidgetFactory:
         name: str = "",
         value: Any,
         field: Optional[FieldInfo] = None,
-        required: boolean = True,
+        required: bool = True,
         parent: Optional[Type[Any]] = None,
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:
             assert field is not None
+            if is_union(typ):
+                return self.build_union(name, typ, field, value, required, parent)
 
             if (
-                type_origin is Union  # Optional[T]
-                or type_origin is UnionType  # T | None
+                type_origin is Sequence
+                or type_origin is MutableSequence
+                or type_origin is list
             ):
-                return self.build_union(name, typ, field, value, required, parent)
+                return self.build_sequence(name, typ, field, value, required, parent)
 
             if type_origin is Literal:
                 return self.build_literal(name, typ, field, value, required, parent)
 
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
             return self.build_model(name, typ, field, value or {}, required, parent)
-
-        assert field is not None
 
         if issubclass(typ, (bool)):
             return self.build_boolean(
@@ -173,11 +172,41 @@ class WidgetFactory:
 
         return widget
 
-    def build_boolean(
+    def build_sequence(
         self,
         field_name: str,
         field_type: Type[Any],
         field: FieldInfo,
+        value: Optional[Sequence[Any]],
+        required: bool,
+        parent: Optional[Type[Any]] = None,
+    ) -> Widget:
+        typ = field_type.__args__[0]  # type: ignore
+        value = value or []
+        items = [
+            self.build(
+                typ,  # type: ignore
+                name=f"{field_name}.{idx}",
+                value=v,
+                field=field,
+                required=False,
+            )
+            for idx, v in enumerate(value)
+        ]
+        return SequenceWidget(
+            field_name,
+            help_text=field.description,
+            title=field.title,
+            items=items,
+            item_type=typ,  # type: ignore
+            token=self.token,
+        )
+
+    def build_boolean(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: FieldInfo | None,
         value: bool,
         required: bool,
         parent: Optional[Type[Any]] = None,
@@ -185,7 +214,7 @@ class WidgetFactory:
         return BooleanWidget(
             field_name,
             required=required,
-            title=field.title,
+            title=field.title if field else "",
             token=self.token,
             value=value,
         )
@@ -194,18 +223,18 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: FieldInfo,
+        field: FieldInfo | None,
         value: str | int | float,
         required: bool,
         parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return TextWidget(
             field_name,
-            help_text=field.description,
+            help_text=field.description if field else "",
             input_type="email",
-            placeholder=str(field.examples[0]) if field.examples else None,
+            placeholder=str(field.examples[0]) if field and field.examples else None,
             required=required,
-            title=field.title,
+            title=field.title if field else "",
             token=self.token,
             value=str(value),
         )
@@ -214,7 +243,7 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],  # a literal actually
-        field: FieldInfo,
+        field: FieldInfo | None,
         value: str | int | float,
         required: bool,
         parent: Optional[Type[Any]] = None,
@@ -223,7 +252,7 @@ class WidgetFactory:
             field_name,
             options=field_type.__args__,  # type: ignore
             required=required,
-            title=field.title,
+            title=field.title if field else "",
             token=self.token,
             value=str(value),
         )
@@ -232,17 +261,17 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: FieldInfo,
+        field: FieldInfo | None,
         value: str | int | float,
         required: bool,
         parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return TextWidget(
             field_name,
-            help_text=field.description,
-            placeholder=str(field.examples[0]) if field.examples else None,
+            help_text=field.description if field else None,
+            placeholder=str(field.examples[0]) if field and field.examples else None,
             required=required,
-            title=field.title,
+            title=field.title if field else "",
             token=self.token,
             value=str(value),
         )

@@ -8,6 +8,7 @@ from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
+from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
 from fastlife.templating.renderer.widgets.union import TypeWrapper, UnionWidget
 
@@ -127,6 +128,30 @@ def test_typewrapper():
                 "expected_tags": [
                     {"tag": "button", "text": "Foo"},
                     {"tag": "button", "text": "Bar"},
+                ],
+            },
+        ),
+        pytest.param(
+            {
+                "widget": SequenceWidget(
+                    "foobar",
+                    title="Foo Bar",
+                    help_text="",
+                    item_type=str,
+                    items=[
+                        TextWidget(
+                            "foobar.0",
+                            title="Name",
+                            token="id",
+                        )
+                    ],
+                    token="abc",
+                ),
+                "expected_tags": [
+                    {
+                        "tag": "input",
+                        "attrs": {"name": "foobar.0"},
+                    },
                 ],
             },
         ),

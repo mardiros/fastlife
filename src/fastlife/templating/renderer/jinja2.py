@@ -3,7 +3,6 @@ from typing import Any, AsyncGenerator, Callable, Mapping, Optional, Sequence, T
 from fastapi import Request
 from jinja2 import Environment, FileSystemLoader, Template
 from markupsafe import Markup
-from pydantic import BaseModel
 
 from fastlife.configurator.settings import Settings
 from fastlife.shared_utils.resolver import resolve_path
@@ -94,7 +93,7 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
 
     async def pydantic_form(
         self,
-        model: Type[BaseModel],
+        model: Type[Any],
         form_data: Optional[Mapping[str, Any]] = None,
         name: Optional[str] = None,
         token: Optional[str] = None,
