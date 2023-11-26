@@ -113,7 +113,6 @@ class Foobar(BaseModel):
                     title="Foo Bar",
                     child=None,
                     children_types=[Foo, Bar],
-                    parent_type=Foobar,
                     token="abc",
                 ),
                 "expected_tags": [

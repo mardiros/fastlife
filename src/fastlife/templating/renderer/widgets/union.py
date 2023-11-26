@@ -16,13 +16,11 @@ class UnionWidget(Widget):
         title: str,
         child: Optional[Widget],
         children_types: Sequence[Type[BaseModel]],
-        parent_type: Type[BaseModel],
         token: str,
     ):
         super().__init__(name, title=title, token=token)
         self.child = child
         self.children_types = children_types
-        self.parent_type = parent_type
         self.parent_name = name
 
     def build_types(self, route_prefix: str) -> Sequence[TypeWrapper]:

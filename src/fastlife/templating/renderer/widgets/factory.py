@@ -51,38 +51,33 @@ class WidgetFactory:
         value: Any,
         field: Optional[FieldInfo] = None,
         required: bool = True,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:
             if is_union(typ):
-                return self.build_union(name, typ, field, value, required, parent)
+                return self.build_union(name, typ, field, value, required)
 
             if (
                 type_origin is Sequence
                 or type_origin is MutableSequence
                 or type_origin is list
             ):
-                return self.build_sequence(name, typ, field, value, required, parent)
+                return self.build_sequence(name, typ, field, value, required)
 
             if type_origin is Literal:
-                return self.build_literal(name, typ, field, value, required, parent)
+                return self.build_literal(name, typ, field, value, required)
 
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
-            return self.build_model(name, typ, field, value or {}, required, parent)
+            return self.build_model(name, typ, field, value or {}, required)
 
         if issubclass(typ, (bool)):
-            return self.build_boolean(
-                name, typ, field, value or False, required, parent
-            )
+            return self.build_boolean(name, typ, field, value or False, required)
 
         if issubclass(typ, EmailStr):
-            return self.build_emailtype(name, typ, field, value or "", required, parent)
+            return self.build_emailtype(name, typ, field, value or "", required)
 
         if issubclass(typ, (int, str, float, Decimal)):
-            return self.build_simpletype(
-                name, typ, field, value or "", required, parent
-            )
+            return self.build_simpletype(name, typ, field, value or "", required)
 
         raise NotImplementedError(f"{typ} not implemented")
 
@@ -93,7 +88,6 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Mapping[str, Any],
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         ret: dict[str, Any] = {}
         for key, field in typ.model_fields.items():
@@ -107,7 +101,6 @@ class WidgetFactory:
                 name=child_key,
                 field=field,
                 value=value.get(key),
-                parent=typ,
             )
         return ModelWidget(
             field_name,
@@ -124,7 +117,6 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Any,
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         types: list[Type[Any]] = []
         required = True
@@ -164,7 +156,6 @@ class WidgetFactory:
             # we assume those types are BaseModel
             child=child,
             children_types=types,  # type: ignore
-            parent_type=parent,  # type: ignore
             title="",  # we can't set a title on a union type, right ?
             token=self.token,
         )
@@ -178,7 +169,6 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Optional[Sequence[Any]],
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         typ = field_type.__args__[0]  # type: ignore
         value = value or []
@@ -208,7 +198,6 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: bool,
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return BooleanWidget(
             field_name,
@@ -225,7 +214,6 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: str | int | float,
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return TextWidget(
             field_name,
@@ -245,7 +233,6 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: str | int | float,
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return DropDownWidget(
             field_name,
@@ -263,7 +250,6 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: str | int | float,
         required: bool,
-        parent: Optional[Type[Any]] = None,
     ) -> Widget:
         return TextWidget(
             field_name,
