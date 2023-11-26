@@ -26,7 +26,8 @@ def resolve_extended(value: str) -> Type[Any]:
     values = value.split("|")
     if len(values) == 1:
         return resolve(value)
-    return Union[tuple([resolve(t) for t in values])]  # type: ignore
+    types = [resolve(t) for t in values if t != "builtins:NoneType"]
+    return Union[tuple(types)]  # type: ignore
 
 
 def resolve_path(value: str) -> str:

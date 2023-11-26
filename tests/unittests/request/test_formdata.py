@@ -76,6 +76,35 @@ from fastlife.request.form_data import (
             },
             id="list containing list of list",
         ),
+        pytest.param(
+            {
+                "flatten": {"a.1": "C"},
+                "expected": {"a": [None, "C"]},
+            },
+            id="list containing missing piece of list",
+        ),
+        pytest.param(
+            {
+                "flatten": {
+                    "payload.name": "x",
+                    "payload.pets.1.nick": "a",
+                    "payload.pets.1.breed": "Labrador",
+                },
+                "expected": {
+                    "payload": {
+                        "name": "x",
+                        "pets": [
+                            None,
+                            {
+                                "nick": "a",
+                                "breed": "Labrador",
+                            },
+                        ],
+                    },
+                },
+            },
+            id="list containing missing piece of list nested dict",
+        ),
     ],
 )
 def test_unflatten_struct(params: Mapping[str, Any]):
@@ -93,14 +122,6 @@ def test_unflatten_struct(params: Mapping[str, Any]):
                 "flatten": {"a": 1, "b": "B"},
                 "input": [],
                 "error": "{'a': 1, 'b': 'B'}: Not a list",
-            },
-            id="not a list",
-        ),
-        pytest.param(
-            {
-                "flatten": {"0": 1, "2": "B"},
-                "input": [],
-                "error": "{'0': 1, '2': 'B'}: Missing index 1",
             },
             id="not a list",
         ),

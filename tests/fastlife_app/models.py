@@ -16,3 +16,4 @@ class Cat(BaseModel):
 class Person(BaseModel):
     name: str = Field(...)
     pet: Dog | Cat | None = Field(default=None)
+    pets: list[Dog | Cat | None] = Field(default_factory=list)

@@ -37,6 +37,8 @@ def unflatten_struct(
             if isinstance(unflattened_output, list):
                 if not key.isdigit():
                     raise ValueError(f"{flatten_input}: Not a list")
+                while int(key) != len(unflattened_output):
+                    unflattened_output.append(None)
                 if not int(key) == len(unflattened_output):
                     raise ValueError(
                         f"{flatten_input}: Missing index {len(unflattened_output)}"
@@ -51,6 +53,8 @@ def unflatten_struct(
         child_is_list = rest.partition(".")[0].isdigit()
         if isinstance(unflattened_output, list):
             vkey = int(lkey)
+            while len(unflattened_output) < vkey:
+                unflattened_output.append(None)
             if len(unflattened_output) < vkey + 1:
                 sub_child_is_list = rest.partition(".")[0].isdigit()
                 unflattened_output.append([] if sub_child_is_list else {})
@@ -79,9 +83,10 @@ async def unflatten_mapping_form_data(
     request: Request, reg: Registry
 ) -> Mapping[str, Any]:
     form_data = await request.form()
-    return unflatten_struct(
+    ret = unflatten_struct(
         form_data, {}, csrf_token_name=reg.settings.csrf_token_name
     )  # type: ignore
+    return ret  # type: ignore
 
 
 async def unflatten_sequence_form_data(
