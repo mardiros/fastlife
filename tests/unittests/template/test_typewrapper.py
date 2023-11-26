@@ -77,13 +77,12 @@ def test_typewrapper(params: Mapping[str, Any]):
     [
         {
             "type": str,
-            "expected_url": "/_/pydantic-form/widgets/builtins:str?name=foo&token=xyz",
-            "expected_cloned_url": "/_/pydantic-form/widgets/builtins:str?"
-            "name=foobar&token=xyz",
+            "expected_url": "/_/pydantic-form/widgets/builtins:str",
+            "expected_params": {"name": "foo", "token": "xyz"},
         },
     ],
 )
 def test_typewrapper_url(params: Mapping[str, Any]):
     wrap = TypeWrapper(params["type"], route_prefix="/_", name="foo", token="xyz")
     assert wrap.url == params["expected_url"]
-    assert wrap.clone("foobar").url == params["expected_cloned_url"]
+    assert wrap.params == params["expected_params"]

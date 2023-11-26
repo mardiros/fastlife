@@ -15,6 +15,7 @@
             type="button",
             target="closest div",
             get=typ.url,
+            vals=typ.params|tojson,
             onclick="document.getElementById('"+ widget.id  +"-remove-btn').hidden = false",
             )
             }}
@@ -26,11 +27,10 @@
         "remove",
         type="button",
         id=widget.id + "-remove-btn",
-        target="#" + widget.id + "-child",
-        select="#" + widget.id + "-child",
+        target="#" + widget.id,
+        vals=parent_type.params|tojson,
         get=parent_type.url,
         hidden=not child,
-        onclick="document.getElementById('"+ widget.id  +"-remove-btn').hidden = true",
         )
         }}
     </details>

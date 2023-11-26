@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Type
+from typing import Optional, Sequence, Type, Union
 
 from markupsafe import Markup
 from pydantic import BaseModel
@@ -23,7 +23,7 @@ class UnionWidget(Widget):
         self.child = child
         self.children_types = children_types
         self.parent_type = parent_type
-        self.parent_name = "-".join("-".split(name)[:-1])
+        self.parent_name = name
 
     def build_types(self, route_prefix: str) -> Sequence[TypeWrapper]:
         return [
@@ -43,7 +43,7 @@ class UnionWidget(Widget):
                 widget=self,
                 types=self.build_types(renderer.route_prefix),
                 parent_type=TypeWrapper(
-                    self.parent_type,
+                    Union[tuple(self.children_types)],  # type: ignore
                     renderer.route_prefix,
                     self.parent_name,
                     self.token,

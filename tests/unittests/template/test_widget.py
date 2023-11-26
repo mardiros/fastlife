@@ -10,7 +10,7 @@ from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
-from fastlife.templating.renderer.widgets.union import TypeWrapper, UnionWidget
+from fastlife.templating.renderer.widgets.union import UnionWidget
 
 
 class Foo(BaseModel):
@@ -23,15 +23,6 @@ class Bar(BaseModel):
 
 class Foobar(BaseModel):
     foobar: Foo | Bar
-
-
-def test_typewrapper():
-    tw = TypeWrapper(Foo, route_prefix="/_", name="placeholder", token="aaa")
-    assert tw.fullname == "tests.unittests.template.test_widget:Foo"
-    assert (
-        tw.url == "/_/pydantic-form/widgets/"
-        "tests.unittests.template.test_widget:Foo?name=placeholder&token=aaa"
-    )
 
 
 @pytest.mark.parametrize(

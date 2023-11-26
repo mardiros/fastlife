@@ -1,6 +1,6 @@
 import abc
 import secrets
-from typing import Any, Optional, Type
+from typing import Any, Mapping, Optional, Type
 
 from markupsafe import Markup
 
@@ -68,17 +68,13 @@ class TypeWrapper:
         return _get_fullname(self.typ)
 
     @property
+    def params(self) -> Mapping[str, str]:
+        return {"name": self.name, "token": self.token}
+
+    @property
     def url(self) -> str:
         ret = (
             f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
-            f"?name={self.name}&token={self.token}"
+            # f"?name={self.name}&token={self.token}"
         )
         return ret
-
-    def clone(self, name: str) -> "TypeWrapper":
-        return TypeWrapper(
-            typ=self.typ,
-            route_prefix=self.route_prefix,
-            name=name,
-            token=self.token,
-        )
