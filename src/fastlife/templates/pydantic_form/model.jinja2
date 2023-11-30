@@ -1,3 +1,6 @@
+{% from "globals.jinja2" import button %}
+{% from "pydantic_form/widget.jinja2" import show_widget %}
+{% call show_widget(widget) %}
 <div id="{{widget.id}}" class="m-4">
   <details open>
     <summary class="justify-between items-center font-medium cursor-pointer">
@@ -10,3 +13,4 @@
     </div>
   </details>
 </div>
+{% endcall %}

@@ -21,6 +21,10 @@ class Widget(abc.ABC):
     "variable name, nested variables have dots"
     title: str
     "Human title for the widget"
+    token: str
+    "unique token to ensure id are unique in the DOM"
+    removable: bool
+    "Indicate that the widget is removable from the dom"
 
     def __init__(
         self,
@@ -28,12 +32,12 @@ class Widget(abc.ABC):
         *,
         title: Optional[str] = None,
         token: Optional[str] = None,
-        required: bool = False,
+        removable: bool = False,
     ):
         self.name = name
         self.title = title or name.split(".")[-1]
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
-        self.required = required
+        self.removable = removable
 
     @property
     def id(self) -> str:

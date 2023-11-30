@@ -12,11 +12,11 @@ async def show_widget(
     reg: Registry,
     name: Optional[str] = Query(...),
     token: Optional[str] = Query(...),
+    removable: bool = Query(False),
 ) -> Response:
     model_cls = resolve_extended(typ)
-    data = await reg.renderer.pydantic_form(model_cls, None, name, token)
-    resp = Response(data, headers={"Content-Type": "text/html"})
-    return resp
+    data = await reg.renderer.pydantic_form(model_cls, None, name, token, removable)
+    return Response(data, headers={"Content-Type": "text/html"})
 
 
 @configure

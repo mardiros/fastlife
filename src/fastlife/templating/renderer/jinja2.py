@@ -87,7 +87,10 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         return ret
 
     async def render_template(self, template: str, **kwargs: Any) -> str:
-        tpl = self._get_template(template)
+        tpl = self._get_template(
+            template,
+            pydantic_form=self.pydantic_form,
+        )
         ret = await tpl.render_async(**kwargs)
         return ret
 
@@ -97,7 +100,11 @@ class Jinja2TemplateRenderer(AbstractTemplateRenderer):
         form_data: Optional[Mapping[str, Any]] = None,
         name: Optional[str] = None,
         token: Optional[str] = None,
+        removable: bool = False,
     ) -> Markup:
         return await WidgetFactory(self, token).get_markup(
-            model, form_data or {}, name or self.form_data_model_prefix
+            model,
+            form_data or {},
+            prefix=(name or self.form_data_model_prefix),
+            removable=removable,
         )

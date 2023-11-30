@@ -1,3 +1,6 @@
+{% from "globals.jinja2" import button %}
+{% from "pydantic_form/widget.jinja2" import show_widget %}
+{% call show_widget(widget) %}
 <div class="pt-4">
   <label for="{{widget.id}}" class="block mb-2 text-base font-bold text-neutral-900 dark:text-white">
     {{widget.title}}
@@ -9,3 +12,4 @@
   <span class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{widget.help_text}}</span>
   {% endif %}
 </div>
+{% endcall %}

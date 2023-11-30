@@ -24,5 +24,6 @@ class AbstractTemplateRenderer(abc.ABC):
         form_data: Optional[Mapping[str, Any]] = None,
         name: Optional[str] = None,
         token: Optional[str] = None,
+        removable: bool = False,
     ) -> Markup:
         ...

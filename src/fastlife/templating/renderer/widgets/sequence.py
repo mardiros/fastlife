@@ -19,8 +19,9 @@ class SequenceWidget(Widget):
         items: Optional[Sequence[Widget]],
         item_type: Type[Any],
         token: str,
+        removable: bool,
     ):
-        super().__init__(name, title=title, token=token)
+        super().__init__(name, title=title, token=token, removable=removable)
         self.items = items or []
         self.item_type = item_type
         self.help_text = help_text

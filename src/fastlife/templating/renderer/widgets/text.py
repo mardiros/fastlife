@@ -10,13 +10,13 @@ class TextWidget(Widget):
         *,
         title: Optional[str],
         placeholder: Optional[str] = None,
-        required: bool = False,
+        removable: bool = False,
         value: str = "",
         token: Optional[str] = None,
         help_text: Optional[str] = None,
         input_type: str = "text"
     ) -> None:
-        super().__init__(name, title=title, token=token, required=required)
+        super().__init__(name, title=title, token=token, removable=removable)
         self.placeholder = placeholder or ""
         self.value = value
         self.help_text = help_text

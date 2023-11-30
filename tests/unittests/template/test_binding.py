@@ -4,7 +4,7 @@ import pytest
 from fastapi import Request
 
 from fastlife.configurator.registry import AppRegistry
-from fastlife.templating.binding import get_template
+from fastlife.templating.binding import get_page_template
 
 
 @pytest.mark.parametrize(
@@ -20,7 +20,7 @@ from fastlife.templating.binding import get_template
 async def test_get_csrf_token_reuse_token(
     dummy_request_param: Request, default_registry: AppRegistry
 ):
-    template = get_template("base.jinja2")
+    template = get_page_template("base.jinja2")
     renderer = template(default_registry, dummy_request_param)
     response = await renderer()
     assert "set-cookie" in response.headers
@@ -46,7 +46,7 @@ async def test_create_csrf_token(
     def create_token():
         return "xxxCsrfTokenxxx"
 
-    template = get_template("base.jinja2")
+    template = get_page_template("base.jinja2")
     renderer: Any = template(
         default_registry,
         dummy_request_param,
@@ -74,7 +74,7 @@ async def test_create_csrf_token(
 async def test_get_csrf_token_https(
     dummy_request_param: Request, default_registry: AppRegistry
 ):
-    template = get_template("base.jinja2")
+    template = get_page_template("base.jinja2")
     renderer = template(default_registry, dummy_request_param)
     response = await renderer()
     assert "set-cookie" in response.headers

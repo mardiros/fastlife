@@ -29,19 +29,25 @@ class WidgetFactory:
         self,
         base: Type[Any],
         form_data: Mapping[str, Any],
+        *,
         prefix: str,
+        removable: bool,
     ) -> Markup:
-        return await self.get_widget(base, form_data, prefix=prefix).to_html(
-            self.renderer
-        )
+        return await self.get_widget(
+            base, form_data, prefix=prefix, removable=removable
+        ).to_html(self.renderer)
 
     def get_widget(
         self,
         base: Type[Any],
         form_data: Mapping[str, Any],
+        *,
         prefix: str,
+        removable: bool,
     ) -> Widget:
-        return self.build(base, value=form_data.get(prefix, {}), name=prefix)
+        return self.build(
+            base, value=form_data.get(prefix, {}), name=prefix, removable=removable
+        )
 
     def build(
         self,
@@ -49,35 +55,35 @@ class WidgetFactory:
         *,
         name: str = "",
         value: Any,
+        removable: bool,
         field: Optional[FieldInfo] = None,
-        required: bool = True,
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:
             if is_union(typ):
-                return self.build_union(name, typ, field, value, required)
+                return self.build_union(name, typ, field, value, removable)
 
             if (
                 type_origin is Sequence
                 or type_origin is MutableSequence
                 or type_origin is list
             ):
-                return self.build_sequence(name, typ, field, value, required)
+                return self.build_sequence(name, typ, field, value, removable)
 
             if type_origin is Literal:
-                return self.build_literal(name, typ, field, value, required)
+                return self.build_literal(name, typ, field, value, removable)
 
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
-            return self.build_model(name, typ, field, value or {}, required)
+            return self.build_model(name, typ, field, value or {}, removable)
 
         if issubclass(typ, (bool)):
-            return self.build_boolean(name, typ, field, value or False, required)
+            return self.build_boolean(name, typ, field, value or False, removable)
 
         if issubclass(typ, EmailStr):
-            return self.build_emailtype(name, typ, field, value or "", required)
+            return self.build_emailtype(name, typ, field, value or "", removable)
 
         if issubclass(typ, (int, str, float, Decimal)):
-            return self.build_simpletype(name, typ, field, value or "", required)
+            return self.build_simpletype(name, typ, field, value or "", removable)
 
         raise NotImplementedError(f"{typ} not implemented")
 
@@ -87,7 +93,7 @@ class WidgetFactory:
         typ: Type[BaseModel],
         field: Optional[FieldInfo],
         value: Mapping[str, Any],
-        required: bool,
+        removable: bool,
     ) -> Widget:
         ret: dict[str, Any] = {}
         for key, field in typ.model_fields.items():
@@ -101,11 +107,12 @@ class WidgetFactory:
                 name=child_key,
                 field=field,
                 value=value.get(key),
+                removable=False,
             )
         return ModelWidget(
             field_name,
             children_widget=list(ret.values()),
-            required=required,
+            removable=removable,
             title=get_title(typ),
             token=self.token,
         )
@@ -116,24 +123,24 @@ class WidgetFactory:
         field_type: Type[Any],
         field: Optional[FieldInfo],
         value: Any,
-        required: bool,
+        removable: bool,
     ) -> Widget:
         types: list[Type[Any]] = []
-        required = True
+        # required = True
         for typ in field_type.__args__:  # type: ignore
             if typ is NoneType:
-                required = False
+                # required = False
                 continue
             types.append(typ)  # type: ignore
 
         if (
-            not required
+            not removable
             and len(types) == 1
             # if the optional type is a complex type,
             and not is_complex_type(types[0])
         ):
             return self.build(
-                types[0], name=field_name, field=field, value=value, required=True
+                types[0], name=field_name, field=field, value=value, removable=False
             )
         child = None
         if value:
@@ -148,7 +155,7 @@ class WidgetFactory:
                         name=field_name,
                         field=field,
                         value=value,
-                        required=required,
+                        removable=False,
                     )
 
         widget = UnionWidget(
@@ -158,6 +165,7 @@ class WidgetFactory:
             children_types=types,  # type: ignore
             title="",  # we can't set a title on a union type, right ?
             token=self.token,
+            removable=removable,
         )
 
         return widget
@@ -168,7 +176,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: Optional[FieldInfo],
         value: Optional[Sequence[Any]],
-        required: bool,
+        removable: bool,
     ) -> Widget:
         typ = field_type.__args__[0]  # type: ignore
         value = value or []
@@ -178,7 +186,7 @@ class WidgetFactory:
                 name=f"{field_name}.{idx}",
                 value=v,
                 field=field,
-                required=False,
+                removable=True,
             )
             for idx, v in enumerate(value)
         ]
@@ -189,6 +197,7 @@ class WidgetFactory:
             items=items,
             item_type=typ,  # type: ignore
             token=self.token,
+            removable=removable,
         )
 
     def build_boolean(
@@ -197,11 +206,11 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: bool,
-        required: bool,
+        removable: bool,
     ) -> Widget:
         return BooleanWidget(
             field_name,
-            required=required,
+            removable=removable,
             title=field.title if field else "",
             token=self.token,
             value=value,
@@ -213,14 +222,14 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: str | int | float,
-        required: bool,
+        removable: bool,
     ) -> Widget:
         return TextWidget(
             field_name,
             help_text=field.description if field else "",
             input_type="email",
             placeholder=str(field.examples[0]) if field and field.examples else None,
-            required=required,
+            removable=removable,
             title=field.title if field else "",
             token=self.token,
             value=str(value),
@@ -232,12 +241,12 @@ class WidgetFactory:
         field_type: Type[Any],  # a literal actually
         field: FieldInfo | None,
         value: str | int | float,
-        required: bool,
+        removable: bool,
     ) -> Widget:
         return DropDownWidget(
             field_name,
             options=field_type.__args__,  # type: ignore
-            required=required,
+            removable=removable,
             title=field.title if field else "",
             token=self.token,
             value=str(value),
@@ -249,13 +258,13 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: str | int | float,
-        required: bool,
+        removable: bool,
     ) -> Widget:
         return TextWidget(
             field_name,
             help_text=field.description if field else None,
             placeholder=str(field.examples[0]) if field and field.examples else None,
-            required=required,
+            removable=removable,
             title=field.title if field else "",
             token=self.token,
             value=str(value),

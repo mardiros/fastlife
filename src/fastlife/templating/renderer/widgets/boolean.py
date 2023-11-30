@@ -10,10 +10,10 @@ class BooleanWidget(Widget):
         *,
         title: Optional[str],
         value: bool = False,
-        required: bool = False,
+        removable: bool = False,
         token: str,
     ) -> None:
-        super().__init__(name, title=title, required=required, token=token)
+        super().__init__(name, title=title, removable=removable, token=token)
         self.value = value
 
     def get_template(self) -> str:

@@ -10,7 +10,9 @@ Template = Callable[..., TemplateEngineHandler]
 TemplateEngine = Callable[["Registry", Request], Template]
 
 
-def get_template(template: str, *, content_type: str = "text/html") -> TemplateEngine:
+def get_page_template(
+    template: str, *, content_type: str = "text/html"
+) -> TemplateEngine:
     def render_template(
         reg: "Registry",
         request: Request,
@@ -38,5 +40,21 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
     return render_template
 
 
-def template(template_path: str) -> Template:
-    return Depends(get_template(template_path))
+def get_template(
+    template: str, *, content_type: str = "text/html"
+) -> Callable[["Registry"], Template]:
+    def render_template(reg: "Registry") -> Template:
+        async def parametrizer(**kwargs: Any) -> Response:
+            data = await reg.renderer.render_template(template, **kwargs)
+            resp = Response(data, headers={"Content-Type": content_type})
+            return resp
+
+        return parametrizer
+
+    return render_template
+
+
+def template(template_path: str, page: bool = True) -> Template:
+    return Depends(
+        get_page_template(template_path) if page else get_template(template_path)
+    )

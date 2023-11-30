@@ -1,0 +1,10 @@
+{%- from "globals.jinja2" import button -%}
+{% macro show_widget(widget) %}
+{% set container_id = widget.name + "-" + widget.token + "-container" %}
+<div id="{{container_id}}">
+  {{ caller() }}
+  {% if widget.removable %}
+  {{ button("Remove", type="button", onclick="document.getElementById('"+ container_id +"').remove()" )}}
+  {% endif %}
+</div>
+{% endmacro %}
