@@ -34,12 +34,13 @@ cov test_suite=default_unittest_suite:
     poetry run pytest --cov-report=html --cov={{package}} {{test_suite}}
     xdg-open htmlcov/index.html
 
+
 functest test_suite=default_functest_suite:
-    poetry run pytest -sxv {{test_suite}}
+    poetry run behave --tags=-dev --no-capture {{test_suite}}
+
 
 funcdevtest:
-    bash -c "sleep 1;firefox http://0.0.0.0:8888/autoform" &
-    PYTHONPATH=. poetry run python tests/fastlife_app/entrypoint.py
+    poetry run behave --tags=dev --no-capture tests/functionals/
 
 mypy:
     poetry run mypy src/ tests/

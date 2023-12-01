@@ -27,7 +27,7 @@ def test_show_widget_base_model(client: WebTestClient):
         "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog?name=pet&token=xxx"
     )
 
-    input = resp.by_label_text("nick")
+    input = resp.by_label_text("Nick name")
     assert input is not None
     assert input.attrs["name"] == "pet.nick"
     assert input.attrs["value"] == ""

@@ -34,6 +34,7 @@ class Foobar(BaseModel):
                     "name",
                     title="Name",
                     value="Robert Nesta",
+                    aria_label="This is written on your ID card",
                     placeholder="John Doe",
                     help_text="This is written on your ID card",
                 ),
@@ -46,6 +47,7 @@ class Foobar(BaseModel):
                             "type": "text",
                             "value": "Robert Nesta",
                             "placeholder": "John Doe",
+                            "aria-label": "This is written on your ID card",
                         },
                     },
                     {
@@ -114,6 +116,7 @@ class Foobar(BaseModel):
                     child=None,
                     children_types=[Foo, Bar],
                     token="abc",
+                    removable=False,
                 ),
                 "expected_tags": [
                     {"tag": "button", "text": "Foo"},
@@ -136,6 +139,7 @@ class Foobar(BaseModel):
                         )
                     ],
                     token="abc",
+                    removable=False,
                 ),
                 "expected_tags": [
                     {
@@ -184,4 +188,4 @@ async def test_widget(
         tag = html.find(expected_tag["tag"], string=string)
         assert tag is not None, f"{expected_tag} in {resp}"
         for attr, val in expected_tag.get("attrs", {}).items():
-            assert tag.attrs.get(attr) == val, tag.attrs
+            assert tag.attrs.get(attr) == val, attr

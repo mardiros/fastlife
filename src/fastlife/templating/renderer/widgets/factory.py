@@ -264,6 +264,7 @@ class WidgetFactory:
             field_name,
             help_text=field.description if field else None,
             placeholder=str(field.examples[0]) if field and field.examples else None,
+            aria_label=field.description if field else None,
             removable=removable,
             title=field.title if field else "",
             token=self.token,

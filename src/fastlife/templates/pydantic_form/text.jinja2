@@ -3,10 +3,11 @@
 {% call show_widget(widget) %}
 <div class="pt-4">
   <label for="{{widget.id}}" class="block mb-2 text-base font-bold text-neutral-900 dark:text-white">
-    {{widget.title}}
+    {{widget.token}} - {{widget.title}}
   </label>
-  <input name="{{widget.name}}" value="{{widget.value}}" type="{{widget.input_type}}" id="{{widget.id}}"
-    placeholder="{{widget.placeholder}}"
+  <input name="{{widget.name}}" value="{{widget.value}}" type="{{widget.input_type}}" id="{{widget.id}}" {% if
+    widget.aria_label %}aria-label="{{widget.aria_label}}" {% endif %} {% if widget.placeholder
+    %}placeholder="{{widget.placeholder}}" {% endif %}
     class="bg-neutral-50 border border-neutral-300 text-neutral-900 text-base rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
   {% if widget.help_text %}
   <span class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{widget.help_text}}</span>

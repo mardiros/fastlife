@@ -9,6 +9,7 @@ class TextWidget(Widget):
         name: str,
         *,
         title: Optional[str],
+        aria_label: Optional[str] = None,
         placeholder: Optional[str] = None,
         removable: bool = False,
         value: str = "",
@@ -16,7 +17,9 @@ class TextWidget(Widget):
         help_text: Optional[str] = None,
         input_type: str = "text"
     ) -> None:
-        super().__init__(name, title=title, token=token, removable=removable)
+        super().__init__(
+            name, title=title, aria_label=aria_label, token=token, removable=removable
+        )
         self.placeholder = placeholder or ""
         self.value = value
         self.help_text = help_text

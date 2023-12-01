@@ -21,6 +21,8 @@ class Widget(abc.ABC):
     "variable name, nested variables have dots"
     title: str
     "Human title for the widget"
+    aria_label: str
+    "Non visible text alternative"
     token: str
     "unique token to ensure id are unique in the DOM"
     removable: bool
@@ -32,10 +34,12 @@ class Widget(abc.ABC):
         *,
         title: Optional[str] = None,
         token: Optional[str] = None,
+        aria_label: Optional[str] = None,
         removable: bool = False,
     ):
         self.name = name
         self.title = title or name.split(".")[-1]
+        self.aria_label = aria_label or ""
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.removable = removable
 
