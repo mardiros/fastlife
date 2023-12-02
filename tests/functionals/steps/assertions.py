@@ -1,36 +1,26 @@
 # type: ignore
 
-from typing import Any
-
 from behave import then
+from playwright.sync_api import Page, expect
 
-"""
-Debug in the devtools of firefox
 
-function getElementByXpath(path) {
-  return document.evaluate(
-    path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
-  ).singleNodeValue;
-}
-"""
+class Context:
+    browser: Page
 
 
 @then('I see the text "{text}"')
-def assert_text(context: Any, text: str):
-    text = text.replace("'", "\\'")
-    context.browser.find_element_by_xpath(
-        f"//*[contains(text(), '{text}') or .='{text}']"
-    )
+def assert_text(context: Context, text: str):
+    loc = context.browser.get_by_text(text)
+    expect(loc).to_be_visible()
 
 
 @then('I don\'t see the text "{text}"')
-def assert_not_text(context: Any, text: str):
-    text = text.replace("'", "\\'")
-    context.browser.dont_find_element_by_xpath(
-        f"//*[contains(text(), '{text}') or .='{text}']"
-    )
+def assert_not_text(context: Context, text: str):
+    loc = context.browser.get_by_text(text)
+    expect(loc).not_to_be_visible()
 
 
 @then('I see the heading "{text}"')
-def assert_h1(context: Any, text: str):
-    context.browser.find_element_by_xpath(f"//h1[contains(text(), '{text}')]")
+def assert_h1(context: Context, text: str):
+    loc = context.browser.locator(f"xpath=//h1[contains(text(), '{text}')]")
+    expect(loc).to_be_visible()
