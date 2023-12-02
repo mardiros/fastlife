@@ -1,29 +1,55 @@
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
-from pydantic import BaseModel, Field, field_validator
-
-
-class Dog(BaseModel):
-    nick: str = Field(title="Nick name", description="Say it, he will wag its tail")
-    breed: Literal["Labrador", "Golden Retriever", "Bulldog"]
+from pydantic import BaseModel, Field, SecretStr, field_validator
 
 
-class Cat(BaseModel):
-    nick: str = Field(title="Nick name", description="Say it, nothing will happen")
-    breed: Literal["Persian", "Siamese", "Ragdoll"]
+class Permission(BaseModel):
+    name: str = Field(title="Permission")
 
 
-class Person(BaseModel):
-    name: str = Field(
-        title="name",
-        description="First name and last name, or surname",
-        examples=["John doe"],
+class Group(BaseModel):
+    name: str = Field(title="Group name")
+    permissions: list[Permission]
+
+    @field_validator("permissions")
+    def validate_permissions(cls, value: Any) -> Any:
+        if value:
+            return [val for val in value if val is not None]
+        return value
+
+
+class PhoneNumber(BaseModel):
+    type: Literal["phonenumber"] = Field(default="phonenumber")
+    number: str = Field(...)
+
+
+class Email(BaseModel):
+    type: Literal["email"] = Field(default="email")
+    address: str = Field(...)
+
+
+class Account(BaseModel):
+    username: str = Field(
+        title="Username",
+        description="Your unique identifier",
+        examples=["alice", "bob"],
     )
-    pet: Dog | Cat | None = Field(default=None)
-    pets: list[Dog | Cat | None] = Field(default_factory=list, title="pets")
+    password: Optional[SecretStr] = Field(
+        title="Password",
+        description="The painfull secret you should put in your password manager",
+        default=None,
+    )
+    recovery_address: Optional[PhoneNumber | Email] = Field(
+        title="Email or Phone",
+        description="Email or Phone number used to recover your account, "
+        "in case you lost your password",
+        default=None,
+    )
 
-    @field_validator("pets")
-    def validate_pets(cls, value: Any) -> Any:
+    groups: list[Group] = Field(title="Group", default_factory=list)
+
+    @field_validator("groups")
+    def validate_groups(cls, value: Any) -> Any:
         if value:
             return [val for val in value if val is not None]
         return value

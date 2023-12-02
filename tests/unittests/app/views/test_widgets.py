@@ -15,27 +15,27 @@ def test_show_widget_builtins_str(typ: str, client: WebTestClient):
 @pytest.mark.parametrize("typ", ["str", "int", "float"])
 def test_show_widget_unions(typ: str, client: WebTestClient):
     resp = client.get(
-        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog|"
-        "tests.fastlife_app.models:Cat?name=pet&token=xxx"
+        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:PhoneNumber|"
+        "tests.fastlife_app.models:Email?name=pet&token=xxx"
     )
-    assert resp.by_text("Dog", node_name="button") is not None
-    assert resp.by_text("Cat", node_name="button") is not None
+    assert resp.by_text("PhoneNumber", node_name="button") is not None
+    assert resp.by_text("Email", node_name="button") is not None
 
 
 def test_show_widget_base_model(client: WebTestClient):
     resp = client.get(
-        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:Dog?name=pet&token=xxx"
+        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:PhoneNumber?name=phone&token=xxx"
     )
 
-    input = resp.by_label_text("Nick name")
+    input = resp.by_label_text("number")
     assert input is not None
-    assert input.attrs["name"] == "pet.nick"
+    assert input.attrs["name"] == "phone.number"
     assert input.attrs["value"] == ""
 
-    select = resp.by_label_text("breed")
+    select = resp.by_label_text("type")  # fixme, should be hidden
     assert select is not None
     assert select.name == "select"
-    assert select.attrs["name"] == "pet.breed"
+    assert select.attrs["name"] == "phone.type"
     children = [
         (
             str(opt.attrs["value"]),  # type: ignore
@@ -44,7 +44,5 @@ def test_show_widget_base_model(client: WebTestClient):
         for opt in select.find_all("option")
     ]
     assert children == [
-        ("Labrador", "Labrador"),
-        ("Golden Retriever", "Golden Retriever"),
-        ("Bulldog", "Bulldog"),
+        ("phonenumber", "phonenumber"),
     ]

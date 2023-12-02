@@ -3,7 +3,7 @@ from typing import Any, Mapping, Optional, Union
 import pytest
 
 from fastlife.templating.renderer.widgets.base import TypeWrapper
-from tests.fastlife_app.models import Cat, Dog, Person
+from tests.fastlife_app.models import Account, Email, PhoneNumber
 
 
 @pytest.mark.parametrize(
@@ -32,38 +32,44 @@ from tests.fastlife_app.models import Cat, Dog, Person
         ),
         pytest.param(
             {
-                "type": Person,
-                "expected_fullname": "tests.fastlife_app.models:Person",
+                "type": Account,
+                "expected_fullname": "tests.fastlife_app.models:Account",
             },
-            id="Person",
+            id="Account",
         ),
         pytest.param(
             {
-                "type": Dog | Cat,
+                "type": PhoneNumber | Email,
                 "expected_fullname": "|".join(
-                    ["tests.fastlife_app.models:Dog", "tests.fastlife_app.models:Cat"]
+                    [
+                        "tests.fastlife_app.models:PhoneNumber",
+                        "tests.fastlife_app.models:Email",
+                    ]
                 ),
             },
-            id="Dog | Cat",
+            id="PhoneNumber | Email",
         ),
         pytest.param(
             {
-                "type": Union[Dog, Cat],
+                "type": Union[PhoneNumber, Email],
                 "expected_fullname": "|".join(
-                    ["tests.fastlife_app.models:Dog", "tests.fastlife_app.models:Cat"]
+                    [
+                        "tests.fastlife_app.models:PhoneNumber",
+                        "tests.fastlife_app.models:Email",
+                    ]
                 ),
             },
-            id="Union[Dog, Cat]",
+            id="Union[PhoneNumber, Email]",
         ),
         pytest.param(
             {
-                "type": Optional[Dog],
+                "type": Optional[PhoneNumber],
                 "expected_fullname": "|".join(
                     # Not sur that NoneType will be , id="Optional[Dog]"ok
-                    ["tests.fastlife_app.models:Dog", "builtins:NoneType"]
+                    ["tests.fastlife_app.models:PhoneNumber", "builtins:NoneType"]
                 ),
             },
-            id="Optional[Dog]",
+            id="Optional[PhoneNumber]",
         ),
     ],
 )

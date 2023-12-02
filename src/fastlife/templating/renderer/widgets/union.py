@@ -13,7 +13,7 @@ class UnionWidget(Widget):
         self,
         name: str,
         *,
-        title: str,
+        title: Optional[str],
         child: Optional[Widget],
         children_types: Sequence[Type[BaseModel]],
         token: str,

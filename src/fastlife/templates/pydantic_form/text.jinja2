@@ -3,7 +3,7 @@
 {% call show_widget(widget) %}
 <div class="pt-4">
   <label for="{{widget.id}}" class="block mb-2 text-base font-bold text-neutral-900 dark:text-white">
-    {{widget.token}} - {{widget.title}}
+    {{widget.title}}
   </label>
   <input name="{{widget.name}}" value="{{widget.value}}" type="{{widget.input_type}}" id="{{widget.id}}" {% if
     widget.aria_label %}aria-label="{{widget.aria_label}}" {% endif %} {% if widget.placeholder

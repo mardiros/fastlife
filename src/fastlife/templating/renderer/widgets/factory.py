@@ -5,7 +5,7 @@ from types import NoneType
 from typing import Any, Literal, Mapping, Optional, Type, get_origin
 
 from markupsafe import Markup
-from pydantic import BaseModel, EmailStr, ValidationError
+from pydantic import BaseModel, EmailStr, SecretStr, ValidationError
 from pydantic.fields import FieldInfo
 
 from fastlife.shared_utils.infer import is_complex_type, is_union
@@ -81,6 +81,9 @@ class WidgetFactory:
 
         if issubclass(typ, EmailStr):
             return self.build_emailtype(name, typ, field, value or "", removable)
+
+        if issubclass(typ, SecretStr):
+            return self.build_secretstr(name, typ, field, value or "", removable)
 
         if issubclass(typ, (int, str, float, Decimal)):
             return self.build_simpletype(name, typ, field, value or "", removable)
@@ -163,7 +166,7 @@ class WidgetFactory:
             # we assume those types are BaseModel
             child=child,
             children_types=types,  # type: ignore
-            title="",  # we can't set a title on a union type, right ?
+            title=field.title if field else "",
             token=self.token,
             removable=removable,
         )
@@ -228,6 +231,25 @@ class WidgetFactory:
             field_name,
             help_text=field.description if field else "",
             input_type="email",
+            placeholder=str(field.examples[0]) if field and field.examples else None,
+            removable=removable,
+            title=field.title if field else "",
+            token=self.token,
+            value=str(value),
+        )
+
+    def build_secretstr(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: FieldInfo | None,
+        value: str | int | float,
+        removable: bool,
+    ) -> Widget:
+        return TextWidget(
+            field_name,
+            help_text=field.description if field else "",
+            input_type="password",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
             title=field.title if field else "",

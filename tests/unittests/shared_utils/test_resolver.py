@@ -12,14 +12,14 @@ def test_resolve():
 
 def test_resolve_extended():
     UnionType = resolver.resolve_extended(
-        "tests.fastlife_app.models:Dog|tests.fastlife_app.models:Cat"
+        "tests.fastlife_app.models:Email|tests.fastlife_app.models:PhoneNumber"
     )
     assert get_origin(UnionType) == Union
     assert len(UnionType.__args__) == 2
     assert UnionType.__args__[0].__module__ == "tests.fastlife_app.models"
-    assert UnionType.__args__[0].__name__ == "Dog"
+    assert UnionType.__args__[0].__name__ == "Email"
     assert UnionType.__args__[1].__module__ == "tests.fastlife_app.models"
-    assert UnionType.__args__[1].__name__ == "Cat"
+    assert UnionType.__args__[1].__name__ == "PhoneNumber"
 
 
 def test_resolve_path(root_dir: Path):

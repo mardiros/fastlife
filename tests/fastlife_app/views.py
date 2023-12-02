@@ -4,23 +4,23 @@ from fastapi import Response
 
 from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import model
-from tests.fastlife_app.models import Person
+from tests.fastlife_app.models import Account
 
 
 async def hello_world(
     template: Annotated[Template, template("hello_world.jinja2")],
-    person: Annotated[Optional[Person], model(Person, "person")],
+    account: Annotated[Optional[Account], model(Account, "account")],
 ) -> Response:
-    return await template(person=person)
+    return await template(account=account)
 
 
 async def autoform(
     template: Annotated[Template, template("autoform.jinja2")],
-    person: Annotated[Optional[Person], model(Person)],
+    account: Annotated[Optional[Account], model(Account)],
 ):
-    person = person
+    account = account
     return await template(
-        model=Person, form_data={"payload": person.model_dump()} if person else {}
+        model=Account, form_data={"payload": account.model_dump()} if account else {}
     )
 
 
