@@ -12,6 +12,7 @@ from fastlife.shared_utils.infer import is_complex_type, is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
+from fastlife.templating.renderer.widgets.hidden import HiddenWidget
 from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 
 from .base import Widget, get_title
@@ -243,7 +244,7 @@ class WidgetFactory:
         field_name: str,
         field_type: Type[Any],
         field: FieldInfo | None,
-        value: str | int | float,
+        value: SecretStr | str,
         removable: bool,
     ) -> Widget:
         return TextWidget(
@@ -254,7 +255,7 @@ class WidgetFactory:
             removable=removable,
             title=field.title if field else "",
             token=self.token,
-            value=str(value),
+            value=value.get_secret_value() if isinstance(value, SecretStr) else value,
         )
 
     def build_literal(
@@ -265,9 +266,16 @@ class WidgetFactory:
         value: str | int | float,
         removable: bool,
     ) -> Widget:
+        choices: list[str] = field_type.__args__  # type: ignore
+        if len(choices) == 1:
+            return HiddenWidget(
+                field_name,
+                value=choices[0],
+                token=self.token,
+            )
         return DropDownWidget(
             field_name,
-            options=field_type.__args__,  # type: ignore
+            options=choices,
             removable=removable,
             title=field.title if field else "",
             token=self.token,

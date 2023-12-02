@@ -106,6 +106,11 @@ class WebResponse:
             self._form = WebForm(self._client, self._origin, form)
         return self._form
 
+    def by_node_name(
+        self, node_name: str, *, attrs: dict[str, str] | None = None
+    ) -> list[bs4.Tag]:
+        return self.html.find_all(node_name, attrs or {})
+
 
 CookieTypes = httpx._types.CookieTypes  # type: ignore
 Cookies = httpx._models.Cookies  # type: ignore

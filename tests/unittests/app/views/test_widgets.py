@@ -24,7 +24,8 @@ def test_show_widget_unions(typ: str, client: WebTestClient):
 
 def test_show_widget_base_model(client: WebTestClient):
     resp = client.get(
-        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:PhoneNumber?name=phone&token=xxx"
+        "/_fl/pydantic-form/widgets/tests.fastlife_app.models:PhoneNumber"
+        "?name=phone&token=xxx"
     )
 
     input = resp.by_label_text("number")
@@ -32,17 +33,30 @@ def test_show_widget_base_model(client: WebTestClient):
     assert input.attrs["name"] == "phone.number"
     assert input.attrs["value"] == ""
 
-    select = resp.by_label_text("type")  # fixme, should be hidden
-    assert select is not None
-    assert select.name == "select"
-    assert select.attrs["name"] == "phone.type"
-    children = [
-        (
-            str(opt.attrs["value"]),  # type: ignore
-            opt.text,
+    assert (
+        len(
+            resp.by_node_name(
+                "input",
+                attrs={
+                    "type": "hidden",
+                    "name": "phone.type",
+                    "value": "phonenumber",
+                },
+            )
         )
-        for opt in select.find_all("option")
-    ]
-    assert children == [
-        ("phonenumber", "phonenumber"),
-    ]
+        == 1
+    )
+    # select = resp.by_label_text("type")  # fixme, should be hidden
+    # assert select is not None
+    # assert select.name == "select"
+    # assert select.attrs["name"] == "phone.type"
+    # children = [
+    #     (
+    #         str(opt.attrs["value"]),  # type: ignore
+    #         opt.text,
+    #     )
+    #     for opt in select.find_all("option")
+    # ]
+    # assert children == [
+    #     ("phonenumber", "phonenumber"),
+    # ]
