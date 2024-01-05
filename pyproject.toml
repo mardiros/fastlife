@@ -1,7 +1,7 @@
 [tool.poetry]
 authors = ["Guillaume Gauvrit <guillaume@gauvr.it>"]
 description = "High-level web framework"
-name = "fastlife"
+name = "fastlifeweb"
 license = "BSD-derived"
 packages = [{include = "fastlife", from = "src"}]
 readme = "README.md"
@@ -18,7 +18,7 @@ version = "0.1.0"
 [tool.poetry.dependencies]
 python = "^3.11"
 beautifulsoup4 = {version = "^4.12.2", extras = ["testing"]}
-fastapi = "^0.103.1"
+fastapi = "^0.108.0"
 jinja2 = "^3.1.2"
 pydantic = "^2.3.0"
 pydantic-settings = "^2.0.3"
