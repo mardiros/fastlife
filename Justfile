@@ -50,7 +50,8 @@ black:
     poetry run black .
 
 gh-pages:
-    poetry export --with dev -f requirements.txt -o docs/requirements.txt --without-hashes
+    # poetry export --with dev -f requirements.txt -o docs/requirements.txt --without-hashes
+    echo "No docs built"
 
 release major_minor_patch: test gh-pages && changelog
     poetry version {{major_minor_patch}}
