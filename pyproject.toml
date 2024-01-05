@@ -1,9 +1,18 @@
 [tool.poetry]
 authors = ["Guillaume Gauvrit <guillaume@gauvr.it>"]
-description = ""
+description = "High-level web framework"
 name = "fastlife"
+license = "BSD-derived"
 packages = [{include = "fastlife", from = "src"}]
 readme = "README.md"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Framework :: AsyncIO",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Internet :: WWW/HTTP",
+]
 version = "0.1.0"
 
 [tool.poetry.dependencies]
