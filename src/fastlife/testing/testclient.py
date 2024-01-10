@@ -1,5 +1,5 @@
 import re
-from typing import Any, Mapping
+from typing import Any, Literal, Mapping
 from urllib.parse import urlencode
 
 import bs4
@@ -30,13 +30,15 @@ class WebForm:
         assert self._form.find("button", string=re.compile(f".*{text}.*")) is not None
         return self
 
-    def submit(self) -> "WebResponse":
+    def submit(self, follow_redirects: bool = True) -> "WebResponse":
         target = (
             self._form.attrs.get("hx-post")
             or self._form.attrs.get("post")
             or self._origin
         )
-        return self._client.post(target, data=self._formdata)
+        return self._client.post(
+            target, data=self._formdata, follow_redirects=follow_redirects
+        )
 
 
 class WebResponse:
@@ -50,6 +52,10 @@ class WebResponse:
     @property
     def status_code(self) -> int:
         return self._response.status_code
+
+    @property
+    def is_redirect(self) -> int:
+        return 300 <= self._response.status_code < 400
 
     @property
     def content_type(self) -> str:
@@ -133,25 +139,61 @@ class WebTestClient:
     def cookies(self, value: Cookies) -> None:
         self.testclient.cookies = value
 
-    def get(self, url: str) -> WebResponse:
-        resp = self.testclient.get(url, follow_redirects=False)
-        if "set-cookie" in resp.headers:
-            for name, cookie in resp.cookies.items():
-                self.testclient.cookies.set(name, cookie)
-        return WebResponse(
+    def request(
+        self,
+        method: Literal["GET", "POST"],  # I am a browser
+        url: str,
+        *,
+        content: str | None = None,
+        headers: Mapping[str, str] | None = None,
+        max_redirects: int = 0,
+    ) -> WebResponse:
+        rawresp = self.testclient.request(
+            method=method,
+            url=url,
+            headers=headers,
+            content=content,
+            follow_redirects=False,  # don't follow for cookie processing
+        )
+        # the wrapper client does not set cookies
+        # and does not set cookie while redirecting,
+        # so we reimplement it here
+        if "set-cookie" in rawresp.headers:
+            for name, cookie in rawresp.cookies.items():
+                self.cookies.set(name, cookie)
+        resp = WebResponse(
             self,
             url,
-            resp,
+            rawresp,
+        )
+        if resp.is_redirect and max_redirects > 0:
+            if resp.status_code != 307:
+                method = "GET"
+                headers = None
+                content = None
+            return self.request(
+                method=method,
+                url=resp.headers["location"],
+                content=content,
+                headers=headers,
+                max_redirects=max_redirects - 1,
+            )
+        return resp
+
+    def get(self, url: str, follow_redirects: bool = False) -> WebResponse:
+        return self.request(
+            "GET",
+            url,
+            max_redirects=int(follow_redirects) * 10,
         )
 
-    def post(self, url: str, data: Mapping[str, Any]) -> WebResponse:
-        return WebResponse(
-            self,
+    def post(
+        self, url: str, data: Mapping[str, Any], follow_redirects: bool = True
+    ) -> WebResponse:
+        return self.request(
+            "POST",
             url,
-            self.testclient.post(
-                url,
-                content=urlencode(data),
-                headers={"Content-Type": "application/x-www-form-urlencoded"},
-                follow_redirects=False,
-            ),
+            content=urlencode(data),
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            max_redirects=int(follow_redirects) * 10,
         )

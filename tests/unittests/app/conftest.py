@@ -10,7 +10,10 @@ from fastlife.testing import WebTestClient
 @pytest.fixture
 async def app():
     conf = Configurator(
-        Settings(template_search_path="fastlife:templates,tests.fastlife_app:templates")
+        Settings(
+            template_search_path="fastlife:templates,tests.fastlife_app:templates",
+            session_secret_key="labamba",
+        )
     )
     conf.include("tests.fastlife_app.views")
     yield conf.get_app()
