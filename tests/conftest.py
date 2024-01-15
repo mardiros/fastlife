@@ -55,5 +55,5 @@ def dummy_request_param(params: Mapping[str, Any]) -> Request:
 
 
 @pytest.fixture()
-def default_registry():
+def default_registry() -> AppRegistry:
     return AppRegistry(Settings())

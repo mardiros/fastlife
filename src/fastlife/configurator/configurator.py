@@ -7,13 +7,24 @@ import logging
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, List, Optional, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Coroutine,
+    List,
+    Optional,
+    Self,
+    Type,
+    Union,
+)
 
 import venusian  # type: ignore
 from fastapi import Depends, FastAPI, Response
 from fastapi.datastructures import Default
 from fastapi.staticfiles import StaticFiles
 
+from fastlife.configurator.base import AbstractMiddleware
 from fastlife.security.csrf import check_csrf
 
 from .settings import Settings
@@ -39,6 +50,7 @@ class Configurator:
         )
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
+        self.include("fastlife.session")
 
     def get_app(self) -> FastAPI:
         return self._app
@@ -47,6 +59,12 @@ class Configurator:
         if isinstance(module, str):
             module = importlib.import_module(module)
         self.scanner.scan(module, categories=[VENUSIAN_CATEGORY])  # type: ignore
+        return self
+
+    def add_middleware(
+        self, middleware_class: Type[AbstractMiddleware], **options: Any
+    ) -> Self:
+        self._app.add_middleware(middleware_class, **options)
         return self
 
     def add_route(
