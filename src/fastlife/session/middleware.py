@@ -24,9 +24,9 @@ class SessionMiddleware(AbstractMiddleware):
         serializer: Type[AbsractSessionSerializer] = SignedSessionSerializer,
     ) -> None:
         self.app = app
-        self.serializer = serializer(secret_key, int(duration.total_seconds()))
-        self.cookie_name = cookie_name
         self.max_age = int(duration.total_seconds())
+        self.serializer = serializer(secret_key, self.max_age)
+        self.cookie_name = cookie_name
         self.security_flags = (
             f"Path={cookie_path}; HttpOnly; SameSite={cookie_same_site}"
         )
