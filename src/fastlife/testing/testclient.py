@@ -155,12 +155,6 @@ class WebTestClient:
             content=content,
             follow_redirects=False,  # don't follow for cookie processing
         )
-        # the wrapper client does not set cookies
-        # and does not set cookie while redirecting,
-        # so we reimplement it here
-        if "set-cookie" in rawresp.headers:
-            for name, cookie in rawresp.cookies.items():
-                self.cookies.set(name, cookie)
         resp = WebResponse(
             self,
             url,

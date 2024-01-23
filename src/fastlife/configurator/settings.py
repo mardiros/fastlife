@@ -26,3 +26,5 @@ class Settings(BaseSettings):
     session_serializer: str = Field(
         default="fastlife.session.serializer:SignedSessionSerializer"
     )
+
+    domain_name: str = Field(default="", title="domain name where the app is served")

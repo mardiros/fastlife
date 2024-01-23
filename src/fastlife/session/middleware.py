@@ -20,16 +20,20 @@ class SessionMiddleware(AbstractMiddleware):
         cookie_path: str = "/",
         cookie_same_site: Literal["lax", "strict", "none"] = "lax",
         cookie_secure: bool = False,
+        cookie_domain: str = "",
         serializer: Type[AbsractSessionSerializer] = SignedSessionSerializer,
     ) -> None:
         self.app = app
         self.serializer = serializer(secret_key, int(duration.total_seconds()))
         self.cookie_name = cookie_name
         self.max_age = int(duration.total_seconds())
-        self.path = cookie_path
-        self.security_flags = "httponly; samesite=" + cookie_same_site
+        self.security_flags = (
+            f"Path={cookie_path}; HttpOnly; SameSite={cookie_same_site}"
+        )
         if cookie_secure:
-            self.security_flags += "; secure"
+            self.security_flags += "; Secure"
+        if cookie_domain:
+            self.security_flags += f"; Domain={cookie_domain}"
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] not in ("http", "websocket"):  # pragma: no cover
@@ -52,7 +56,7 @@ class SessionMiddleware(AbstractMiddleware):
                     data = self.serializer.serialize(scope["session"]).decode("utf-8")
                     headers = MutableHeaders(scope=message)
                     header_value = (
-                        f"{self.cookie_name}={data}; path={self.path}; "
+                        f"{self.cookie_name}={data}; "
                         f"Max-Age={self.max_age}; {self.security_flags}"
                     )
                     headers.append("set-cookie", header_value)
@@ -61,8 +65,7 @@ class SessionMiddleware(AbstractMiddleware):
                     headers = MutableHeaders(scope=message)
                     expires = "expires=Thu, 01 Jan 1970 00:00:00 GMT; "
                     header_value = (
-                        f"{self.cookie_name}=; path={self.path}; "
-                        f"{expires}{self.security_flags}"
+                        f"{self.cookie_name}=; " f"{expires}{self.security_flags}"
                     )
                     headers.append("set-cookie", header_value)
             await send(message)
