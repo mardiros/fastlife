@@ -1,4 +1,5 @@
 import re
+from collections.abc import MutableMapping
 from typing import Any, Literal, Mapping
 from urllib.parse import urlencode
 
@@ -6,6 +7,10 @@ import bs4
 import httpx
 from fastapi.testclient import TestClient
 from starlette.types import ASGIApp
+
+from fastlife.configurator.settings import Settings
+from fastlife.session.serializer import AbsractSessionSerializer
+from fastlife.shared_utils.resolver import resolve
 
 
 class WebForm:
@@ -122,14 +127,64 @@ CookieTypes = httpx._types.CookieTypes  # type: ignore
 Cookies = httpx._models.Cookies  # type: ignore
 
 
+class Session(dict[str, Any]):
+    def __init__(self, client: "WebTestClient"):
+        self.client = client
+        if client.session_serializer is None:
+            raise RuntimeError(
+                "WebTestClient has not been initialize with the app settings, "
+                "can't decode session"
+            )
+
+        self.srlz = client.session_serializer
+        settings = self.client.settings
+        assert settings is not None
+        self.settings = settings
+        data: Mapping[str, Any]
+        if settings.session_cookie_name in self.client.cookies:
+            data, exists = self.srlz.deserialize(
+                self.client.cookies[settings.session_cookie_name].encode("utf-8")
+            )
+        else:
+            data, exists = {}, False
+        self.new_session = not exists
+        super().__init__(data)
+
+    def __setitem__(self, __key: Any, __value: Any) -> None:
+        super().__setitem__(__key, __value)
+        settings = self.settings
+        data = self.serialize()
+        if self.new_session:
+            self.client.cookies.set(
+                settings.session_cookie_name,
+                data,
+                settings.domain_name,
+                settings.session_cookie_path,
+            )
+        else:
+            self.client.cookies[settings.session_cookie_name] = data
+
+    def serialize(self) -> str:
+        return self.srlz.serialize(self).decode("utf-8")
+
+
 class WebTestClient:
     def __init__(
         self,
         app: ASGIApp,
+        *,
+        settings: Settings | None = None,
         cookies: CookieTypes | None = None,
     ) -> None:
         self.app = app
         self.testclient = TestClient(app, cookies=cookies or {})
+        self.settings = settings
+        self.session_serializer: AbsractSessionSerializer | None = None
+        if settings:
+            self.session_serializer = resolve(settings.session_serializer)(
+                settings.session_secret_key,
+                int(settings.session_duration.total_seconds()),
+            )
 
     @property
     def cookies(self) -> Cookies:
@@ -138,6 +193,10 @@ class WebTestClient:
     @cookies.setter
     def cookies(self, value: Cookies) -> None:
         self.testclient.cookies = value
+
+    @property
+    def session(self) -> MutableMapping[str, Any]:
+        return Session(self)
 
     def request(
         self,
