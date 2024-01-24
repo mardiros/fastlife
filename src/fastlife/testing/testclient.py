@@ -233,7 +233,7 @@ class WebTestClient:
             )
         return resp
 
-    def get(self, url: str, follow_redirects: bool = False) -> WebResponse:
+    def get(self, url: str, follow_redirects: bool = True) -> WebResponse:
         return self.request(
             "GET",
             url,
