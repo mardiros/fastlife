@@ -38,3 +38,9 @@ def test_session(client: WebTestClient):
     resp.form.set("payload.password", "secret")
     resp = resp.form.submit()
     assert resp.by_text("Welcome back Bob!", node_name="h1") is not None
+
+
+def test_redirect_on_login(client: WebTestClient):
+    resp = client.get("/secured", follow_redirects=False)
+    assert resp.status_code == 303
+    assert resp.headers["Location"] == "http://testserver/login"

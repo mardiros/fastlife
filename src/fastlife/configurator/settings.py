@@ -28,3 +28,5 @@ class Settings(BaseSettings):
     )
 
     domain_name: str = Field(default="", title="domain name where the app is served")
+
+    check_permission: str = Field(default="fastlife.security.policy:check_permission")

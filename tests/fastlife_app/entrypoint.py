@@ -9,7 +9,10 @@ from fastlife.configurator.configurator import Settings
 
 async def app():
     conf = Configurator(
-        Settings(template_search_path="fastlife:templates,tests.fastlife_app:templates")
+        Settings(
+            template_search_path="fastlife:templates,tests.fastlife_app:templates",
+            # check_permission="tests.fastlife_app.security:check_permission",
+        )
     )
     conf.include("tests.fastlife_app.views")
     conf.include("tests.fastlife_app.static")
