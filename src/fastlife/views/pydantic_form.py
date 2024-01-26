@@ -23,5 +23,6 @@ async def show_widget(
 def includeme(config: Configurator) -> None:
     route_prefix = config.registry.settings.fastlife_route_prefix
     config.add_route(
+        "fl-pydantic-form-widget",
         f"{route_prefix}/pydantic-form/widgets/{{typ}}", show_widget, methods=["GET"]
     )

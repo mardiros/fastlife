@@ -38,7 +38,7 @@ async def login(
 ) -> Response:
     if loginform and loginform.password.get_secret_value() == "secret":
         request.session["username"] = loginform.username
-        return RedirectResponse(request.url_for("secured"), status_code=303)
+        return RedirectResponse(request.url_for("secured_page"), status_code=303)
     return await template(model=LoginForm, form_data={})
 
 
@@ -50,8 +50,8 @@ async def secured(
 
 @configure
 def includeme(config: Configurator):
-    config.add_route("/", hello_world, methods=["GET", "POST"])
-    config.add_route("/autoform", autoform, methods=["GET", "POST"])
+    config.add_route("home", "/", hello_world, methods=["GET", "POST"])
+    config.add_route("autoform", "/autoform", autoform, methods=["GET", "POST"])
 
-    config.add_route("/login", login, methods=["GET", "POST"])
-    config.add_route("/secured", secured, methods=["GET"])
+    config.add_route("login", "/login", login, methods=["GET", "POST"])
+    config.add_route("secured_page", "/secured", secured, methods=["GET"])

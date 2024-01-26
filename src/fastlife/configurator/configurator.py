@@ -69,6 +69,7 @@ class Configurator:
 
     def add_route(
         self,
+        name: str,
         path: str,
         endpoint: Callable[..., Coroutine[Any, Any, Response]],
         *,
@@ -78,11 +79,11 @@ class Configurator:
         # dependencies: Optional[Sequence[Depends]] = None,  # type: ignore
         summary: Optional[str] = None,
         description: Optional[str] = None,
-        # response_description: str = "Successful Response",
+        response_description: str = "Successful Response",
         # responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
         deprecated: Optional[bool] = None,
         methods: Optional[List[str]] = None,
-        operation_id: Optional[str] = None,
+        # operation_id: Optional[str] = None,
         # response_model_include: Optional[IncEx] = None,
         # response_model_exclude: Optional[IncEx] = None,
         # response_model_by_alias: bool = True,
@@ -93,7 +94,6 @@ class Configurator:
         # response_class: Union[Type[Response], DefaultPlaceholder] = Default(
         #     HTMLResponse
         # ),
-        name: Optional[str] = None,
         # openapi_extra: Optional[Dict[str, Any]] = None,
         # generate_unique_id_function: Callable[[APIRoute], str] = Default(
         #     generate_unique_id
@@ -108,11 +108,11 @@ class Configurator:
             # dependencies=dependencies,
             summary=summary,
             description=description,
-            # response_description=response_description,
+            response_description=response_description,
             # responses=responses,
             deprecated=deprecated,
             methods=methods,
-            operation_id=operation_id,
+            # operation_id=operation_id,
             # response_model_include=response_model_include,
             # response_model_exclude=response_model_exclude,
             # response_model_by_alias=response_model_by_alias,
