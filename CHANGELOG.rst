@@ -1,3 +1,10 @@
+0.2.1  - Released on 2024-01-27
+-------------------------------
+* Change add_route signature
+  * Set the name of the route mandatory and first argument (breaking change)
+  * Add a permission argument
+  * Add a settings to inject a check_permission handler
+
 0.2.0  - Released on 2024-01-24
 -------------------------------
 * Add a session wrapper in the test client
