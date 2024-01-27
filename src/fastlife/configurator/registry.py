@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
+from fastlife.security.policy import CheckPermission
 from fastlife.shared_utils.resolver import resolve
 from fastlife.templating.renderer import AbstractTemplateRenderer
 
@@ -11,11 +12,15 @@ from .settings import Settings
 class AppRegistry:
     settings: Settings
     renderer: AbstractTemplateRenderer
+    check_permission: CheckPermission
 
     def __init__(self, settings: Settings) -> None:
+        # Abtract class resolved for dependency injection
         TemplateRenderer = resolve(settings.template_renderer_class)
+
         self.settings = settings
         self.renderer = TemplateRenderer(settings)
+        self.check_permission = resolve(settings.check_permission)
 
 
 DEFAULT_REGISTRY: AppRegistry = None  # type: ignore

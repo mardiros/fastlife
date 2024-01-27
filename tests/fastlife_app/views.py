@@ -1,12 +1,17 @@
 from typing import Annotated, Optional
 
-from fastapi import Request, Response
+from fastapi import Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
 from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import model
 from tests.fastlife_app.models import Account
+from tests.fastlife_app.security import (
+    AuthenticationPolicy,
+    AuthenticatedUser,
+    authenticated_user,
+)
 
 
 async def hello_world(
@@ -35,17 +40,22 @@ async def login(
     request: Request,
     loginform: Annotated[Optional[LoginForm], model(LoginForm)],
     template: Annotated[Template, template("login.jinja2")],
+    policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
 ) -> Response:
-    if loginform and loginform.password.get_secret_value() == "secret":
-        request.session["username"] = loginform.username
+    if loginform:
+        if user := await policy.authenticate(
+            loginform.username, loginform.password.get_secret_value()
+        ):
+            policy.remember(user)
         return RedirectResponse(request.url_for("secured_page"), status_code=303)
     return await template(model=LoginForm, form_data={})
 
 
 async def secured(
-    template: Annotated[Template, template("secured.jinja2")]
+    template: Annotated[Template, template("secured.jinja2")],
+    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
 ) -> Response:
-    return await template()
+    return await template(user=user)
 
 
 @configure
@@ -54,4 +64,6 @@ def includeme(config: Configurator):
     config.add_route("autoform", "/autoform", autoform, methods=["GET", "POST"])
 
     config.add_route("login", "/login", login, methods=["GET", "POST"])
-    config.add_route("secured_page", "/secured", secured, methods=["GET"])
+    config.add_route(
+        "secured_page", "/secured", secured, permission="admin", methods=["GET"]
+    )

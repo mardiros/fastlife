@@ -21,7 +21,7 @@ from typing import (
 
 import venusian  # type: ignore
 from fastapi import Depends, FastAPI, Response
-from fastapi.datastructures import Default
+from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 
 from fastlife.configurator.base import AbstractMiddleware
@@ -73,10 +73,9 @@ class Configurator:
         path: str,
         endpoint: Callable[..., Coroutine[Any, Any, Response]],
         *,
-        response_model: Any = Default(None),
-        status_code: Optional[int] = None,
-        tags: Optional[List[Union[str, Enum]]] = None,
-        # dependencies: Optional[Sequence[Depends]] = None,  # type: ignore
+        permission: str | None = None,
+        status_code: int | None = None,
+        tags: List[Union[str, Enum]] | None = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         response_description: str = "Successful Response",
@@ -84,6 +83,7 @@ class Configurator:
         deprecated: Optional[bool] = None,
         methods: Optional[List[str]] = None,
         # operation_id: Optional[str] = None,
+        # response_model: Any = Default(None),
         # response_model_include: Optional[IncEx] = None,
         # response_model_exclude: Optional[IncEx] = None,
         # response_model_by_alias: bool = True,
@@ -99,13 +99,17 @@ class Configurator:
         #     generate_unique_id
         # ),
     ) -> "Configurator":
+        dependencies: List[DependsType] = []
+        if permission:
+            dependencies.append(Depends(self.registry.check_permission(permission)))
+
         self._app.add_api_route(
             path,
             endpoint,
-            response_model=response_model,
+            # response_model=response_model,
             status_code=status_code,
             tags=tags,
-            # dependencies=dependencies,
+            dependencies=dependencies,
             summary=summary,
             description=description,
             response_description=response_description,
@@ -132,6 +136,12 @@ class Configurator:
     ) -> "Configurator":
         """Mount a directory to an http endpoint."""
         self._app.mount(route_path, StaticFiles(directory=directory), name=name)
+        return self
+
+    def add_exception_handler(
+        self, status_code_or_exc: int | Type[Exception], handler: Any
+    ) -> "Configurator":
+        self._app.add_exception_handler(status_code_or_exc, handler)
         return self
 
 

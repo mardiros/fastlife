@@ -13,6 +13,7 @@ async def app():
         Settings(
             template_search_path="fastlife:templates,tests.fastlife_app:templates",
             session_secret_key="labamba",
+            check_permission="tests.fastlife_app.security:check_permission",
         )
     )
     conf.include("tests.fastlife_app.views")
