@@ -1,7 +1,6 @@
-from types import NoneType
 from typing import Any, Callable, Coroutine
 
-CheckPermissionHook = Callable[..., Coroutine[Any, Any, NoneType]] | Callable[..., None]
+CheckPermissionHook = Callable[..., Coroutine[Any, Any, None]] | Callable[..., None]
 CheckPermission = Callable[[str], CheckPermissionHook]
 
 
