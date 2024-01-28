@@ -1,3 +1,9 @@
+0.2.2  - Released on 2024-01-28
+-------------------------------
+* Add another settings for session domain cookie
+* Update test client wrapper and also wrap bs4 tag
+* Fix session cleanup to properly logout
+
 0.2.1  - Released on 2024-01-27
 -------------------------------
 * Change add_route signature
