@@ -34,6 +34,11 @@ class SignedSessionSerializer(AbsractSessionSerializer):
     def deserialize(self, data: bytes) -> Tuple[Mapping[str, Any], bool]:
         try:
             data = self.signer.unsign(data, max_age=self.max_age)
+            # We can't deserialize something wrong since the serialize
+            # is signing the content.
+            # If the signature key is compromise and we have invalid payload,
+            # raising exceptions here is fine, it's dangerous afterall.
+            session = json.loads(b64decode(data))
         except itsdangerous.BadSignature:
             return {}, True
-        return json.loads(b64decode(data)), False
+        return session, False

@@ -8,19 +8,13 @@ from fastlife.testing import WebTestClient
 
 
 @pytest.fixture
-async def app():
-    conf = Configurator(
-        Settings(
-            template_search_path="fastlife:templates,tests.fastlife_app:templates",
-            session_secret_key="labamba",
-            check_permission="tests.fastlife_app.security:check_permission",
-        )
-    )
+async def app(settings: Settings):
+    conf = Configurator(settings=settings)
     conf.include("tests.fastlife_app.views")
     yield conf.get_app()
     cleanup_registry()
 
 
 @pytest.fixture
-def client(app: FastAPI):
-    return WebTestClient(app)
+def client(app: FastAPI, settings: Settings):
+    return WebTestClient(app, settings=settings)

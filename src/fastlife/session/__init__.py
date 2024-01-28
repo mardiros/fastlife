@@ -17,6 +17,6 @@ def includeme(config: Configurator) -> None:
             cookie_path=settings.session_cookie_path,
             cookie_same_site=settings.session_cookie_same_site,
             cookie_secure=settings.session_cookie_secure,
-            cookie_domain=settings.domain_name,
+            cookie_domain=settings.session_cookie_domain,
             serializer=session_serializer,
         )

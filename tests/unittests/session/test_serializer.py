@@ -12,7 +12,7 @@ def test_serializer():
     assert srlz.deserialize(s) == ({"foo": "bar"}, False)
 
 
-def test_serializer_failed():
+def test_serializer_signature_failed():
     srlz = SignedSessionSerializer("secret", 10)
     data = srlz.serialize({"foo": "bar"})
     payload, bsignature = data.split(b".", maxsplit=1)

@@ -8,8 +8,8 @@ from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import model
 from tests.fastlife_app.models import Account
 from tests.fastlife_app.security import (
-    AuthenticationPolicy,
     AuthenticatedUser,
+    AuthenticationPolicy,
     authenticated_user,
 )
 
@@ -58,6 +58,14 @@ async def secured(
     return await template(user=user)
 
 
+async def logout(
+    request: Request,
+    policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
+) -> Response:
+    policy.forget()
+    return RedirectResponse(request.url_for("home"), status_code=302)
+
+
 @configure
 def includeme(config: Configurator):
     config.add_route("home", "/", hello_world, methods=["GET", "POST"])
@@ -67,3 +75,4 @@ def includeme(config: Configurator):
     config.add_route(
         "secured_page", "/secured", secured, permission="admin", methods=["GET"]
     )
+    config.add_route("logout", "/logout", logout, methods=["GET"])

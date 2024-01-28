@@ -65,6 +65,10 @@ def test_redirect_on_login(client: WebTestClient):
 
 
 def test_redirect_on_logout(client: WebTestClient):
+    client.session["user_id"] = "2"
     resp = client.get("/secured", follow_redirects=False)
-    assert resp.status_code == 303
-    assert resp.headers["Location"] == "http://testserver.local/login"
+    assert resp.status_code == 200
+    logout = resp.by_text("logout")
+    assert logout is not None, resp.html
+    logout.click()
+    assert client.session == {}

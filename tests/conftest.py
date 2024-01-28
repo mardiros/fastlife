@@ -55,5 +55,16 @@ def dummy_request_param(params: Mapping[str, Any]) -> Request:
 
 
 @pytest.fixture()
-def default_registry() -> AppRegistry:
-    return AppRegistry(Settings())
+def settings() -> Settings:
+    return Settings(
+        template_search_path="fastlife:templates,tests.fastlife_app:templates",
+        session_secret_key="labamba",
+        check_permission="tests.fastlife_app.security:check_permission",
+        domain_name="testserver.local",
+        session_cookie_domain="testserver.local",
+    )
+
+
+@pytest.fixture()
+def default_registry(settings: Settings) -> AppRegistry:
+    return AppRegistry(settings)

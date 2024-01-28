@@ -41,16 +41,18 @@ class SessionMiddleware(AbstractMiddleware):
             return
 
         connection = HTTPConnection(scope)
-        reset_session = False
-
-        if self.cookie_name in connection.cookies:
+        existing_session = self.cookie_name in connection.cookies
+        if existing_session:
             data = connection.cookies[self.cookie_name].encode("utf-8")
-            scope["session"], reset_session = self.serializer.deserialize(data)
+            scope["session"], broken_session = self.serializer.deserialize(data)
+            if broken_session:
+                existing_session = False
         else:
             scope["session"] = {}
 
         async def send_wrapper(message: Message) -> None:
             if message["type"] == "http.response.start":
+                headers = None
                 if scope["session"]:
                     # We have session data to persist.
                     data = self.serializer.serialize(scope["session"]).decode("utf-8")
@@ -60,7 +62,7 @@ class SessionMiddleware(AbstractMiddleware):
                         f"Max-Age={self.max_age}; {self.security_flags}"
                     )
                     headers.append("set-cookie", header_value)
-                elif reset_session:
+                elif existing_session:
                     # The session has been cleared.
                     headers = MutableHeaders(scope=message)
                     expires = "expires=Thu, 01 Jan 1970 00:00:00 GMT; "

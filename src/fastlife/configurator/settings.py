@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     session_secret_key: str = Field(default="")
     session_cookie_name: str = Field(default="flsess")
+    session_cookie_domain: str = Field(default="")
     session_cookie_path: str = Field(default="/")
     session_duration: timedelta = Field(default=timedelta(days=14))
     session_cookie_same_site: Literal["lax", "strict", "none"] = Field(default="lax")

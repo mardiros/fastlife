@@ -1,4 +1,5 @@
 import re
+import time
 from collections.abc import MutableMapping
 from typing import Any, Literal, Mapping
 from urllib.parse import urlencode
@@ -176,9 +177,11 @@ class Session(dict[str, Any]):
         data: Mapping[str, Any]
         self.has_session = settings.session_cookie_name in self.client.cookies
         if self.has_session:
-            data = self.srlz.deserialize(
+            data, error = self.srlz.deserialize(
                 self.client.cookies[settings.session_cookie_name].encode("utf-8")
             )
+            if error:
+                self.has_session = False
         else:
             data = {}
         super().__init__(data)
@@ -187,15 +190,36 @@ class Session(dict[str, Any]):
         super().__setitem__(__key, __value)
         settings = self.settings
         data = self.serialize()
-        # if self.has_session:
-        #     self.client.cookies[settings.session_cookie_name] = data
-        # else:
-        self.client.cookies.set(
-            settings.session_cookie_name,
-            data,
-            "." + settings.domain_name,
-            settings.session_cookie_path,
+        from http.cookiejar import Cookie
+
+        self.client.cookies.jar.set_cookie(
+            Cookie(
+                version=0,
+                name=settings.session_cookie_name,
+                value=data,
+                port=None,
+                port_specified=False,
+                domain=f".{settings.session_cookie_domain}",
+                domain_specified=True,
+                domain_initial_dot=True,
+                path="/",
+                path_specified=True,
+                secure=False,
+                expires=int(time.time() + settings.session_duration.total_seconds()),
+                discard=False,
+                comment=None,
+                comment_url=None,
+                rest={"HttpOnly": None, "SameSite": "lax"},  # type: ignore
+                rfc2109=False,
+            )
         )
+        # this does not work
+        # self.client.cookies.set(
+        #     settings.session_cookie_name,
+        #     data,
+        #     settings.session_cookie_domain,
+        #     settings.session_cookie_path,
+        # )
 
     def serialize(self) -> str:
         return self.srlz.serialize(self).decode("utf-8")
