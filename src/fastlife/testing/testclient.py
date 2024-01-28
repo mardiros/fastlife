@@ -13,13 +13,60 @@ from fastlife.session.serializer import AbsractSessionSerializer
 from fastlife.shared_utils.resolver import resolve
 
 
+class Element:
+    def __init__(self, client: "WebTestClient", tag: bs4.Tag):
+        self._client = client
+        self._tag = tag
+
+    def click(self) -> "WebResponse":
+        return self._client.get(self._tag.attrs["href"])
+
+    @property
+    def attrs(self) -> dict[str, str]:
+        return self._tag.attrs
+
+    @property
+    def form(self) -> "Element | None":
+        return Element(self._client, self._tag.form) if self._tag.form else None
+
+    def by_text(self, text: str, *, node_name: str | None = None) -> "Element | None":
+        nodes = self._tag.find_all(string=re.compile(rf"\s*{text}\s*"))
+        for node in nodes:
+            if isinstance(node, bs4.NavigableString):
+                node = node.parent
+
+            if node_name:
+                while node is not None:
+                    if node.name == node_name:
+                        return Element(self._client, node)
+                    node = node.parent
+            elif node:
+                return Element(self._client, node)
+        return None
+
+    def by_label_text(self, text: str) -> "Element | None":
+        label = self.by_text(text, node_name="label")
+        assert label is not None
+        assert label.attrs.get("for") is not None
+        resp = self._tag.find(id=label.attrs["for"])
+        assert not isinstance(resp, bs4.NavigableString)
+        return Element(self._client, resp) if resp else None
+
+    def by_node_name(
+        self, node_name: str, *, attrs: dict[str, str] | None = None
+    ) -> list["Element"]:
+        return [
+            Element(self._client, e) for e in self._tag.find_all(node_name, attrs or {})
+        ]
+
+
 class WebForm:
-    def __init__(self, client: "WebTestClient", origin: str, form: bs4.Tag):
+    def __init__(self, client: "WebTestClient", origin: str, form: Element):
         self._client = client
         self._form = form
         self._origin = origin
         self._formdata: dict[str, str] = {}
-        inputs = self._form.find_all("input")
+        inputs = self._form.by_node_name("input")
         for input in inputs:
             if input.attrs.get("type") == "checkbox" and "checked" not in input.attrs:
                 continue
@@ -32,7 +79,7 @@ class WebForm:
         self._formdata[fieldname] = value
 
     def button(self, text: str) -> "WebForm":
-        assert self._form.find("button", string=re.compile(f".*{text}.*")) is not None
+        assert self._form.by_text(text, node_name="button") is not None
         return self
 
     def submit(self, follow_redirects: bool = True) -> "WebResponse":
@@ -44,6 +91,9 @@ class WebForm:
         return self._client.post(
             target, data=self._formdata, follow_redirects=follow_redirects
         )
+
+    def __contains__(self, key: str) -> bool:
+        return key in self._formdata
 
 
 class WebResponse:
@@ -75,39 +125,16 @@ class WebResponse:
         return self._response.text
 
     @property
-    def html(self) -> bs4.Tag:
+    def html(self) -> Element:
         if self._html is None:
             self._html = bs4.BeautifulSoup(self._response.text, "html.parser")
-        return self._html
+        return Element(self._client, self._html)
 
     @property
-    def html_body(self) -> bs4.Tag:
-        body = self.html.find("body")
-        assert body is not None
-        assert isinstance(body, bs4.Tag)
-        return body
-
-    def by_text(self, text: str, *, node_name: str | None = None) -> bs4.Tag | None:
-        nodes = self.html.find_all(string=re.compile(rf"\s*{text}\s*"))
-        for node in nodes:
-            if isinstance(node, bs4.NavigableString):
-                node = node.parent
-
-            if node_name:
-                while node is not None:
-                    if node.name == node_name:
-                        return node
-                    node = node.parent
-
-        return None
-
-    def by_label_text(self, text: str) -> bs4.Tag | None:
-        label = self.by_text(text, node_name="label")
-        assert label is not None
-        assert label.attrs.get("for") is not None
-        resp = self.html.find(id=label.attrs["for"])
-        assert not isinstance(resp, bs4.NavigableString)
-        return resp
+    def html_body(self) -> Element:
+        body = self.html.by_node_name("body")
+        assert len(body) == 1
+        return body[0]
 
     @property
     def form(self) -> WebForm:
@@ -117,10 +144,16 @@ class WebResponse:
             self._form = WebForm(self._client, self._origin, form)
         return self._form
 
+    def by_text(self, text: str, *, node_name: str | None = None) -> Element | None:
+        return self.html.by_text(text, node_name=node_name)
+
+    def by_label_text(self, text: str) -> Element | None:
+        return self.html.by_label_text(text)
+
     def by_node_name(
         self, node_name: str, *, attrs: dict[str, str] | None = None
-    ) -> list[bs4.Tag]:
-        return self.html.find_all(node_name, attrs or {})
+    ) -> list[Element]:
+        return self.html.by_node_name(node_name, attrs=attrs)
 
 
 CookieTypes = httpx._types.CookieTypes  # type: ignore
@@ -141,28 +174,28 @@ class Session(dict[str, Any]):
         assert settings is not None
         self.settings = settings
         data: Mapping[str, Any]
-        if settings.session_cookie_name in self.client.cookies:
-            data, exists = self.srlz.deserialize(
+        self.has_session = settings.session_cookie_name in self.client.cookies
+        if self.has_session:
+            data = self.srlz.deserialize(
                 self.client.cookies[settings.session_cookie_name].encode("utf-8")
             )
         else:
-            data, exists = {}, False
-        self.new_session = not exists
+            data = {}
         super().__init__(data)
 
     def __setitem__(self, __key: Any, __value: Any) -> None:
         super().__setitem__(__key, __value)
         settings = self.settings
         data = self.serialize()
-        if self.new_session:
-            self.client.cookies.set(
-                settings.session_cookie_name,
-                data,
-                settings.domain_name,
-                settings.session_cookie_path,
-            )
-        else:
-            self.client.cookies[settings.session_cookie_name] = data
+        # if self.has_session:
+        #     self.client.cookies[settings.session_cookie_name] = data
+        # else:
+        self.client.cookies.set(
+            settings.session_cookie_name,
+            data,
+            "." + settings.domain_name,
+            settings.session_cookie_path,
+        )
 
     def serialize(self) -> str:
         return self.srlz.serialize(self).decode("utf-8")
@@ -177,7 +210,12 @@ class WebTestClient:
         cookies: CookieTypes | None = None,
     ) -> None:
         self.app = app
-        self.testclient = TestClient(app, cookies=cookies or {})
+        if settings is None:
+            settings = Settings()
+            settings.domain_name = settings.domain_name or "testserver.local"
+        self.testclient = TestClient(
+            app, base_url=f"http://{settings.domain_name}", cookies=cookies or {}
+        )
         self.settings = settings
         self.session_serializer: AbsractSessionSerializer | None = None
         if settings:
@@ -212,7 +250,7 @@ class WebTestClient:
             url=url,
             headers=headers,
             content=content,
-            follow_redirects=False,  # don't follow for cookie processing
+            follow_redirects=False,
         )
         resp = WebResponse(
             self,
