@@ -2,6 +2,7 @@
 The configurator is here to register routes in a fastapi app,
 with dependency injection.
 """
+import inspect
 import importlib
 import logging
 from enum import Enum
@@ -57,7 +58,12 @@ class Configurator:
 
     def include(self, module: str | ModuleType) -> "Configurator":
         if isinstance(module, str):
-            module = importlib.import_module(module)
+            package = None
+            if module.startswith("."):
+                caller_module = inspect.getmodule(inspect.stack()[1][0])
+                package = caller_module.__name__ if caller_module else "__main__"
+
+            module = importlib.import_module(module, package)
         self.scanner.scan(module, categories=[VENUSIAN_CATEGORY])  # type: ignore
         return self
 
