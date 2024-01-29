@@ -1,3 +1,7 @@
+0.2.3  - Released on 2024-01-29
+-------------------------------
+* Add support of relative import in :class:`Configurator.include` method
+
 0.2.2  - Released on 2024-01-28
 -------------------------------
 * Add another settings for session domain cookie
