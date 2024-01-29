@@ -6,29 +6,7 @@ from pydantic import BaseModel, SecretStr
 
 from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import model
-from tests.fastlife_app.models import Account
-from tests.fastlife_app.security import (
-    AuthenticatedUser,
-    AuthenticationPolicy,
-    authenticated_user,
-)
-
-
-async def hello_world(
-    template: Annotated[Template, template("hello_world.jinja2")],
-    account: Annotated[Optional[Account], model(Account, "account")],
-) -> Response:
-    return await template(account=account)
-
-
-async def autoform(
-    template: Annotated[Template, template("autoform.jinja2")],
-    account: Annotated[Optional[Account], model(Account)],
-):
-    account = account
-    return await template(
-        model=Account, form_data={"payload": account.model_dump()} if account else {}
-    )
+from tests.fastlife_app.security import AuthenticationPolicy
 
 
 class LoginForm(BaseModel):
@@ -51,13 +29,6 @@ async def login(
     return await template(model=LoginForm, form_data={})
 
 
-async def secured(
-    template: Annotated[Template, template("secured.jinja2")],
-    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
-) -> Response:
-    return await template(user=user)
-
-
 async def logout(
     request: Request,
     policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
@@ -68,11 +39,5 @@ async def logout(
 
 @configure
 def includeme(config: Configurator):
-    config.add_route("home", "/", hello_world, methods=["GET", "POST"])
-    config.add_route("autoform", "/autoform", autoform, methods=["GET", "POST"])
-
     config.add_route("login", "/login", login, methods=["GET", "POST"])
-    config.add_route(
-        "secured_page", "/secured", secured, permission="admin", methods=["GET"]
-    )
     config.add_route("logout", "/logout", logout, methods=["GET"])
