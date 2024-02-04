@@ -2,8 +2,8 @@
 The configurator is here to register routes in a fastapi app,
 with dependency injection.
 """
-import inspect
 import importlib
+import inspect
 import logging
 from enum import Enum
 from pathlib import Path

@@ -1,7 +1,7 @@
 import re
 import time
 from collections.abc import MutableMapping
-from typing import Any, Literal, Mapping
+from typing import Any, Literal, Mapping, Optional, Sequence
 from urllib.parse import urlencode
 
 import bs4
@@ -23,12 +23,32 @@ class Element:
         return self._client.get(self._tag.attrs["href"])
 
     @property
+    def node_name(self) -> str:
+        return self._tag.name
+
+    @property
     def attrs(self) -> dict[str, str]:
         return self._tag.attrs
 
     @property
+    def text(self) -> str:
+        return self._tag.text.strip()
+
+    @property
     def form(self) -> "Element | None":
         return Element(self._client, self._tag.form) if self._tag.form else None
+
+    @property
+    def hx_target(self) -> Optional[str]:
+        el = self._tag
+        while el:
+            if "hx-target" in el.attrs:
+                ret = el.attrs["hx-target"]
+                if ret == "this":
+                    ret = el.attrs["id"]
+                return ret
+            el = el.parent
+        return None
 
     def by_text(self, text: str, *, node_name: str | None = None) -> "Element | None":
         nodes = self._tag.find_all(string=re.compile(rf"\s*{text}\s*"))
@@ -60,37 +80,90 @@ class Element:
             Element(self._client, e) for e in self._tag.find_all(node_name, attrs or {})
         ]
 
+    @property
+    def h1(self) -> "Element":
+        nodes = self.by_node_name("h1")
+        assert len(nodes) == 1, f"Should have 1 <h1>, got {len(nodes)} in {self}"
+        return nodes[0]
+
+    @property
+    def h2(self) -> Sequence["Element"]:
+        return self.by_node_name("h2")
+
+    def __repr__(self):
+        return f"<{self.node_name}>"
+
+    def __str__(self):
+        return str(self._tag)
+
 
 class WebForm:
     def __init__(self, client: "WebTestClient", origin: str, form: Element):
         self._client = client
         self._form = form
         self._origin = origin
+        self._formfields: dict[str, Element] = {}
         self._formdata: dict[str, str] = {}
         inputs = self._form.by_node_name("input")
         for input in inputs:
+            self._formfields[input.attrs["name"]] = input
             if input.attrs.get("type") == "checkbox" and "checked" not in input.attrs:
                 continue
             self._formdata[input.attrs["name"]] = input.attrs.get("value", "")
-        # field select, textearea...
+
+        inputs = self._form.by_node_name("select")
+        for input in inputs:
+            self._formfields[input.attrs["name"]] = input
+            for option in input.by_node_name("options"):
+                if "selected" in option.attrs:
+                    self._formdata[input.attrs["name"]] = option.attrs.get(
+                        "value", option.text
+                    )
+        # field textearea...
 
     def set(self, fieldname: str, value: str) -> Any:
-        if fieldname not in self._formdata:
+        if fieldname not in self._formfields:
             raise ValueError(f"{fieldname} does not exists")
+        if self._formfields[fieldname].node_name == "select":
+            raise RuntimeError(f"{fieldname} is a <select>, use select() instead")
         self._formdata[fieldname] = value
+
+    def select(self, fieldname: str, value: str) -> Any:
+        if fieldname not in self._formfields:
+            raise ValueError(f"{fieldname} does not exists")
+        if self._formfields[fieldname].node_name != "select":
+            raise RuntimeError(
+                f"{fieldname} is a <{self._formfields[fieldname]}>, use set() instead"
+            )
+        if "multiple" in self._formfields[fieldname].attrs:
+            raise NotImplementedError
+        for option in self._formfields[fieldname].by_node_name("option"):
+            if option.text == value.strip():
+                self._formdata[fieldname] = option.attrs.get("value", option.text)
+                break
+        else:
+            raise ValueError(f'No option {value} in <select name="{fieldname}">')
 
     def button(self, text: str) -> "WebForm":
         assert self._form.by_text(text, node_name="button") is not None
         return self
 
     def submit(self, follow_redirects: bool = True) -> "WebResponse":
+        headers = {}
         target = (
             self._form.attrs.get("hx-post")
             or self._form.attrs.get("post")
             or self._origin
         )
+        if "hx-post" in self._form.attrs:
+            if hx_target := self._form.hx_target:
+                headers["HX-Target"] = hx_target
+
         return self._client.post(
-            target, data=self._formdata, follow_redirects=follow_redirects
+            target,
+            data=self._formdata,
+            headers=headers,
+            follow_redirects=follow_redirects,
         )
 
     def __contains__(self, key: str) -> bool:
@@ -293,6 +366,15 @@ class WebTestClient:
                 headers=headers,
                 max_redirects=max_redirects - 1,
             )
+        if "HX-Redirect" in resp.headers and max_redirects > 0:
+            return self.request(
+                method="GET",
+                url=resp.headers["HX-Redirect"],
+                content=None,
+                headers=headers,
+                max_redirects=max_redirects - 1,
+            )
+
         return resp
 
     def get(self, url: str, follow_redirects: bool = True) -> WebResponse:
@@ -303,12 +385,19 @@ class WebTestClient:
         )
 
     def post(
-        self, url: str, data: Mapping[str, Any], follow_redirects: bool = True
+        self,
+        url: str,
+        data: Mapping[str, Any],
+        *,
+        headers: Mapping[str, Any] | None = None,
+        follow_redirects: bool = True,
     ) -> WebResponse:
+        if headers is None:
+            headers = {}
         return self.request(
             "POST",
             url,
             content=urlencode(data),
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            headers={"Content-Type": "application/x-www-form-urlencoded", **headers},
             max_redirects=int(follow_redirects) * 10,
         )

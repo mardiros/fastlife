@@ -3,6 +3,7 @@ from collections.abc import MutableSequence, Sequence
 from decimal import Decimal
 from types import NoneType
 from typing import Any, Literal, Mapping, Optional, Type, get_origin
+from uuid import UUID
 
 from markupsafe import Markup
 from pydantic import BaseModel, EmailStr, SecretStr, ValidationError
@@ -86,7 +87,7 @@ class WidgetFactory:
         if issubclass(typ, SecretStr):
             return self.build_secretstr(name, typ, field, value or "", removable)
 
-        if issubclass(typ, (int, str, float, Decimal)):
+        if issubclass(typ, (int, str, float, Decimal, UUID)):
             return self.build_simpletype(name, typ, field, value or "", removable)
 
         raise NotImplementedError(f"{typ} not implemented")
