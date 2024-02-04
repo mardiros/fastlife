@@ -1,7 +1,7 @@
 import re
 import time
 from collections.abc import MutableMapping
-from typing import Any, Literal, Mapping, Optional, Sequence
+from typing import Any, Iterator, Literal, Mapping, Optional, Sequence
 from urllib.parse import urlencode
 
 import bs4
@@ -39,6 +39,16 @@ class Element:
         return Element(self._client, self._tag.form) if self._tag.form else None
 
     @property
+    def h1(self) -> "Element":
+        nodes = self.by_node_name("h1")
+        assert len(nodes) == 1, f"Should have 1 <h1>, got {len(nodes)} in {self}"
+        return nodes[0]
+
+    @property
+    def h2(self) -> Sequence["Element"]:
+        return self.by_node_name("h2")
+
+    @property
     def hx_target(self) -> Optional[str]:
         el = self._tag
         while el:
@@ -51,6 +61,12 @@ class Element:
         return None
 
     def by_text(self, text: str, *, node_name: str | None = None) -> "Element | None":
+        nodes = self.iter_all_by_text(text, node_name=node_name)
+        return next(nodes, None)
+
+    def iter_all_by_text(
+        self, text: str, *, node_name: str | None = None
+    ) -> "Iterator[Element]":
         nodes = self._tag.find_all(string=re.compile(rf"\s*{text}\s*"))
         for node in nodes:
             if isinstance(node, bs4.NavigableString):
@@ -59,11 +75,17 @@ class Element:
             if node_name:
                 while node is not None:
                     if node.name == node_name:
-                        return Element(self._client, node)
+                        yield Element(self._client, node)
                     node = node.parent
             elif node:
-                return Element(self._client, node)
+                yield Element(self._client, node)
         return None
+
+    def get_all_by_text(
+        self, text: str, *, node_name: str | None = None
+    ) -> "Sequence[Element]":
+        nodes = self.iter_all_by_text(text, node_name=node_name)
+        return list(nodes)
 
     def by_label_text(self, text: str) -> "Element | None":
         label = self.by_text(text, node_name="label")
@@ -79,16 +101,6 @@ class Element:
         return [
             Element(self._client, e) for e in self._tag.find_all(node_name, attrs or {})
         ]
-
-    @property
-    def h1(self) -> "Element":
-        nodes = self.by_node_name("h1")
-        assert len(nodes) == 1, f"Should have 1 <h1>, got {len(nodes)} in {self}"
-        return nodes[0]
-
-    @property
-    def h2(self) -> Sequence["Element"]:
-        return self.by_node_name("h2")
 
     def __repr__(self):
         return f"<{self.node_name}>"
@@ -144,8 +156,12 @@ class WebForm:
         else:
             raise ValueError(f'No option {value} in <select name="{fieldname}">')
 
-    def button(self, text: str) -> "WebForm":
-        assert self._form.by_text(text, node_name="button") is not None
+    def button(self, text: str, position: int = 0) -> "WebForm":
+        buttons = self._form.get_all_by_text(text, node_name="button")
+        assert len(buttons) > position, f'Button "{text}" not found'
+        button = buttons[position]
+        if "name" in button.attrs:
+            self._formdata[button.attrs["name"]] = button.attrs.get("value", "")
         return self
 
     def submit(self, follow_redirects: bool = True) -> "WebResponse":
