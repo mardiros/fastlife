@@ -20,7 +20,7 @@
 {% macro link(label, href, target="#maincontent", swap="innerHTML show:body:top", push_url=true) %}
 <a href="{{href}}" hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url %}hx-push-url="true" {%-
   endif %}
-  class="cursor-pointer px-4 py-2 text-sm font-medium text-neutral-900 bg-white border-t border-b border-neutral-200 hover:bg-neutral-100 hover:text-primary-700 focus:z-10 focus:ring-2 focus:ring-primary-700 focus:text-primary-700 dark:bg-neutral-700 dark:border-neutral-600 dark:text-white dark:hover:text-white dark:hover:bg-neutral-600 dark:focus:ring-primary-500 dark:focus:text-white">
+  class="text-neutral-900 bg-neutral-200 hover:bg-neutral-50 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-400 dark:hover:bg-neutral-300 dark:focus:ring-neutral-100">
   {{- label -}}
   {%- if caller %}{{ caller() }}{% endif -%}
 </a>
@@ -54,7 +54,7 @@ aria_label=""
 </button>
 {% endmacro %}
 
-{% macro input(label, name, id, aria_label="", placeholder="", value="", type="text", required=false) %}
+{% macro input(label, name, id, aria_label="", placeholder="", value="", type="text", required=false, hint="") %}
 <div>
   <label for="{{id}}" class="block mb-2 text-sm font-medium text-neutral-900 dark:text-white">
     {{label}}
@@ -63,19 +63,35 @@ aria_label=""
     {%endif%} {%if required%}required="" {%endif%} {% if aria_label %}aria-label="{{aria_label}}" {% endif %} class="bg-neutral-50 border border-neutral-300 text-neutral-900 sm:text-sm rounded-lg focus:ring-primary-600
   focus:border-primary-600 block w-full p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400
   dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+  {% if hint %}
+  <span class="mt-2 text-sm text-neutral-700 dark:text-neutral-200">{{hint}}</span>
+  {% endif %}
+
 </div>
 {% endmacro %}
 
-{% macro checkbox(label, name, id, placeholder, checked=false) %}
+{% macro checkbox(label, name, id, value="", checked=false, disabled=false, onclick="") %}
 <div class="flex items-center mb-4">
-  <input type="checkbox" name="{{name}}" id="{{id}}" {% if checked %}checked="" {% endif %}
+  <input type="checkbox" name="{{name}}" id="{{id}}" {% if value %}value="{{value}}" {% endif %}{% if checked
+    %}checked{% endif %}
     class="w-4 h-4 text-primary-600 bg-neutral-100 border-neutral-300 rounded focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600"
-    placeholder="{{placeholder}}" {%if required%}required="" {%endif%}>
+    {% if onclick %}onclick="{{onclick}}" {% endif %} {%if disabled%}disabled{%endif%}>
   <label for="{{id}}" class="block ml-2 text-sm font-medium text-neutral-900 dark:text-white">
     {{label}}
   </label>
 </div>
 {% endmacro %}
+
+{% macro radio(label, name, id, value, checked=false, disabled=false, onclick="") %}
+<div class="flex items-center mb-4">
+  <input type="radio" name="{{name}}" id="{{id}}" {% if value %}value="{{value}}" {% endif %}{% if checked %}checked{%
+    endif %}
+    class="w-4 h-4 text-primary-600 bg-neutral-100 border-neutral-300 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-neutral-800 focus:ring-2 dark:bg-neutral-700 dark:border-neutral-600"
+    {% if onclick %}onclick="{{onclick}}" {% endif %} {%if disabled%}disabled{%endif%}>
+  <label for="{{id}}" class="ms-2 text-sm font-medium text-neutral-900 dark:text-neutral-300">{{label}}</label>
+</div>
+{% endmacro %}
+
 
 {% macro hidden(name, value) %}
 <div>

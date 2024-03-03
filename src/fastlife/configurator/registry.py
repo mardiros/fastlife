@@ -4,6 +4,7 @@ from fastapi import Depends
 
 from fastlife.security.policy import CheckPermission
 from fastlife.shared_utils.resolver import resolve
+
 if TYPE_CHECKING:
     from fastlife.templating.renderer import AbstractTemplateRenderer
 

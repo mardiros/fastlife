@@ -1,0 +1,17 @@
+{# def widget #}
+
+<pydantic_form.Widget name={widget.name} token={widget.token} removable={widget.removable}>
+  <div class="pt-4">
+    <Label for={widget.id}>{{widget.title}}</Label>
+    <Select name={widget.name} id={widget.id}>
+      {%- for opt in widget.options -%}
+        <Option value={opt.value}>
+          {{ opt.text }}
+        </Option>
+      {%- endfor -%}
+    </Select>
+    {%- if widget.help_text -%}
+    <span class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{widget.help_text}}</span>
+    {%- endif %}
+  </div>
+</pydantic_form.Widget>
