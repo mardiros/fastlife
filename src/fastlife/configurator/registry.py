@@ -1,17 +1,18 @@
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends
 
 from fastlife.security.policy import CheckPermission
 from fastlife.shared_utils.resolver import resolve
-from fastlife.templating.renderer import AbstractTemplateRenderer
+if TYPE_CHECKING:
+    from fastlife.templating.renderer import AbstractTemplateRenderer
 
 from .settings import Settings
 
 
 class AppRegistry:
     settings: Settings
-    renderer: AbstractTemplateRenderer
+    renderer: "AbstractTemplateRenderer"
     check_permission: CheckPermission
 
     def __init__(self, settings: Settings) -> None:

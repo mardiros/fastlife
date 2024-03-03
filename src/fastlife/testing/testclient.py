@@ -50,7 +50,7 @@ class Element:
 
     @property
     def hx_target(self) -> Optional[str]:
-        el = self._tag
+        el: bs4.Tag | None = self._tag
         while el:
             if "hx-target" in el.attrs:
                 ret = el.attrs["hx-target"]
@@ -102,10 +102,10 @@ class Element:
             Element(self._client, e) for e in self._tag.find_all(node_name, attrs or {})
         ]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.node_name}>"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self._tag)
 
 
