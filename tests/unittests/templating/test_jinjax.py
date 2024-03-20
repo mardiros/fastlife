@@ -6,6 +6,8 @@ from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
+from fastlife.templating.renderer.widgets.model import ModelWidget
+from fastlife.templating.renderer.widgets.text import TextWidget
 
 
 async def test_render_template(renderer: JinjaxTemplateRenderer):
@@ -66,4 +68,58 @@ async def test_render_hidden(
     hid = HiddenWidget("foo", value="bar", token="x")
     result = await hid.to_html(renderer)
     html = soup(result)
-    assert html.find("input", attrs={"id": "foo-x", "name": "foo", "value": "bar"})
+    assert html.find(
+        "input", attrs={"id": "foo-x", "type": "hidden", "name": "foo", "value": "bar"}
+    )
+
+
+async def test_render_text(
+    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    hid = TextWidget("foo", title="Foo", value="bar", token="x")
+    result = await hid.to_html(renderer)
+    html = soup(result)
+    assert html.find(
+        "input", attrs={"id": "foo-x", "type": "text", "name": "foo", "value": "bar"}
+    )
+
+
+async def test_render_text_help(
+    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    hid = TextWidget(
+        "foo", title="Foo", value="bar", token="x", help_text="This is foobar"
+    )
+    result = await hid.to_html(renderer)
+    html = soup(result)
+    assert html.find(
+        "input", attrs={"id": "foo-x", "type": "text", "name": "foo", "value": "bar"}
+    )
+    help_text = html.find("span")
+    assert help_text
+    assert help_text.text == "This is foobar"
+
+
+async def test_render_text_removable(
+    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    text = TextWidget("foo", title="Foo", token="x", removable=True)
+    result = await text.to_html(renderer)
+    html = soup(result)
+    assert html.find("button", attrs={"type": "button"})
+
+
+async def test_render_model(
+    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    model = ModelWidget(
+        "foo",
+        title="Foo",
+        children_widget=[TextWidget("name", title="n", token="x", removable=True)],
+        removable=False,
+        token="x",
+    )
+    result = await model.to_html(renderer)
+    html = soup(result)
+    assert html.find("div", attrs={"id": "foo-x"})
+    assert html.find("input", attrs={"id": "name-x", "type": "text"})

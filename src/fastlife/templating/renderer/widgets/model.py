@@ -21,15 +21,15 @@ class ModelWidget(Widget):
         self.children_widget = children_widget
 
     def get_template(self) -> str:
-        return "pydantic_form/model.jinja2"
+        return "pydantic_form.Model"
 
     async def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version"""
         children_widget = [
             await child.to_html(renderer) for child in self.children_widget
         ]
-        return Markup(
-            await renderer.render_template(
-                self.get_template(), widget=self, children_widget=children_widget
-            )
-        )
+        kwargs = {
+            "widget": self,
+            "children_widget": children_widget,
+        }
+        return Markup(await renderer.render_template(self.get_template(), **kwargs))
