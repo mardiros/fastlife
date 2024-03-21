@@ -27,7 +27,7 @@ class SequenceWidget(Widget):
         self.help_text = help_text
 
     def get_template(self) -> str:
-        return "pydantic_form/sequence.jinja2"
+        return "pydantic_form/Sequence"
 
     def build_item_type(self, route_prefix: str) -> TypeWrapper:
         return TypeWrapper(self.item_type, route_prefix, self.name, self.token)

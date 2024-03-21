@@ -7,6 +7,7 @@ from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
 from fastlife.templating.renderer.widgets.model import ModelWidget
+from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
 
 
@@ -123,3 +124,25 @@ async def test_render_model(
     html = soup(result)
     assert html.find("div", attrs={"id": "foo-x"})
     assert html.find("input", attrs={"id": "name-x", "type": "text"})
+
+
+async def test_render_sequence(
+    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    model = SequenceWidget(
+        "foo",
+        title="Foo",
+        items=[
+            TextWidget("x", title="x", token="x", removable=True),
+            TextWidget("y", title="y", token="x", removable=True),
+        ],
+        removable=False,
+        token="x",
+        help_text="",
+        item_type=str,
+    )
+    result = await model.to_html(renderer)
+    html = soup(result)
+    assert html.find("details", attrs={"id": "foo-x"})
+    assert html.find("input", attrs={"id": "x-x", "type": "text"})
+    assert html.find("input", attrs={"id": "y-x", "type": "text"})
