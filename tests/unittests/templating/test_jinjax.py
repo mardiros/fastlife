@@ -1,6 +1,7 @@
 from typing import Callable
 
 import bs4
+from pydantic import BaseModel
 
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
@@ -9,6 +10,7 @@ from fastlife.templating.renderer.widgets.hidden import HiddenWidget
 from fastlife.templating.renderer.widgets.model import ModelWidget
 from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 from fastlife.templating.renderer.widgets.text import TextWidget
+from fastlife.templating.renderer.widgets.union import UnionWidget
 
 
 async def test_render_template(renderer: JinjaxTemplateRenderer):
@@ -146,3 +148,28 @@ async def test_render_sequence(
     assert html.find("details", attrs={"id": "foo-x"})
     assert html.find("input", attrs={"id": "x-x", "type": "text"})
     assert html.find("input", attrs={"id": "y-x", "type": "text"})
+
+
+async def test_render_union(
+    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+
+    class Foo(BaseModel):
+        foo: str
+
+    class Bar(BaseModel):
+        bar: str
+
+    model = UnionWidget(
+        "foobar",
+        title="foobar",
+        child=None,
+        children_types=[Foo, Bar],
+        removable=False,
+        token="x",
+    )
+    result = await model.to_html(renderer)
+    html = soup(result)
+    assert html.find("div", attrs={"id": "foobar-x"})
+
+    # assert html.find("button", attrs={})

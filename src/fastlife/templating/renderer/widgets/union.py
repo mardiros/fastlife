@@ -31,7 +31,7 @@ class UnionWidget(Widget):
         ]
 
     def get_template(self) -> str:
-        return "pydantic_form/union.jinja2"
+        return "pydantic_form.Union"
 
     async def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version"""
