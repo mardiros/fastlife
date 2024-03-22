@@ -27,7 +27,7 @@ class WidgetFactory:
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
 
-    async def get_markup(
+    def get_markup(
         self,
         base: Type[Any],
         form_data: Mapping[str, Any],
@@ -35,7 +35,7 @@ class WidgetFactory:
         prefix: str,
         removable: bool,
     ) -> Markup:
-        return await self.get_widget(
+        return self.get_widget(
             base, form_data, prefix=prefix, removable=removable
         ).to_html(self.renderer)
 

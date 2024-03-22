@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     template_search_path: str = Field(default="fastlife:templates")
     registry_class: str = Field(default="fastlife.configurator.registry:AppRegistry")
     template_renderer_class: str = Field(
-        default="fastlife.templating.renderer.jinja2:Jinja2TemplateRenderer"
+        default="fastlife.templating.renderer:JinjaxTemplateRenderer"
     )
     form_data_model_prefix: str = Field(default="payload")
     csrf_token_name: str = Field(default="csrf_token")

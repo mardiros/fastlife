@@ -4,15 +4,15 @@ import bs4
 import pytest
 
 from fastlife.configurator.settings import Settings
-from fastlife.templating.renderer.jinja2 import Jinja2TemplateRenderer
+from fastlife.templating.renderer import JinjaxTemplateRenderer
 
-template_path = str(Path(__file__).parent / "jinja2")
+template_path = str(Path(__file__).parent / "components")
 
 
 @pytest.fixture()
 def renderer():
     settings = Settings(template_search_path=f"{template_path},fastlife:templates")
-    return Jinja2TemplateRenderer(settings)
+    return JinjaxTemplateRenderer(settings)
 
 
 @pytest.fixture()

@@ -17,7 +17,7 @@ class LoginForm(BaseModel):
 async def login(
     request: Request,
     loginform: Annotated[Optional[LoginForm], model(LoginForm)],
-    template: Annotated[Template, template("login.jinja2")],
+    template: Annotated[Template, template("Login")],
     policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
 ) -> Response:
     if loginform:
@@ -26,7 +26,7 @@ async def login(
         ):
             policy.remember(user)
         return RedirectResponse(request.url_for("secured_page"), status_code=303)
-    return await template(model=LoginForm, form_data={})
+    return template(model=LoginForm, form_data={})
 
 
 async def logout(

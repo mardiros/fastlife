@@ -1,12 +1,15 @@
-from typing import TYPE_CHECKING, Any, Mapping, Optional, Sequence, Type
+from typing import TYPE_CHECKING, Any, Callable, Mapping, Optional, Sequence, Type
 
 from fastapi import Request
 from jinjax.catalog import Catalog
 from markupsafe import Markup
 
+from fastlife.templating.renderer.widgets.factory import WidgetFactory
+
 if TYPE_CHECKING:
     from fastlife.configurator.settings import Settings
 
+from fastlife.security import csrf
 from fastlife.shared_utils.resolver import resolve_path
 
 from .abstract import AbstractTemplateRenderer
@@ -37,13 +40,22 @@ class JinjaxTemplateRenderer(AbstractTemplateRenderer):
         for path in build_searchpath(settings.template_search_path):
             self.catalog.add_folder(path)
 
-    async def render_page(self, request: Request, template: str, **params: Any) -> str:
-        return self.catalog.render(template, request=request, **params)  # type:ignore
+    def render_page(self, request: Request, template: str, **params: Any) -> str:
+        return self.catalog.render(  # type:ignore
+            template,
+            request=request,
+            csrf_token={
+                "name": self.csrf_token_name,
+                "value": request.scope.get(self.csrf_token_name, ""),
+            },
+            pydantic_form=self.pydantic_form,
+            **params
+        )
 
-    async def render_template(self, template: str, **params: Any) -> str:
+    def render_template(self, template: str, **params: Any) -> str:
         return self.catalog.render(template, **params)  # type:ignore
 
-    async def pydantic_form(
+    def pydantic_form(
         self,
         model: Type[Any],
         form_data: Optional[Mapping[str, Any]] = None,
@@ -51,4 +63,9 @@ class JinjaxTemplateRenderer(AbstractTemplateRenderer):
         token: Optional[str] = None,
         removable: bool = False,
     ) -> Markup:
-        raise NotImplementedError
+        return WidgetFactory(self, token).get_markup(
+            model,
+            form_data or {},
+            prefix=(name or self.form_data_model_prefix),
+            removable=removable,
+        )

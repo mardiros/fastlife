@@ -33,11 +33,11 @@ class UnionWidget(Widget):
     def get_template(self) -> str:
         return "pydantic_form.Union"
 
-    async def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version"""
-        child = Markup(await self.child.to_html(renderer)) if self.child else ""
+        child = Markup(self.child.to_html(renderer)) if self.child else ""
         return Markup(
-            await renderer.render_template(
+            renderer.render_template(
                 self.get_template(),
                 widget=self,
                 types=self.build_types(renderer.route_prefix),

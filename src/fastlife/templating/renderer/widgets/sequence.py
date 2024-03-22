@@ -32,11 +32,11 @@ class SequenceWidget(Widget):
     def build_item_type(self, route_prefix: str) -> TypeWrapper:
         return TypeWrapper(self.item_type, route_prefix, self.name, self.token)
 
-    async def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version"""
-        children = [Markup(await item.to_html(renderer)) for item in self.items]
+        children = [Markup(item.to_html(renderer)) for item in self.items]
         return Markup(
-            await renderer.render_template(
+            renderer.render_template(
                 self.get_template(),
                 widget=self,
                 type=self.build_item_type(renderer.route_prefix),

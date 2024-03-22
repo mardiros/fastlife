@@ -1,9 +1,0 @@
-{% extends "layout.jinja2" %}
-{% block maincontent %}
-<h1>Hello {{ account.username|default("World") }}!</h1>
-
-{% call form() %}
-{{ input(name="account.username", label="Name", aria_label="First name and last name, or surname") }}
-{{ button("Submit", aria_label="submit") }}
-{% endcall %}
-{% endblock %}

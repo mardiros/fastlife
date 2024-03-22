@@ -1,12 +1,11 @@
-from typing import Any, Callable, Coroutine
+from typing import Any, Callable
 
 from fastapi import Depends, Request, Response
 
 from fastlife.configurator.registry import Registry
 from fastlife.security.csrf import create_csrf_token
 
-TemplateEngineHandler = Coroutine[Any, Any, Response]
-Template = Callable[..., TemplateEngineHandler]
+Template = Callable[..., Response]
 TemplateEngine = Callable[["Registry", Request], Template]
 
 
@@ -19,12 +18,12 @@ def get_page_template(
         *,
         _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Template:
-        async def parametrizer(**kwargs: Any) -> Response:
+        def parametrizer(**kwargs: Any) -> Response:
             request.scope[reg.settings.csrf_token_name] = (
                 request.cookies.get(reg.settings.csrf_token_name)
                 or _create_csrf_token()
             )
-            data = await reg.renderer.render_page(request, template, **kwargs)
+            data = reg.renderer.render_page(request, template, **kwargs)
             resp = Response(data, headers={"Content-Type": content_type})
             resp.set_cookie(
                 reg.settings.csrf_token_name,
@@ -44,8 +43,8 @@ def get_template(
     template: str, *, content_type: str = "text/html"
 ) -> Callable[["Registry"], Template]:
     def render_template(reg: "Registry") -> Template:
-        async def parametrizer(**kwargs: Any) -> Response:
-            data = await reg.renderer.render_template(template, **kwargs)
+        def parametrizer(**kwargs: Any) -> Response:
+            data = reg.renderer.render_template(template, **kwargs)
             resp = Response(data, headers={"Content-Type": content_type})
             return resp
 

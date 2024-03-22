@@ -10,15 +10,15 @@ class AbstractTemplateRenderer(abc.ABC):
     """Used to prefix url to fetch fast life widgets."""
 
     @abc.abstractmethod
-    async def render_page(self, request: Request, template: str, **params: Any) -> str:
+    def render_page(self, request: Request, template: str, **params: Any) -> str:
         ...
 
     @abc.abstractmethod
-    async def render_template(self, template: str, **params: Any) -> str:
+    def render_template(self, template: str, **params: Any) -> str:
         ...
 
     @abc.abstractmethod
-    async def pydantic_form(
+    def pydantic_form(
         self,
         model: Type[Any],
         form_data: Optional[Mapping[str, Any]] = None,

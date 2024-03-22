@@ -51,9 +51,9 @@ class Widget(abc.ABC):
     def get_template(self) -> str:
         ...
 
-    async def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
+    def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version"""
-        return Markup(await renderer.render_template(self.get_template(), widget=self))
+        return Markup(renderer.render_template(self.get_template(), widget=self))
 
 
 def _get_fullname(typ: Type[Any]) -> str:

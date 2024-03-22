@@ -15,7 +15,7 @@ async def show_widget(
     removable: bool = Query(False),
 ) -> Response:
     model_cls = resolve_extended(typ)
-    data = await reg.renderer.pydantic_form(model_cls, None, name, token, removable)
+    data = reg.renderer.pydantic_form(model_cls, None, name, token, removable)
     return Response(data, headers={"Content-Type": "text/html"})
 
 
