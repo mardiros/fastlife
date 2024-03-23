@@ -42,10 +42,7 @@ class Widget(abc.ABC):
         self.aria_label = aria_label or ""
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.removable = removable
-
-    @property
-    def id(self) -> str:
-        return f"{self.name}-{self.token}".replace("_", "-").replace(".", "-")
+        self.id = f"{self.name}-{self.token}".replace("_", "-").replace(".", "-")
 
     @abc.abstractmethod
     def get_template(self) -> str:

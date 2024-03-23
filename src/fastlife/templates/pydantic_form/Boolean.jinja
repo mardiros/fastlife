@@ -1,5 +1,5 @@
 {# def widget #}
-<pydantic_form.Widget name={widget.name} token={widget.token} removable={widget.removable}>
+<pydantic_form.Widget widget={widget} removable={widget.removable}>
   <div class="pt-4">
     <Label for={widget.id}>{{widget.title}}</Label>
     <Checkbox name={widget.name} value={widget.value} type="checkbox" id={widget.id} />

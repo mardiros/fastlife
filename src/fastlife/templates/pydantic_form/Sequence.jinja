@@ -1,13 +1,14 @@
 {# def widget, children_widgets, type #}
 
-<pydantic_form.Widget name={widget.name} token={widget.token} removable={widget.removable}>
+<pydantic_form.Widget widget={widget} removable={widget.removable}>
   <details id="{{widget.id}}" open>
     <summary class="justify-between items-center font-medium cursor-pointer">
       <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
     </summary>
     <div>
+      {% set fnGetName = "get" + widget.id.replace("-", "_") %}
       <script>
-        function getName() {
+        function {{fnGetName}}() {
           const el = document.getElementById("{{widget.id}}-content");
           const len = el.dataset.length;
           el.dataset.length = parseInt(len) + 1;
@@ -26,11 +27,10 @@
       <div>
         {% set container_id = "#" + widget.id + "-container" %}
         {% set add_id = widget.id + "-add" %}
-        {% set vals = 'js:{"name": getName(), "token": "' + type.token + '", "removable": true}' %}
+        {% set vals = 'js:{"name": '+ fnGetName + '(), "token": "' + type.token + '", "removable": true}' %}
         <Button type="button" target={container_id} swap="beforeend" id={add_id} vals={vals} get={type.url}>
           Add
         </Button>
-        }}
       </div>
     </div>
   </details>

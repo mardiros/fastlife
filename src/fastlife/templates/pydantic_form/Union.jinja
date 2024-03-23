@@ -1,6 +1,6 @@
 {# def widget, child, types, parent_type #}
 
-<pydantic_form.Widget name={widget.name} token={widget.token}>
+<pydantic_form.Widget widget={widget}>
   <div id="{{widget.id}}">
     <details open>
       <summary class="justify-between items-center font-medium cursor-pointer">
@@ -12,14 +12,14 @@
         {% else %}
         {% for typ in types %}
         <Button type="button" target="closest div" get={typ.url} vals={typ.params|tojson}
-          id={"*****************"+typ.fullname + "-" + widget.token}
-          onclick={"document.getElementById('" + widget.id +"-remove-btn').hidden=false)"}>{{typ.title}}</Button>
+          id={typ.fullname + "-" + widget.token}
+          onclick={"document.getElementById('" + widget.id +"-remove-btn').hidden=false"}>{{typ.title}}</Button>
         {% endfor %}
         {% endif %}
       </div>
       <Button type="button" id={widget.id + "-remove-btn" } target={"#" + widget.id} vals={parent_type.params|tojson}
         get={parent_type.url} hidden={not child}>
-        remove
+        Remove
       </Button>
     </details>
   </div>

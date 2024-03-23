@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: "class",
   content: [
-    "./src/fastlife/templates/*.jinja2",
-    "./src/fastlife/templates/**/*.jinja2",
-    "./tests/fastlife_app/templates/*.jinja2",
-    "./tests/fastlife_app/templates/**/*.jinja2",
+    "./src/fastlife/templates/*.jinja",
+    "./src/fastlife/templates/**/*.jinja",
+    "./tests/fastlife_app/templates/*.jinja",
+    "./tests/fastlife_app/templates/**/*.jinja",
   ],
   theme: {
     extend: {

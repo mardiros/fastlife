@@ -78,7 +78,7 @@ class WidgetFactory:
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
             return self.build_model(name, typ, field, value or {}, removable)
 
-        if issubclass(typ, (bool)):
+        if issubclass(typ, bool):
             return self.build_boolean(name, typ, field, value or False, removable)
 
         if issubclass(typ, EmailStr):

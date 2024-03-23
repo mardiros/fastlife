@@ -1,6 +1,6 @@
 {# def widget, children_widget #}
 
-<pydantic_form.Widget name={widget.name} token={widget.token} removable={widget.removable}>
+<pydantic_form.Widget widget={widget} removable={widget.removable}>
   <div id="{{widget.id}}" class="m-4">
     <details open>
       <summary class="justify-between items-center font-medium cursor-pointer">
