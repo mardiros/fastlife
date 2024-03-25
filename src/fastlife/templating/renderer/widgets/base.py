@@ -85,7 +85,5 @@ class TypeWrapper:
 
     @property
     def url(self) -> str:
-        ret = (
-            f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
-        )
+        ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
         return ret

@@ -3,6 +3,7 @@ from typing import Any, Mapping, Type
 
 from fastapi import Request
 from markupsafe import Markup
+from pydantic.fields import FieldInfo
 
 
 class AbstractTemplateRenderer(abc.ABC):
