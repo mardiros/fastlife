@@ -1,5 +1,5 @@
 import abc
-from typing import Any, Mapping, Optional, Type
+from typing import Any, Mapping, Type
 
 from fastapi import Request
 from markupsafe import Markup
@@ -21,9 +21,10 @@ class AbstractTemplateRenderer(abc.ABC):
     def pydantic_form(
         self,
         model: Type[Any],
-        form_data: Optional[Mapping[str, Any]] = None,
-        name: Optional[str] = None,
-        token: Optional[str] = None,
+        form_data: Mapping[str, Any] | None = None,
+        name: str | None = None,
+        token: str | None = None,
         removable: bool = False,
+        field: FieldInfo | None = None,
     ) -> Markup:
         ...

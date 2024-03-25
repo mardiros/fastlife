@@ -46,6 +46,7 @@ class UnionWidget(Widget):
                     renderer.route_prefix,
                     self.parent_name,
                     self.token,
+                    title=self.title,
                 ),
                 child=child,
             )

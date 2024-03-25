@@ -34,9 +34,10 @@ class WidgetFactory:
         *,
         prefix: str,
         removable: bool,
+        field: FieldInfo | None = None,
     ) -> Markup:
         return self.get_widget(
-            base, form_data, prefix=prefix, removable=removable
+            base, form_data, prefix=prefix, removable=removable, field=field
         ).to_html(self.renderer)
 
     def get_widget(
@@ -46,9 +47,14 @@ class WidgetFactory:
         *,
         prefix: str,
         removable: bool,
+        field: FieldInfo | None = None,
     ) -> Widget:
         return self.build(
-            base, value=form_data.get(prefix, {}), name=prefix, removable=removable
+            base,
+            value=form_data.get(prefix, {}),
+            name=prefix,
+            removable=removable,
+            field=field,
         )
 
     def build(
@@ -58,7 +64,7 @@ class WidgetFactory:
         name: str = "",
         value: Any,
         removable: bool,
-        field: Optional[FieldInfo] = None,
+        field: FieldInfo | None = None,
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:

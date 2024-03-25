@@ -61,11 +61,18 @@ def _get_fullname(typ: Type[Any]) -> str:
 
 
 class TypeWrapper:
-    def __init__(self, typ: Type[Any], route_prefix: str, name: str, token: str):
+    def __init__(
+        self,
+        typ: Type[Any],
+        route_prefix: str,
+        name: str,
+        token: str,
+        title: str | None = None,
+    ):
         self.typ = typ
         self.route_prefix = route_prefix
         self.name = name
-        self.title = get_title(typ)
+        self.title = title or get_title(typ)
         self.token = token
 
     @property
@@ -74,12 +81,11 @@ class TypeWrapper:
 
     @property
     def params(self) -> Mapping[str, str]:
-        return {"name": self.name, "token": self.token}
+        return {"name": self.name, "token": self.token, "title": self.title}
 
     @property
     def url(self) -> str:
         ret = (
             f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
-            # f"?name={self.name}&token={self.token}"
         )
         return ret

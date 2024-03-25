@@ -1,15 +1,15 @@
-from typing import TYPE_CHECKING, Any, Callable, Mapping, Optional, Sequence, Type
+from typing import TYPE_CHECKING, Any, Mapping, Optional, Sequence, Type
 
 from fastapi import Request
 from jinjax.catalog import Catalog
 from markupsafe import Markup
+from pydantic.fields import FieldInfo
 
 from fastlife.templating.renderer.widgets.factory import WidgetFactory
 
 if TYPE_CHECKING:
     from fastlife.configurator.settings import Settings
 
-from fastlife.security import csrf
 from fastlife.shared_utils.resolver import resolve_path
 
 from .abstract import AbstractTemplateRenderer
@@ -62,10 +62,12 @@ class JinjaxTemplateRenderer(AbstractTemplateRenderer):
         name: Optional[str] = None,
         token: Optional[str] = None,
         removable: bool = False,
+        field: FieldInfo | None = None,
     ) -> Markup:
         return WidgetFactory(self, token).get_markup(
             model,
             form_data or {},
             prefix=(name or self.form_data_model_prefix),
             removable=removable,
+            field=field,
         )
