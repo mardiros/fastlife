@@ -72,3 +72,8 @@ def test_redirect_on_logout(client: WebTestClient):
     assert logout is not None, resp.html
     logout.click()
     assert client.session == {}
+
+
+def test_exception_handler(client: WebTestClient):
+    resp = client.get("/failed")
+    assert resp.text == "It's a trap"
