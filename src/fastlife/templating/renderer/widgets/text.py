@@ -26,4 +26,4 @@ class TextWidget(Widget):
         self.input_type = input_type
 
     def get_template(self) -> str:
-        return "pydantic_form/text.jinja2"
+        return "pydantic_form.Text"

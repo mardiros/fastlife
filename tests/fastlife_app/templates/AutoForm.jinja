@@ -1,0 +1,9 @@
+{# def pydantic_form, model, form_data, csrf_token #}
+<Layout>
+  <div class="max-w-screen-lg mx-auto px-5 bg-white min-h-sceen">
+    <Form csrf_token={csrf_token}>
+      {{ pydantic_form(model, form_data) }}
+      <Button>Submit</Button>
+    </Form>
+  </div>
+</Layout>

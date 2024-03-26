@@ -1,10 +1,9 @@
-from pathlib import Path
-
 import bs4
 import pytest
+from anyio import Path
 
 from fastlife.configurator.settings import Settings
-from fastlife.templating.renderer import JinjaxTemplateRenderer
+from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
 
 template_path = str(Path(__file__).parent / "components")
 

@@ -1,0 +1,10 @@
+{# def widget, removable=false #}
+{% set container_id = widget.id + "-container" %}
+<div id="{{container_id}}">
+  {{ content }}
+  {% if removable %}
+  <Button type="button" onclick={"document.getElementById('" + container_id + "').remove()"}>
+    Remove
+  </Button>
+  {% endif %}
+</div>

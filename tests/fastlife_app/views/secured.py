@@ -7,10 +7,10 @@ from tests.fastlife_app.security import AuthenticatedUser, authenticated_user
 
 
 async def secured(
-    template: Annotated[Template, template("secured.jinja2")],
+    template: Annotated[Template, template("Secured")],
     user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
 ) -> Response:
-    return await template(user=user)
+    return template(user=user)
 
 
 @configure

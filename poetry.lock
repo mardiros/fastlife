@@ -632,6 +632,22 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "jinjax"
+version = "0.31"
+description = "Replace your HTML templates with Python server-Side components"
+optional = false
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "jinjax-0.31-py3-none-any.whl", hash = "sha256:7003b4c539795423f064fc20ee5c96fcc0d4a78e855e6ab1e38ec7ab8b9da0ce"},
+    {file = "jinjax-0.31.tar.gz", hash = "sha256:2883b38ed95ffdf21c5f4e33d0ac81ffacab3f1f8ccd704a534f746d5c22f834"},
+]
+
+[package.dependencies]
+jinja2 = ">=3.0"
+markupsafe = ">=2.0"
+whitenoise = ">=5.3"
+
+[[package]]
 name = "markupsafe"
 version = "2.1.3"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -1356,6 +1372,20 @@ docs = ["Sphinx (>=4.3.2)", "pylons-sphinx-themes", "repoze.sphinx.autointerface
 testing = ["coverage", "pytest", "pytest-cov"]
 
 [[package]]
+name = "whitenoise"
+version = "6.6.0"
+description = "Radically simplified static file serving for WSGI applications"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "whitenoise-6.6.0-py3-none-any.whl", hash = "sha256:b1f9db9bf67dc183484d760b99f4080185633136a273a03f6436034a41064146"},
+    {file = "whitenoise-6.6.0.tar.gz", hash = "sha256:8998f7370973447fac1e8ef6e8ded2c5209a7b1f67c1012866dbcd09681c3251"},
+]
+
+[package.extras]
+brotli = ["Brotli"]
+
+[[package]]
 name = "wsproto"
 version = "1.2.0"
 description = "WebSockets state-machine based protocol implementation"
@@ -1372,4 +1402,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "50ec2ee685e6f15cfffbdea49ddf89e3925b04f71cc40ffb044885d693cc8175"
+content-hash = "ac66bf8f7b013862a8b721c7fec754ae41e63a24a22f727a5279d527c8d4cfb4"

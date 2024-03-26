@@ -1,0 +1,5 @@
+{# def csrf_token #}
+<form class="space-y-4 md:space-y-6" hx-post="" method="post">
+  <CsrfToken csrf_token={csrf_token}/>
+  {{ content }}
+</form>

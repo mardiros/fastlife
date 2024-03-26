@@ -13,4 +13,4 @@ class HiddenWidget(Widget):
         self.value = value
 
     def get_template(self) -> str:
-        return "pydantic_form/hidden.jinja2"
+        return "pydantic_form.Hidden"

@@ -8,18 +8,18 @@ from tests.fastlife_app.models import Account
 
 
 async def hello_world(
-    template: Annotated[Template, template("hello_world.jinja2")],
+    template: Annotated[Template, template("HelloWorld")],
     account: Annotated[Optional[Account], model(Account, "account")],
 ) -> Response:
-    return await template(account=account)
+    return template(account=account)
 
 
 async def autoform(
-    template: Annotated[Template, template("autoform.jinja2")],
+    template: Annotated[Template, template("AutoForm")],
     account: Annotated[Optional[Account], model(Account)],
 ):
     account = account
-    return await template(
+    return template(
         model=Account, form_data={"payload": account.model_dump()} if account else {}
     )
 

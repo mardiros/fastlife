@@ -17,4 +17,4 @@ class BooleanWidget(Widget):
         self.value = value
 
     def get_template(self) -> str:
-        return "pydantic_form/boolean.jinja2"
+        return "pydantic_form.Boolean"

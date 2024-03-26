@@ -27,16 +27,17 @@ class WidgetFactory:
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
 
-    async def get_markup(
+    def get_markup(
         self,
         base: Type[Any],
         form_data: Mapping[str, Any],
         *,
         prefix: str,
         removable: bool,
+        field: FieldInfo | None = None,
     ) -> Markup:
-        return await self.get_widget(
-            base, form_data, prefix=prefix, removable=removable
+        return self.get_widget(
+            base, form_data, prefix=prefix, removable=removable, field=field
         ).to_html(self.renderer)
 
     def get_widget(
@@ -46,9 +47,14 @@ class WidgetFactory:
         *,
         prefix: str,
         removable: bool,
+        field: FieldInfo | None = None,
     ) -> Widget:
         return self.build(
-            base, value=form_data.get(prefix, {}), name=prefix, removable=removable
+            base,
+            value=form_data.get(prefix, {}),
+            name=prefix,
+            removable=removable,
+            field=field,
         )
 
     def build(
@@ -58,7 +64,7 @@ class WidgetFactory:
         name: str = "",
         value: Any,
         removable: bool,
-        field: Optional[FieldInfo] = None,
+        field: FieldInfo | None = None,
     ) -> Widget:
         type_origin = get_origin(typ)
         if type_origin:
@@ -78,7 +84,7 @@ class WidgetFactory:
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
             return self.build_model(name, typ, field, value or {}, removable)
 
-        if issubclass(typ, (bool)):
+        if issubclass(typ, bool):
             return self.build_boolean(name, typ, field, value or False, removable)
 
         if issubclass(typ, EmailStr):

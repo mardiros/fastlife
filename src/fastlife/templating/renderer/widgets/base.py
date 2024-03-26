@@ -42,18 +42,15 @@ class Widget(abc.ABC):
         self.aria_label = aria_label or ""
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.removable = removable
-
-    @property
-    def id(self) -> str:
-        return f"{self.name}-{self.token}".replace("_", "-").replace(".", "-")
+        self.id = f"{self.name}-{self.token}".replace("_", "-").replace(".", "-")
 
     @abc.abstractmethod
     def get_template(self) -> str:
         ...
 
-    async def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
+    def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version"""
-        return Markup(await renderer.render_template(self.get_template(), widget=self))
+        return Markup(renderer.render_template(self.get_template(), widget=self))
 
 
 def _get_fullname(typ: Type[Any]) -> str:
@@ -64,11 +61,18 @@ def _get_fullname(typ: Type[Any]) -> str:
 
 
 class TypeWrapper:
-    def __init__(self, typ: Type[Any], route_prefix: str, name: str, token: str):
+    def __init__(
+        self,
+        typ: Type[Any],
+        route_prefix: str,
+        name: str,
+        token: str,
+        title: str | None = None,
+    ):
         self.typ = typ
         self.route_prefix = route_prefix
         self.name = name
-        self.title = get_title(typ)
+        self.title = title or get_title(typ)
         self.token = token
 
     @property
@@ -77,12 +81,9 @@ class TypeWrapper:
 
     @property
     def params(self) -> Mapping[str, str]:
-        return {"name": self.name, "token": self.token}
+        return {"name": self.name, "token": self.token, "title": self.title}
 
     @property
     def url(self) -> str:
-        ret = (
-            f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
-            # f"?name={self.name}&token={self.token}"
-        )
+        ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
         return ret

@@ -1,8 +1,0 @@
-{% from "globals.jinja2" import button %}
-{% from "pydantic_form/widget.jinja2" import show_widget %}
-{% call show_widget(widget) %}
-<div class="pt-4">
-  <label for="{{widget.id}}">{{widget.title}}</label>
-  <input name="{{widget.name}}" value="{{widget.value}}" type="checkbox" id="{{widget.id}}" />
-</div>
-{% endcall %}

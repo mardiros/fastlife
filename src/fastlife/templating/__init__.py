@@ -1,9 +1,9 @@
 from .binding import Template, template
-from .renderer import AbstractTemplateRenderer, Jinja2TemplateRenderer
+from .renderer import AbstractTemplateRenderer, JinjaxTemplateRenderer
 
 __all__ = [
     "AbstractTemplateRenderer",
-    "Jinja2TemplateRenderer",
+    "JinjaxTemplateRenderer",
     "Template",
     "template",
 ]

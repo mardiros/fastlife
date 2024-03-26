@@ -1,0 +1,16 @@
+{# def widget, children_widget #}
+
+<pydantic_form.Widget widget={widget} removable={widget.removable}>
+  <div id="{{widget.id}}" class="m-4">
+    <details open>
+      <summary class="justify-between items-center font-medium cursor-pointer">
+        <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
+      </summary>
+      <div>
+        {% for child in children_widget %}
+        {{ child }}
+        {% endfor %}
+      </div>
+    </details>
+  </div>
+</pydantic_form.Widget>
