@@ -31,7 +31,7 @@ from fastlife.security.csrf import check_csrf
 from .settings import Settings
 
 if TYPE_CHECKING:
-    from .registry import AppRegistry
+    from .registry import AppRegistry  # coverage: ignore
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
