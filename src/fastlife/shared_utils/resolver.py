@@ -8,16 +8,18 @@ def resolve(value: str) -> Any:
     module_name, attr_name = value.split(":", 2)
     spec = importlib.util.find_spec(module_name)
     if spec is None:
-        raise ValueError(f"Module {module_name} not found.")
+        raise ValueError(f"Module {module_name} not found")
     module = importlib.util.module_from_spec(spec)
     if spec.loader is None:
-        raise ValueError("No loader on spec")
+        # I can't figure out when the spec.loader is None,
+        # just relying on typing here
+        raise ValueError("No loader on spec")  # coverage: ignore
     spec.loader.exec_module(module)
 
     try:
         attr = getattr(module, attr_name)
     except AttributeError:
-        raise ValueError(f"Attribute {attr_name} not found in module {module_name}.")
+        raise ValueError(f"Attribute {attr_name} not found in module {module_name}")
 
     return attr
 
