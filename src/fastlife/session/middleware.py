@@ -39,7 +39,6 @@ class SessionMiddleware(AbstractMiddleware):
         if scope["type"] not in ("http", "websocket"):  # pragma: no cover
             await self.app(scope, receive, send)
             return
-
         connection = HTTPConnection(scope)
         existing_session = self.cookie_name in connection.cookies
         if existing_session:
