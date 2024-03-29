@@ -18,7 +18,7 @@ version = "0.3.0"
 [tool.poetry.dependencies]
 python = "^3.11"
 beautifulsoup4 = {version = "^4.12.2", extras = ["testing"]}
-fastapi = "^0.108.0"
+fastapi = "^0.110.0"
 jinjax = "^0.31"
 pydantic = "^2.3.0"
 pydantic-settings = "^2.0.3"
