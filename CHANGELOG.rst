@@ -1,3 +1,7 @@
+0.3.1  - Released on 2024-03-29
+-------------------------------
+* Update FastAPI
+
 0.3.0  - Released on 2024-03-29
 -------------------------------
 * Replace jinja2 by JinjaX
