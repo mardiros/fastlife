@@ -1,3 +1,7 @@
+0.3.0  - Released on 2024-03-29
+-------------------------------
+* Replace jinja2 by JinjaX
+
 0.2.3  - Released on 2024-01-29
 -------------------------------
 * Add support of relative import in :class:`Configurator.include` method
