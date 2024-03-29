@@ -26,7 +26,6 @@ def unflatten_struct(
 ) -> Mapping[str, Any] | Sequence[Any]:
     # we sort to ensure that list index are ordered
     formkeys = sorted(flatten_input.keys())
-
     for key in formkeys:
         if csrf_token_name is not None and key == csrf_token_name:
             continue
@@ -39,15 +38,11 @@ def unflatten_struct(
                     raise ValueError(f"{flatten_input}: Not a list")
                 while int(key) != len(unflattened_output):
                     unflattened_output.append(None)
-                if not int(key) == len(unflattened_output):
-                    raise ValueError(
-                        f"{flatten_input}: Missing index {len(unflattened_output)}"
-                    )
                 unflattened_output.append(flatten_input[key])
             elif isinstance(unflattened_output, dict):
                 unflattened_output[key] = flatten_input[key]
             else:
-                raise ValueError(type(unflattened_output))
+                raise TypeError(type(unflattened_output))
             continue
 
         child_is_list = rest.partition(".")[0].isdigit()
@@ -74,7 +69,7 @@ def unflatten_struct(
                 level + 1,
             )
         else:
-            raise ValueError(type(unflattened_output))
+            raise TypeError(type(unflattened_output))
 
     return unflattened_output
 

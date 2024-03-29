@@ -120,16 +120,35 @@ def test_unflatten_struct(params: Mapping[str, Any]):
         pytest.param(
             {
                 "flatten": {"a": 1, "b": "B"},
-                "input": [],
+                "unflattened_output": [],
+                "type": ValueError,
                 "error": "{'a': 1, 'b': 'B'}: Not a list",
             },
             id="not a list",
         ),
+        pytest.param(
+            {
+                "flatten": {"0": "A"},
+                "unflattened_output": 42,
+                "type": TypeError,
+                "error": "<class 'int'>",
+            },
+            id="unflattened_output type error",
+        ),
+        pytest.param(
+            {
+                "flatten": {"a.a": "A"},
+                "unflattened_output": 42,
+                "type": TypeError,
+                "error": "<class 'int'>",
+            },
+            id="unflattened_output nexted type error",
+        ),
     ],
 )
 def test_unflatten_struct_error(params: Mapping[str, Any]):
-    with pytest.raises(ValueError) as ctx:
-        unflatten_struct(params["flatten"], params["input"])
+    with pytest.raises(params["type"]) as ctx:
+        unflatten_struct(params["flatten"], params["unflattened_output"])
     assert str(ctx.value) == params["error"]
 
 

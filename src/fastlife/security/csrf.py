@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Callable, Coroutine
 from fastapi import Request
 
 if TYPE_CHECKING:
-    from fastlife.configurator.registry import Registry
+    from fastlife.configurator.registry import Registry  # coverage: ignore
 
 
 class CSRFAttack(Exception):

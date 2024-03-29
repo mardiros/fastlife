@@ -1,5 +1,7 @@
 from pathlib import Path
-from typing import Union, get_origin
+from typing import Any, Mapping, Union, get_origin
+
+import pytest
 
 from fastlife import Configurator
 from fastlife.shared_utils import resolver
@@ -8,6 +10,22 @@ from fastlife.shared_utils import resolver
 def test_resolve():
     ConfiguratorClass = resolver.resolve("fastlife:Configurator")
     assert ConfiguratorClass is Configurator
+
+
+@pytest.mark.parametrize(
+    "params",
+    [
+        {"value": "xxx:xxx", "error": "Module xxx not found"},
+        {
+            "value": "fastlife:xxx",
+            "error": "Attribute xxx not found in module fastlife",
+        },
+    ],
+)
+def test_resolve_error(params: Mapping[str, Any]):
+    with pytest.raises(ValueError) as ctx:
+        resolver.resolve(params["value"])
+    assert str(ctx.value) == params["error"]
 
 
 def test_resolve_extended():
@@ -25,3 +43,9 @@ def test_resolve_extended():
 def test_resolve_path(root_dir: Path):
     path = resolver.resolve_path("fastlife:templates")
     assert path == str(root_dir / "src" / "fastlife" / "templates")
+
+
+def test_resolve_path_error(root_dir: Path):
+    with pytest.raises(ValueError) as err:
+        resolver.resolve_path("xxx:templates")
+    assert str(err.value) == "xxx:templates not found"
