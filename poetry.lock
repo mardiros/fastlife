@@ -641,16 +641,20 @@ name = "jinjax"
 version = "0.31"
 description = "Replace your HTML templates with Python server-Side components"
 optional = false
-python-versions = ">=3.9,<4.0"
-files = [
-    {file = "jinjax-0.31-py3-none-any.whl", hash = "sha256:7003b4c539795423f064fc20ee5c96fcc0d4a78e855e6ab1e38ec7ab8b9da0ce"},
-    {file = "jinjax-0.31.tar.gz", hash = "sha256:2883b38ed95ffdf21c5f4e33d0ac81ffacab3f1f8ccd704a534f746d5c22f834"},
-]
+python-versions = "^3.9"
+files = []
+develop = false
 
 [package.dependencies]
 jinja2 = ">=3.0"
 markupsafe = ">=2.0"
 whitenoise = ">=5.3"
+
+[package.source]
+type = "git"
+url = "https://github.com/mardiros/jinjax.git"
+reference = "features/globals"
+resolved_reference = "e6fac79615ef44fb393b86cb614a4e2ee509cdb7"
 
 [[package]]
 name = "markupsafe"
@@ -1399,4 +1403,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b1568b765f29684846c82b7ec9ed361021cd2078e1552dbc57c55a8ba5eb3e37"
+content-hash = "b690fb7cd4347f7127712ac94b6da8c6522aa6bc14d2859427c3b83d96c0bd44"

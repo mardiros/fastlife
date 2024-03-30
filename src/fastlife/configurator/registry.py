@@ -7,7 +7,7 @@ from fastlife.shared_utils.resolver import resolve
 
 if TYPE_CHECKING:
     from fastlife.templating.renderer import (  # coverage: ignore
-        AbstractTemplateRenderer,  # coverage: ignore
+        AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
 
 from .settings import Settings
@@ -15,7 +15,7 @@ from .settings import Settings
 
 class AppRegistry:
     settings: Settings
-    renderer: "AbstractTemplateRenderer"
+    renderer: "AbstractTemplateRendererFactory"
     check_permission: CheckPermission
 
     def __init__(self, settings: Settings) -> None:

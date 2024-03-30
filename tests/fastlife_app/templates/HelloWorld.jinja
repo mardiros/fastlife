@@ -1,7 +1,7 @@
-{# def account, csrf_token #}
+{# def account #}
 <Layout>
   <H1>Hello {{ account.username|default("World") }}!</H1>
-  <Form csrf_token={csrf_token}>
+  <Form>
     <Input name="account.username" label="Name" aria_label="First name and last name, or surname" />
     <Button aria_label="submit">Submit</Button>
   </Form>
