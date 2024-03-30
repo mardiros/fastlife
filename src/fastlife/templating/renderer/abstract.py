@@ -8,11 +8,7 @@ from pydantic.fields import FieldInfo
 
 class AbstractTemplateRenderer(abc.ABC):
     route_prefix: str
-    """Used to prefix url to fetch fast life widgets."""
-
-    @abc.abstractmethod
-    def render_page(self, request: Request, template: str, **params: Any) -> str:
-        ...
+    """Used to buid pydantic form"""
 
     @abc.abstractmethod
     def render_template(self, template: str, **params: Any) -> str:
@@ -28,4 +24,10 @@ class AbstractTemplateRenderer(abc.ABC):
         removable: bool = False,
         field: FieldInfo | None = None,
     ) -> Markup:
+        ...
+
+
+class AbstractTemplateRendererFactory(abc.ABC):
+    @abc.abstractmethod
+    def __call__(self, request: Request) -> AbstractTemplateRenderer:
         ...

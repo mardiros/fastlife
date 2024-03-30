@@ -1,4 +1,7 @@
-from .abstract import AbstractTemplateRenderer
+from .abstract import AbstractTemplateRendererFactory
 from .jinjax import JinjaxTemplateRenderer
 
-__all__ = ["AbstractTemplateRenderer", "JinjaxTemplateRenderer"]
+__all__ = [
+    "AbstractTemplateRendererFactory",
+    "JinjaxTemplateRenderer",
+]

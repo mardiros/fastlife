@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import Query, Response
+from fastapi import Query, Request, Response
 from pydantic.fields import FieldInfo
 
 from fastlife import Configurator, configure
@@ -11,6 +11,7 @@ from fastlife.shared_utils.resolver import resolve_extended
 async def show_widget(
     typ: str,
     reg: Registry,
+    request: Request,
     title: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
     token: Optional[str] = Query(None),
@@ -20,7 +21,9 @@ async def show_widget(
     field = None
     if title:
         field = FieldInfo(title=title)
-    data = reg.renderer.pydantic_form(model_cls, None, name, token, removable, field)
+    data = reg.renderer(request).pydantic_form(
+        model_cls, None, name, token, removable, field
+    )
     return Response(data, headers={"Content-Type": "text/html"})
 
 

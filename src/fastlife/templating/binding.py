@@ -9,9 +9,7 @@ Template = Callable[..., Response]
 TemplateEngine = Callable[["Registry", Request], Template]
 
 
-def get_page_template(
-    template: str, *, content_type: str = "text/html"
-) -> TemplateEngine:
+def get_template(template: str, *, content_type: str = "text/html") -> TemplateEngine:
     def render_template(
         reg: "Registry",
         request: Request,
@@ -23,7 +21,7 @@ def get_page_template(
                 request.cookies.get(reg.settings.csrf_token_name)
                 or _create_csrf_token()
             )
-            data = reg.renderer.render_page(request, template, **kwargs)
+            data = reg.renderer(request).render_template(template, **kwargs)
             resp = Response(data, headers={"Content-Type": content_type})
             resp.set_cookie(
                 reg.settings.csrf_token_name,
@@ -39,21 +37,5 @@ def get_page_template(
     return render_template
 
 
-def get_template(
-    template: str, *, content_type: str = "text/html"
-) -> Callable[["Registry"], Template]:
-    def render_template(reg: "Registry") -> Template:
-        def parametrizer(**kwargs: Any) -> Response:
-            data = reg.renderer.render_template(template, **kwargs)
-            resp = Response(data, headers={"Content-Type": content_type})
-            return resp
-
-        return parametrizer
-
-    return render_template
-
-
-def template(template_path: str, page: bool = True) -> Template:
-    return Depends(
-        get_page_template(template_path) if page else get_template(template_path)
-    )
+def template(template_path: str) -> Template:
+    return Depends(get_template(template_path))

@@ -3,7 +3,7 @@ from typing import Callable
 import bs4
 from pydantic import BaseModel
 
-from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
+from fastlife.templating.renderer.jinjax import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
@@ -13,7 +13,7 @@ from fastlife.templating.renderer.widgets.text import TextWidget
 from fastlife.templating.renderer.widgets.union import UnionWidget
 
 
-def test_render_template(renderer: JinjaxTemplateRenderer):
+def test_render_template(renderer: AbstractTemplateRenderer):
     res = renderer.render_template("Page")
     assert (
         res
@@ -34,7 +34,7 @@ def test_render_template(renderer: JinjaxTemplateRenderer):
 
 
 def test_render_boolean(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     boolean = BooleanWidget("foo", title="Foo", token="XxX")
     result = boolean.to_html(renderer)
@@ -45,7 +45,7 @@ def test_render_boolean(
 
 
 def test_render_boolean_removable(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     boolean = BooleanWidget("foo", title="Foo", token="XxX", removable=True)
     result = boolean.to_html(renderer)
@@ -56,7 +56,7 @@ def test_render_boolean_removable(
 
 
 def test_render_dropdown(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     boolean = DropDownWidget("foxo", title="Foo", options=["A", "B"], token="XxX")
     result = boolean.to_html(renderer)
@@ -66,7 +66,7 @@ def test_render_dropdown(
 
 
 def test_render_hidden(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = HiddenWidget("foo", value="bar", token="x")
     result = hid.to_html(renderer)
@@ -77,7 +77,7 @@ def test_render_hidden(
 
 
 def test_render_text(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = TextWidget("foo", title="Foo", value="bar", token="x")
     result = hid.to_html(renderer)
@@ -88,7 +88,7 @@ def test_render_text(
 
 
 def test_render_text_help(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = TextWidget(
         "foo", title="Foo", value="bar", token="x", help_text="This is foobar"
@@ -104,7 +104,7 @@ def test_render_text_help(
 
 
 def test_render_text_removable(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     text = TextWidget("foo", title="Foo", token="x", removable=True)
     result = text.to_html(renderer)
@@ -113,7 +113,7 @@ def test_render_text_removable(
 
 
 def test_render_model(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ModelWidget(
         "foo",
@@ -129,7 +129,7 @@ def test_render_model(
 
 
 def test_render_sequence(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = SequenceWidget(
         "foo",
@@ -151,7 +151,7 @@ def test_render_sequence(
 
 
 def test_render_union(
-    renderer: JinjaxTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     class Foo(BaseModel):
         foo: str
