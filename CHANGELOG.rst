@@ -1,9 +1,3 @@
-0.3.2  - Released on 2024-03-30
--------------------------------
-* Use Jinjax fork with globals support
-* Refactor template rendering to get it working
-* Remove non page template rendering
-
 0.3.1  - Released on 2024-03-29
 -------------------------------
 * Update FastAPI
