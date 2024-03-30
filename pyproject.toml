@@ -4,6 +4,8 @@ description = "High-level web framework"
 name = "fastlifeweb"
 license = "BSD-derived"
 packages = [{include = "fastlife", from = "src"}]
+homepage = "https://github.com/mardiros/fastlife"
+repository = "https://github.com/mardiros/fastlife"
 readme = "README.md"
 classifiers = [
   "Development Status :: 4 - Beta",
