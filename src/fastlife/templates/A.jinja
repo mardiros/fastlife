@@ -1,5 +1,9 @@
-{# def href, target="#maincontent", swap="innerHTML show:body:top", push_url=true #}
-<a href="{{href}}" hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url %}hx-push-url="true" {%- endif %}
-  class="text-neutral-900 bg-neutral-200 hover:bg-neutral-50 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-400 dark:hover:bg-neutral-300 dark:focus:ring-neutral-100">
+{# def href, target="#maincontent", swap="innerHTML show:body:top", disable_htmx=false, push_url=true #}
+
+{% set class = "text-neutral-900 bg-neutral-200 hover:bg-neutral-50 focus:ring-4 focus:outline-none
+focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-neutral-400
+dark:hover:bg-neutral-300 dark:focus:ring-neutral-100"%}
+<a href="{{href}}" {% if not disable_htmx %}hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url
+  %}hx-push-url="true" {%- endif %}{%- endif %} class="{{class}}">
   {{ content }}
 </a>
