@@ -3,7 +3,7 @@
 <pydantic_form.Widget widget={widget} removable={widget.removable}>
   <details id="{{widget.id}}" open>
     <summary class="justify-between items-center font-medium cursor-pointer">
-      <h4 class="inline font-sans text-3xl font-bold">{{widget.title}}</h4>
+      <H3>{{widget.title}}</H3>
     </summary>
     <div>
       {% set fnGetName = "get" + widget.id.replace("-", "_") %}

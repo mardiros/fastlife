@@ -5,8 +5,6 @@
     <Label for={widget.id}>{{widget.title}}</Label>
     <Input name={widget.name} value={widget.value} type={widget.input_type} id={widget.id}
       aria-label={widget.aria_label} placeholder={widget.placeholder} />
-    {%- if widget.help_text -%}
-    <span class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">{{widget.help_text}}</span>
-    {%- endif %}
+    <pydantic_form.Hint text={widget.hint} />
   </div>
 </pydantic_form.Widget>

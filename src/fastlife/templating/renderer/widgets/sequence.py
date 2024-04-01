@@ -15,7 +15,7 @@ class SequenceWidget(Widget):
         name: str,
         *,
         title: Optional[str],
-        help_text: Optional[str],
+        hint: Optional[str],
         items: Optional[Sequence[Widget]],
         item_type: Type[Any],
         token: str,
@@ -24,7 +24,7 @@ class SequenceWidget(Widget):
         super().__init__(name, title=title, token=token, removable=removable)
         self.items = items or []
         self.item_type = item_type
-        self.help_text = help_text
+        self.hint = hint
 
     def get_template(self) -> str:
         return "pydantic_form/Sequence"

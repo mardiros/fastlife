@@ -13,7 +13,7 @@ class DropDownWidget(Widget):
         removable: bool = False,
         value: str = "",
         token: Optional[str] = None,
-        help_text: Optional[str] = None,
+        hint: Optional[str] = None,
     ) -> None:
         super().__init__(name, title=title, token=token, removable=removable)
         self.options: list[dict[str, str]] = []
@@ -23,7 +23,7 @@ class DropDownWidget(Widget):
             else:
                 self.options.append({"value": opt, "text": opt})
         self.value = value
-        self.help_text = help_text
+        self.hint = hint
 
     def get_template(self) -> str:
         return "pydantic_form.Dropdown"

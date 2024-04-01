@@ -203,7 +203,7 @@ class WidgetFactory:
         ]
         return SequenceWidget(
             field_name,
-            help_text=field.description if field else "",
+            hint=field.description if field else "",
             title=field.title if field else "",
             items=items,
             item_type=typ,  # type: ignore
@@ -237,7 +237,7 @@ class WidgetFactory:
     ) -> Widget:
         return TextWidget(
             field_name,
-            help_text=field.description if field else "",
+            hint=field.description if field else "",
             input_type="email",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
@@ -256,7 +256,7 @@ class WidgetFactory:
     ) -> Widget:
         return TextWidget(
             field_name,
-            help_text=field.description if field else "",
+            hint=field.description if field else "",
             input_type="password",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
@@ -299,7 +299,7 @@ class WidgetFactory:
     ) -> Widget:
         return TextWidget(
             field_name,
-            help_text=field.description if field else None,
+            hint=field.description if field else None,
             placeholder=str(field.examples[0]) if field and field.examples else None,
             aria_label=field.description if field else None,
             removable=removable,

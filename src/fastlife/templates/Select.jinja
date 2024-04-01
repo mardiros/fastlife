@@ -1,7 +1,26 @@
-{# def name, id #}
-{% set css = "bg-neutral-50 border border-neutral-300 text-neutral-900 text-base rounded-lg focus:ring-primary-500
-focus:border-primary-500 block w-full p-2.5 dark:bg-neutral-700 dark:border-neutral-600 dark:placeholder-neutral-400
-dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %}
+{# def
+name,
+id,
+css = """
+bg-neutral-50
+block
+border
+border-neutral-300
+p-2.5
+rounded-lg
+text-base
+text-neutral-900
+w-full
+focus:border-primary-500
+focus:ring-primary-500
+dark:bg-neutral-700
+dark:border-neutral-600
+dark:focus:border-primary-500
+dark:focus:ring-primary-500
+dark:placeholder-neutral-400
+dark:text-white
+"""
+#}
 
 <select name="{{name}}" id="{{id}}" class="{{css}}">
   {{content}}

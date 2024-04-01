@@ -91,16 +91,16 @@ def test_render_text_help(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = TextWidget(
-        "foo", title="Foo", value="bar", token="x", help_text="This is foobar"
+        "foo", title="Foo", value="bar", token="x", hint="This is foobar"
     )
     result = hid.to_html(renderer)
     html = soup(result)
     assert html.find(
         "input", attrs={"id": "foo-x", "type": "text", "name": "foo", "value": "bar"}
     )
-    help_text = html.find("span")
-    assert help_text
-    assert help_text.text == "This is foobar"
+    hint = html.find("span")
+    assert hint
+    assert hint.text == "This is foobar"
 
 
 def test_render_text_removable(
@@ -140,7 +140,7 @@ def test_render_sequence(
         ],
         removable=False,
         token="x",
-        help_text="",
+        hint="",
         item_type=str,
     )
     result = model.to_html(renderer)

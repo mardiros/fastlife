@@ -1,3 +1,11 @@
-{%- set css ="block mb-2 text-base font-bold text-neutral-900 dark:text-white" -%}
+{#def
+css="""
+block
+font-bold
+mb-2
+text-base
+text-neutral-900
+dark:text-white
+""" #}
 
 <label for="{{attrs.for}}" class="{{css}}">{{content}}</label>
