@@ -85,8 +85,8 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
         self.csrf_token_name = settings.csrf_token_name
 
         self.catalog = Catalog(
-            use_cache=True,
-            auto_reload=False,
+            use_cache=settings.jinjax_use_cache,
+            auto_reload=settings.jinjax_auto_reload,
         )
         for path in build_searchpath(settings.template_search_path):
             self.catalog.add_folder(path)

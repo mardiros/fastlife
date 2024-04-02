@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     form_data_model_prefix: str = Field(default="payload")
     csrf_token_name: str = Field(default="csrf_token")
 
+    jinjax_use_cache: bool = Field(default=True)
+    jinjax_auto_reload: bool = Field(default=False)
+
     session_secret_key: str = Field(default="")
     session_cookie_name: str = Field(default="flsess")
     session_cookie_domain: str = Field(default="")
