@@ -1,11 +1,11 @@
 {# def
-label
-name
-id
-value
-checked=false
-disabled=false
-onclick=""
+label,
+name,
+id,
+value,
+checked=false,
+disabled=false,
+onclick="",
 css="""
 bg-neutral-100
 border-neutral-300
@@ -19,7 +19,7 @@ dark:border-neutral-600
 dark:focus:ring-primary-600
 dark:ring-offset-neutral-800
 """,
-css="""
+css_label="""
 ms-2 text-sm font-medium text-neutral-900 dark:text-neutral-300
 """#}
 <div class="flex items-center mb-4">
@@ -27,5 +27,5 @@ ms-2 text-sm font-medium text-neutral-900 dark:text-neutral-300
     endif %}
     class="{{css}}"
     {% if onclick %}onclick="{{onclick}}" {% endif %} {%if disabled%}disabled{%endif%}>
-  <Label for={id} class={css}>{{label}}</Label>
+  <Label for={id} class={css_label}>{{label}}</Label>
 </div>
