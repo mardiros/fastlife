@@ -1,9 +1,9 @@
 {# def
 method="post",
 hx_post="",
-css="space-y-4 md:space-y-6"
+class_="space-y-4 md:space-y-6"
 #}
-<form class="{{css}}" hx-post="{{hx_post}}" method="post">
+<form class="{{attrs.class or class_}}" hx-post="{{hx_post}}" method="post">
   <CsrfToken />
   {{ content }}
 </form>

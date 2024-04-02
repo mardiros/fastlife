@@ -1,7 +1,7 @@
 {# def
 name,
 id,
-css = """
+class_="""
 bg-neutral-50
 block
 border
@@ -22,6 +22,6 @@ dark:text-white
 """
 #}
 
-<select name="{{name}}" id="{{id}}" class="{{css}}">
+<select name="{{name}}" id="{{id}}" class="{{attrs.class or class_}}">
   {{content}}
 </select>

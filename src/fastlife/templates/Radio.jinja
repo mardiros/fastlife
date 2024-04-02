@@ -6,7 +6,7 @@ value,
 checked=false,
 disabled=false,
 onclick="",
-css="""
+class_="""
 bg-neutral-100
 border-neutral-300
 w-4
@@ -19,13 +19,13 @@ dark:border-neutral-600
 dark:focus:ring-primary-600
 dark:ring-offset-neutral-800
 """,
-css_label="""
-ms-2 text-sm font-medium text-neutral-900 dark:text-neutral-300
-"""#}
-<div class="flex items-center mb-4">
+label_class="ms-2 text-sm font-medium text-neutral-900 dark:text-neutral-300"
+div_class="flex items-center mb-4"
+#}
+<div class="{{div_class}}">
   <input type="radio" name="{{name}}" id="{{id}}" {% if value %}value="{{value}}" {% endif %}{% if checked %}checked{%
     endif %}
-    class="{{css}}"
+    class="{{attrs.class or class_}}"
     {% if onclick %}onclick="{{onclick}}" {% endif %} {%if disabled%}disabled{%endif%}>
-  <Label for={id} class={css_label}>{{label}}</Label>
+  <Label for={id} class={label_class}>{{label}}</Label>
 </div>

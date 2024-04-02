@@ -13,7 +13,7 @@ vals="",
 full_width=false,
 hidden=false,
 aria_label="",
-css="""
+class_="""
 bg-primary-600
 font-medium
 px-5
@@ -36,6 +36,6 @@ dark:hover:bg-primary-700
   %}hx-select="{{select}}" {% endif %} {% if get %}hx-get="{{get}}" {% endif %} {% if onclick %}onclick="{{onclick}}" {%
   endif %}{% if after_request %}hx-on::after-request="{{after_request}}" {% endif %} {% if vals
   %}hx-vals='{{vals|safe}}' {% endif %} {% if aria_label %}aria-label="{{aria_label}}" {% endif %}
-  class="{% if full_width %}w-full {% endif %}{{css}}" {% if hidden %}hidden{% endif %}>
+  class="{% if full_width %}w-full {% endif %}{{attrs.class or class_}}" {% if hidden %}hidden{% endif %}>
   {{ content}}
 </button>

@@ -4,7 +4,7 @@ target="#maincontent",
 swap="innerHTML show:body:top",
 disable_htmx=false,
 push_url=true,
-css="""
+class_="""
 bg-neutral-200
 px-5
 py-2.5
@@ -24,6 +24,6 @@ dark:hover:bg-neutral-300
 #}
 
 <a href="{{href}}" {% if not disable_htmx %} hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url
-  %} hx-push-url="true" {%- endif %}{%- endif %}class="{{css}}">
+  %} hx-push-url="true" {%- endif %}{%- endif %}class="{{attrs.class or class_}}">
   {{ content }}
 </a>
