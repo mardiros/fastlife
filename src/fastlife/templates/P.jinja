@@ -1,0 +1,9 @@
+{# def
+id="",
+class_="""
+text-base
+text-neutral-900
+dark:text-white
+"""
+#}
+<p {% if id %}id="{{id}}" {% endif %} class="{{ attrs.class or class_}}">{{content}}</p>

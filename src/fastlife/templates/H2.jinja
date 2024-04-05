@@ -12,6 +12,4 @@ dark:text-white
 md:text-4xl
 """
 #}
-<h2 class="{{class_}}">
-  {{ content }}
-</h2>
+<h2 class="{{attrs.class or class_}}">{{ content }}</h2>

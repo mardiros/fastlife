@@ -23,9 +23,8 @@ label_class="ms-2 text-sm font-medium text-neutral-900 dark:text-neutral-300",
 div_class="flex items-center mb-4"
 #}
 <div class="{{div_class}}">
-  <input type="radio" name="{{name}}" id="{{id}}" {% if value %}value="{{value}}" {% endif %}{% if checked %}checked{%
-    endif %}
-    class="{{attrs.class or class_}}"
-    {% if onclick %}onclick="{{onclick}}" {% endif %} {%if disabled%}disabled{%endif%}>
+  <input type="radio" name="{{name}}" id="{{id}}" value="{{value}}" {% if checked %}checked{% endif %}
+    class="{{attrs.class or class_}}" {% if onclick %}onclick="{{onclick}}" {% endif %} {%if
+    disabled%}disabled{%endif%}>
   <Label for={id} class={label_class}>{{label}}</Label>
 </div>

@@ -1,9 +1,10 @@
 {# def
 href,
-target="#maincontent",
-swap="innerHTML show:body:top",
 disable_htmx=false,
-push_url=true,
+hx_target="#maincontent",
+hx_select=None,
+hx_swap="innerHTML show:body:top",
+hx_push_url=true,
 class_="""
 bg-neutral-200
 px-5
@@ -23,7 +24,8 @@ dark:hover:bg-neutral-300
 """
 #}
 
-<a href="{{href}}" {% if not disable_htmx %} hx-get="{{href}}" hx-target="{{target}}" hx-swap="{{swap}}" {% if push_url
-  %} hx-push-url="true" {%- endif %}{%- endif %}class="{{attrs.class or class_}}">
-  {{ content }}
+<a href="{{href}}" {% if not disable_htmx %} hx-get="{{href}}" hx-target="{{hx_target}}" hx-swap="{{hx_swap}}" {% if
+  hx_push_url %} hx-push-url="true" {%- endif %}{% if hx_select %} hx-select="{{hx_select}}" {%- endif %}{%- endif
+  %}class="{{attrs.class or class_}}">
+  {{- content -}}
 </a>

@@ -1,12 +1,16 @@
+from pathlib import Path
+
 import bs4
 import pytest
-from anyio import Path
 from fastapi import Request
 
 from fastlife.configurator.settings import Settings
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
 
-template_path = str(Path(__file__).parent / "components")
+
+@pytest.fixture(scope="session")
+def components_dir() -> Path:
+    return Path(__file__).parent / "components"
 
 
 @pytest.fixture()
@@ -24,8 +28,10 @@ def dummy_request() -> Request:
 
 
 @pytest.fixture()
-def renderer(dummy_request: Request):
-    settings = Settings(template_search_path=f"{template_path},fastlife:templates")
+def renderer(dummy_request: Request, components_dir: Path):
+    settings = Settings(
+        template_search_path=f"{str(components_dir)},fastlife:templates"
+    )
     return JinjaxTemplateRenderer(settings)(dummy_request)
 
 

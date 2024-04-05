@@ -90,9 +90,7 @@ def test_render_text(
 def test_render_text_help(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    hid = TextWidget(
-        "foo", title="Foo", value="bar", token="x", hint="This is foobar"
-    )
+    hid = TextWidget("foo", title="Foo", value="bar", token="x", hint="This is foobar")
     result = hid.to_html(renderer)
     html = soup(result)
     assert html.find(

@@ -1,11 +1,14 @@
 {# def
 class_="""
-inline
-font-sans
-text-3xl
+block
 font-bold
-"""
+font-sans
+leading-tight
+pb-4
+text-3xl
+text-neutral-900
+tracking-tight
+dark:text-white
+md:text-3xl"""
 #}
-<h3 class="{{class_}}">
-  {{ content }}
-</h3>
+<h3 class="{{attrs.class or class_}}">{{ content }}</h3>
