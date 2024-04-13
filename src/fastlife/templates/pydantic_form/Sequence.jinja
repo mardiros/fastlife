@@ -8,7 +8,7 @@
     <div>
       {% set fnGetName = "get" + widget.id.replace("-", "_") %}
       <script>
-        function {{fnGetName}}() {
+        function {{ fnGetName }} () {
           const el = document.getElementById("{{widget.id}}-content");
           const len = el.dataset.length;
           el.dataset.length = parseInt(len) + 1;
@@ -28,7 +28,7 @@
         {% set container_id = "#" + widget.id + "-container" %}
         {% set add_id = widget.id + "-add" %}
         {% set vals = 'js:{"name": '+ fnGetName + '(), "token": "' + type.token + '", "removable": true}' %}
-        <Button type="button" target={container_id} swap="beforeend" id={add_id} vals={vals} get={type.url}>
+        <Button type="button" hx-target={container_id} hx-swap="beforeend" id={add_id} hx-vals={vals} hx-get={type.url}>
           Add
         </Button>
       </div>

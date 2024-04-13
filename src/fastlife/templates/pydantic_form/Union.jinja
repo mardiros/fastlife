@@ -11,14 +11,14 @@
         {{ child }}
         {% else %}
         {% for typ in types %}
-        <Button type="button" target="closest div" get={typ.url} vals={typ.params|tojson}
+        <Button type="button" hx-target="closest div" hx-get={typ.url} hx-vals={typ.params|tojson}
           id={typ.fullname + "-" + widget.token}
           onclick={"document.getElementById('" + widget.id +"-remove-btn').hidden=false"}>{{typ.title}}</Button>
         {% endfor %}
         {% endif %}
       </div>
-      <Button type="button" id={widget.id + "-remove-btn" } target={"#" + widget.id} vals={parent_type.params|tojson}
-        get={parent_type.url} hidden={not child}>
+      <Button type="button" id={widget.id + "-remove-btn" } hx-target={"#" + widget.id} hx-vals={parent_type.params|tojson}
+        hx-get={parent_type.url} hidden={not child}>
         Remove
       </Button>
     </details>

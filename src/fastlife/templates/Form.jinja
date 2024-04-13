@@ -1,9 +1,11 @@
 {# def
-method="post",
-hx_post="",
+method="",
+action=None,
+hx_post=None,
 class_="space-y-4 md:space-y-6"
 #}
-<form class="{{attrs.class or class_}}" hx-post="{{hx_post}}" method="{{method}}">
+<form class="{{attrs.class or class_}}" {% if hx_post is not none %}hx-post="{{hx_post}}" {% endif %}{% if action is not
+  none %}action="{{action}}" {% endif %}{% if method %}method="{{method}}" {% endif %}>
   <CsrfToken />
   {{ content }}
 </form>
