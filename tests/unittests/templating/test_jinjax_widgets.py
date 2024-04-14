@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Callable
+from typing import Any, Callable, Mapping
 
 import bs4
 from pydantic import BaseModel
