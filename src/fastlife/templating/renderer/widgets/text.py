@@ -3,7 +3,7 @@ from typing import Optional
 from .base import Widget
 
 
-class TextWidget(Widget):
+class TextWidget(Widget[str]):
     def __init__(
         self,
         name: str,
@@ -18,10 +18,14 @@ class TextWidget(Widget):
         input_type: str = "text"
     ) -> None:
         super().__init__(
-            name, title=title, aria_label=aria_label, token=token, removable=removable
+            name,
+            value=value,
+            title=title,
+            aria_label=aria_label,
+            token=token,
+            removable=removable,
         )
         self.placeholder = placeholder or ""
-        self.value = value
         self.hint = hint
         self.input_type = input_type
 

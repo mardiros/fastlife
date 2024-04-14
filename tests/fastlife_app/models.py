@@ -1,6 +1,13 @@
-from typing import Any, Literal, Optional
+from typing import Annotated, Any, Literal, Optional
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
+
+from fastlife.templating.renderer.widgets.base import Widget
+
+
+class Checklist(Widget[Any]):
+    def get_template(self) -> str:
+        return "Checklist"
 
 
 class Permission(BaseModel):
@@ -9,7 +16,7 @@ class Permission(BaseModel):
 
 class Group(BaseModel):
     name: str = Field(title="Group name")
-    permissions: list[Permission]
+    permissions: list[Permission] = Field(title="Permissions", default_factory=list)
 
     @field_validator("permissions")
     def validate_permissions(cls, value: Any) -> Any:
@@ -46,7 +53,9 @@ class Account(BaseModel):
         default=None,
     )
 
-    groups: list[Group] = Field(title="Group", default_factory=list)
+    groups: Annotated[list[Group], Checklist] = Field(
+        title="Group", default_factory=list
+    )
 
     @field_validator("groups")
     def validate_groups(cls, value: Any) -> Any:

@@ -4,7 +4,7 @@ from fastapi import Response
 
 from fastlife import Configurator, Template, configure, template
 from fastlife.request.form_data import model
-from tests.fastlife_app.models import Account
+from tests.fastlife_app.models import Account, Group
 
 
 async def hello_world(
@@ -18,7 +18,9 @@ async def autoform(
     template: Annotated[Template, template("AutoForm")],
     account: Annotated[Optional[Account], model(Account)],
 ):
-    account = account
+    account = account or Account(
+        username="", groups=[Group(name="admin"), Group(name="editor")]
+    )
     return template(
         model=Account, form_data={"payload": account.model_dump()} if account else {}
     )

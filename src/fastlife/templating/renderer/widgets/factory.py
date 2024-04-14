@@ -2,7 +2,7 @@ import secrets
 from collections.abc import MutableSequence, Sequence
 from decimal import Decimal
 from types import NoneType
-from typing import Any, Literal, Mapping, Optional, Type, get_origin
+from typing import Any, Literal, Mapping, Optional, Type, cast, get_origin
 from uuid import UUID
 
 from markupsafe import Markup
@@ -48,7 +48,7 @@ class WidgetFactory:
         prefix: str,
         removable: bool,
         field: FieldInfo | None = None,
-    ) -> Widget:
+    ) -> Widget[Any]:
         return self.build(
             base,
             value=form_data.get(prefix, {}),
@@ -65,7 +65,22 @@ class WidgetFactory:
         value: Any,
         removable: bool,
         field: FieldInfo | None = None,
-    ) -> Widget:
+    ) -> Widget[Any]:
+        if field and field.metadata:
+            for widget in field.metadata:
+                if issubclass(widget, Widget):
+                    return cast(
+                        Widget[Any],
+                        widget(
+                            name,
+                            value=value,
+                            removable=removable,
+                            title=field.title if field else "",
+                            aria_label=field.description if field else None,
+                            token=self.token,
+                        ),
+                    )
+
         type_origin = get_origin(typ)
         if type_origin:
             if is_union(typ):
@@ -87,7 +102,7 @@ class WidgetFactory:
         if issubclass(typ, bool):
             return self.build_boolean(name, typ, field, value or False, removable)
 
-        if issubclass(typ, EmailStr):
+        if issubclass(typ, EmailStr):  # type: ignore
             return self.build_emailtype(name, typ, field, value or "", removable)
 
         if issubclass(typ, SecretStr):
@@ -105,7 +120,7 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Mapping[str, Any],
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         ret: dict[str, Any] = {}
         for key, field in typ.model_fields.items():
             child_key = f"{field_name}.{key}" if field_name else key
@@ -122,7 +137,7 @@ class WidgetFactory:
             )
         return ModelWidget(
             field_name,
-            children_widget=list(ret.values()),
+            value=list(ret.values()),
             removable=removable,
             title=get_title(typ),
             token=self.token,
@@ -135,7 +150,7 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Any,
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         types: list[Type[Any]] = []
         # required = True
         for typ in field_type.__args__:  # type: ignore
@@ -172,7 +187,7 @@ class WidgetFactory:
         widget = UnionWidget(
             field_name,
             # we assume those types are BaseModel
-            child=child,
+            value=child,
             children_types=types,  # type: ignore
             title=field.title if field else "",
             token=self.token,
@@ -188,7 +203,7 @@ class WidgetFactory:
         field: Optional[FieldInfo],
         value: Optional[Sequence[Any]],
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         typ = field_type.__args__[0]  # type: ignore
         value = value or []
         items = [
@@ -205,7 +220,7 @@ class WidgetFactory:
             field_name,
             hint=field.description if field else "",
             title=field.title if field else "",
-            items=items,
+            value=items,
             item_type=typ,  # type: ignore
             token=self.token,
             removable=removable,
@@ -218,7 +233,7 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: bool,
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         return BooleanWidget(
             field_name,
             removable=removable,
@@ -234,7 +249,7 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: str | int | float,
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         return TextWidget(
             field_name,
             hint=field.description if field else "",
@@ -253,7 +268,7 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: SecretStr | str,
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         return TextWidget(
             field_name,
             hint=field.description if field else "",
@@ -272,7 +287,7 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: str | int | float,
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         choices: list[str] = field_type.__args__  # type: ignore
         if len(choices) == 1:
             return HiddenWidget(
@@ -296,7 +311,7 @@ class WidgetFactory:
         field: FieldInfo | None,
         value: str | int | float,
         removable: bool,
-    ) -> Widget:
+    ) -> Widget[Any]:
         return TextWidget(
             field_name,
             hint=field.description if field else None,

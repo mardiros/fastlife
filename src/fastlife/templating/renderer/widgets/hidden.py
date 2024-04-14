@@ -1,7 +1,7 @@
 from .base import Widget
 
 
-class HiddenWidget(Widget):
+class HiddenWidget(Widget[str]):
     def __init__(
         self,
         name: str,
@@ -9,8 +9,7 @@ class HiddenWidget(Widget):
         value: str,
         token: str,
     ) -> None:
-        super().__init__(name, token=token)
-        self.value = value
+        super().__init__(name, value=value, token=token)
 
     def get_template(self) -> str:
         return "pydantic_form.Hidden"

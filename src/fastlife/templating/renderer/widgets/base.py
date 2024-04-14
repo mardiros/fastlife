@@ -1,11 +1,13 @@
 import abc
 import secrets
-from typing import Any, Mapping, Optional, Type
+from typing import Any, Generic, Mapping, Optional, Type, TypeVar
 
 from markupsafe import Markup
 
 from fastlife.shared_utils.infer import is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
+
+T = TypeVar("T")
 
 
 def get_title(typ: Type[Any]) -> str:
@@ -16,7 +18,7 @@ def get_title(typ: Type[Any]) -> str:
     )
 
 
-class Widget(abc.ABC):
+class Widget(abc.ABC, Generic[T]):
     name: str
     "variable name, nested variables have dots"
     title: str
@@ -32,12 +34,14 @@ class Widget(abc.ABC):
         self,
         name: str,
         *,
+        value: Optional[T] = None,
         title: Optional[str] = None,
         token: Optional[str] = None,
         aria_label: Optional[str] = None,
         removable: bool = False,
     ):
         self.name = name
+        self.value = value
         self.title = title or name.split(".")[-1]
         self.aria_label = aria_label or ""
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")

@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Type, Union
+from typing import Any, Optional, Sequence, Type, Union
 
 from markupsafe import Markup
 from pydantic import BaseModel
@@ -8,19 +8,20 @@ from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 from .base import TypeWrapper, Widget
 
 
-class UnionWidget(Widget):
+class UnionWidget(Widget[Widget[Any]]):
     def __init__(
         self,
         name: str,
         *,
         title: Optional[str],
-        child: Optional[Widget],
+        value: Optional[Widget[Any]],
         children_types: Sequence[Type[BaseModel]],
         token: str,
         removable: bool,
     ):
-        super().__init__(name, title=title, token=token, removable=removable)
-        self.child = child
+        super().__init__(
+            name, value=value, title=title, token=token, removable=removable
+        )
         self.children_types = children_types
         self.parent_name = name
 
@@ -35,7 +36,7 @@ class UnionWidget(Widget):
 
     def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version"""
-        child = Markup(self.child.to_html(renderer)) if self.child else ""
+        child = Markup(self.value.to_html(renderer)) if self.value else ""
         return Markup(
             renderer.render_template(
                 self.get_template(),

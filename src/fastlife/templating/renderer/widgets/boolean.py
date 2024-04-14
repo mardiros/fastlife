@@ -3,7 +3,7 @@ from typing import Optional
 from .base import Widget
 
 
-class BooleanWidget(Widget):
+class BooleanWidget(Widget[bool]):
     def __init__(
         self,
         name: str,
@@ -13,8 +13,9 @@ class BooleanWidget(Widget):
         removable: bool = False,
         token: str,
     ) -> None:
-        super().__init__(name, title=title, removable=removable, token=token)
-        self.value = value
+        super().__init__(
+            name, title=title, value=value, removable=removable, token=token
+        )
 
     def get_template(self) -> str:
         return "pydantic_form.Boolean"
