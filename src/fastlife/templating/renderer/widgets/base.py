@@ -84,6 +84,12 @@ class TypeWrapper:
         return _get_fullname(self.typ)
 
     @property
+    def id(self) -> str:
+        name = self.name.replace("_", "-").replace(".", "-").replace(":", "-")
+        typ = self.typ.__name__.replace("_", "-")
+        return f"{name}-{typ}-{self.token}"
+
+    @property
     def params(self) -> Mapping[str, str]:
         return {"name": self.name, "token": self.token, "title": self.title}
 

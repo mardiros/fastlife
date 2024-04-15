@@ -12,7 +12,7 @@
         {% else %}
         {% for typ in types %}
         <Button type="button" hx-target="closest div" hx-get={typ.url} hx-vals={typ.params|tojson}
-          id={typ.fullname + "-" + widget.token}
+          id={typ.id}
           onclick={"document.getElementById('" + widget.id +"-remove-btn').hidden=false"}>{{typ.title}}</Button>
         {% endfor %}
         {% endif %}

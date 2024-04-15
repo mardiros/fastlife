@@ -1,8 +1,8 @@
 from typing import Any, Callable, Mapping
 
 import bs4
-from pydantic import BaseModel
 import pytest
+from pydantic import BaseModel
 
 from fastlife.templating.renderer.jinjax import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
@@ -193,7 +193,6 @@ def test_render_union(
 def test_render_custom(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-
     class CustomWidget(Widget[Any]):
         def get_template(self) -> str:
             return "CustomWidget"

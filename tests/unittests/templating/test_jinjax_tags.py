@@ -142,18 +142,17 @@ def test_render_Button(node: bs4.PageElement, expected: bs4.PageElement):
     "template_string,expected_string",
     [
         pytest.param(
-            """<Checkbox id="foo-bar" name="foo" value="bar" />""",
-            """<input type="checkbox" id="foo-bar" name="foo" value="bar"
+            """<Checkbox id="foo-bar" name="foo" value={True} />""",
+            """<input type="checkbox" id="foo-bar" name="foo" checked
             class="bg-neutral-100 border-neutral-300 h-4 rounded text-primary-600
             w-4 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-primary-600
             dark:ring-offset-neutral-800 focus:ring-2 focus:ring-primary-500"/>""",
             id="checkbox",
         ),
         pytest.param(
-            """<Checkbox id="foo-bar" name="foo" value="bar" class="css"/>""",
-            """<input type="checkbox" id="foo-bar" name="foo" value="bar"
-            class="css"/>""",
-            id="checkbox-css",
+            """<Checkbox id="foo-bar" name="foo" value={False} class="css"/>""",
+            """<input type="checkbox" id="foo-bar" name="foo" class="css"/>""",
+            id="checkbox-css-and-false",
         ),
     ],
 )
@@ -415,6 +414,11 @@ def test_render_Label(node: bs4.PageElement, expected: bs4.PageElement):
             """<Option value="y">yoyo</Option>""",
             """<option value="y">yoyo</option>""",
             id="option",
+        ),
+        pytest.param(
+            """<Option value="y" selected={True}>yoyo</Option>""",
+            """<option value="y" selected>yoyo</option>""",
+            id="option-selected",
         ),
     ],
 )

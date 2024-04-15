@@ -1,2 +1,4 @@
-{# def value #}
-<option value="{{value}}">{{ content }}</option>
+{# def value, selected=False #}
+<option value="{{value}}" {%if selected%}selected{% endif%}>
+  {{- content -}}
+</option>

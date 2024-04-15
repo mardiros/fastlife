@@ -111,7 +111,7 @@ class WidgetFactory:
         if issubclass(typ, (int, str, float, Decimal, UUID)):
             return self.build_simpletype(name, typ, field, value or "", removable)
 
-        raise NotImplementedError(f"{typ} not implemented")
+        raise NotImplementedError(f"{typ} not implemented")  # coverage: ignore
 
     def build_model(
         self,
@@ -127,7 +127,9 @@ class WidgetFactory:
             if field.exclude:
                 continue
             if field.annotation is None:
-                raise ValueError(f"Missing annotation for {field} in {child_key}")
+                raise ValueError(  # coverage: ignore
+                    f"Missing annotation for {field} in {child_key}"
+                )
             ret[key] = self.build(
                 field.annotation,
                 name=child_key,
