@@ -3,12 +3,12 @@ from fastlife.testing import WebTestClient
 
 def test_http_call(client: WebTestClient):
     resp = client.get("/")
-    assert resp.by_text("Hello World!", node_name="h1") is not None
+    assert resp.html.h1.text == "Hello World!"
     assert "account.username" in resp.form
     assert "csrf_token" in resp.form
     resp.form.set("account.username", "Bob")
     resp = resp.form.submit()
-    assert resp.by_text("Hello Bob!", node_name="h1") is not None
+    assert resp.html.h1.text == "Hello Bob!"
 
 
 def test_http_call_optional_form(client: WebTestClient):
@@ -28,6 +28,9 @@ def test_http_call_optional_form(client: WebTestClient):
 
 def test_session(client: WebTestClient):
     resp = client.get("/login")
+    assert len(resp.html.h2) == 1
+    assert resp.html.h2[0].text == "Let's authenticate"
+    assert resp.html.hx_target is None
     input_ = resp.by_label_text("username")
     assert input_ is not None
     assert input_.attrs["name"] == "payload.username"
@@ -60,6 +63,7 @@ def test_forbidden(client: WebTestClient):
 
 def test_redirect_on_login(client: WebTestClient):
     resp = client.get("/secured", follow_redirects=False)
+    assert resp.is_redirect
     assert resp.status_code == 303
     assert resp.headers["Location"] == "http://testserver.local/login"
 
@@ -70,10 +74,17 @@ def test_redirect_on_logout(client: WebTestClient):
     assert resp.status_code == 200
     logout = resp.by_text("logout")
     assert logout is not None, resp.html
-    logout.click()
+    resp = logout.click()
     assert client.session == {}
+    assert repr(resp.html) == "<[document]>"
+    assert (
+        str(resp.html.get_all_by_text("Hello World")[0])
+        == '<h1 class="block font-bold font-sans leading-tight pb-4 text-5xl '
+        'text-neutral-900 tracking-tight dark:text-white md:text-4xl">Hello World!</h1>'
+    )
 
 
 def test_exception_handler(client: WebTestClient):
     resp = client.get("/failed")
     assert resp.text == "It's a trap"
+    assert resp.content_type == "text/plain"

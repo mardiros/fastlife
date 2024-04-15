@@ -11,7 +11,7 @@ class MyException(Exception):
 
 
 def my_handler(request: Request, exc: MyException) -> Response:
-    return Response("It's a trap")
+    return Response("It's a trap", headers={"Content-Type": "text/plain"})
 
 
 async def failed(

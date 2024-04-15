@@ -199,7 +199,7 @@ class WebResponse:
         return self._response.status_code
 
     @property
-    def is_redirect(self) -> int:
+    def is_redirect(self) -> bool:
         return 300 <= self._response.status_code < 400
 
     @property
