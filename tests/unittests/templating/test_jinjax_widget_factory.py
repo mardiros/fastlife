@@ -163,11 +163,32 @@ def test_render_template_values(
         },
     )
 
-    # assert html.find(
-    #     "input",
-    #     attrs={
-    #         "id": "payload-tags-1-tkt",
-    #         "name": "payload.tags.1.tkt",
-    #         "value": "greed",
-    #     },
-    # )
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-tags-0-tkt",
+            "name": "payload.tags.0",
+            "type": "text",
+            "value": "blue",
+        },
+    )
+
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-tags-1-tkt",
+            "name": "payload.tags.1",
+            "type": "text",
+            "value": "green",
+        },
+    )
+
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-foobar-foo-tkt",
+            "name": "payload.foobar.foo",
+            "value": "totally",
+            "type": "text",
+        },
+    )
