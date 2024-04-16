@@ -35,10 +35,6 @@ class Element:
         return self._tag.text.strip()
 
     @property
-    def form(self) -> "Element | None":
-        return Element(self._client, self._tag.form) if self._tag.form else None
-
-    @property
     def h1(self) -> "Element":
         nodes = self.by_node_name("h1")
         assert len(nodes) == 1, f"Should have 1 <h1>, got {len(nodes)} in {self}"
@@ -47,6 +43,10 @@ class Element:
     @property
     def h2(self) -> Sequence["Element"]:
         return self.by_node_name("h2")
+
+    @property
+    def form(self) -> "Element | None":
+        return Element(self._client, self._tag.form) if self._tag.form else None
 
     @property
     def hx_target(self) -> Optional[str]:
