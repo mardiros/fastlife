@@ -13,6 +13,9 @@ from fastlife.configurator.settings import Settings
 from fastlife.session.serializer import AbsractSessionSerializer
 from fastlife.shared_utils.resolver import resolve
 
+CookieTypes = httpx._types.CookieTypes  # type: ignore
+Cookies = httpx._models.Cookies  # type: ignore
+
 
 class Element:
     def __init__(self, client: "WebTestClient", tag: bs4.Tag):
@@ -126,26 +129,37 @@ class WebForm:
         inputs = self._form.by_node_name("select")
         for input in inputs:
             self._formfields[input.attrs["name"]] = input
-            for option in input.by_node_name("options"):
+            options = input.by_node_name("option")
+            for option in options:
                 if "selected" in option.attrs:
                     self._formdata[input.attrs["name"]] = option.attrs.get(
                         "value", option.text
                     )
+                    break
+            else:
+                try:
+                    self._formdata[input.attrs["name"]] = options[0].attrs.get(
+                        "value", options[0].text
+                    )
+                except IndexError:
+                    # empty select, should it be posted ?
+                    self._formdata[input.attrs["name"]] = ""
+
         # field textearea...
 
     def set(self, fieldname: str, value: str) -> Any:
         if fieldname not in self._formfields:
-            raise ValueError(f"{fieldname} does not exists")
+            raise ValueError(f'"{fieldname}" does not exists')
         if self._formfields[fieldname].node_name == "select":
-            raise RuntimeError(f"{fieldname} is a <select>, use select() instead")
+            raise ValueError(f'"{fieldname}" is a <select>, use select() instead')
         self._formdata[fieldname] = value
 
     def select(self, fieldname: str, value: str) -> Any:
         if fieldname not in self._formfields:
-            raise ValueError(f"{fieldname} does not exists")
+            raise ValueError(f'"{fieldname}" does not exists')
         if self._formfields[fieldname].node_name != "select":
-            raise RuntimeError(
-                f"{fieldname} is a <{self._formfields[fieldname]}>, use set() instead"
+            raise ValueError(
+                f"{fieldname} is a {repr(self._formfields[fieldname])}, use set() instead"
             )
         if "multiple" in self._formfields[fieldname].attrs:
             raise NotImplementedError
@@ -158,14 +172,18 @@ class WebForm:
 
     def button(self, text: str, position: int = 0) -> "WebForm":
         buttons = self._form.get_all_by_text(text, node_name="button")
-        assert len(buttons) > position, f'Button "{text}" not found'
+        if position >= len(buttons):
+            pos = ""
+            if position > 0:
+                pos = f" at position {position}"
+            raise ValueError(f'Button "{text}" not found{pos}')
         button = buttons[position]
         if "name" in button.attrs:
             self._formdata[button.attrs["name"]] = button.attrs.get("value", "")
         return self
 
     def submit(self, follow_redirects: bool = True) -> "WebResponse":
-        headers = {}
+        headers: dict[str, str] = {}
         target = (
             self._form.attrs.get("hx-post")
             or self._form.attrs.get("post")
@@ -244,10 +262,6 @@ class WebResponse:
         self, node_name: str, *, attrs: dict[str, str] | None = None
     ) -> list[Element]:
         return self.html.by_node_name(node_name, attrs=attrs)
-
-
-CookieTypes = httpx._types.CookieTypes  # type: ignore
-Cookies = httpx._models.Cookies  # type: ignore
 
 
 class Session(dict[str, Any]):

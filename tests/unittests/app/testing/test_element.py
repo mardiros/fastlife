@@ -1,4 +1,5 @@
 import pytest
+
 from fastlife.testing.testclient import Element
 
 
@@ -170,14 +171,14 @@ def test_get_all_by_text(element: Element, expected: str):
                 <label for="my-target">fetch target</label>
                 <input type="text" id="my-target">
             </form>
-        """.strip(),
+        """,
         """
             <form>
                 <label for="my-target">fetch target</label>
                 <input type="text" id="my-target">
                 <input type="text" id="could-it-be">
             </form>
-        """.strip(),
+        """,
     ],
 )
 def test_by_label_text(element: Element):
@@ -194,7 +195,7 @@ def test_by_label_text(element: Element):
                 <label for="my-target">fetch target</label>
                 <input type="text" id="could-it-be">
             </form>
-        """.strip(),
+        """,
     ],
 )
 def test_by_label_text_not_found(element: Element):
@@ -214,7 +215,7 @@ def test_by_label_text_not_found(element: Element):
                     <input type="text" id="could-it-be">
                 </fieldset>
             </form>
-        """.strip(),
+        """,
     ],
 )
 def test_by_node_name(element: Element):
