@@ -149,7 +149,7 @@ def test_select_value(webform: WebForm):
             """,
             'No option subito in <select name="name">',
             id="select",
-        )
+        ),
     ],
 )
 def test_select_exception(webform: WebForm, expected: str):

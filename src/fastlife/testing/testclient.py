@@ -159,7 +159,8 @@ class WebForm:
             raise ValueError(f'"{fieldname}" does not exists')
         if self._formfields[fieldname].node_name != "select":
             raise ValueError(
-                f"{fieldname} is a {repr(self._formfields[fieldname])}, use set() instead"
+                f"{fieldname} is a {repr(self._formfields[fieldname])}, "
+                "use set() instead"
             )
         if "multiple" in self._formfields[fieldname].attrs:
             raise NotImplementedError
