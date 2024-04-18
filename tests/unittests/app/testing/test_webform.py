@@ -138,11 +138,23 @@ def test_select_value(webform: WebForm):
             '"name" does not exists',
             id="unkown",
         ),
+        pytest.param(
+            """
+            <form>
+                <select name="name" class="css">
+                    <option>piano</option>
+                    <option>allegro</option>
+                </select>
+            </form>
+            """,
+            'No option subito in <select name="name">',
+            id="select",
+        )
     ],
 )
 def test_select_exception(webform: WebForm, expected: str):
     with pytest.raises(ValueError) as cxt:
-        webform.select("name", "medium")
+        webform.select("name", "subito")
     assert str(cxt.value) == expected
 
 
