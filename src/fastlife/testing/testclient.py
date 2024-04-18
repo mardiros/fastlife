@@ -223,7 +223,7 @@ class WebResponse:
 
     @property
     def content_type(self) -> str:
-        return self._response.headers["content-type"]
+        return self._response.headers.get("content-type", "").split(";").pop(0)
 
     @property
     def headers(self) -> httpx.Headers:
