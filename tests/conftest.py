@@ -1,6 +1,7 @@
+import json
 import os
 from pathlib import Path
-from typing import Any, Mapping, MutableMapping, Sequence, Tuple, cast
+from typing import Any, Mapping, MutableMapping, Sequence, Tuple, Type, cast
 from urllib.parse import urlencode
 
 import pytest
@@ -8,6 +9,7 @@ from fastapi import APIRouter, Request
 
 from fastlife.configurator.registry import AppRegistry
 from fastlife.configurator.settings import Settings
+from fastlife.session.serializer import AbsractSessionSerializer
 
 
 @pytest.fixture()
@@ -68,3 +70,23 @@ def settings() -> Settings:
 @pytest.fixture()
 def default_registry(settings: Settings) -> AppRegistry:
     return AppRegistry(settings)
+
+
+class DummySessionSerializer(AbsractSessionSerializer):
+    def __init__(self, secret_key: str, max_age: int) -> None:
+        ...
+
+    def serialize(self, data: Mapping[str, Any]) -> bytes:
+        return json.dumps(data).encode("utf-8")
+
+    def deserialize(self, data: bytes) -> Tuple[Mapping[str, Any], bool]:
+        ret: Mapping[str, Any] = json.loads(data)
+        broken = "broken" in ret
+        if broken:
+            ret = {}
+        return ret, broken
+
+
+@pytest.fixture()
+def dummy_session_serializer() -> Type[AbsractSessionSerializer]:
+    return DummySessionSerializer

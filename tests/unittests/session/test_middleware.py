@@ -1,6 +1,5 @@
-import json
 from datetime import timedelta
-from typing import Any, Mapping, Tuple
+from typing import Any, Mapping, Type
 
 import pytest
 
@@ -84,21 +83,6 @@ def test_security_flags(params: Mapping[str, Any]):
     assert mid.security_flags == params["expected"]
 
 
-class DummySessionSerializer(AbsractSessionSerializer):
-    def __init__(self, secret_key: str, max_age: int) -> None:
-        ...
-
-    def serialize(self, data: Mapping[str, Any]) -> bytes:
-        return json.dumps(data).encode("utf-8")
-
-    def deserialize(self, data: bytes) -> Tuple[Mapping[str, Any], bool]:
-        ret: Mapping[str, Any] = json.loads(data)
-        broken = "broken" in ret
-        if broken:
-            ret = {}
-        return ret, broken
-
-
 @pytest.mark.parametrize(
     "params",
     [
@@ -146,7 +130,9 @@ class DummySessionSerializer(AbsractSessionSerializer):
         ),
     ],
 )
-async def test_middleware(params: Mapping[str, Any]):
+async def test_middleware(
+    params: Mapping[str, Any], dummy_session_serializer: Type[AbsractSessionSerializer]
+):
     data = {}
 
     async def app(scope: Mapping[str, Any], receive: Any, send: Any):
@@ -157,7 +143,7 @@ async def test_middleware(params: Mapping[str, Any]):
         cookie_name="sess",
         secret_key="x" * 16,
         duration=timedelta(hours=1),
-        serializer=DummySessionSerializer,
+        serializer=dummy_session_serializer,
     )
     await mid(params["scope"], None, None)  # type: ignore
     assert data["scope"] == params["expected"]

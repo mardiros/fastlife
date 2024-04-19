@@ -3,6 +3,7 @@ import time
 from collections.abc import MutableMapping
 from typing import Any, Iterator, Literal, Mapping, Optional, Sequence
 from urllib.parse import urlencode
+from http.cookiejar import Cookie
 
 import bs4
 import httpx
@@ -268,21 +269,14 @@ class WebResponse:
 class Session(dict[str, Any]):
     def __init__(self, client: "WebTestClient"):
         self.client = client
-        if client.session_serializer is None:
-            raise RuntimeError(
-                "WebTestClient has not been initialize with the app settings, "
-                "can't decode session"
-            )
-
         self.srlz = client.session_serializer
-        settings = self.client.settings
-        assert settings is not None
-        self.settings = settings
+        self.settings = self.client.settings
         data: Mapping[str, Any]
-        self.has_session = settings.session_cookie_name in self.client.cookies
+        cookie_name = self.settings.session_cookie_name
+        self.has_session = cookie_name in self.client.cookies
         if self.has_session:
             data, error = self.srlz.deserialize(
-                self.client.cookies[settings.session_cookie_name].encode("utf-8")
+                self.client.cookies[cookie_name].encode("utf-8")
             )
             if error:
                 self.has_session = False
@@ -294,8 +288,6 @@ class Session(dict[str, Any]):
         super().__setitem__(__key, __value)
         settings = self.settings
         data = self.serialize()
-        from http.cookiejar import Cookie
-
         self.client.cookies.jar.set_cookie(
             Cookie(
                 version=0,
@@ -345,12 +337,12 @@ class WebTestClient:
             app, base_url=f"http://{settings.domain_name}", cookies=cookies or {}
         )
         self.settings = settings
-        self.session_serializer: AbsractSessionSerializer | None = None
-        if settings:
-            self.session_serializer = resolve(settings.session_serializer)(
-                settings.session_secret_key,
-                int(settings.session_duration.total_seconds()),
-            )
+        self.session_serializer: AbsractSessionSerializer = resolve(
+            settings.session_serializer
+        )(
+            settings.session_secret_key,
+            int(settings.session_duration.total_seconds()),
+        )
 
     @property
     def cookies(self) -> Cookies:
