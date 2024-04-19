@@ -348,10 +348,6 @@ class WebTestClient:
     def cookies(self) -> Cookies:
         return self.testclient.cookies
 
-    @cookies.setter
-    def cookies(self, value: Cookies) -> None:
-        self.testclient.cookies = value
-
     @property
     def session(self) -> MutableMapping[str, Any]:
         return Session(self)
