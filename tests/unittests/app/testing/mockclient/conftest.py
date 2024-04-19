@@ -3,6 +3,7 @@ from typing import Any, Literal, Mapping
 import httpx
 import pytest
 from fastapi import FastAPI
+from multidict import MultiDict
 from starlette.types import ASGIApp
 
 from fastlife.configurator.settings import Settings
@@ -61,7 +62,7 @@ def client(app: FastAPI, settings: Settings):
         def post(
             self,
             url: str,
-            data: Mapping[str, Any],
+            data: MultiDict[str],
             *,
             headers: Mapping[str, Any] | None = None,
             follow_redirects: bool = True,

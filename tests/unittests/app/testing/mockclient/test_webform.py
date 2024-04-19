@@ -1,4 +1,5 @@
 import pytest
+from multidict import MultiDict
 
 from fastlife.testing.testclient import WebForm
 
@@ -47,6 +48,27 @@ from fastlife.testing.testclient import WebForm
                 "origin": "/htmx",
             },
             id="origin",
+        ),
+        pytest.param(
+            """
+            <form hx-post="/htmx">
+                <input type="checkbox" name="colors" value="red">
+                <input type="checkbox" name="colors" value="green" checked>
+                <input type="checkbox" name="colors" value="blue" checked>
+                <input type="hidden" name="csrf" value="token">
+                <button name="shoes" value="0">Choose<button>
+            </form>
+            """,
+            MultiDict(  # type: ignore
+                [
+                    ("colors", "green"),
+                    ("colors", "blue"),
+                    ("csrf", "token"),
+                    ("shoes", "0"),
+                    ("origin", "/htmx"),
+                ]
+            ),
+            id="checkboxes",
         ),
     ],
 )

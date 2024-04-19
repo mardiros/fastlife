@@ -1,13 +1,14 @@
 import re
 import time
 from collections.abc import MutableMapping
+from http.cookiejar import Cookie
 from typing import Any, Iterator, Literal, Mapping, Optional, Sequence
 from urllib.parse import urlencode
-from http.cookiejar import Cookie
 
 import bs4
 import httpx
 from fastapi.testclient import TestClient
+from multidict import MultiDict
 from starlette.types import ASGIApp
 
 from fastlife.configurator.settings import Settings
@@ -119,13 +120,13 @@ class WebForm:
         self._form = form
         self._origin = origin
         self._formfields: dict[str, Element] = {}
-        self._formdata: dict[str, str] = {}
+        self._formdata: MultiDict[str] = MultiDict()
         inputs = self._form.by_node_name("input")
         for input in inputs:
             self._formfields[input.attrs["name"]] = input
             if input.attrs.get("type") == "checkbox" and "checked" not in input.attrs:
                 continue
-            self._formdata[input.attrs["name"]] = input.attrs.get("value", "")
+            self._formdata.add(input.attrs["name"], input.attrs.get("value", ""))
 
         inputs = self._form.by_node_name("select")
         for input in inputs:
@@ -406,7 +407,7 @@ class WebTestClient:
     def post(
         self,
         url: str,
-        data: Mapping[str, Any],
+        data: MultiDict[str],
         *,
         headers: Mapping[str, Any] | None = None,
         follow_redirects: bool = True,

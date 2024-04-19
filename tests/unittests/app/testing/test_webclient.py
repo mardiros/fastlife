@@ -1,4 +1,5 @@
 from starlette.types import ASGIApp
+
 from fastlife.configurator.settings import Settings
 from fastlife.testing.testclient import WebTestClient
 

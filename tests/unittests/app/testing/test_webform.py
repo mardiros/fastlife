@@ -1,6 +1,7 @@
 from typing import Any
 
 import pytest
+from multidict import MultiDict
 
 from fastlife.testing.testclient import WebForm
 
@@ -51,6 +52,9 @@ def test_default_value(webform: WebForm):
             <form>
                 <input type="text" name="firstname">
                 <input type="text" name="lastname">
+                <input type="checkbox" name="colors" value="red">
+                <input type="checkbox" name="colors" value="green" checked>
+                <input type="checkbox" name="colors" value="blue" checked>
                 <input type="hidden" name="csrf" value="token">
             </form>
         """,
@@ -61,11 +65,15 @@ def test_default_value(webform: WebForm):
 def test_set_input_value(webform: WebForm):
     webform.set("firstname", "bob")
     webform.set("lastname", "marley")
-    assert webform._formdata == {  # type: ignore
-        "csrf": "token",
-        "firstname": "bob",
-        "lastname": "marley",
-    }
+    assert webform._formdata == MultiDict(  # type: ignore
+        [
+            ("firstname", "bob"),
+            ("lastname", "marley"),
+            ("colors", "green"),
+            ("colors", "blue"),
+            ("csrf", "token"),
+        ]
+    )
 
 
 @pytest.mark.parametrize(
