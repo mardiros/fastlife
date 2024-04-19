@@ -154,7 +154,24 @@ class WebForm:
             raise ValueError(f'"{fieldname}" does not exists')
         if self._formfields[fieldname].node_name == "select":
             raise ValueError(f'"{fieldname}" is a <select>, use select() instead')
-        self._formdata[fieldname] = value
+        if self._formfields[fieldname].attrs.get("type") == "checkbox":
+            self._formdata.add(fieldname, value)
+        else:
+            self._formdata[fieldname] = value
+
+    def unset(self, fieldname: str, value: str) -> Any:
+        if fieldname not in self._formfields:
+            raise ValueError(f'"{fieldname}" does not exists')
+        if self._formfields[fieldname].node_name != "input":
+            raise ValueError(f'"{fieldname}" is not a checkbox')
+        if self._formfields[fieldname].attrs.get("type") != "checkbox":
+            raise ValueError(f'"{fieldname}" is not a checkbox')
+        values = self._formdata.popall(fieldname)
+        if value not in values:
+            raise ValueError(f'"{value}" not in "{fieldname}"')
+        for val in values:
+            if val != value:
+                self._formdata[fieldname] = val
 
     def select(self, fieldname: str, value: str) -> Any:
         if fieldname not in self._formfields:

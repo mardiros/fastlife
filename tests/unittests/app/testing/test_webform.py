@@ -54,10 +54,10 @@ def test_default_value(webform: WebForm):
                 <input type="text" name="lastname">
                 <input type="checkbox" name="colors" value="red">
                 <input type="checkbox" name="colors" value="green" checked>
-                <input type="checkbox" name="colors" value="blue" checked>
+                <input type="checkbox" name="colors" value="blue">
                 <input type="hidden" name="csrf" value="token">
             </form>
-        """,
+            """,
             id="text",
         )
     ],
@@ -65,15 +65,90 @@ def test_default_value(webform: WebForm):
 def test_set_input_value(webform: WebForm):
     webform.set("firstname", "bob")
     webform.set("lastname", "marley")
+    webform.set("colors", "blue")
     assert webform._formdata == MultiDict(  # type: ignore
         [
             ("firstname", "bob"),
             ("lastname", "marley"),
             ("colors", "green"),
-            ("colors", "blue"),
             ("csrf", "token"),
+            ("colors", "blue"),
         ]
     )
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
+                <input type="checkbox" name="colors" value="red" checked>
+                <input type="checkbox" name="colors" value="green" checked>
+                <input type="checkbox" name="colors" value="blue">
+            </form>
+            """,
+            id="checkbox",
+        )
+    ],
+)
+def test_unset_input_value(webform: WebForm):
+    webform.unset("colors", "green")
+    assert webform._formdata == MultiDict(  # type: ignore
+        [
+            ("colors", "red"),
+        ]
+    )
+
+
+@pytest.mark.parametrize(
+    "html,expected",
+    [
+        pytest.param(
+            """
+            <form></form>
+            """,
+            '"colors" does not exists',
+            id="does not exist",
+        ),
+        pytest.param(
+            """
+            <form>
+                <input type="checkbox" name="colors" value="green" checked>
+                <input type="checkbox" name="colors" value="blue">
+            </form>
+            """,
+            '"red" not in "colors"',
+            id="missing",
+        ),
+        pytest.param(
+            """
+            <form>
+                <input type="text" name="colors" value="red" />
+            </form>
+            """,
+            '"colors" is not a checkbox',
+            id="text",
+        ),
+        pytest.param(
+            """
+            <form>
+                <select name="colors">
+                    <option>red</option>
+                    <option>green</option>
+                    <option>blue</option>
+                </select>
+            </form>
+            """,
+            '"colors" is not a checkbox',
+            id="select",
+        ),
+    ],
+)
+def test_unset_raise(webform: WebForm, expected: str):
+    with pytest.raises(ValueError) as ctx:
+        webform.unset("colors", "red")
+    assert str(ctx.value) == expected
 
 
 @pytest.mark.parametrize(
