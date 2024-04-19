@@ -58,7 +58,7 @@ def test_default_value(webform: WebForm):
                 <input type="hidden" name="csrf" value="token">
             </form>
             """,
-            id="text",
+            id="input",
         )
     ],
 )
@@ -75,6 +75,47 @@ def test_set_input_value(webform: WebForm):
             ("colors", "blue"),
         ]
     )
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
+                <input type="radio" name="colors" value="red">
+                <input type="radio" name="colors" value="green" checked>
+                <input type="radio" name="colors" value="blue">
+            </form>
+            """,
+            id="radio",
+        )
+    ],
+)
+def test_set_radio(webform: WebForm):
+    webform.set("colors", "red")
+    webform.set("colors", "blue")
+    assert webform._formdata == MultiDict([("colors", "blue")])  # type: ignore
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
+                <input type="radio" name="colors" value="red">
+                <input type="radio" name="colors" value="green" checked>
+            </form>
+            """,
+            id="radio",
+        )
+    ],
+)
+def test_set_radio_raise(webform: WebForm):
+    with pytest.raises(ValueError) as ctx:
+        webform.set("colors", "blue")
+    assert str(ctx.value) == 'radio "colors" does not contains blue option'
 
 
 @pytest.mark.parametrize(

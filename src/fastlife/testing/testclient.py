@@ -154,10 +154,21 @@ class WebForm:
             raise ValueError(f'"{fieldname}" does not exists')
         if self._formfields[fieldname].node_name == "select":
             raise ValueError(f'"{fieldname}" is a <select>, use select() instead')
+
         if self._formfields[fieldname].attrs.get("type") == "checkbox":
             self._formdata.add(fieldname, value)
-        else:
-            self._formdata[fieldname] = value
+            return
+
+        if self._formfields[fieldname].attrs.get("type") == "radio":
+            radio = self._form.by_node_name(
+                "input", attrs={"type": "radio", "value": value}
+            )
+            if not radio:
+                raise ValueError(
+                    f'radio "{fieldname}" does not contains {value} option'
+                )
+
+        self._formdata[fieldname] = value
 
     def unset(self, fieldname: str, value: str) -> Any:
         if fieldname not in self._formfields:
