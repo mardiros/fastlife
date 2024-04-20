@@ -1,3 +1,10 @@
+0.4.0  - Released on 2024-04-20
+-------------------------------
+* Update JinjaX for global template var support
+* Add lots of missing unit tests
+* Add support of more html form element
+* Update deps
+
 0.3.1  - Released on 2024-03-29
 -------------------------------
 * Update FastAPI
