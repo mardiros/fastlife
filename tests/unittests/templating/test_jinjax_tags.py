@@ -202,12 +202,20 @@ def test_render_CSRFToken(node: bs4.PageElement, expected: bs4.PageElement):
             id="form-post",
         ),
         pytest.param(
+            """<Form class="form" hx-post>XxX</Form>""",
+            """<form class="form" hx-post="">
+  <input name="csrf_token" type="hidden" value=""/>
+  XxX
+</form>""",
+            id="form-hx-post",
+        ),
+        pytest.param(
             """<Form hx-post="/go" class="form">XxX</Form>""",
             """<form class="form" hx-post="/go">
   <input name="csrf_token" type="hidden" value=""/>
   XxX
 </form>""",
-            id="form-hx-post",
+            id="form-hx-post-url",
         ),
         pytest.param(
             """<Form method="get" hx-post="/go" class="form">XxX</Form>""",
