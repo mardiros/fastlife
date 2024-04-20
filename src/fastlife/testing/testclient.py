@@ -128,24 +128,28 @@ class WebForm:
                 continue
             self._formdata.add(input.attrs["name"], input.attrs.get("value", ""))
 
-        inputs = self._form.by_node_name("select")
-        for input in inputs:
-            self._formfields[input.attrs["name"]] = input
-            options = input.by_node_name("option")
-            for option in options:
-                if "selected" in option.attrs:
-                    self._formdata[input.attrs["name"]] = option.attrs.get(
-                        "value", option.text
-                    )
-                    break
+        selects = self._form.by_node_name("select")
+        for select in selects:
+            fieldname = select.attrs["name"]
+            self._formfields[fieldname] = select
+            options = select.by_node_name("option")
+            if "multiple" in select.attrs:
+                for option in options:
+                    if "selected" in option.attrs:
+                        self._formdata.add(
+                            fieldname, option.attrs.get("value", option.text)
+                        )
             else:
-                try:
-                    self._formdata[input.attrs["name"]] = options[0].attrs.get(
+                if options:
+                    self._formdata[fieldname] = options[0].attrs.get(
                         "value", options[0].text
                     )
-                except IndexError:
-                    # empty select, should it be posted ?
-                    self._formdata[input.attrs["name"]] = ""
+                    for option in options:
+                        if "selected" in option.attrs:
+                            self._formdata[fieldname] = option.attrs.get(
+                                "value", option.text
+                            )
+                            break
 
         # field textearea...
 
@@ -187,16 +191,41 @@ class WebForm:
     def select(self, fieldname: str, value: str) -> Any:
         if fieldname not in self._formfields:
             raise ValueError(f'"{fieldname}" does not exists')
-        if self._formfields[fieldname].node_name != "select":
+        field = self._formfields[fieldname]
+        if field.node_name != "select":
+            raise ValueError(f"{fieldname} is a {repr(field)}, " "use set() instead")
+
+        for option in field.by_node_name("option"):
+            if option.text == value.strip():
+                if "multiple" in field.attrs:
+                    self._formdata.add(fieldname, value)
+                else:
+                    self._formdata[fieldname] = option.attrs.get("value", option.text)
+                break
+        else:
+            raise ValueError(f'No option {value} in <select name="{fieldname}">')
+
+    def unselect(self, fieldname: str, value: str) -> Any:
+        if fieldname not in self._formfields:
+            raise ValueError(f'"{fieldname}" does not exists')
+        field = self._formfields[fieldname]
+
+        if field.node_name != "select":
             raise ValueError(
                 f"{fieldname} is a {repr(self._formfields[fieldname])}, "
-                "use set() instead"
+                "use unset() for checkbox instead"
             )
-        if "multiple" in self._formfields[fieldname].attrs:
-            raise NotImplementedError
+        if "multiple" not in field.attrs:
+            raise ValueError("only <select multiple> support unselect.")
+
         for option in self._formfields[fieldname].by_node_name("option"):
             if option.text == value.strip():
-                self._formdata[fieldname] = option.attrs.get("value", option.text)
+                values = self._formdata.popall(fieldname)
+                if value not in values:
+                    raise ValueError(f'"{value}" not in "{fieldname}"')
+                for val in values:
+                    if val != value:
+                        self._formdata[fieldname] = val
                 break
         else:
             raise ValueError(f'No option {value} in <select name="{fieldname}">')

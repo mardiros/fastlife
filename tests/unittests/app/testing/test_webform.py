@@ -26,6 +26,11 @@ from fastlife.testing.testclient import WebForm
                     <option>piano</option>
                     <option>allegro</option>
                 </select>
+                <select name="lang" multiple>
+                    <option>python</option>
+                    <option>javascript</option>
+                    <option>ruby</option>
+                </select>
                 <input type="hidden" name="csrf" value="token">
             </form>
             """,
@@ -250,6 +255,60 @@ def test_select_value(webform: WebForm):
 
 
 @pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
+                <select name="tempo" multiple>
+                    <option>piano</option>
+                    <option>allegro</option>
+                    <option>moderato</option>
+                </select>
+            </form>
+            """,
+            id="select",
+        )
+    ],
+)
+def test_select_multiple_value(webform: WebForm):
+    webform.select("tempo", "allegro")
+    webform.select("tempo", "moderato")
+    assert webform._formdata == MultiDict(  # type: ignore
+        [
+            ("tempo", "allegro"),
+            ("tempo", "moderato"),
+        ]
+    )
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
+                <select name="tempo" multiple>
+                    <option>piano</option>
+                    <option selected>allegro</option>
+                    <option selected>moderato</option>
+                </select>
+            </form>
+            """,
+            id="select",
+        )
+    ],
+)
+def test_select_multiple_default_value(webform: WebForm):
+    assert webform._formdata == MultiDict(  # type: ignore
+        [
+            ("tempo", "allegro"),
+            ("tempo", "moderato"),
+        ]
+    )
+
+
+@pytest.mark.parametrize(
     "html,expected",
     [
         pytest.param(
@@ -280,6 +339,93 @@ def test_select_exception(webform: WebForm, expected: str):
     with pytest.raises(ValueError) as cxt:
         webform.select("name", "subito")
     assert str(cxt.value) == expected
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
+                <select name="tempo" multiple>
+                    <option>piano</option>
+                    <option selected>allegro</option>
+                    <option selected>moderato</option>
+                </select>
+            </form>
+            """,
+            id="select",
+        )
+    ],
+)
+def test_unselect_multiple_value(webform: WebForm):
+    webform.unselect("tempo", "allegro")
+    assert webform._formdata == MultiDict(  # type: ignore
+        [
+            ("tempo", "moderato"),
+        ]
+    )
+
+
+@pytest.mark.parametrize(
+    "html,expected",
+    [
+        pytest.param(
+            """<form></form>""",
+            '"tempo" does not exists',
+            id="missing-select",
+        ),
+        pytest.param(
+            """
+            <form>
+                <select name="tempo" multiple>
+                    <option>piano</option>
+                    <option selected>moderato</option>
+                </select>
+            </form>
+            """,
+            'No option allegro in <select name="tempo">',
+            id="missing-option",
+        ),
+        pytest.param(
+            """
+            <form>
+                <select name="tempo" multiple>
+                    <option>allegro</option>
+                    <option selected>moderato</option>
+                </select>
+            </form>
+            """,
+            '"allegro" not selected in "tempo"',
+            id="option-not-selected",
+        ),
+        pytest.param(
+            """
+            <form>
+                <input name="tempo" type="checkbox" value="moderato" />
+            </form>
+            """,
+            "tempo is a <input>, use unset() for checkbox instead",
+            id="input",
+        ),
+        pytest.param(
+            """
+            <form>
+                <select name="tempo">
+                    <option>piano</option>
+                    <option selected>moderato</option>
+                </select>
+            </form>
+            """,
+            "only <select multiple> support unselect",
+            id="select-not-multiple",
+        ),
+    ],
+)
+def test_unselect_exception(webform: WebForm, expected: str):
+    with pytest.raises(ValueError) as ctx:
+        webform.unselect("tempo", "allegro")
+    assert str(ctx.value) == expected
 
 
 @pytest.mark.parametrize(
