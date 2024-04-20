@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Callable, Literal
+from typing import Annotated, Any, Callable, Literal, Sequence
 
 import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
@@ -38,6 +38,21 @@ class DummyModel(BaseModel):
     tags: list[str] = Field()
     foo: Foo = Field()
     foobar: Foo | Bar = Field()
+
+
+class Tempo(BaseModel):
+    id: int = Field()
+    name: str = Field()
+
+
+class CustomSelect(Widget[Any]):
+    def get_template(self) -> str:
+        return "CustomSelect"
+
+
+class Banger(BaseModel):
+    name: str = Field()
+    tempo: Annotated[Sequence[Tempo], CustomSelect] = Field()
 
 
 def test_render_template(
@@ -192,3 +207,23 @@ def test_render_template_values(
             "type": "text",
         },
     )
+
+
+def test_render_custom_list(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    result = renderer.render_template(
+        "DummyForm",
+        model=Banger,
+        form_data={
+            "name": "asturia",
+            "tempo": 1,
+        },
+        token="tkt",
+        globals={
+            "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
+        },
+    )
+    html = soup(result)
+    assert html.find("option", attrs={"value": "1", "selected": ""})
+    assert html.find("option", attrs={"value": "2"})

@@ -31,4 +31,6 @@ class ModelWidget(Widget[Sequence[Widget[Any]]]):
             "widget": self,
             "children_widget": children_widget,
         }
-        return Markup(renderer.render_template(self.get_template(), **kwargs))
+        return Markup(
+            renderer.render_template(self.get_template(), globals=None, **kwargs)
+        )

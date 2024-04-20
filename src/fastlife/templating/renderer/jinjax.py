@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Mapping, Optional, Sequence, Type
+from typing import TYPE_CHECKING, Any, Mapping, MutableMapping, Optional, Sequence, Type
 
 from fastapi import Request
 from jinjax.catalog import Catalog
@@ -41,6 +41,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self.request = request
         self.csrf_token_name = csrf_token_name
         self.form_data_model_prefix = form_data_model_prefix
+        self.globals: MutableMapping[str, Any] = {}
 
     def build_globals(self) -> Mapping[str, Any]:
         return {
@@ -50,9 +51,18 @@ class JinjaxRenderer(AbstractTemplateRenderer):
                 "value": self.request.scope.get(self.csrf_token_name, ""),
             },
             "pydantic_form": self.pydantic_form,
+            **self.globals,
         }
 
-    def render_template(self, template: str, **params: Any) -> str:
+    def render_template(
+        self,
+        template: str,
+        *,
+        globals: Optional[Mapping[str, Any]] = None,
+        **params: Any,
+    ) -> str:
+        if globals:
+            self.globals.update(globals)
         return self.catalog.render(  # type: ignore
             template, __globals=self.build_globals(), **params
         )

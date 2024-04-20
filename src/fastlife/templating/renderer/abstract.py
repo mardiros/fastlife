@@ -1,5 +1,5 @@
 import abc
-from typing import Any, Mapping, Type
+from typing import Any, Mapping, Optional, Type
 
 from fastapi import Request
 from markupsafe import Markup
@@ -11,8 +11,21 @@ class AbstractTemplateRenderer(abc.ABC):
     """Used to buid pydantic form"""
 
     @abc.abstractmethod
-    def render_template(self, template: str, **params: Any) -> str:
-        ...
+    def render_template(
+        self,
+        template: str,
+        *,
+        globals: Optional[Mapping[str, Any]] = None,
+        **params: Any,
+    ) -> str:
+        """
+        Render the given template with the given params.
+
+        While rendering templates, the globals parameter is keps by the instantiated
+        renderer and sent to every rendering made by the request.
+        This is used by the pydantic form method that will render other templates
+        for the request.
+        """
 
     @abc.abstractmethod
     def pydantic_form(
