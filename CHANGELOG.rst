@@ -1,3 +1,7 @@
+0.4.1  - Released on 2024-04-20
+-------------------------------
+* Add globals to render custom widget with global data
+
 0.4.0  - Released on 2024-04-20
 -------------------------------
 * Update JinjaX for global template var support
