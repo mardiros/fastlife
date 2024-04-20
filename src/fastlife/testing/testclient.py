@@ -216,13 +216,13 @@ class WebForm:
                 "use unset() for checkbox instead"
             )
         if "multiple" not in field.attrs:
-            raise ValueError("only <select multiple> support unselect.")
+            raise ValueError("only <select multiple> support unselect")
 
         for option in self._formfields[fieldname].by_node_name("option"):
             if option.text == value.strip():
                 values = self._formdata.popall(fieldname)
                 if value not in values:
-                    raise ValueError(f'"{value}" not in "{fieldname}"')
+                    raise ValueError(f'"{value}" not selected in "{fieldname}"')
                 for val in values:
                     if val != value:
                         self._formdata[fieldname] = val

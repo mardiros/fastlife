@@ -29,10 +29,7 @@ def client(app: FastAPI, settings: Settings):
             cookies: CookieTypes | None = None,
         ) -> None:
             super().__init__(app, settings=settings, cookies=cookies)
-            self.url = ""
             self.data = {}
-            self.headers = None
-            self.follow_redirects = True
 
         def request(
             self,
@@ -47,7 +44,7 @@ def client(app: FastAPI, settings: Settings):
                 f"""<input type="text" name="{key}" value="{val}">"""
                 for key, val in self.data.items()
             ]
-            fields.append(f"""<input type="text" name="origin" value="{self.url}">""")
+            fields.append(f"""<input type="text" name="origin" value="{url}">""")
 
             form = "\n".join(fields)
             return WebResponse(
@@ -67,10 +64,7 @@ def client(app: FastAPI, settings: Settings):
             headers: Mapping[str, Any] | None = None,
             follow_redirects: bool = True,
         ) -> WebResponse:
-            self.url = url
             self.data = data
-            self.headers = headers
-            self.follow_redirects = follow_redirects
             return super().post(
                 url, data, headers=headers, follow_redirects=follow_redirects
             )
