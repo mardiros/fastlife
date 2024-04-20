@@ -1,6 +1,7 @@
 {# def
 name,
 id,
+multiple=False,
 class_="""
 bg-neutral-50
 block
@@ -22,6 +23,6 @@ dark:text-white
 """
 #}
 
-<select name="{{name}}" id="{{id}}" class="{{attrs.class or class_}}">
+<select name="{{name}}" id="{{id}}" class="{{attrs.class or class_}}" {% if multiple %}multiple{% endif %}>
   {{- content -}}
 </select>

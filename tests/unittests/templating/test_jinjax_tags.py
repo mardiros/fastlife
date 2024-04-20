@@ -504,6 +504,11 @@ def test_render_Radio(node: bs4.PageElement, expected: bs4.PageElement):
             """<select name="n" id="i" class="slct">X</select>""",
             id="select-css",
         ),
+        pytest.param(
+            """<Select name="n" id="i" class="slct" multiple>X</Select>""",
+            """<select name="n" id="i" class="slct" multiple>X</select>""",
+            id="select-multiple",
+        ),
     ],
 )
 def test_render_Select(node: bs4.PageElement, expected: bs4.PageElement):
