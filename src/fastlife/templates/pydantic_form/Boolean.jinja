@@ -2,6 +2,6 @@
 <pydantic_form.Widget widget={widget} removable={widget.removable}>
   <div class="pt-4">
     <Label for={widget.id}>{{widget.title}}</Label>
-    <Checkbox name={widget.name} type="checkbox" id={widget.id} {% if widget.value %}checked{% endif %} />
+    <Checkbox name={widget.name} type="checkbox" id={widget.id} checked={widget.value} />
   </div>
 </pydantic_form.Widget>

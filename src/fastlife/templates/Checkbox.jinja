@@ -1,7 +1,8 @@
 {# def
 name,
-value,
 id,
+value=None,
+checked=False,
 class_="""
 bg-neutral-100
 border-neutral-300
@@ -17,4 +18,5 @@ focus:ring-2
 focus:ring-primary-500
 """
 #}
-<input name="{{name}}" {% if value%}checked{% endif %} type="checkbox" id="{{id}}" class="{{attrs.class or class_}}" />
+<input name="{{name}}" {% if value is not none %}value="{{value}}" {% endif %} {% if checked %}checked{% endif %}
+  type="checkbox" id="{{id}}" class="{{attrs.class or class_}}" />

@@ -142,17 +142,23 @@ def test_render_Button(node: bs4.PageElement, expected: bs4.PageElement):
     "template_string,expected_string",
     [
         pytest.param(
-            """<Checkbox id="foo-bar" name="foo" value={True} />""",
+            """<Checkbox id="foo-bar" name="foo" checked={True} />""",
             """<input type="checkbox" id="foo-bar" name="foo" checked
             class="bg-neutral-100 border-neutral-300 h-4 rounded text-primary-600
             w-4 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-primary-600
             dark:ring-offset-neutral-800 focus:ring-2 focus:ring-primary-500"/>""",
-            id="checkbox",
+            id="checkbox-checked",
         ),
         pytest.param(
-            """<Checkbox id="foo-bar" name="foo" value={False} class="css"/>""",
+            """<Checkbox id="foo-bar" name="foo" class="css"/>""",
             """<input type="checkbox" id="foo-bar" name="foo" class="css"/>""",
-            id="checkbox-css-and-false",
+            id="checkbox-css",
+        ),
+        pytest.param(
+            """<Checkbox id="foo-bar" name="foo" value="bar" checked class="css"/>""",
+            """<input type="checkbox" id="foo-bar" name="foo" value="bar" checked
+            class="css"/>""",
+            id="checkbox-checked-value",
         ),
     ],
 )
