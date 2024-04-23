@@ -1,6 +1,7 @@
 import secrets
 from collections.abc import MutableSequence, Sequence
 from decimal import Decimal
+from enum import Enum
 from types import NoneType
 from typing import Any, Literal, Mapping, Optional, Type, cast, get_origin
 from uuid import UUID
@@ -95,6 +96,9 @@ class WidgetFactory:
 
             if type_origin is Literal:
                 return self.build_literal(name, typ, field, value, removable)
+
+        if issubclass(typ, Enum):  # if it raises here, the type_origin is unknown
+            return self.build_enum(name, typ, field, value, removable)
 
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
             return self.build_model(name, typ, field, value or {}, removable)
@@ -300,6 +304,24 @@ class WidgetFactory:
         return DropDownWidget(
             field_name,
             options=choices,
+            removable=removable,
+            title=field.title if field else "",
+            token=self.token,
+            value=str(value),
+        )
+
+    def build_enum(
+        self,
+        field_name: str,
+        field_type: Type[Any],  # an enum subclass
+        field: FieldInfo | None,
+        value: str | int | float,
+        removable: bool,
+    ) -> Widget[Any]:
+        options = [(item.name, item.value) for item in field_type]  # type: ignore
+        return DropDownWidget(
+            field_name,
+            options=options,  # type: ignore
             removable=removable,
             title=field.title if field else "",
             token=self.token,

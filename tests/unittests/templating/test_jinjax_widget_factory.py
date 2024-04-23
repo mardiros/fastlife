@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Annotated, Any, Callable, Literal, Sequence
 
 import bs4
@@ -12,9 +13,9 @@ class CustomWidget(Widget[Any]):
         return "CustomWidget"
 
 
-# class Flavor(Enum):
-#     vanilla = "vanilla"
-#     chocolate = "chocolate"
+class Flavor(Enum):
+    vanilla = "vanilla"
+    chocolate = "chocolate"
 
 
 class Foo(BaseModel):
@@ -31,7 +32,7 @@ class DummyModel(BaseModel):
     description: Annotated[str, CustomWidget] = Field()
     private: str = Field(exclude=True)
     type: Literal["foo", "bar"] = Field()
-    # flavor: Flavor = Field()
+    flavor: Flavor = Field()
     passphrase: SecretStr = Field()
     email: EmailStr = Field()
     vegan: bool = Field()
@@ -94,9 +95,7 @@ def test_render_template(
         "div", attrs={"id": "payload-description-tkt", "contenteditable": True}
     )
     assert html.find("select", attrs={"id": "payload-type-tkt"})
-    # assert html.find(
-    #     "select", attrs={"id": "payload-flavor-tkt"}
-    # )
+    assert html.find("select", attrs={"id": "payload-flavor-tkt"})
     assert html.find(
         "input",
         attrs={"id": "payload-vegan-tkt", "name": "payload.vegan", "type": "checkbox"},
