@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, IntEnum
 from typing import Annotated, Any, Callable, Literal, Sequence
 
 import bs4
@@ -14,8 +14,14 @@ class CustomWidget(Widget[Any]):
 
 
 class Flavor(Enum):
-    vanilla = "vanilla"
-    chocolate = "chocolate"
+    vanilla = "Vanilla"
+    chocolate = "Chocolate"
+
+
+class Score(IntEnum):
+    un = 1
+    deux = 2
+    trois = 3
 
 
 class Foo(BaseModel):
@@ -33,6 +39,7 @@ class DummyModel(BaseModel):
     private: str = Field(exclude=True)
     type: Literal["foo", "bar"] = Field()
     flavor: Flavor = Field()
+    score: Score = Field()
     passphrase: SecretStr = Field()
     email: EmailStr = Field()
     vegan: bool = Field()
@@ -95,7 +102,20 @@ def test_render_template(
         "div", attrs={"id": "payload-description-tkt", "contenteditable": True}
     )
     assert html.find("select", attrs={"id": "payload-type-tkt"})
-    assert html.find("select", attrs={"id": "payload-flavor-tkt"})
+
+    flavors = html.find("select", attrs={"id": "payload-flavor-tkt"})
+    assert isinstance(flavors, bs4.Tag)
+    vanilla = flavors.find("option", attrs={"value": "vanilla"})
+    assert vanilla
+    assert vanilla.text.strip() == "Vanilla"
+    assert flavors.find("option", attrs={"value": "chocolate"})
+
+    scores = html.find("select", attrs={"id": "payload-score-tkt"})
+    assert isinstance(scores, bs4.Tag)
+    score_option = scores.find("option", attrs={"value": "deux"})
+    assert score_option
+    assert score_option.text.strip() == "2"
+
     assert html.find(
         "input",
         attrs={"id": "payload-vegan-tkt", "name": "payload.vegan", "type": "checkbox"},
