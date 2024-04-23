@@ -25,8 +25,8 @@ def unflatten_struct(
     csrf_token_name: Optional[str] = None,
 ) -> Mapping[str, Any] | Sequence[Any]:
     # we sort to ensure that list index are ordered
-    formkeys = sorted(flatten_input.keys())
-    for key in formkeys:
+    # formkeys = sorted(flatten_input.keys())
+    for key in flatten_input:
         if csrf_token_name is not None and key == csrf_token_name:
             continue
         lkey, sep, rest = key.partition(".")
@@ -78,8 +78,17 @@ async def unflatten_mapping_form_data(
     request: Request, reg: Registry
 ) -> Mapping[str, Any]:
     form_data = await request.form()
+    form_data_decode_list: MutableMapping[str, Any] = {}
+    for key, val in form_data.multi_items():
+        if key in form_data_decode_list:
+            if not isinstance(form_data_decode_list, list):
+                form_data_decode_list[key] = [form_data_decode_list[key]]
+            form_data_decode_list[key].append(val)
+        else:
+            form_data_decode_list[key] = val
+
     ret = unflatten_struct(
-        form_data, {}, csrf_token_name=reg.settings.csrf_token_name
+        form_data_decode_list, {}, csrf_token_name=reg.settings.csrf_token_name
     )  # type: ignore
     return ret  # type: ignore
 

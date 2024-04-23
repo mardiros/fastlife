@@ -155,14 +155,28 @@ def test_unflatten_struct_error(params: Mapping[str, Any]):
 @pytest.mark.parametrize(
     "params",
     [
-        {
-            "request": {
-                "method": "POST",
-                "headers": {"content-type": "application/x-www-form-urlencoded"},
-                "body": "a.b=C&csrf_token=xxx",
+        pytest.param(
+            {
+                "request": {
+                    "method": "POST",
+                    "headers": {"content-type": "application/x-www-form-urlencoded"},
+                    "body": "a.b=C&csrf_token=xxx",
+                },
+                "expected": {"a": {"b": "C"}},
             },
-            "expected": {"a": {"b": "C"}},
-        }
+            id="dict",
+        ),
+        pytest.param(
+            {
+                "request": {
+                    "method": "POST",
+                    "headers": {"content-type": "application/x-www-form-urlencoded"},
+                    "body": "a.b=C&a.b=D&csrf_token=xxx",
+                },
+                "expected": {"a": {"b": ["C", "D"]}},
+            },
+            id="multidict",
+        ),
     ],
 )
 async def test_unflatten_mapping_form_data(
