@@ -1,6 +1,7 @@
 from typing import Sequence
 
 from pydantic import BaseModel
+
 from .base import Widget
 
 
@@ -25,9 +26,11 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
         title: str | None,
         value: Sequence[Checkable],
         token: str,
+        removable: bool,
     ) -> None:
-        super().__init__(name, value=value, token=token)
-        self.title = title or ""
+        super().__init__(
+            name, value=value, token=token, title=title, removable=removable
+        )
 
     def get_template(self) -> str:
         return "pydantic_form.Checklist"

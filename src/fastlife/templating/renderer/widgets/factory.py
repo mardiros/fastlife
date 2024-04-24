@@ -13,6 +13,7 @@ from pydantic.fields import FieldInfo
 from fastlife.shared_utils.infer import is_complex_type, is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
+from fastlife.templating.renderer.widgets.checklist import Checkable, ChecklistWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
 from fastlife.templating.renderer.widgets.sequence import SequenceWidget
@@ -96,6 +97,9 @@ class WidgetFactory:
 
             if type_origin is Literal:
                 return self.build_literal(name, typ, field, value, removable)
+
+            if type_origin is set:
+                return self.build_set(name, typ, field, value, removable)
 
         if issubclass(typ, Enum):  # if it raises here, the type_origin is unknown
             return self.build_enum(name, typ, field, value, removable)
@@ -229,6 +233,55 @@ class WidgetFactory:
             value=items,
             item_type=typ,  # type: ignore
             token=self.token,
+            removable=removable,
+        )
+
+    def build_set(
+        self,
+        field_name: str,
+        field_type: Type[Any],
+        field: Optional[FieldInfo],
+        value: Optional[Sequence[Any]],
+        removable: bool,
+    ) -> Widget[Any]:
+        choice_wrapper = field_type.__args__[0]
+        choices = []
+        choice_wrapper_origin = get_origin(choice_wrapper)
+        if choice_wrapper_origin:
+            if choice_wrapper_origin is Literal:
+                litchoice: list[str] = choice_wrapper.__args__  # type: ignore
+                choices = [
+                    Checkable(
+                        label=c,
+                        value=c,
+                        checked=c in value if value else False,  # type: ignore
+                        name=field_name,
+                        token=self.token,
+                    )
+                    for c in litchoice
+                ]
+
+            else:
+                raise NotImplementedError
+        elif issubclass(choice_wrapper, Enum):
+            choices = [
+                Checkable(
+                    label=e.value,
+                    value=e.name,
+                    checked=e.name in value if value else False,  # type: ignore
+                    name=field_name,
+                    token=self.token,
+                )
+                for e in choice_wrapper
+            ]
+        else:
+            raise NotImplementedError
+
+        return ChecklistWidget(
+            field_name,
+            title=field.title if field else "",
+            token=self.token,
+            value=choices,
             removable=removable,
         )
 

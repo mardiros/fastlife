@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Literal, Optional
+from typing import Annotated, Any, Literal, Optional, Set
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
@@ -35,6 +35,9 @@ class Email(BaseModel):
     address: str = Field(...)
 
 
+Interest = Literal["music", "cinema", "sport"]
+
+
 class Account(BaseModel):
     username: str = Field(
         title="Username",
@@ -56,6 +59,8 @@ class Account(BaseModel):
     groups: Annotated[list[Group], Checklist] = Field(
         title="Group", default_factory=list
     )
+
+    interest: Set[Interest] = Field(default_factory=set)
 
     @field_validator("groups")
     def validate_groups(cls, value: Any) -> Any:

@@ -181,6 +181,7 @@ def test_render_checklist(
             Checkable(label="Baz", name="foobar", value="z", token="x", checked=False),
         ],
         token="x",
+        removable=False,
     )
     result = model.to_html(renderer)
     html = soup(result)

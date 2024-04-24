@@ -1,5 +1,5 @@
 from enum import Enum, IntEnum
-from typing import Annotated, Any, Callable, Literal, Sequence
+from typing import Annotated, Any, Callable, Literal, Sequence, Set
 
 import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
@@ -61,6 +61,11 @@ class CustomSelect(Widget[Any]):
 class Banger(BaseModel):
     name: str = Field()
     tempo: Annotated[Sequence[Tempo], CustomSelect] = Field()
+
+
+class MultiSet(BaseModel):
+    flavors: Set[Flavor] = Field(default_factory=set)
+    foobarz: Set[Literal["foo", "bar", "baz"]] = Field(default_factory=set)
 
 
 def test_render_template(
@@ -246,3 +251,48 @@ def test_render_custom_list(
     html = soup(result)
     assert html.find("option", attrs={"value": "1", "selected": ""})
     assert html.find("option", attrs={"value": "2"})
+
+
+def test_render_set(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    result = renderer.render_template(
+        "DummyForm", model=MultiSet, form_data={}, token="tkt"
+    )
+    html = soup(result)
+    assert html.find(
+        "input", attrs={"id": "payload-flavors-vanilla-tkt", "type": "checkbox"}
+    )
+
+    assert html.find(
+        "input", attrs={"id": "payload-foobarz-foo-tkt", "type": "checkbox"}
+    )
+
+
+def test_render_set_checked(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    result = renderer.render_template(
+        "DummyForm",
+        model=MultiSet,
+        form_data={"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
+        token="tkt",
+    )
+    html = soup(result)
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-flavors-vanilla-tkt",
+            "type": "checkbox",
+            "checked": True,
+        },
+    )
+
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-foobarz-foo-tkt",
+            "type": "checkbox",
+            "checked": True,
+        },
+    )
