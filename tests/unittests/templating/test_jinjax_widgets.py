@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from fastlife.templating.renderer.jinjax import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
+from fastlife.templating.renderer.widgets.checklist import Checkable, ChecklistWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
 from fastlife.templating.renderer.widgets.model import ModelWidget
@@ -166,6 +167,36 @@ def test_render_sequence(
     assert html.find("details", attrs={"id": "foo-x"})
     assert html.find("input", attrs={"id": "x-x", "type": "text"})
     assert html.find("input", attrs={"id": "y-x", "type": "text"})
+
+
+def test_render_checklist(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    model = ChecklistWidget(
+        "foobar",
+        title="Foobar",
+        value=[
+            Checkable(label="Foo", name="foobar", value="f", token="x", checked=True),
+            Checkable(label="Bar", name="foobar", value="b", token="x", checked=False),
+            Checkable(label="Baz", name="foobar", value="z", token="x", checked=False),
+        ],
+        token="x",
+    )
+    result = model.to_html(renderer)
+    html = soup(result)
+    assert html.find(
+        "input",
+        attrs={"id": "foobar-f-x", "type": "checkbox", "value": "f", "checked": True},
+    )
+    lbl = html.find("label", attrs={"for": "foobar-f-x"})
+    assert isinstance(lbl, bs4.Tag)
+    assert lbl.text.strip() == "Foo"
+    b = html.find("input", attrs={"id": "foobar-b-x", "type": "checkbox", "value": "b"})
+    assert isinstance(b, bs4.Tag)
+    assert "checked" not in b.attrs
+    assert html.find(
+        "input", attrs={"id": "foobar-z-x", "type": "checkbox", "value": "z"}
+    )
 
 
 def test_render_union(
