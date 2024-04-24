@@ -1,5 +1,3 @@
-from typing import Optional
-
 from .base import Widget
 
 
@@ -8,7 +6,7 @@ class BooleanWidget(Widget[bool]):
         self,
         name: str,
         *,
-        title: Optional[str],
+        title: str | None,
         value: bool = False,
         removable: bool = False,
         token: str,
