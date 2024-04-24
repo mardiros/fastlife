@@ -9,12 +9,15 @@ from typing import (
     Sequence,
     Type,
     TypeVar,
+    get_origin,
 )
 
 from fastapi import Depends, Request
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
+from result import Err, Ok, Result
 
 from fastlife.configurator.registry import Registry
+from fastlife.shared_utils.infer import is_union
 
 
 def unflatten_struct(
@@ -115,16 +118,54 @@ SequenceFormData = Annotated[Sequence[str], Depends(unflatten_sequence_form_data
 
 T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
+ModelResult = Result[T, Mapping[str, str]] | None
 
 
-def model(cls: Type[T], name: Optional[str] = None) -> Callable[[Mapping[str, Any]], T]:
+def model(
+    cls: Type[T], name: str | None = None
+) -> Callable[[Mapping[str, Any]], ModelResult[T]]:
     """
     Build a model, a class of type T based on Pydandic Base Model from a form payload.
     """
 
-    def to_model(data: MappingFormData, registry: Registry) -> Optional[T]:
+    def to_model(data: MappingFormData, registry: Registry) -> ModelResult[T]:
         if data:
-            return cls(**data[name or registry.settings.form_data_model_prefix])
+            prefix = name or registry.settings.form_data_model_prefix
+            try:
+                return Ok(cls(**data[prefix]))
+            except ValidationError as exc:
+                errors: dict[str, str] = {}
+                for error in exc.errors():
+                    loc = prefix
+                    typ: Any = cls
+                    for part in error["loc"]:
+                        if isinstance(part, str):
+                            type_origin = get_origin(typ)
+                            if type_origin:
+                                if is_union(typ):
+                                    args = typ.__args__
+                                    for arg in args:
+                                        if arg.__name__ == part:
+                                            typ = arg
+                                            continue
+
+                                else:
+                                    raise NotImplementedError
+                            elif issubclass(typ, BaseModel):
+                                typ = typ.model_fields[part].annotation
+                                loc = f"{loc}.{part}"
+                            else:
+                                raise NotImplementedError
+
+                        else:
+                            # it is an integer and it part of the list
+                            loc = f"{loc}.{part}"
+
+                    if loc in errors:
+                        errors[loc] = f"{errors[loc]}, {error['msg']}"
+                    else:
+                        errors[loc] = error["msg"]
+                return Err(errors)
         return None
 
     return Depends(to_model)

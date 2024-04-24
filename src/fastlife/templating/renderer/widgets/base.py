@@ -1,6 +1,6 @@
 import abc
 import secrets
-from typing import Any, Generic, Mapping, Optional, Type, TypeVar
+from typing import Any, Generic, Mapping, Type, TypeVar
 
 from markupsafe import Markup
 
@@ -34,14 +34,16 @@ class Widget(abc.ABC, Generic[T]):
         self,
         name: str,
         *,
-        value: Optional[T] = None,
-        title: Optional[str] = None,
-        token: Optional[str] = None,
-        aria_label: Optional[str] = None,
+        value: T | None = None,
+        error: str | None = None,
+        title: str | None = None,
+        token: str | None = None,
+        aria_label: str | None = None,
         removable: bool = False,
     ):
         self.name = name
         self.value = value
+        self.error = error
         self.title = title or name.split(".")[-1]
         self.aria_label = aria_label or ""
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")

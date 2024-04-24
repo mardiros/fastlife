@@ -4,9 +4,9 @@ from fastlife.testing import WebTestClient
 def test_http_call(client: WebTestClient):
     resp = client.get("/")
     assert resp.html.h1.text == "Hello World!"
-    assert "account.username" in resp.form
+    assert "person.nick" in resp.form
     assert "csrf_token" in resp.form
-    resp.form.set("account.username", "Bob")
+    resp.form.set("person.nick", "Bob")
     resp = resp.form.submit()
     assert resp.html.h1.text == "Hello Bob!"
 

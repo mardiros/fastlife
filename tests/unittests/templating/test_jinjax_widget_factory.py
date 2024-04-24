@@ -72,7 +72,7 @@ def test_render_template(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm", model=DummyModel, form_data=None, token="tkt"
+        "DummyForm", model=DummyModel, form_data=None, form_errors=None, token="tkt"
     )
     html = soup(result)
 
@@ -172,6 +172,7 @@ def test_render_template_values(
                 "foobar": {"foo": "totally"},
             }
         },
+        form_errors=None,
         token="tkt",
     )
 
@@ -243,6 +244,7 @@ def test_render_custom_list(
             "name": "asturia",
             "tempo": 1,
         },
+        form_errors=None,
         token="tkt",
         globals={
             "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
@@ -257,7 +259,7 @@ def test_render_set(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm", model=MultiSet, form_data={}, token="tkt"
+        "DummyForm", model=MultiSet, form_data={}, form_errors=None, token="tkt"
     )
     html = soup(result)
     assert html.find(
@@ -288,6 +290,7 @@ def test_render_set_checked(
         "DummyForm",
         model=MultiSet,
         form_data={"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
+        form_errors=None,
         token="tkt",
     )
     html = soup(result)

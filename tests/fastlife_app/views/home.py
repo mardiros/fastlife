@@ -1,29 +1,37 @@
-from typing import Annotated, Optional
+from typing import Annotated
 
 from fastapi import Response
+from pydantic import BaseModel
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.request.form_data import model
-from tests.fastlife_app.models import Account, Group
+from fastlife.request.form_data import MappingFormData, ModelResult, model
+from tests.fastlife_app.models import Account
+
+
+class Person(BaseModel):
+    nick: str
 
 
 async def hello_world(
     template: Annotated[Template, template("HelloWorld")],
-    account: Annotated[Optional[Account], model(Account, "account")],
+    person: Annotated[ModelResult[Person], model(Person, "person")],
 ) -> Response:
-    return template(account=account)
+    return template(person=person.unwrap_or(None) if person else None)
 
 
 async def autoform(
     template: Annotated[Template, template("AutoForm")],
-    account: Annotated[Optional[Account], model(Account)],
+    data: MappingFormData,
+    account_result: Annotated[ModelResult[Account], model(Account)],
 ):
-    account = account or Account(
-        username="", groups=[Group(name="admin"), Group(name="editor")]
-    )
-    return template(
-        model=Account, form_data={"payload": account.model_dump()} if account else {}
-    )
+    errors = None
+    if account_result:
+        if account_result.is_err():
+            errors = account_result.unwrap_err()
+        else:
+            account = account_result.unwrap()
+            data = {"payload": account.model_dump()}
+    return template(model=Account, form_data=data, form_errors=errors)
 
 
 @configure

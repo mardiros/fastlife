@@ -1,8 +1,8 @@
-{# def account #}
+{# def person #}
 <Layout>
-  <H1>Hello {{ account.username|default("World") }}!</H1>
+  <H1>Hello {{ person.nick|default("World") }}!</H1>
   <Form  method="post">
-    <Input name="account.username" label="Name" aria_label="First name and last name, or surname" />
+    <Input name="person.nick" label="Name" aria_label="First name and last name, or surname" />
     <Button aria_label="submit">Submit</Button>
   </Form>
 </Layout>

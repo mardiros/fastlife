@@ -1,5 +1,5 @@
-{# def model, form_data,token #}
+{# def model, form_data, form_errors, token #}
 <Form>
-  {{ pydantic_form(model, form_data, token=token) }}
+  {{ pydantic_form(model=model, form_data=form_data, form_errors=form_errors, token=token) }}
   <Button>Submit</Button>
 </Form>

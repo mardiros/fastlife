@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Literal, Optional, Set
+from typing import Annotated, Any, Literal, Set
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
@@ -27,12 +27,12 @@ class Group(BaseModel):
 
 class PhoneNumber(BaseModel):
     type: Literal["phonenumber"] = Field(default="phonenumber")
-    number: str = Field(...)
+    number: str = Field(min_length=4)
 
 
 class Email(BaseModel):
     type: Literal["email"] = Field(default="email")
-    address: str = Field(...)
+    address: str = Field(min_length=5)
 
 
 Interest = Literal["music", "cinema", "sport"]
@@ -43,13 +43,14 @@ class Account(BaseModel):
         title="Username",
         description="Your unique identifier",
         examples=["alice", "bob"],
+        min_length=3,
+        pattern="^[a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$",
     )
-    password: Optional[SecretStr] = Field(
+    password: SecretStr = Field(
         title="Password",
         description="The painfull secret you should put in your password manager",
-        default=None,
     )
-    recovery_address: Optional[PhoneNumber | Email] = Field(
+    recovery_address: PhoneNumber | Email | None = Field(
         title="Email or Phone",
         description="Email or Phone number used to recover your account, "
         "in case you lost your password",

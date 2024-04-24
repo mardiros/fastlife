@@ -22,7 +22,12 @@ async def show_widget(
     if title:
         field = FieldInfo(title=title)
     data = reg.renderer(request).pydantic_form(
-        model_cls, None, name, token, removable, field
+        model=model_cls,
+        form_data=None,
+        name=name,
+        token=token,
+        removable=removable,
+        field=field,
     )
     return Response(data, headers={"Content-Type": "text/html"})
 

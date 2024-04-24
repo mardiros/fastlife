@@ -2,6 +2,7 @@ import secrets
 from collections.abc import MutableSequence, Sequence
 from decimal import Decimal
 from enum import Enum
+from inspect import isclass
 from types import NoneType
 from typing import Any, Literal, Mapping, Optional, Type, cast, get_origin
 from uuid import UUID
@@ -33,19 +34,26 @@ class WidgetFactory:
         self,
         base: Type[Any],
         form_data: Mapping[str, Any],
+        form_errors: Mapping[str, Any],
         *,
         prefix: str,
         removable: bool,
         field: FieldInfo | None = None,
     ) -> Markup:
         return self.get_widget(
-            base, form_data, prefix=prefix, removable=removable, field=field
+            base,
+            form_data,
+            form_errors,
+            prefix=prefix,
+            removable=removable,
+            field=field,
         ).to_html(self.renderer)
 
     def get_widget(
         self,
         base: Type[Any],
         form_data: Mapping[str, Any],
+        form_errors: Mapping[str, Any],
         *,
         prefix: str,
         removable: bool,
@@ -54,6 +62,7 @@ class WidgetFactory:
         return self.build(
             base,
             value=form_data.get(prefix, {}),
+            form_errors=form_errors,
             name=prefix,
             removable=removable,
             field=field,
@@ -66,11 +75,12 @@ class WidgetFactory:
         name: str = "",
         value: Any,
         removable: bool,
+        form_errors: Mapping[str, Any],
         field: FieldInfo | None = None,
     ) -> Widget[Any]:
         if field and field.metadata:
             for widget in field.metadata:
-                if issubclass(widget, Widget):
+                if isclass(widget) and issubclass(widget, Widget):
                     return cast(
                         Widget[Any],
                         widget(
@@ -86,38 +96,52 @@ class WidgetFactory:
         type_origin = get_origin(typ)
         if type_origin:
             if is_union(typ):
-                return self.build_union(name, typ, field, value, removable)
+                return self.build_union(name, typ, field, value, form_errors, removable)
 
             if (
                 type_origin is Sequence
                 or type_origin is MutableSequence
                 or type_origin is list
             ):
-                return self.build_sequence(name, typ, field, value, removable)
+                return self.build_sequence(
+                    name, typ, field, value, form_errors, removable
+                )
 
             if type_origin is Literal:
-                return self.build_literal(name, typ, field, value, removable)
+                return self.build_literal(
+                    name, typ, field, value, form_errors, removable
+                )
 
             if type_origin is set:
-                return self.build_set(name, typ, field, value, removable)
+                return self.build_set(name, typ, field, value, form_errors, removable)
 
         if issubclass(typ, Enum):  # if it raises here, the type_origin is unknown
-            return self.build_enum(name, typ, field, value, removable)
+            return self.build_enum(name, typ, field, value, form_errors, removable)
 
         if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
-            return self.build_model(name, typ, field, value or {}, removable)
+            return self.build_model(
+                name, typ, field, value or {}, form_errors, removable
+            )
 
         if issubclass(typ, bool):
-            return self.build_boolean(name, typ, field, value or False, removable)
+            return self.build_boolean(
+                name, typ, field, value or False, form_errors, removable
+            )
 
         if issubclass(typ, EmailStr):  # type: ignore
-            return self.build_emailtype(name, typ, field, value or "", removable)
+            return self.build_emailtype(
+                name, typ, field, value or "", form_errors, removable
+            )
 
         if issubclass(typ, SecretStr):
-            return self.build_secretstr(name, typ, field, value or "", removable)
+            return self.build_secretstr(
+                name, typ, field, value or "", form_errors, removable
+            )
 
         if issubclass(typ, (int, str, float, Decimal, UUID)):
-            return self.build_simpletype(name, typ, field, value or "", removable)
+            return self.build_simpletype(
+                name, typ, field, value or "", form_errors, removable
+            )
 
         raise NotImplementedError(f"{typ} not implemented")  # coverage: ignore
 
@@ -127,6 +151,7 @@ class WidgetFactory:
         typ: Type[BaseModel],
         field: Optional[FieldInfo],
         value: Mapping[str, Any],
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         ret: dict[str, Any] = {}
@@ -143,6 +168,7 @@ class WidgetFactory:
                 name=child_key,
                 field=field,
                 value=value.get(key),
+                form_errors=form_errors,
                 removable=False,
             )
         return ModelWidget(
@@ -159,6 +185,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: Optional[FieldInfo],
         value: Any,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         types: list[Type[Any]] = []
@@ -176,7 +203,12 @@ class WidgetFactory:
             and not is_complex_type(types[0])
         ):
             return self.build(
-                types[0], name=field_name, field=field, value=value, removable=False
+                types[0],
+                name=field_name,
+                field=field,
+                value=value,
+                form_errors=form_errors,
+                removable=False,
             )
         child = None
         if value:
@@ -191,6 +223,7 @@ class WidgetFactory:
                         name=field_name,
                         field=field,
                         value=value,
+                        form_errors=form_errors,
                         removable=False,
                     )
 
@@ -212,6 +245,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: Optional[FieldInfo],
         value: Optional[Sequence[Any]],
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         typ = field_type.__args__[0]  # type: ignore
@@ -222,6 +256,7 @@ class WidgetFactory:
                 name=f"{field_name}.{idx}",
                 value=v,
                 field=field,
+                form_errors=form_errors,
                 removable=True,
             )
             for idx, v in enumerate(value)
@@ -242,6 +277,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: Optional[FieldInfo],
         value: Optional[Sequence[Any]],
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         choice_wrapper = field_type.__args__[0]
@@ -291,6 +327,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: bool,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         return BooleanWidget(
@@ -307,6 +344,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: str | int | float,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         return TextWidget(
@@ -326,6 +364,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: SecretStr | str,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         return TextWidget(
@@ -345,6 +384,7 @@ class WidgetFactory:
         field_type: Type[Any],  # a literal actually
         field: FieldInfo | None,
         value: str | int | float,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         choices: list[str] = field_type.__args__  # type: ignore
@@ -369,6 +409,7 @@ class WidgetFactory:
         field_type: Type[Any],  # an enum subclass
         field: FieldInfo | None,
         value: str | int | float,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         options = [(item.name, item.value) for item in field_type]  # type: ignore
@@ -387,6 +428,7 @@ class WidgetFactory:
         field_type: Type[Any],
         field: FieldInfo | None,
         value: str | int | float,
+        form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
         return TextWidget(
@@ -398,4 +440,5 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             value=str(value),
+            error=form_errors.get(field_name),
         )

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 def is_complex_type(typ: Type[Any]) -> bool:
-    return get_origin(typ) or issubclass(typ, BaseModel)
+    return bool(get_origin(typ) or issubclass(typ, BaseModel))
 
 
 def is_union(typ: Type[Any]) -> bool:

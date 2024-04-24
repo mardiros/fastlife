@@ -70,7 +70,9 @@ class JinjaxRenderer(AbstractTemplateRenderer):
     def pydantic_form(
         self,
         model: Type[Any],
+        *,
         form_data: Optional[Mapping[str, Any]] = None,
+        form_errors: Optional[Mapping[str, Any]] = None,
         name: Optional[str] = None,
         token: Optional[str] = None,
         removable: bool = False,
@@ -79,6 +81,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         return WidgetFactory(self, token).get_markup(
             model,
             form_data or {},
+            form_errors or {},
             prefix=(name or self.form_data_model_prefix),
             removable=removable,
             field=field,

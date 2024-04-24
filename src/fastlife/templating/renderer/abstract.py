@@ -31,7 +31,9 @@ class AbstractTemplateRenderer(abc.ABC):
     def pydantic_form(
         self,
         model: Type[Any],
+        *,
         form_data: Mapping[str, Any] | None = None,
+        form_errors: Optional[Mapping[str, Any]] = None,
         name: str | None = None,
         token: str | None = None,
         removable: bool = False,

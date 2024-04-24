@@ -11,11 +11,12 @@ class TextWidget(Widget[str]):
         title: Optional[str],
         aria_label: Optional[str] = None,
         placeholder: Optional[str] = None,
+        error: str | None = None,
         removable: bool = False,
         value: str = "",
         token: Optional[str] = None,
         hint: Optional[str] = None,
-        input_type: str = "text"
+        input_type: str = "text",
     ) -> None:
         super().__init__(
             name,
@@ -23,6 +24,7 @@ class TextWidget(Widget[str]):
             title=title,
             aria_label=aria_label,
             token=token,
+            error=error,
             removable=removable,
         )
         self.placeholder = placeholder or ""

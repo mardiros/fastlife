@@ -3,6 +3,7 @@
 <pydantic_form.Widget widget={widget} removable={widget.removable}>
   <div class="pt-4">
     <Label for={widget.id}>{{widget.title}}</Label>
+    <pydantic_form.Error text={widget.error} />
     <Input name={widget.name} value={widget.value} type={widget.input_type} id={widget.id}
       aria-label={widget.aria_label} placeholder={widget.placeholder} />
     <pydantic_form.Hint text={widget.hint} />

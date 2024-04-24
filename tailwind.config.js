@@ -36,7 +36,7 @@ module.exports = {
           900: "#7f1d1d",
           950: "#450a0a",
         },
-        dull: {
+        neutral: {
           50: "#fafaf9",
           100: "#f5f5f4",
           200: "#e7e5e4",
