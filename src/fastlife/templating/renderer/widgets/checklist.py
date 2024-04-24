@@ -13,7 +13,7 @@ class Checkable(BaseModel):
     checked: bool
 
     @property
-    def id(self):
+    def id(self) -> str:
         id = f"{self.name}-{self.value}-{self.token}"
         return id.replace(".", "-").replace("_", "-")
 
