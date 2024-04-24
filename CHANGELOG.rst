@@ -1,3 +1,7 @@
+0.5.0  - Released on 2024-04-24
+-------------------------------
+* Implement new types for pydantic form: Enum, Set[Literal] and Set[Enum]
+
 0.4.1  - Released on 2024-04-20
 -------------------------------
 * Add globals to render custom widget with global data
