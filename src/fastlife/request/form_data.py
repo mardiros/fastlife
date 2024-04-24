@@ -80,7 +80,13 @@ async def unflatten_mapping_form_data(
     form_data = await request.form()
     form_data_decode_list: MutableMapping[str, Any] = {}
     for key, val in form_data.multi_items():
-        if key in form_data_decode_list:
+        if key.endswith("[]"):
+            key = key[:-2]
+            if key not in form_data_decode_list:
+                form_data_decode_list[key] = [val]
+            else:
+                form_data_decode_list[key].append(val)
+        elif key in form_data_decode_list:
             if not isinstance(form_data_decode_list, list):
                 form_data_decode_list[key] = [form_data_decode_list[key]]
             form_data_decode_list[key].append(val)

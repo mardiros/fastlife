@@ -17,6 +17,10 @@ class Checkable(BaseModel):
         id = f"{self.name}-{self.value}-{self.token}"
         return id.replace(".", "-").replace("_", "-")
 
+    @property
+    def field_name(self) -> str:
+        return f"{self.name}[]"
+
 
 class ChecklistWidget(Widget[Sequence[Checkable]]):
     def __init__(

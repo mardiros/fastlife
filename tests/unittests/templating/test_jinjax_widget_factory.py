@@ -261,11 +261,23 @@ def test_render_set(
     )
     html = soup(result)
     assert html.find(
-        "input", attrs={"id": "payload-flavors-vanilla-tkt", "type": "checkbox"}
+        "input",
+        attrs={
+            "id": "payload-flavors-vanilla-tkt",
+            "type": "checkbox",
+            "name": "payload.flavors[]",
+            "value": "vanilla",
+        },
     )
 
     assert html.find(
-        "input", attrs={"id": "payload-foobarz-foo-tkt", "type": "checkbox"}
+        "input",
+        attrs={
+            "id": "payload-foobarz-foo-tkt",
+            "type": "checkbox",
+            "name": "payload.foobarz[]",
+            "value": "foo",
+        },
     )
 
 
@@ -283,6 +295,8 @@ def test_render_set_checked(
         "input",
         attrs={
             "id": "payload-flavors-vanilla-tkt",
+            "name": "payload.flavors[]",
+            "value": "vanilla",
             "type": "checkbox",
             "checked": True,
         },
@@ -293,6 +307,8 @@ def test_render_set_checked(
         attrs={
             "id": "payload-foobarz-foo-tkt",
             "type": "checkbox",
+            "name": "payload.foobarz[]",
+            "value": "foo",
             "checked": True,
         },
     )

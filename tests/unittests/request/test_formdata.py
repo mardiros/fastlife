@@ -177,6 +177,17 @@ def test_unflatten_struct_error(params: Mapping[str, Any]):
             },
             id="multidict",
         ),
+        pytest.param(
+            {
+                "request": {
+                    "method": "POST",
+                    "headers": {"content-type": "application/x-www-form-urlencoded"},
+                    "body": "a.b[]=C&csrf_token=xxx",
+                },
+                "expected": {"a": {"b": ["C"]}},
+            },
+            id="multidict",
+        ),
     ],
 )
 async def test_unflatten_mapping_form_data(
