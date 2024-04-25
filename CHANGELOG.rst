@@ -1,3 +1,7 @@
+0.6.0  - Released on 2024-04-25
+-------------------------------
+* Refactor the pydantic_form to start handling errors in form.
+
 0.5.1  - Released on 2024-04-24
 -------------------------------
 * Fix minimum dependency version for JinjaX
