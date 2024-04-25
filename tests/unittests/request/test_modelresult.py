@@ -22,7 +22,9 @@ def test_default():
         pytest.param(
             {},
             False,
-            {"p": {"groups": [], "interest": set(), "recovery_address": None}},  # type: ignore
+            {  # type: ignore
+                "p": {"groups": [], "interest": set(), "recovery_address": None},
+            },
             {"p.password": "Field required", "p.username": "Field required"},
         ),
         pytest.param(
