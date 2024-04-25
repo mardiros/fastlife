@@ -4,7 +4,8 @@ from typing import Annotated, Any, Callable, Literal, Sequence, Set
 import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
-from fastlife.templating.renderer.jinjax import AbstractTemplateRenderer
+from fastlife.request.model_result import ModelResult
+from fastlife.templating.renderer.jinjax import JinjaxRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 
 
@@ -26,7 +27,7 @@ class Score(IntEnum):
 
 class Foo(BaseModel):
     bar: str = Field()
-    private: str = Field(exclude=True)
+    # private: str = Field(exclude=True)
 
 
 class Bar(BaseModel):
@@ -69,10 +70,12 @@ class MultiSet(BaseModel):
 
 
 def test_render_template(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm", model=DummyModel, form_data=None, form_errors=None, token="tkt"
+        "DummyForm",
+        model=ModelResult[DummyModel].default("payload", DummyModel),
+        token="tkt",
     )
     html = soup(result)
 
@@ -158,21 +161,23 @@ def test_render_template(
 
 
 def test_render_template_values(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=DummyModel,
-        form_data={
-            "payload": {
-                "name": "bernard",
-                "type": "bar",
-                "vegan": True,
-                "tags": ["blue", "green"],
-                "foobar": {"foo": "totally"},
-            }
-        },
-        form_errors=None,
+        model=ModelResult[DummyModel].from_payload(
+            "payload",
+            DummyModel,
+            {
+                "payload": {
+                    "name": "bernard",
+                    "type": "bar",
+                    "vegan": True,
+                    "tags": ["blue", "green"],
+                    "foobar": {"foo": "totally"},
+                }
+            },
+        ),
         token="tkt",
     )
 
@@ -235,16 +240,20 @@ def test_render_template_values(
 
 
 def test_render_custom_list(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=Banger,
-        form_data={
-            "name": "asturia",
-            "tempo": 1,
-        },
-        form_errors=None,
+        model=ModelResult[Banger].from_payload(
+            "payload",
+            Banger,
+            {
+                "payload": {
+                    "name": "asturia",
+                    "tempo": 1,
+                }
+            },
+        ),
         token="tkt",
         globals={
             "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
@@ -255,11 +264,11 @@ def test_render_custom_list(
     assert html.find("option", attrs={"value": "2"})
 
 
-def test_render_set(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
-):
+def test_render_set(renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]):
     result = renderer.render_template(
-        "DummyForm", model=MultiSet, form_data={}, form_errors=None, token="tkt"
+        "DummyForm",
+        model=ModelResult[MultiSet].default("payload", MultiSet),
+        token="tkt",
     )
     html = soup(result)
     assert html.find(
@@ -284,13 +293,18 @@ def test_render_set(
 
 
 def test_render_set_checked(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=MultiSet,
-        form_data={"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
-        form_errors=None,
+        model=ModelResult[MultiSet].from_payload(
+            "payload",
+            MultiSet,
+            {"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
+        ),
+        globals={
+            "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
+        },
         token="tkt",
     )
     html = soup(result)

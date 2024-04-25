@@ -1,6 +1,7 @@
 from typing import Any, Optional, Type, Union
-from pydantic import BaseModel
+
 import pytest
+from pydantic import BaseModel
 
 from fastlife.shared_utils.infer import is_complex_type, is_union
 

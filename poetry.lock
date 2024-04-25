@@ -1366,17 +1366,6 @@ socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
-name = "result"
-version = "0.16.1"
-description = "A Rust-like result type for Python"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "result-0.16.1-py3-none-any.whl", hash = "sha256:47598bb9bde342251f5b0f49e3637cd30dc144c086b29dc58fff458477650669"},
-    {file = "result-0.16.1.tar.gz", hash = "sha256:379f0233cdf8cf157588c77bb2ab1ac367431d9bf6e8456a336b026d528cee0d"},
-]
-
-[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1536,4 +1525,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "d8a2e1ee6fed88ad9513a69449f5f84c40747705858e2693fb7149b1560cf61c"
+content-hash = "26c7c42169d7e10b24d0b3a6851c7be9fbd41f698744311e4d65473ccb856148"

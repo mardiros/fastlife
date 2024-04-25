@@ -5,6 +5,8 @@ from fastapi import Request
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
+from fastlife.request.model_result import ModelResult
+
 
 class AbstractTemplateRenderer(abc.ABC):
     route_prefix: str
@@ -30,12 +32,22 @@ class AbstractTemplateRenderer(abc.ABC):
     @abc.abstractmethod
     def pydantic_form(
         self,
-        model: Type[Any],
+        model: ModelResult[Any],
         *,
-        form_data: Mapping[str, Any] | None = None,
-        form_errors: Optional[Mapping[str, Any]] = None,
         name: str | None = None,
         token: str | None = None,
+        removable: bool = False,
+        field: FieldInfo | None = None,
+    ) -> Markup:
+        ...
+
+    @abc.abstractmethod
+    def pydantic_form_field(
+        self,
+        model: Type[Any],
+        *,
+        name: Optional[str] = None,
+        token: Optional[str] = None,
         removable: bool = False,
         field: FieldInfo | None = None,
     ) -> Markup:

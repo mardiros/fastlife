@@ -1,6 +1,7 @@
 from .configurator import Configurator, configure
 from .configurator.registry import Registry
-from .request.form_data import model
+
+# from .request.form_data import model
 from .templating import Template, template
 
 __all__ = [
@@ -11,5 +12,5 @@ __all__ = [
     "Template",
     "Registry",
     # Model
-    "model",
+    # "model",
 ]

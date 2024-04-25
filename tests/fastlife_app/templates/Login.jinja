@@ -1,9 +1,9 @@
-{# def model, form_data,form_errors #}
+{# def model #}
 <Layout>
   <H2>Let's authenticate</H2>
   <div class="max-w-screen-lg mx-auto px-5 bg-white min-h-sceen">
     <Form method="post">
-      {{ pydantic_form(model=model, form_data=form_data, form_errors=form_errors) }}
+      {{ pydantic_form(model=model) }}
       <Button>Login</Button>
     </Form>
   </div>

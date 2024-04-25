@@ -29,7 +29,6 @@ multidict = "^6.0.5"
 pydantic = "2.5.1"
 pydantic-settings = "^2.0.3"
 python-multipart = "^0.0.6"
-result = ">=0.11.0, <1"
 venusian = "^3.0.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -68,6 +67,7 @@ filterwarnings = [
   'ignore:.*Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning', # venusian
   'ignore:.*find_module\(\) is deprecated.*:DeprecationWarning',
   'ignore:.*FileFinder.find_loader\(\) is deprecated.*:DeprecationWarning',
+  'ignore:.*Pydantic serializer warnings.*:UserWarning',
 ]
 testpaths = ["tests"]
 

@@ -5,7 +5,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.request.form_data import MappingFormData, ModelResult, model
+from fastlife.request.model_result import ModelResult, model
 from tests.fastlife_app.security import AuthenticationPolicy
 
 
@@ -16,22 +16,17 @@ class LoginForm(BaseModel):
 
 async def login(
     request: Request,
-    loginform_result: Annotated[ModelResult[LoginForm], model(LoginForm)],
+    loginform: Annotated[ModelResult[LoginForm], model(LoginForm)],
     template: Annotated[Template, template("Login")],
-    data: MappingFormData,
     policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
 ) -> Response:
-    form_errors = None
-    if loginform_result:
-        if loginform_result.is_ok():
-            loginform = loginform_result.unwrap()
-            if user := await policy.authenticate(
-                loginform.username, loginform.password.get_secret_value()
-            ):
-                policy.remember(user)
-            return RedirectResponse(request.url_for("secured_page"), status_code=303)
-        form_errors = loginform_result.unwrap_err()
-    return template(model=LoginForm, form_data=data, form_errors=form_errors)
+    if loginform.is_valid:
+        if user := await policy.authenticate(
+            loginform.model.username, loginform.model.password.get_secret_value()
+        ):
+            policy.remember(user)
+        return RedirectResponse(request.url_for("secured_page"), status_code=303)
+    return template(model=loginform)
 
 
 async def logout(

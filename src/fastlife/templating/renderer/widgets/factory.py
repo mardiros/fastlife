@@ -11,6 +11,7 @@ from markupsafe import Markup
 from pydantic import BaseModel, EmailStr, SecretStr, ValidationError
 from pydantic.fields import FieldInfo
 
+from fastlife.request.model_result import ModelResult
 from fastlife.shared_utils.infer import is_complex_type, is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
@@ -32,19 +33,16 @@ class WidgetFactory:
 
     def get_markup(
         self,
-        base: Type[Any],
-        form_data: Mapping[str, Any],
-        form_errors: Mapping[str, Any],
+        model: ModelResult[Any],
         *,
-        prefix: str,
         removable: bool,
         field: FieldInfo | None = None,
     ) -> Markup:
         return self.get_widget(
-            base,
-            form_data,
-            form_errors,
-            prefix=prefix,
+            model.model.__class__,
+            model.form_data,
+            model.errors,
+            prefix=model.prefix,
             removable=removable,
             field=field,
         ).to_html(self.renderer)

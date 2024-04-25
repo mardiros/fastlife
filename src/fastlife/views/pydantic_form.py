@@ -21,9 +21,8 @@ async def show_widget(
     field = None
     if title:
         field = FieldInfo(title=title)
-    data = reg.renderer(request).pydantic_form(
+    data = reg.renderer(request).pydantic_form_field(
         model=model_cls,
-        form_data=None,
         name=name,
         token=token,
         removable=removable,

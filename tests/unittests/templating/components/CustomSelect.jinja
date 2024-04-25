@@ -1,6 +1,8 @@
 {# def widget #}
-<Select name="{{widget.name}}" id="{{widget.id}}" multiple>
+<Select name={widget.name} id={widget.id} multiple>
   {% for tempo in tempos %}
-  <Option value={tempo.id} {% if widget.value.id==tempo.id %}selected{% endif%}>{{tempo.name}}</Option>
+  <Option value={tempo.id} selected={widget.value==tempo.id}>
+    {{tempo.name}}
+  </Option>
   {% endfor %}
 </Select>
