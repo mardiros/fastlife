@@ -16,6 +16,10 @@ from fastlife.templating.renderer.widgets.text import TextWidget
 from fastlife.templating.renderer.widgets.union import UnionWidget
 
 
+class Foo(BaseModel):
+    ...
+
+
 def test_render_template(renderer: AbstractTemplateRenderer):
     res = renderer.render_template("Page")
     assert (
@@ -239,3 +243,104 @@ def test_render_custom(
     result = model.to_html(renderer)
     html = soup(result)
     assert html.find("div", attrs={"id": "foo-x", "contenteditable": True})
+
+
+@pytest.mark.parametrize(
+    "widget",
+    [
+        pytest.param(
+            TextWidget("foo", title="Foo", token="x", error="It did not work"),
+            id="text",
+        ),
+        pytest.param(
+            BooleanWidget("foo", title="Foo", token="x", error="It did not work"),
+            id="boolean",
+        ),
+        pytest.param(
+            DropDownWidget(
+                "foo", title="Foo", options=["A"], token="x", error="It did not work"
+            ),
+            id="dropdown",
+        ),
+        pytest.param(
+            ChecklistWidget(
+                "foo",
+                title="Foobar",
+                value=[
+                    Checkable(
+                        label="Foo", name="foobar", value="f", token="x", checked=True
+                    ),
+                ],
+                token="x",
+                removable=False,
+                error="It did not work",
+            ),
+            id="checklist",
+        ),
+        pytest.param(
+            ChecklistWidget(
+                "foo",
+                title="Foobar",
+                value=[
+                    Checkable(
+                        label="Foo",
+                        name="foobar",
+                        value="f",
+                        token="x",
+                        checked=True,
+                        error="It did not work",
+                    ),
+                ],
+                token="x",
+                removable=False,
+            ),
+            id="checklist-checkable",
+        ),
+        pytest.param(
+            SequenceWidget(
+                "foo",
+                title="Foo",
+                value=[
+                    TextWidget("x", title="x", token="x", removable=True),
+                ],
+                removable=False,
+                token="x",
+                hint="",
+                item_type=str,
+                error="It did not work",
+            ),
+            id="sequence",
+        ),
+        pytest.param(
+            UnionWidget(
+                "foo",
+                title="foo",
+                value=None,
+                error="It did not work",
+                children_types=[Foo],
+                removable=False,
+                token="x",
+            ),
+            id="union",
+        ),
+        pytest.param(
+            ModelWidget(
+                "foo",
+                title="Foo",
+                value=[TextWidget("name", title="n", token="x", removable=True)],
+                error="It did not work",
+                removable=False,
+                token="x",
+            ),
+            id="checklist-checkable",
+        ),
+    ],
+)
+def test_render_text_error(
+    renderer: AbstractTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+    widget: Widget[Any],
+):
+    result = widget.to_html(renderer)
+    html = soup(result)
+    assert html.find(string="It did not work")

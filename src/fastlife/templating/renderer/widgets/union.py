@@ -15,12 +15,18 @@ class UnionWidget(Widget[Widget[Any]]):
         *,
         title: Optional[str],
         value: Optional[Widget[Any]],
+        error: str | None = None,
         children_types: Sequence[Type[BaseModel]],
         token: str,
         removable: bool,
     ):
         super().__init__(
-            name, value=value, title=title, token=token, removable=removable
+            name,
+            value=value,
+            error=error,
+            title=title,
+            token=token,
+            removable=removable,
         )
         self.children_types = children_types
         self.parent_name = name

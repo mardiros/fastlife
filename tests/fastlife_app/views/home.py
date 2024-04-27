@@ -23,6 +23,7 @@ async def autoform(
     template: Annotated[Template, template("AutoForm")],
     account: Annotated[ModelResult[Account], model(Account)],
 ):
+    print(account.errors)
     return template(model=account)
 
 

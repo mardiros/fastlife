@@ -63,8 +63,21 @@ class Account(BaseModel):
 
     interest: Set[Interest] = Field(default_factory=set)
 
+    terms_and_conditions: bool = Field(
+        # XXX tailwind did not inspect this class
+        title="I accept <a class='text-primary-600' href='#'>terms and conditions</a>."
+    )
+
     @field_validator("groups")
+    @classmethod
     def validate_groups(cls, value: Any) -> Any:
         if value:
             return [val for val in value if val is not None]
+        return value
+
+    @field_validator("terms_and_conditions", mode="after")
+    @classmethod
+    def validate_terms_and_conditions(cls, value: Any) -> Any:
+        if value is not True:
+            raise ValueError("You must accept term and condition")
         return value

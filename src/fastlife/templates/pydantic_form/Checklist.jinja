@@ -7,12 +7,14 @@ widget,
     <details open>
       <summary class="justify-between items-center font-medium cursor-pointer">
         <H3>{{widget.title}}</H3>
+        <pydantic_form.Error text={widget.error} />
       </summary>
       <div>
         {% for value in widget.value %}
         <div class="flex items-center mb-4">
           <Checkbox name={value.field_name} type="checkbox" id={value.id} value={value.value} checked={value.checked} />
           <Label for={value.id} class="ms-2 text-base text-neutral-900 dark:text-white">{{value.label}}</Label>
+          <pydantic_form.Error text={value.error} />
         </div>
         {% endfor %}
       </div>

@@ -13,12 +13,18 @@ class ModelWidget(Widget[Sequence[Widget[Any]]]):
         name: str,
         *,
         value: Sequence[Widget[Any]],
+        error: str | None = None,
         removable: bool,
         title: str,
         token: str,
     ):
         super().__init__(
-            name, title=title, value=value, removable=removable, token=token
+            name,
+            title=title,
+            value=value,
+            error=error,
+            removable=removable,
+            token=token,
         )
 
     def get_template(self) -> str:

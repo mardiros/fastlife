@@ -10,6 +10,7 @@
       </Option>
       {%- endfor -%}
     </Select>
+    <pydantic_form.Error text={widget.error} />
     <pydantic_form.Hint text={widget.hint} />
   </div>
 </pydantic_form.Widget>

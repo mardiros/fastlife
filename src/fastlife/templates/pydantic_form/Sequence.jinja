@@ -4,6 +4,7 @@
   <details id="{{widget.id}}" open>
     <summary class="justify-between items-center font-medium cursor-pointer">
       <H3>{{widget.title}}</H3>
+      <pydantic_form.Error text={widget.error} />
     </summary>
     <div>
       {% set fnGetName = "get" + widget.id.replace("-", "_") %}

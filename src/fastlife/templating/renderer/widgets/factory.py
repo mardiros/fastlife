@@ -175,6 +175,7 @@ class WidgetFactory:
             removable=removable,
             title=get_title(typ),
             token=self.token,
+            error=form_errors.get(field_name),
         )
 
     def build_union(
@@ -233,6 +234,7 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             removable=removable,
+            error=form_errors.get(field_name),
         )
 
         return widget
@@ -267,6 +269,7 @@ class WidgetFactory:
             item_type=typ,  # type: ignore
             token=self.token,
             removable=removable,
+            error=form_errors.get(field_name),
         )
 
     def build_set(
@@ -291,6 +294,7 @@ class WidgetFactory:
                         checked=c in value if value else False,  # type: ignore
                         name=field_name,
                         token=self.token,
+                        error=form_errors.get(f"{field_name}-{c}"),
                     )
                     for c in litchoice
                 ]
@@ -305,6 +309,7 @@ class WidgetFactory:
                     checked=e.name in value if value else False,  # type: ignore
                     name=field_name,
                     token=self.token,
+                    error=form_errors.get(f"{field_name}-{e.name}"),
                 )
                 for e in choice_wrapper
             ]
@@ -317,6 +322,7 @@ class WidgetFactory:
             token=self.token,
             value=choices,
             removable=removable,
+            error=form_errors.get(field_name),
         )
 
     def build_boolean(
@@ -334,6 +340,7 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             value=value,
+            error=form_errors.get(field_name),
         )
 
     def build_emailtype(
@@ -354,6 +361,7 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             value=str(value),
+            error=form_errors.get(field_name),
         )
 
     def build_secretstr(
@@ -374,6 +382,7 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             value=value.get_secret_value() if isinstance(value, SecretStr) else value,
+            error=form_errors.get(field_name),
         )
 
     def build_literal(
@@ -399,6 +408,7 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             value=str(value),
+            error=form_errors.get(field_name),
         )
 
     def build_enum(
@@ -418,6 +428,7 @@ class WidgetFactory:
             title=field.title if field else "",
             token=self.token,
             value=str(value),
+            error=form_errors.get(field_name),
         )
 
     def build_simpletype(

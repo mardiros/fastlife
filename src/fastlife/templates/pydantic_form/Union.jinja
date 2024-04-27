@@ -5,20 +5,20 @@
     <details open>
       <summary class="justify-between items-center font-medium cursor-pointer">
         <H3>{{widget.title}}</H3>
+        <pydantic_form.Error text={widget.error} />
       </summary>
       <div hx-sync="this" id="{{widget.id}}-child">
         {% if child %}
         {{ child }}
         {% else %}
         {% for typ in types %}
-        <Button type="button" hx-target="closest div" hx-get={typ.url} hx-vals={typ.params|tojson}
-          id={typ.id}
+        <Button type="button" hx-target="closest div" hx-get={typ.url} hx-vals={typ.params|tojson} id={typ.id}
           onclick={"document.getElementById('" + widget.id +"-remove-btn').hidden=false"}>{{typ.title}}</Button>
         {% endfor %}
         {% endif %}
       </div>
-      <Button type="button" id={widget.id + "-remove-btn" } hx-target={"#" + widget.id} hx-vals={parent_type.params|tojson}
-        hx-get={parent_type.url} hidden={not child}>
+      <Button type="button" id={widget.id + "-remove-btn" } hx-target={"#" + widget.id}
+        hx-vals={parent_type.params|tojson} hx-get={parent_type.url} hidden={not child}>
         Remove
       </Button>
     </details>

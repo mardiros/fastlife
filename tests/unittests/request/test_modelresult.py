@@ -25,7 +25,12 @@ def test_default():
             {  # type: ignore
                 "p": {"groups": [], "interest": set(), "recovery_address": None},
             },
-            {"p.password": "Field required", "p.username": "Field required"},
+            {
+                "p.username": "Field required",
+                "p.password": "Field required",
+                "p.terms_and_conditions": "Field required",
+            },
+            id="bad-payload",
         ),
         pytest.param(
             {"p": {"username": "Bob"}},
@@ -38,10 +43,20 @@ def test_default():
                     "recovery_address": None,
                 }
             },
-            {"p.password": "Field required"},
+            {
+                "p.password": "Field required",
+                "p.terms_and_conditions": "Field required",
+            },
+            id="missing-password-and-contracts",
         ),
         pytest.param(
-            {"p": {"username": "Bob", "password": "secret123"}},
+            {
+                "p": {
+                    "username": "Bob",
+                    "password": "secret123",
+                    "terms_and_conditions": "true",
+                }
+            },
             True,
             {  # type: ignore
                 "p": {
@@ -50,9 +65,11 @@ def test_default():
                     "groups": [],
                     "interest": set(),
                     "recovery_address": None,
+                    "terms_and_conditions": True,
                 }
             },
             {},
+            id="lgtm",
         ),
         pytest.param(
             {
@@ -63,6 +80,7 @@ def test_default():
                         "type": "email",
                         "address": "bob@aliceandbob.fr",
                     },
+                    "terms_and_conditions": "true",
                 }
             },
             True,
@@ -76,9 +94,11 @@ def test_default():
                         "type": "email",
                         "address": "bob@aliceandbob.fr",
                     },
+                    "terms_and_conditions": True,
                 }
             },
             {},
+            id="lgtm+recovery",
         ),
     ],
 )

@@ -8,11 +8,17 @@ class BooleanWidget(Widget[bool]):
         *,
         title: str | None,
         value: bool = False,
+        error: str | None = None,
         removable: bool = False,
         token: str,
     ) -> None:
         super().__init__(
-            name, title=title, value=value, removable=removable, token=token
+            name,
+            title=title,
+            value=value,
+            error=error,
+            removable=removable,
+            token=token,
         )
 
     def get_template(self) -> str:

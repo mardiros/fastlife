@@ -10,13 +10,19 @@ class DropDownWidget(Widget[str]):
         *,
         title: Optional[str],
         value: Optional[str] = None,
+        error: str | None = None,
         options: Sequence[Tuple[str, str]] | Sequence[str],
         removable: bool = False,
         token: Optional[str] = None,
         hint: Optional[str] = None,
     ) -> None:
         super().__init__(
-            name, value=value, title=title, token=token, removable=removable
+            name,
+            value=value,
+            error=error,
+            title=title,
+            token=token,
+            removable=removable,
         )
         self.options: list[dict[str, str]] = []
         for opt in options:

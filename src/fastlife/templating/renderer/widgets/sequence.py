@@ -15,12 +15,18 @@ class SequenceWidget(Widget[Sequence[Widget[Any]]]):
         title: Optional[str],
         hint: Optional[str],
         value: Optional[Sequence[Widget[Any]]],
+        error: str | None = None,
         item_type: Type[Any],
         token: str,
         removable: bool,
     ):
         super().__init__(
-            name, value=value, title=title, token=token, removable=removable
+            name,
+            value=value,
+            error=error,
+            title=title,
+            token=token,
+            removable=removable,
         )
         self.item_type = item_type
         self.hint = hint

@@ -12,6 +12,7 @@ async def app():
         Settings(
             template_search_path="fastlife:templates,tests.fastlife_app:templates",
             # check_permission="tests.fastlife_app.security:check_permission",
+            jinjax_auto_reload=True,
         )
     )
     conf.include("tests.fastlife_app.views")
