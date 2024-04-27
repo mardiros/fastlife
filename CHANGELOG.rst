@@ -1,3 +1,7 @@
+0.6.1  - Released on 2024-04-27
+-------------------------------
+* Display errors on every widget
+
 0.6.0  - Released on 2024-04-25
 -------------------------------
 * Refactor the pydantic_form to start handling errors in form.
