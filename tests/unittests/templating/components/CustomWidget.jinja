@@ -1,2 +1,5 @@
 {# def widget #}
 <div id="{{widget.id}}" contenteditable>{{widget.value}}</div>
+{% if widget.error %}
+<p id="{{widget.id}}-error">{{widget.error}}</p>
+{% endif %}

@@ -36,7 +36,7 @@ class Bar(BaseModel):
 
 class DummyModel(BaseModel):
     name: str = Field()
-    description: Annotated[str, CustomWidget] = Field()
+    description: Annotated[str, CustomWidget] = Field(min_length=2)
     private: str = Field(exclude=True)
     type: Literal["foo", "bar"] = Field()
     flavor: Flavor = Field()
@@ -171,6 +171,7 @@ def test_render_template_values(
             {
                 "payload": {
                     "name": "bernard",
+                    "description": "-",
                     "type": "bar",
                     "vegan": True,
                     "tags": ["blue", "green"],
@@ -198,6 +199,14 @@ def test_render_template_values(
         "option",
         attrs={"value": "bar", "selected": True},
     )
+
+    div = html.find("div", attrs={"id": "payload-description-tkt"})
+    assert isinstance(div, bs4.Tag)
+    assert div.text == "-"
+    err = html.find("p", attrs={"id": "payload-description-tkt-error"})
+    assert isinstance(err, bs4.Tag)
+    assert err.text == "String should have at least 2 characters"
+
     assert html.find(
         "input",
         attrs={

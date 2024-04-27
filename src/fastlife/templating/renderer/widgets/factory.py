@@ -88,6 +88,7 @@ class WidgetFactory:
                             title=field.title if field else "",
                             aria_label=field.description if field else None,
                             token=self.token,
+                            error=form_errors.get(name),
                         ),
                     )
 
