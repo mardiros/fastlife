@@ -38,4 +38,11 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
 
 
 def template(template_path: str) -> Template:
+    """
+    Return a FastAPI dependency template engine ready to render the template.
+
+
+    :param template_path: path to template to render by the engine setup in the regitry.
+    :return: A callable accepting kwargs to pass as the context, returning a string.
+    """
     return Depends(get_template(template_path))

@@ -14,6 +14,10 @@ from .settings import Settings
 
 
 class AppRegistry:
+    """
+    The application registry got fastlife dependency injection.
+    It is initialized by the configurator and accessed by the `fastlife.Registry`.
+    """
     settings: Settings
     renderer: "AbstractTemplateRendererFactory"
     check_permission: CheckPermission
@@ -32,7 +36,7 @@ DEFAULT_REGISTRY: AppRegistry = None  # type: ignore
 
 def initialize_registry(settings: Settings) -> AppRegistry:
     global DEFAULT_REGISTRY
-    if DEFAULT_REGISTRY is not None:
+    if DEFAULT_REGISTRY is not None:  # type: ignore
         raise ValueError("Registry is already set")
     AppRegistryCls = resolve(settings.registry_class)
     DEFAULT_REGISTRY = AppRegistryCls(settings)  # type: ignore
@@ -46,3 +50,4 @@ def cleanup_registry() -> None:
 
 
 Registry = Annotated[AppRegistry, Depends(lambda: DEFAULT_REGISTRY)]
+"""FastAPI dependency to access to the registry."""

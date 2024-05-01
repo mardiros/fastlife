@@ -17,6 +17,9 @@ async def show_widget(
     token: Optional[str] = Query(None),
     removable: bool = Query(False),
 ) -> Response:
+    """
+    This views is used by pydantic_form to generate a nested field asynchronously.
+    """
     model_cls = resolve_extended(typ)
     field = None
     if title:

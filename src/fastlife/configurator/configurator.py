@@ -2,6 +2,7 @@
 The configurator is here to register routes in a fastapi app,
 with dependency injection.
 """
+
 import importlib
 import inspect
 import logging
@@ -38,6 +39,14 @@ VENUSIAN_CATEGORY = "fastlife"
 
 
 class Configurator:
+    """
+    Configure and build an application.
+
+    Initialize the app from the settings.
+
+    :param settings: Application settings.
+    """
+
     registry: "AppRegistry"
 
     def __init__(self, settings: Settings) -> None:
@@ -54,9 +63,30 @@ class Configurator:
         self.include("fastlife.session")
 
     def get_app(self) -> FastAPI:
+        """
+        Get the app after configuration in order to start after beeing configured.
+
+        :return: FastAPI application
+        """
         return self._app
 
     def include(self, module: str | ModuleType) -> "Configurator":
+        """
+        Include a module in order to load its views.
+
+        Here is an example.
+
+        ::
+
+            from fastlife import Configurator, configure
+
+            @configure
+            def includeme(config: Configurator) -> None:
+                config.include(".views")
+
+
+        :param module: a module to include.
+        """
         if isinstance(module, str):
             package = None
             if module.startswith("."):
@@ -70,7 +100,10 @@ class Configurator:
     def add_middleware(
         self, middleware_class: Type[AbstractMiddleware], **options: Any
     ) -> Self:
-        self._app.add_middleware(middleware_class, **options)
+        """
+        Add a starlette middleware to the FastAPI app.
+        """
+        self._app.add_middleware(middleware_class, **options)  # type: ignore
         return self
 
     def add_route(
@@ -105,6 +138,7 @@ class Configurator:
         #     generate_unique_id
         # ),
     ) -> "Configurator":
+        """Add a route to the app."""
         dependencies: List[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
@@ -140,13 +174,22 @@ class Configurator:
     def add_static_route(
         self, route_path: str, directory: Path, name: str = "static"
     ) -> "Configurator":
-        """Mount a directory to an http endpoint."""
+        """
+        Mount a directory to an http endpoint.
+
+        :param route_path: the root path for the statics
+        :param directory: the directory on the filesystem where the statics files are.
+        :param name: a name for the route in the starlette app.
+        :return: the configurator
+
+        """
         self._app.mount(route_path, StaticFiles(directory=directory), name=name)
         return self
 
     def add_exception_handler(
         self, status_code_or_exc: int | Type[Exception], handler: Any
     ) -> "Configurator":
+        """Add an exception handler the application."""
         self._app.add_exception_handler(status_code_or_exc, handler)
         return self
 
@@ -154,7 +197,9 @@ class Configurator:
 def configure(
     wrapped: Callable[[Configurator], None]
 ) -> Callable[[Configurator], None]:
-    """Decorator used to attach route in a submodule while using the confirator.scan"""
+    """
+    Decorator used to attach route in a submodule while using the configurator.include.
+    """
 
     def callback(
         scanner: venusian.Scanner, name: str, ob: Callable[[venusian.Scanner], None]

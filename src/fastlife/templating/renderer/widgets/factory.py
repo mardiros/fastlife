@@ -35,7 +35,7 @@ class WidgetFactory:
         self,
         model: ModelResult[Any],
         *,
-        removable: bool,
+        removable: bool = False,
         field: FieldInfo | None = None,
     ) -> Markup:
         return self.get_widget(

@@ -1,3 +1,8 @@
+"""
+Prevents CSRF attack using cookie and html hidden field comparaison.
+
+Fast life did not reinvent the wheel on CSRF Protection. It use the good old method.
+"""
 import secrets
 from typing import TYPE_CHECKING, Any, Callable, Coroutine
 
@@ -8,14 +13,23 @@ if TYPE_CHECKING:
 
 
 class CSRFAttack(Exception):
-    ...
+    """
+    An exception raised if the cookie and the csrf token hidden field did not match.
+    """
 
 
 def create_csrf_token() -> str:
+    """A helper that create a csrf token."""
     return secrets.token_urlsafe(5)
 
 
 def check_csrf(registry: "Registry") -> Callable[[Request], Coroutine[Any, Any, bool]]:
+    """
+    A global application dependency, that is always active.
+
+    If you don't want csrf token, its simple don't use the
+    application/x-www-form-urlencoded on a POST method.
+    """
     async def check_csrf(request: Request) -> bool:
         if (
             request.method != "POST"

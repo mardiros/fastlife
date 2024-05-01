@@ -69,28 +69,18 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         )
 
     def pydantic_form(
-        self,
-        model: ModelResult[Any],
-        *,
-        name: Optional[str] = None,
-        token: Optional[str] = None,
-        removable: bool = False,
-        field: FieldInfo | None = None,
+        self, model: ModelResult[Any], *, token: Optional[str] = None
     ) -> Markup:
-        return WidgetFactory(self, token).get_markup(
-            model,
-            removable=removable,
-            field=field,
-        )
+        return WidgetFactory(self, token).get_markup(model)
 
     def pydantic_form_field(
         self,
         model: Type[Any],
         *,
-        name: Optional[str] = None,
-        token: Optional[str] = None,
-        removable: bool = False,
-        field: FieldInfo | None = None,
+        name: str | None,
+        token: str | None,
+        removable: bool,
+        field: FieldInfo | None,
     ) -> Markup:
         return (
             WidgetFactory(self, token)
@@ -107,6 +97,12 @@ class JinjaxRenderer(AbstractTemplateRenderer):
 
 
 class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
+    """
+    The default template renderer factory. Based on JinjaX.
+
+    :param settings: setting used to configure jinjax.
+    """
+
     route_prefix: str
     """Used to prefix url to fetch fast life widgets."""
 
@@ -123,6 +119,7 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
             self.catalog.add_folder(path)
 
     def __call__(self, request: Request) -> AbstractTemplateRenderer:
+        """Build the renderer to render request for template."""
         return JinjaxRenderer(
             self.catalog,
             request,
