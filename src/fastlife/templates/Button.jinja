@@ -12,6 +12,8 @@ hx_get="",
 hx_select="",
 hx_after_request="",
 hx_vals="",
+hx_confirm="",
+hx_delete="",
 full_width=false,
 class_="""
 bg-primary-600
@@ -33,9 +35,10 @@ dark:hover:bg-primary-700
 #}
 <button type="{{type}}" {%if id %}id="{{id}}" {%endif%} name="{{name}}" value="{{value}}" {% if
   hx_target%}hx-target="{{hx_target}}" {% endif %} {% if hx_swap %}hx-swap="{{hx_swap}}" {% endif %} {% if hx_select
-  %}hx-select="{{hx_select}}" {% endif %} {% if hx_get %}hx-get="{{hx_get}}" {% endif %} {% if onclick %}onclick="{{onclick}}" {%
-  endif %}{% if hx_after_request %}hx-on::after-request="{{hx_after_request}}" {% endif %} {% if hx_vals
-  %}hx-vals='{{hx_vals|safe}}' {% endif %} {% if aria_label %}aria-label="{{aria_label}}" {% endif %}
+  %}hx-select="{{hx_select}}" {% endif %} {% if hx_get %}hx-get="{{hx_get}}" {% endif %} {% if onclick
+  %}onclick="{{onclick}}" {% endif %}{% if hx_after_request %}hx-on::after-request="{{hx_after_request}}" {% endif %} {%
+  if hx_vals %}hx-vals='{{hx_vals|safe}}' {% endif %} {% if hx_confirm %}hx-confirm="{{hx_confirm}}" {% endif %} {% if
+  hx_delete %}hx-delete="{{hx_delete}}" {% endif %} {% if aria_label %}aria-label="{{aria_label}}" {% endif %}
   class="{% if full_width %}w-full {% endif %}{{attrs.class or class_}}" {% if hidden %}hidden{% endif %}>
   {{- content -}}
 </button>
