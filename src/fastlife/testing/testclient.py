@@ -511,7 +511,7 @@ class WebTestClient:
 
     def request(
         self,
-        method: Literal["GET", "POST"],  # I am a browser
+        method: Literal["GET", "POST", "DELETE"],
         url: str,
         *,
         content: str | None = None,
@@ -558,6 +558,14 @@ class WebTestClient:
         """Perform http GET request."""
         return self.request(
             "GET",
+            url,
+            max_redirects=int(follow_redirects) * 10,
+        )
+
+    def delete(self, url: str, follow_redirects: bool = True) -> WebResponse:
+        """Perform http DELETE request."""
+        return self.request(
+            "DELETE",
             url,
             max_redirects=int(follow_redirects) * 10,
         )

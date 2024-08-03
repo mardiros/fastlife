@@ -33,13 +33,23 @@ def client(app: FastAPI, settings: Settings):
 
         def request(
             self,
-            method: Literal["GET", "POST"],
+            method: Literal["GET", "POST", "DELETE"],
             url: str,
             *,
             content: str | None = None,
             headers: Mapping[str, str] | None = None,
             max_redirects: int = 0,
         ) -> WebResponse:
+            if method == "DELETE":
+                return WebResponse(
+                    self,
+                    url,
+                    httpx.Response(
+                        303,
+                        headers={"location": f"{url}/deleted"},
+                    ),
+                )
+
             fields = [
                 f"""<input type="text" name="{key}" value="{val}">"""
                 for key, val in self.data.items()
