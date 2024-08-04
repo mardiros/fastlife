@@ -1,3 +1,7 @@
+0.7.1  - Released on 2024-08-04
+-------------------------------
+* Add the registry on request for exception handler
+
 0.7.0  - Released on 2024-08-04
 -------------------------------
 * Rewrite how the registry is handled, now part of the request (request.registry)

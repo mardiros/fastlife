@@ -15,7 +15,7 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Internet :: WWW/HTTP",
 ]
-version = "0.7.0"
+version = "0.7.1"
 
 [tool.poetry.dependencies]
 python = "^3.11"
