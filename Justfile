@@ -2,6 +2,8 @@ package := 'fastlife'
 default_unittest_suite := 'tests/unittests'
 default_functest_suite := 'tests/functionals'
 
+export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
+
 install:
     poetry install
 
@@ -34,6 +36,10 @@ cov test_suite=default_unittest_suite:
     poetry run pytest --cov-report=html --cov={{package}} {{test_suite}}
     xdg-open htmlcov/index.html
 
+# start the playwright server in a docker container
+# to honnort PW_TEST_CONNECT_WS_ENDPOINT for functional tests
+playwrightserver:
+    docker run -p 3000:3000 --rm --init -it mcr.microsoft.com/playwright:v1.41.0-jammy /bin/sh -c "cd /home/pwuser && npx -y playwright@1.41.0 run-server --port 3000 --host 0.0.0.0"
 
 functest test_suite=default_functest_suite:
     poetry run behave --tags=-dev --no-capture {{test_suite}}
