@@ -22,7 +22,7 @@ from typing import (
 )
 
 import venusian  # type: ignore
-from fastapi import Depends, FastAPI, Response
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 
@@ -31,6 +31,7 @@ from fastlife.configurator.route_handler import FastlifeRoute
 from fastlife.security.csrf import check_csrf
 
 from .settings import Settings
+from .route_handler import FastlifeRequest
 
 if TYPE_CHECKING:
     from .registry import AppRegistry  # coverage: ignore
@@ -193,7 +194,12 @@ class Configurator:
         self, status_code_or_exc: int | Type[Exception], handler: Any
     ) -> "Configurator":
         """Add an exception handler the application."""
-        self._app.add_exception_handler(status_code_or_exc, handler)
+
+        def exception_handler(request: Request, exc: Exception) -> Any:
+            req = FastlifeRequest(self.registry, request)
+            return handler(req, exc)
+
+        self._app.add_exception_handler(status_code_or_exc, exception_handler)
         return self
 
 

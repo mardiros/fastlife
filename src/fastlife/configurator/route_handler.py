@@ -3,15 +3,14 @@ from typing import TYPE_CHECKING, Any, Callable, Coroutine
 from fastapi import Request as BaseRequest
 from fastapi.routing import APIRoute
 from starlette.responses import Response
-from starlette.types import Receive, Scope
 
 if TYPE_CHECKING:
     from .registry import AppRegistry  # coverage: ignore
 
 
 class FastlifeRequest(BaseRequest):
-    def __init__(self, registry: "AppRegistry", scope: Scope, receive: Receive) -> None:
-        super().__init__(scope, receive)
+    def __init__(self, registry: "AppRegistry", request: BaseRequest) -> None:
+        super().__init__(request.scope, request.receive)
         self.registry = registry
 
 
@@ -24,7 +23,7 @@ class FastlifeRoute(APIRoute):
         orig_route_handler = super().get_route_handler()
 
         async def route_handler(request: BaseRequest) -> FastlifeRequest:
-            req = FastlifeRequest(self.registry, request.scope, request.receive)
+            req = FastlifeRequest(self.registry, request)
             return await orig_route_handler(req)  # type: ignore
 
         return route_handler  # type: ignore
