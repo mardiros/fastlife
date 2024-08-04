@@ -342,6 +342,9 @@ class WebForm:
         """Test if a field exists in the form."""
         return key in self._formdata
 
+    def __repr__(self) -> str:
+        return repr(self._formdata)
+
 
 class WebResponse:
     """Represent an http response made by the WebTestClient browser."""
