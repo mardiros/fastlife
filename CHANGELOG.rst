@@ -1,3 +1,8 @@
+0.7.0  - Released on 2024-08-04
+-------------------------------
+* Rewrite how the registry is handled, now part of the request (request.registry)
+* Update to get hx-confirm and hx-delete on button
+
 0.6.1  - Released on 2024-04-27
 -------------------------------
 * Display errors on every widget
