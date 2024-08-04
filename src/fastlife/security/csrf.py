@@ -30,6 +30,7 @@ def check_csrf(registry: "Registry") -> Callable[[Request], Coroutine[Any, Any, 
     If you don't want csrf token, its simple don't use the
     application/x-www-form-urlencoded on a POST method.
     """
+
     async def check_csrf(request: Request) -> bool:
         if (
             request.method != "POST"

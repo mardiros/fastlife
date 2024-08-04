@@ -27,6 +27,7 @@ from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 
 from fastlife.configurator.base import AbstractMiddleware
+from fastlife.configurator.route_handler import FastlifeRoute
 from fastlife.security.csrf import check_csrf
 
 from .settings import Settings
@@ -58,6 +59,8 @@ class Configurator:
             docs_url=None,
             redoc_url=None,
         )
+        FastlifeRoute.registry = self.registry
+        self._app.router.route_class = FastlifeRoute
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.session")

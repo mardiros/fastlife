@@ -12,6 +12,7 @@ class Settings(BaseSettings):
 
     It can be overriden in order to inject application own settings.
     """
+
     model_config = SettingsConfigDict(env_prefix="fastlife_")
     """Set the prefix fastlife_ for configuration using operating system environment."""
 
