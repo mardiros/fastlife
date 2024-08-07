@@ -1,3 +1,7 @@
+0.7.2  - Released on 2024-08-07
+-------------------------------
+* Fix https behind a reverse proxy
+
 0.7.1  - Released on 2024-08-04
 -------------------------------
 * Add the registry on request for exception handler
