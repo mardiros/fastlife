@@ -30,8 +30,8 @@ from fastlife.configurator.base import AbstractMiddleware
 from fastlife.configurator.route_handler import FastlifeRoute
 from fastlife.security.csrf import check_csrf
 
-from .settings import Settings
 from .route_handler import FastlifeRequest
+from .settings import Settings
 
 if TYPE_CHECKING:
     from .registry import AppRegistry  # coverage: ignore
@@ -64,7 +64,7 @@ class Configurator:
         self._app.router.route_class = FastlifeRoute
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
-        self.include("fastlife.session")
+        self.include("fastlife.middlewares.session")
 
     def get_app(self) -> FastAPI:
         """

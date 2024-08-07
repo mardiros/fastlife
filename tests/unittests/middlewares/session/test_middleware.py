@@ -3,8 +3,8 @@ from typing import Any, Mapping, Type
 
 import pytest
 
-from fastlife.session.middleware import SessionMiddleware
-from fastlife.session.serializer import AbsractSessionSerializer
+from fastlife.middlewares.session.middleware import SessionMiddleware
+from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 
 
 @pytest.mark.parametrize(

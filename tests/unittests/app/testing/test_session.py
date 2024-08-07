@@ -5,7 +5,7 @@ from typing import Type
 import pytest
 
 from fastlife.configurator.settings import Settings
-from fastlife.session.serializer import AbsractSessionSerializer
+from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 from fastlife.testing.testclient import Session, WebTestClient
 
 

@@ -9,7 +9,7 @@ from fastapi import APIRouter, Request
 
 from fastlife.configurator.registry import AppRegistry
 from fastlife.configurator.settings import Settings
-from fastlife.session.serializer import AbsractSessionSerializer
+from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 
 
 @pytest.fixture()

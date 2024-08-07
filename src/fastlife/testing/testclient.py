@@ -14,7 +14,7 @@ from multidict import MultiDict
 from starlette.types import ASGIApp
 
 from fastlife.configurator.settings import Settings
-from fastlife.session.serializer import AbsractSessionSerializer
+from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 from fastlife.shared_utils.resolver import resolve
 
 CookieTypes = httpx._types.CookieTypes  # type: ignore
