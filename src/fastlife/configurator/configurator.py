@@ -64,7 +64,7 @@ class Configurator:
         self._app.router.route_class = FastlifeRoute
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
-        self.include("fastlife.middlewares.session")
+        self.include("fastlife.middlewares")
 
     def get_app(self) -> FastAPI:
         """

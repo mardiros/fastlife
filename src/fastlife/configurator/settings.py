@@ -1,4 +1,5 @@
 """Settings for the fastlife."""
+
 from datetime import timedelta
 from typing import Literal
 
@@ -86,3 +87,6 @@ class Settings(BaseSettings):
 
     check_permission: str = Field(default="fastlife.security.policy:check_permission")
     """Handler for checking permission set on any views using the configurator."""
+
+    decode_reverse_proxy_headers: bool = Field(default=True)
+    """Ensure that the request object has information based on http proxy headers."""
