@@ -1,3 +1,7 @@
+0.7.3  - Released on 2024-08-10
+-------------------------------
+* Add some HTML markup
+
 0.7.2  - Released on 2024-08-07
 -------------------------------
 * Fix https behind a reverse proxy
