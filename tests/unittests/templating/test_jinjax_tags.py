@@ -41,7 +41,7 @@ def expected(expected_string: str) -> bs4.PageElement:
     "template_string,expected_string",
     [
         pytest.param(
-            """<A href="/" disable-htmx={True}>Oh</A>""",
+            """<A href="/" :disable-htmx="true">Oh</A>""",
             """<a href="/" class="bg-neutral-200 px-5 py-2.5 rounded-lg text-center
             text-neutral-900 text-sm font-medium focus:outline-none focus:ring-4
             focus:ring-primary-300 hover:bg-neutral-50 dark:bg-neutral-400
@@ -49,7 +49,7 @@ def expected(expected_string: str) -> bs4.PageElement:
             id="A-hx-disabled",
         ),
         pytest.param(
-            """<A href="/" class="css" disable-htmx={True}>Oh</A>""",
+            """<A href="/" class="css" :disable-htmx="true">Oh</A>""",
             """<a href="/" class="css">Oh</a>""",
             id="A-class",
         ),
@@ -62,7 +62,7 @@ def expected(expected_string: str) -> bs4.PageElement:
         ),
         pytest.param(
             """<A href="/" class="css" hx-target="body" hx-swap="outerHTML"
-            hx-push-url={False}>Ah</A>""",
+            :hx-push-url="false">Ah</A>""",
             """<a href="/" class="css" href="/" hx-get="/" hx-swap="outerHTML"
             hx-target="body">Ah</a>""",
             id="A-hx-params",
@@ -99,13 +99,13 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
             id="button-css",
         ),
         pytest.param(
-            """<Button class="css" full-width={True}>Go</Button>""",
+            """<Button class="css" :full-width="true">Go</Button>""",
             """<button name="action" type="submit" value="submit"
             class="w-full css">Go</button>""",
             id="button-css-full-width",
         ),
         pytest.param(
-            """<Button class="css" hidden={True}>Go</Button>""",
+            """<Button class="css" :hidden="true">Go</Button>""",
             """<button name="action" type="submit" value="submit"
             class="css" hidden>Go</button>""",
             id="button-hidden",
@@ -142,7 +142,7 @@ def test_render_Button(node: bs4.PageElement, expected: bs4.PageElement):
     "template_string,expected_string",
     [
         pytest.param(
-            """<Checkbox id="foo-bar" name="foo" checked={True} />""",
+            """<Checkbox id="foo-bar" name="foo" :checked="true" />""",
             """<input type="checkbox" id="foo-bar" name="foo" checked
             class="bg-neutral-100 border-neutral-300 h-4 rounded text-primary-600
             w-4 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-primary-600
@@ -430,7 +430,7 @@ def test_render_Label(node: bs4.PageElement, expected: bs4.PageElement):
             id="option",
         ),
         pytest.param(
-            """<Option value="y" selected={True}>yoyo</Option>""",
+            """<Option value="y" :selected="true">yoyo</Option>""",
             """<option value="y" selected>yoyo</option>""",
             id="option-selected",
         ),

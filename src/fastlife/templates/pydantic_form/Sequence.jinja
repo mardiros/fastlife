@@ -1,10 +1,10 @@
 {# def widget, children_widgets, type #}
 
-<pydantic_form.Widget widget={widget} removable={widget.removable}>
+<pydantic_form.Widget :widget="widget" :removable="widget.removable">
   <details id="{{widget.id}}" open>
     <summary class="justify-between items-center font-medium cursor-pointer">
       <H3>{{widget.title}}</H3>
-      <pydantic_form.Error text={widget.error} />
+      <pydantic_form.Error :text="widget.error" />
     </summary>
     <div>
       {% set fnGetName = "get" + widget.id.replace("-", "_") %}
@@ -29,7 +29,7 @@
         {% set container_id = "#" + widget.id + "-container" %}
         {% set add_id = widget.id + "-add" %}
         {% set vals = 'js:{"name": '+ fnGetName + '(), "token": "' + type.token + '", "removable": true}' %}
-        <Button type="button" hx-target={container_id} hx-swap="beforeend" id={add_id} hx-vals={vals} hx-get={type.url}>
+        <Button type="button" :hx-target="container_id" hx-swap="beforeend" :id="add_id" :hx-vals="vals" :hx-get="type.url">
           Add
         </Button>
       </div>

@@ -332,7 +332,7 @@ def test_render_custom(
                 removable=False,
                 token="x",
             ),
-            id="checklist-checkable",
+            id="model-widget",
         ),
     ],
 )

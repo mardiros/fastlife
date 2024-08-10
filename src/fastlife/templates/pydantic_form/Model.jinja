@@ -1,11 +1,11 @@
 {# def widget, children_widget #}
 
-<pydantic_form.Widget widget={widget} removable={widget.removable}>
+<pydantic_form.Widget :widget="widget" :removable="widget.removable">
   <div id="{{widget.id}}" class="m-4">
     <details open>
       <summary class="justify-between items-center font-medium cursor-pointer">
         <H3>{{widget.title}}</H3>
-        <pydantic_form.Error text={widget.error} />
+        <pydantic_form.Error :text="widget.error" />
       </summary>
       <div>
         {% for child in children_widget %}
