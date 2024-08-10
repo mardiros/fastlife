@@ -26,5 +26,5 @@ div_class="flex items-center mb-4"
   <input type="radio" name="{{name}}" id="{{id}}" value="{{value}}" {% if checked %}checked{% endif %}
     class="{{attrs.class or class_}}" {% if onclick %}onclick="{{onclick}}" {% endif %} {%if
     disabled%}disabled{%endif%}>
-  <Label for={id} class={label_class}>{{label}}</Label>
+  <Label :for="id" :class="label_class">{{label}}</Label>
 </div>
