@@ -1,3 +1,7 @@
+0.8.0  - Released on 2024-08-10
+-------------------------------
+* Upgrade JinjaX (Template update required, use vue-like syntax now)
+
 0.7.3  - Released on 2024-08-10
 -------------------------------
 * Add some HTML markup
