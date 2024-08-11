@@ -659,13 +659,13 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "jinjax"
-version = "0.43"
+version = "0.44"
 description = "Replace your HTML templates with Python server-Side components"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "jinjax-0.43-py3-none-any.whl", hash = "sha256:1b96442d1d3cce1151f1f547151894d212eecccab470d7925513cb9460a595ec"},
-    {file = "jinjax-0.43.tar.gz", hash = "sha256:b7265bdcfbbcfdcdbf7297a694eb1f3193029c5b51532d33eafbb3aecd02adb8"},
+    {file = "jinjax-0.44-py3-none-any.whl", hash = "sha256:0c6700395708394acfe8d9c252327fe4f0b565b7fc494a0e0d2c031ac49c7a40"},
+    {file = "jinjax-0.44.tar.gz", hash = "sha256:721f7747e1ad26cc13193011afaeeebbed8591fc8c1d14e68d008f79aa1b1ef5"},
 ]
 
 [package.dependencies]
@@ -1534,4 +1534,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "5ed3de8a97d8ac023b5cad69e9643b2350ea7ee77a4bf9c88064279864e7a2e9"
+content-hash = "8a48604744141faf3c8194f1e135f042ab6e72935833e9101be53100764020f3"
