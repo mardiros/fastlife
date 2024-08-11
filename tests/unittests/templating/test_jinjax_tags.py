@@ -127,10 +127,17 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
             """<Button hx-target="#body" hx-swap="body top"
             hx-get="/" hx-select="#body" hx-after_request=""
             hx-vals='{"a":"A"}' class="css">Go</Button>""",
-            """<button hx-get="/" hx-select="#body" hx-swap="body top"
-            hx-target="#body" hx-vals='{"a":"A"}' name="action" type="submit"
+            """<button hx-get="/" hx-push-url="true" hx-select="#body"
+            hx-swap="body top" hx-target="#body" hx-vals='{"a":"A"}'
+            name="action" type="submit"
             value="submit" class="css">Go</button>""",
             id="button-hx-params",
+        ),
+        pytest.param(
+            """<Button hx-get="/" :hx-push-url="false" class="css">Go</Button>""",
+            """<button hx-get="/" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-disable-push-url",
         ),
     ],
 )
