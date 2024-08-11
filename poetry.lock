@@ -407,6 +407,16 @@ pycodestyle = ">=2.11.0,<2.12.0"
 pyflakes = ">=3.1.0,<3.2.0"
 
 [[package]]
+name = "fontawesomefree"
+version = "6.6.0"
+description = "Font Awesome Free"
+optional = false
+python-versions = "*"
+files = [
+    {file = "fontawesomefree-6.6.0-py3-none-any.whl", hash = "sha256:599b574431c9bd92ed5fc054d1045a07c42335da36c17884f2b934755eef9089"},
+]
+
+[[package]]
 name = "greenlet"
 version = "3.0.3"
 description = "Lightweight in-process concurrent programming"
@@ -1534,4 +1544,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "8a48604744141faf3c8194f1e135f042ab6e72935833e9101be53100764020f3"
+content-hash = "e33da636cfbdab043054e48988907e3d62317e6ef39d7a5e6ce28d5db3099d9e"
