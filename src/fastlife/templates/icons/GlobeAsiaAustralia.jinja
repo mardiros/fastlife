@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.GlobeAsiaAustralia :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.GlobeAsiaAustralia :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.GlobeAsiaAustralia :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.GlobeAsiaAustralia :class="attrs.class or ''"/>
+{%endif%}

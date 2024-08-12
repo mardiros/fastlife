@@ -407,16 +407,6 @@ pycodestyle = ">=2.11.0,<2.12.0"
 pyflakes = ">=3.1.0,<3.2.0"
 
 [[package]]
-name = "fontawesomefree"
-version = "6.6.0"
-description = "Font Awesome Free"
-optional = false
-python-versions = "*"
-files = [
-    {file = "fontawesomefree-6.6.0-py3-none-any.whl", hash = "sha256:599b574431c9bd92ed5fc054d1045a07c42335da36c17884f2b934755eef9089"},
-]
-
-[[package]]
 name = "greenlet"
 version = "3.0.3"
 description = "Lightweight in-process concurrent programming"
@@ -512,6 +502,21 @@ files = [
 [package.dependencies]
 hpack = ">=4.0,<5"
 hyperframe = ">=6.0,<7"
+
+[[package]]
+name = "heroicons"
+version = "2.7.0"
+description = "Use heroicons in your Django and Jinja templates."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "heroicons-2.7.0-py3-none-any.whl", hash = "sha256:09ee325060a403edc4c78975fbef90d5fa3a784c53c20725fc3a0d59923f818a"},
+    {file = "heroicons-2.7.0.tar.gz", hash = "sha256:631845ef81be0a7c754cb0a7703d056af971ddf6b829ae66c5b1e6d94841b118"},
+]
+
+[package.extras]
+django = ["django (>=2.2)"]
+jinja = ["jinja2 (>=2.8)"]
 
 [[package]]
 name = "hpack"
@@ -1544,4 +1549,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "cab0b0b6182b30ba63cb0f82be1a967ed748b61149efb70f528aba9b3584b544"
+content-hash = "eeb2f0b36a1a1a7cbc70e1ce1da8d1a0bdf926f361a9fdf3700b85c1bbd64c7b"

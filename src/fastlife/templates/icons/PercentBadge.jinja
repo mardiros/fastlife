@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.PercentBadge :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.PercentBadge :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.PercentBadge :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.PercentBadge :class="attrs.class or ''"/>
+{%endif%}

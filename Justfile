@@ -24,8 +24,8 @@ buildcss:
         -i tests/fastlife_app/assets/styles/main.css \
         -o tests/fastlife_app/static/css/main.css
 
-buildfaassets:
-    poetry run scripts/build_fa_assets.py
+buildicons:
+    poetry run scripts/build_heroicon_tags.py
 
 
 unittest test_suite=default_unittest_suite:

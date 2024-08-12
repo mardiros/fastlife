@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.SpeakerXMark :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.SpeakerXMark :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.SpeakerXMark :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.SpeakerXMark :class="attrs.class or ''"/>
+{%endif%}
