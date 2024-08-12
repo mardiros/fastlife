@@ -1,5 +1,7 @@
 from typing import Any, Mapping
+
 import pytest
+
 from fastlife.middlewares.reverse_proxy.x_forwarded import XForwardedStar, get_header
 
 

@@ -24,6 +24,10 @@ buildcss:
         -i tests/fastlife_app/assets/styles/main.css \
         -o tests/fastlife_app/static/css/main.css
 
+buildfaassets:
+    poetry run scripts/build_fa_assets.py
+
+
 unittest test_suite=default_unittest_suite:
     poetry run pytest -sxv {{test_suite}}
 

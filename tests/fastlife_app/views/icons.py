@@ -18,7 +18,6 @@ async def icons(
     return template()
 
 
-
 @configure
 def includeme(config: Configurator):
     config.add_route("login", "/icons", icons, methods=["GET"])

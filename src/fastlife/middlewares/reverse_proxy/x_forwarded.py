@@ -18,7 +18,6 @@ from starlette.types import ASGIApp, Receive, Scope, Send
 
 from fastlife.configurator.base import AbstractMiddleware
 
-
 log = logging.getLogger(__name__)
 
 
@@ -38,7 +37,6 @@ class XForwardedStar(AbstractMiddleware):
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] in ("http", "websocket"):
-
             headers = scope["headers"]
             new_vals = {
                 "client": get_header(headers, b"x-real-ip"),
