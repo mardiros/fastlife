@@ -1,3 +1,7 @@
+0.9.0  - Released on 2024-08-12
+-------------------------------
+* Add fa Icons (extra)
+
 0.8.0  - Released on 2024-08-10
 -------------------------------
 * Upgrade JinjaX (Template update required, use vue-like syntax now)
