@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.ClipboardDocumentCheck :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.ClipboardDocumentCheck :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.ClipboardDocumentCheck :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.ClipboardDocumentCheck :class="attrs.class or ''"/>
+{%endif%}

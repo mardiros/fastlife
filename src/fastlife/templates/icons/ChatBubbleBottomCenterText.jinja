@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.ChatBubbleBottomCenterText :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.ChatBubbleBottomCenterText :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.ChatBubbleBottomCenterText :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.ChatBubbleBottomCenterText :class="attrs.class or ''"/>
+{%endif%}

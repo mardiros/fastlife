@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.WrenchScrewdriver :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.WrenchScrewdriver :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.WrenchScrewdriver :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.WrenchScrewdriver :class="attrs.class or ''"/>
+{%endif%}

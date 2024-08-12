@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.ArrowUturnLeft :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.ArrowUturnLeft :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.ArrowUturnLeft :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.ArrowUturnLeft :class="attrs.class or ''"/>
+{%endif%}

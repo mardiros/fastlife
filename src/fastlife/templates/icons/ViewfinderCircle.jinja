@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.ViewfinderCircle :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.ViewfinderCircle :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.ViewfinderCircle :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.ViewfinderCircle :class="attrs.class or ''"/>
+{%endif%}

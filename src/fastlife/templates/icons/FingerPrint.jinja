@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.FingerPrint :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.FingerPrint :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.FingerPrint :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.FingerPrint :class="attrs.class or ''"/>
+{%endif%}

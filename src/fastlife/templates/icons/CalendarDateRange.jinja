@@ -1,0 +1,7 @@
+{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+
+{% if mode == "micro"%}<icons.micro.CalendarDateRange :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.CalendarDateRange :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.CalendarDateRange :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.CalendarDateRange :class="attrs.class or ''"/>
+{%endif%}
