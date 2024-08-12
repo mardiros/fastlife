@@ -1,3 +1,7 @@
+0.9.1  - Released on 2024-08-12
+-------------------------------
+* Replace fa icons by hero icons
+
 0.9.0  - Released on 2024-08-12
 -------------------------------
 * Add fa Icons (extra)
