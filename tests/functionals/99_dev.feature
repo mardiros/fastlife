@@ -1,6 +1,6 @@
 Feature: Basic form
   @dev
   Scenario: Hello world
-    Given anonymous user on "/icons"
+    Given anonymous user on "/autoform"
     And I wait
 

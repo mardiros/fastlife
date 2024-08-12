@@ -5,27 +5,8 @@ type="text",
 id="",
 aria_label="",
 placeholder="",
-class_="""
-bg-neutral-50
-block
-border
-border-neutral-300
-p-2.5
-rounded-lg
-text-base
-text-neutral-900
-w-full
-dark:bg-neutral-700
-dark:border-neutral-600
-dark:focus:border-primary-500
-dark:focus:ring-primary-500
-dark:placeholder-neutral-400
-dark:text-white
-focus:border-primary-500
-focus:ring-primary-500
-"""
 #}
 
 <input name="{{name}}" value="{{value}}" type="{{type}}" {% if id %}id="{{id}}" {% endif %}{% if aria_label
   %}aria-label="{{aria_label}}" {% endif %} {% if placeholder %}placeholder="{{placeholder}}" {% endif %}
-  class="{{attrs.class or class_}}" />
+  class="{{attrs.class or INPUT_CLASS}}" />

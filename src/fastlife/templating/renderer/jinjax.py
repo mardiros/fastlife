@@ -11,7 +11,7 @@ from fastlife.templating.renderer.widgets.factory import WidgetFactory
 if TYPE_CHECKING:
     from fastlife.configurator.settings import Settings  # coverage: ignore
 
-from fastlife.shared_utils.resolver import resolve_path
+from fastlife.shared_utils.resolver import resolve, resolve_path
 
 from .abstract import AbstractTemplateRenderer, AbstractTemplateRendererFactory
 
@@ -110,10 +110,12 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
         self.route_prefix = settings.fastlife_route_prefix
         self.form_data_model_prefix = settings.form_data_model_prefix
         self.csrf_token_name = settings.csrf_token_name
+        globals = resolve(settings.jinjax_global_catalog_class)().model_dump()
 
         self.catalog = Catalog(
             use_cache=settings.jinjax_use_cache,
             auto_reload=settings.jinjax_auto_reload,
+            globals=globals,
         )
         for path in build_searchpath(settings.template_search_path):
             self.catalog.add_folder(path)

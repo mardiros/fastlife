@@ -3,20 +3,6 @@ name,
 id,
 value=None,
 checked=False,
-class_="""
-bg-neutral-100
-border-neutral-300
-h-4
-rounded
-text-primary-600
-w-4
-dark:bg-neutral-700
-dark:border-neutral-600
-dark:focus:ring-primary-600
-dark:ring-offset-neutral-800
-focus:ring-2
-focus:ring-primary-500
-"""
 #}
 <input name="{{name}}" {% if value is not none %}value="{{value}}" {% endif %} {% if checked %}checked{% endif %}
-  type="checkbox" id="{{id}}" class="{{attrs.class or class_}}" />
+  type="checkbox" id="{{id}}" class="{{attrs.class or CHECKBOX_CLASS}}" />

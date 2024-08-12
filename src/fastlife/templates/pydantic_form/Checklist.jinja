@@ -4,11 +4,11 @@ widget,
 
 <pydantic_form.Widget :widget="widget" :removable="widget.removable">
   <div class="pt-4">
-    <details open>
-      <summary class="justify-between items-center font-medium cursor-pointer">
-        <H3>{{widget.title}}</H3>
+    <Details>
+      <Summary :id="widget.id + '-summary'">
+        <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
         <pydantic_form.Error :text="widget.error" />
-      </summary>
+      </Summary>
       <div>
         {% for value in widget.value %}
         <div class="flex items-center mb-4">
@@ -18,5 +18,6 @@ widget,
         </div>
         {% endfor %}
       </div>
+    </Details>
   </div>
 </pydantic_form.Widget>

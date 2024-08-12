@@ -4,28 +4,11 @@ disable_htmx=false,
 hx_target="#maincontent",
 hx_select=None,
 hx_swap="innerHTML show:body:top",
-hx_push_url=true,
-class_="""
-bg-neutral-200
-px-5
-py-2.5
-rounded-lg
-text-center
-text-neutral-900
-text-sm
-font-medium
-focus:outline-none
-focus:ring-4
-focus:ring-primary-300
-hover:bg-neutral-50
-dark:bg-neutral-400
-dark:focus:ring-neutral-100
-dark:hover:bg-neutral-300
-"""
+hx_push_url=true
 #}
 
 <a href="{{href}}" {% if not disable_htmx %} hx-get="{{href}}" hx-target="{{hx_target}}" hx-swap="{{hx_swap}}" {% if
   hx_push_url %} hx-push-url="true" {%- endif %}{% if hx_select %} hx-select="{{hx_select}}" {%- endif %}{%- endif
-  %}class="{{attrs.class or class_}}">
+  %}class="{{attrs.class or A_CLASS}}">
   {{- content -}}
 </a>

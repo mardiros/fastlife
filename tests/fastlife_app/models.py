@@ -64,7 +64,7 @@ class Account(BaseModel):
     interest: Set[Interest] = Field(default_factory=set)
 
     terms_and_conditions: bool = Field(
-        # XXX tailwind did not inspect this class
+        # Add models.py in the content section of tailwind.config.js
         title="I accept <a class='text-primary-600' href='#'>terms and conditions</a>."
     )
 

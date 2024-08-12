@@ -1,0 +1,9 @@
+{# def id, open=True #}
+
+<summary id="{{id}}" class="flex items-center items-center font-medium cursor-pointer"
+  style="list-style: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;"
+  onclick="document.getElementById('{{id}}-icon').classList.toggle('rotate-90')">
+  <icons.ChevronRight :id="id + '-icon'"
+    :class="'w-8 h-8 transform transition-transform duration-300' + {True: ' rotate-90', False: ''}[open]" />
+  {{ content }}
+</summary>
