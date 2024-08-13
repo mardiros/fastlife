@@ -8,11 +8,11 @@ def space_join(*segments: str) -> str:
 class Constants(BaseModel):
 
     A_CLASS: str = space_join(
-        "text-blue-500",
-        "hover:text-blue-700",
+        "text-primary-500",
+        "hover:text-primary-700",
         "hover:underline",
-        "dark:text-blue-300",
-        "dark:hover:text-blue-400",
+        "dark:text-primary-300",
+        "dark:hover:text-primary-400",
     )
 
     BUTTON_CLASS: str = space_join(

@@ -42,10 +42,9 @@ def expected(expected_string: str) -> bs4.PageElement:
     [
         pytest.param(
             """<A href="/" :disable-htmx="true">Oh</A>""",
-            """<a href="/" class="bg-neutral-200 px-5 py-2.5 rounded-lg text-center
-            text-neutral-900 text-sm font-medium focus:outline-none focus:ring-4
-            focus:ring-primary-300 hover:bg-neutral-50 dark:bg-neutral-400
-            dark:focus:ring-neutral-100 dark:hover:bg-neutral-300">Oh</a>""",
+            """<a href="/" class="text-primary-500 hover:text-primary-700
+            hover:underline dark:text-primary-300 dark:hover:text-primary-400"
+            >Oh</a>""",
             id="A-hx-disabled",
         ),
         pytest.param(
@@ -85,9 +84,9 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Button>Go</Button>""",
             """<button name="action" type="submit" value="submit"
-            class="bg-primary-600 font-medium px-5 py-2.5 rounded-lg
-            text-center text-sm text-white hover:bg-primary-700 focus:outline-none
-            focus:ring-4 focus:ring-primary-300 dark:bg-primary-600
+            class="bg-primary-600 px-5 py-2.5 font-semibold rounded-lg text-center
+            text-sm text-white hover:bg-primary-700 hover:bg-primary-200
+            focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600
             dark:focus:ring-primary-800 dark:hover:bg-primary-700"
             >Go</button>""",
             id="button",
