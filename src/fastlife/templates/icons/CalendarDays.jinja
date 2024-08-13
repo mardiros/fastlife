@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.CalendarDays :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.CalendarDays :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.CalendarDays :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.CalendarDays :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.CalendarDays :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.CalendarDays :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.CalendarDays :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.CalendarDays :id="id" :class="attrs.class or ''"/>
 {%endif%}

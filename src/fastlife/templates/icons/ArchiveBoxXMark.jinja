@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.ArchiveBoxXMark :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.ArchiveBoxXMark :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.ArchiveBoxXMark :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.ArchiveBoxXMark :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.ArchiveBoxXMark :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.ArchiveBoxXMark :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.ArchiveBoxXMark :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.ArchiveBoxXMark :id="id" :class="attrs.class or ''"/>
 {%endif%}

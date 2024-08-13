@@ -20,7 +20,10 @@ def to_name(filename: str) -> str:
 
 
 def add_attrs(content: str) -> str:
-    return content.replace('viewBox="', 'class="{{attrs.class or \'\'}}" viewBox="')
+    return "{# def id=None #}\n\n" + content.replace(
+        'viewBox="',
+        '{% if id %}id="{{id}}" {%endif%}class="{{attrs.class or \'\'}}" viewBox="',
+    )
 
 
 def iter_zip(heroicons_path: Path) -> Iterator[Tuple[str, str]]:
@@ -63,7 +66,8 @@ def main():
             else:
                 if_stmt = f'{{% elif mode == "{mode}"%}}'
             components.append(
-                f"{if_stmt}<icons.{mode}.{name} :class=\"attrs.class or ''\"/>\n",
+                f'{if_stmt}<icons.{mode}.{name} :id="id" '
+                ":class=\"attrs.class or ''\"/>\n",
             )
 
         stmt = f"{'                '.join(components)}                {{%endif%}}"
@@ -71,7 +75,7 @@ def main():
         (iconsdir / f"{name}.jinja").write_text(
             dedent(
                 f"""\
-                {{# def mode: Literal["{'","'.join(modes)}"] = "solid"  #}}
+                {{# def id=None, mode: Literal["{'","'.join(modes)}"] = "solid"  #}}
 
                 {stmt}
                 """,
@@ -102,7 +106,7 @@ def main():
         for name, vals in names.items():
             fw.write(
                 '<div class="flex flex-col items-center text-center cursor-pointer" '
-                f"onclick=\"copyText('&lt;{name} /&gt;')\">"
+                f"onclick=\"copyText('&lt;icons.{name} /&gt;')\">"
             )
             fw.write(f'<icons.{name} class="w-16 h-16" />\n')
             fw.write(f'<p class="mt-2">{name}</p>\n')

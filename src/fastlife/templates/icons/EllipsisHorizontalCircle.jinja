@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.EllipsisHorizontalCircle :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.EllipsisHorizontalCircle :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.EllipsisHorizontalCircle :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.EllipsisHorizontalCircle :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.EllipsisHorizontalCircle :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.EllipsisHorizontalCircle :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.EllipsisHorizontalCircle :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.EllipsisHorizontalCircle :id="id" :class="attrs.class or ''"/>
 {%endif%}

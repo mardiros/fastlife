@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.CircleStack :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.CircleStack :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.CircleStack :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.CircleStack :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.CircleStack :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.CircleStack :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.CircleStack :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.CircleStack :id="id" :class="attrs.class or ''"/>
 {%endif%}

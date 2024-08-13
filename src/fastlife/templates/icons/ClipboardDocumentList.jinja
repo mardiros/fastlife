@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.ClipboardDocumentList :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.ClipboardDocumentList :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.ClipboardDocumentList :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.ClipboardDocumentList :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.ClipboardDocumentList :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.ClipboardDocumentList :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.ClipboardDocumentList :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.ClipboardDocumentList :id="id" :class="attrs.class or ''"/>
 {%endif%}

@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.QrCode :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.QrCode :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.QrCode :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.QrCode :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.QrCode :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.QrCode :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.QrCode :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.QrCode :id="id" :class="attrs.class or ''"/>
 {%endif%}

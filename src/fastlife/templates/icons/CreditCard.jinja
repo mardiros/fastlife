@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.CreditCard :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.CreditCard :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.CreditCard :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.CreditCard :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.CreditCard :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.CreditCard :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.CreditCard :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.CreditCard :id="id" :class="attrs.class or ''"/>
 {%endif%}

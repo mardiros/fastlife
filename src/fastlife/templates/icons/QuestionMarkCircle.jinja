@@ -1,7 +1,7 @@
-{# def mode: Literal["micro","mini","outline","solid"] = "solid"  #}
+{# def id=None, mode: Literal["micro","mini","outline","solid"] = "solid"  #}
 
-{% if mode == "micro"%}<icons.micro.QuestionMarkCircle :class="attrs.class or ''"/>
-{% elif mode == "mini"%}<icons.mini.QuestionMarkCircle :class="attrs.class or ''"/>
-{% elif mode == "outline"%}<icons.outline.QuestionMarkCircle :class="attrs.class or ''"/>
-{% elif mode == "solid"%}<icons.solid.QuestionMarkCircle :class="attrs.class or ''"/>
+{% if mode == "micro"%}<icons.micro.QuestionMarkCircle :id="id" :class="attrs.class or ''"/>
+{% elif mode == "mini"%}<icons.mini.QuestionMarkCircle :id="id" :class="attrs.class or ''"/>
+{% elif mode == "outline"%}<icons.outline.QuestionMarkCircle :id="id" :class="attrs.class or ''"/>
+{% elif mode == "solid"%}<icons.solid.QuestionMarkCircle :id="id" :class="attrs.class or ''"/>
 {%endif%}
