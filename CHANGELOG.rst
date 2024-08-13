@@ -1,3 +1,8 @@
+0.9.2  - Released on 2024-08-13
+-------------------------------
+* Add a constants class for global variable in templates
+* Use icons to customize collapsible widget
+
 0.9.1  - Released on 2024-08-12
 -------------------------------
 * Replace fa icons by hero icons
