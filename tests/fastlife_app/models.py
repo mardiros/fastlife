@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Literal, Set
+from typing import Annotated, Any, Literal, Sequence, Set
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
@@ -61,6 +61,7 @@ class Account(BaseModel):
         title="Group", default_factory=list
     )
 
+    aliases: Sequence[str] = Field(default_factory=list)
     interest: Set[Interest] = Field(default_factory=set)
 
     terms_and_conditions: bool = Field(

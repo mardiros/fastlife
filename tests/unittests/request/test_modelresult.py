@@ -11,7 +11,7 @@ def test_default():
     account = ModelResult[Account].default("p", Account)
     assert account.is_valid is False
     assert account.form_data == {
-        "p": {"groups": [], "interest": set(), "recovery_address": None}
+        "p": {"aliases": [], "groups": [], "interest": set(), "recovery_address": None}
     }
     assert account.errors == {}
 
@@ -23,7 +23,12 @@ def test_default():
             {},
             False,
             {  # type: ignore
-                "p": {"groups": [], "interest": set(), "recovery_address": None},
+                "p": {
+                    "aliases": [],
+                    "groups": [],
+                    "interest": set(),
+                    "recovery_address": None,
+                },
             },
             {
                 "p.username": "Field required",
@@ -38,6 +43,7 @@ def test_default():
             {  # type: ignore
                 "p": {
                     "username": "Bob",
+                    "aliases": [],
                     "groups": [],
                     "interest": set(),
                     "recovery_address": None,
@@ -63,6 +69,7 @@ def test_default():
                     "username": "Bob",
                     "password": SecretStr("secret123"),
                     "groups": [],
+                    "aliases": [],
                     "interest": set(),
                     "recovery_address": None,
                     "terms_and_conditions": True,
@@ -89,6 +96,7 @@ def test_default():
                     "username": "Bob",
                     "password": SecretStr("secret123"),
                     "groups": [],
+                    "aliases": [],
                     "interest": set(),
                     "recovery_address": {
                         "type": "email",
