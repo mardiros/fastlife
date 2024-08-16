@@ -1,3 +1,7 @@
+0.9.4  - Released on 2024-08-16
+-------------------------------
+* Don't update browser url while manipulating autoform lists
+
 0.9.3  - Released on 2024-08-16
 -------------------------------
 * Fix autoform widgets from jinjax migration
