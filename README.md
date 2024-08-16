@@ -5,9 +5,12 @@
 [![codecov](https://codecov.io/gh/mardiros/fastlife/graph/badge.svg?token=DTpi73d7mf)](https://codecov.io/gh/mardiros/fastlife)
 
 
-A high-level Python web framework based on FastAPI, Jinja2 and Pydandic and htmx.
+A high-level Python web framework based on FastAPI, JinjaX, Pydandic and htmx.
 
-The intention is to prototype fast application.
+The intention is to prototype web application fast. It generate forms directly from
+Pydantic models.
+
+
 
 Under heavy development.
 
