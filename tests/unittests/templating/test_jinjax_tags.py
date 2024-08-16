@@ -42,7 +42,7 @@ def expected(expected_string: str) -> bs4.PageElement:
     [
         pytest.param(
             """<A href="/" :disable-htmx="true">Oh</A>""",
-            """<a href="/" class="text-primary-500 hover:text-primary-700
+            """<a href="/" class="text-primary-600 hover:text-primary-500
             hover:underline dark:text-primary-300 dark:hover:text-primary-400"
             >Oh</a>""",
             id="A-hx-disabled",
@@ -126,15 +126,15 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
             """<Button hx-target="#body" hx-swap="body top"
             hx-get="/" hx-select="#body" hx-after_request=""
             hx-vals='{"a":"A"}' class="css">Go</Button>""",
-            """<button hx-get="/" hx-push-url="true" hx-select="#body"
+            """<button hx-get="/" hx-select="#body"
             hx-swap="body top" hx-target="#body" hx-vals='{"a":"A"}'
             name="action" type="submit"
             value="submit" class="css">Go</button>""",
             id="button-hx-params",
         ),
         pytest.param(
-            """<Button hx-get="/" :hx-push-url="false" class="css">Go</Button>""",
-            """<button hx-get="/" name="action" type="submit"
+            """<Button hx-get="/" :hx-push-url="true" class="css">Go</Button>""",
+            """<button hx-get="/" hx-push-url="true" name="action" type="submit"
             value="submit" class="css">Go</button>""",
             id="button-hx-disable-push-url",
         ),
