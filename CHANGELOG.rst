@@ -1,3 +1,7 @@
+0.9.3  - Released on 2024-08-16
+-------------------------------
+* Fix autoform widgets from jinjax migration
+
 0.9.2  - Released on 2024-08-13
 -------------------------------
 * Add a constants class for global variable in templates
