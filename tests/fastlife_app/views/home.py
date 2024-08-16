@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 from fastlife import Configurator, Template, configure, template
 from fastlife.request.model_result import ModelResult, model
-from tests.fastlife_app.models import Account
+from tests.fastlife_app.models import Account, Group
 
 
 class Person(BaseModel):
@@ -24,7 +24,16 @@ async def autoform(
     account: Annotated[ModelResult[Account], model(Account)],
 ):
     print(account.errors)
-    return template(model=account)
+    return template(
+        model=account,
+        globals={
+            "groups": [
+                Group(name="admin"),
+                Group(name="editor"),
+                Group(name="moderator"),
+            ]
+        },
+    )
 
 
 @configure

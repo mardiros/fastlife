@@ -6,7 +6,6 @@ def space_join(*segments: str) -> str:
 
 
 class Constants(BaseModel):
-
     A_CLASS: str = space_join(
         "text-primary-500",
         "hover:text-primary-700",

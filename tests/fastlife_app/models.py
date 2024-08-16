@@ -5,16 +5,27 @@ from pydantic import BaseModel, Field, SecretStr, field_validator
 from fastlife.templating.renderer.widgets.base import Widget
 
 
-class Checklist(Widget[Any]):
+class GroupsChoice(Widget[Any]):
     def get_template(self) -> str:
-        return "Checklist"
+        return "GroupsChoice"
 
 
 class Permission(BaseModel):
     name: str = Field(title="Permission")
 
 
+def nextid():
+    id = 1
+    while True:
+        yield id
+        id += 1
+
+
+_groupid = nextid()
+
+
 class Group(BaseModel):
+    id: int = Field(default_factory=lambda: next(_groupid))
     name: str = Field(title="Group name")
     permissions: list[Permission] = Field(title="Permissions", default_factory=list)
 
@@ -57,7 +68,7 @@ class Account(BaseModel):
         default=None,
     )
 
-    groups: Annotated[list[Group], Checklist] = Field(
+    groups: Annotated[list[Group], GroupsChoice] = Field(
         title="Group", default_factory=list
     )
 
