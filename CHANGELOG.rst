@@ -1,3 +1,8 @@
+0.9.5  - Released on 2024-08-17
+-------------------------------
+* Use icons to customize collapsible widget for sequence
+* Add parameter for button to avoid send params
+
 0.9.4  - Released on 2024-08-16
 -------------------------------
 * Don't update browser url while manipulating autoform lists
