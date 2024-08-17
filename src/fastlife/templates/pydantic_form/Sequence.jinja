@@ -1,11 +1,11 @@
 {# def widget, children_widgets, type #}
 
 <pydantic_form.Widget :widget="widget" :removable="widget.removable">
-  <details id="{{widget.id}}" open>
-    <summary class="justify-between items-center font-medium cursor-pointer">
-      <H3>{{widget.title}}</H3>
+  <Details :id="widget.id">
+    <Summary :id="widget.id + '-summary'">
+      <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
       <pydantic_form.Error :text="widget.error" />
-    </summary>
+    </Summary>
     <div>
       {% set fnGetName = "get" + widget.id.replace("-", "_") %}
       <script>
@@ -34,5 +34,5 @@
         </Button>
       </div>
     </div>
-  </details>
+  </Details>
 </pydantic_form.Widget>

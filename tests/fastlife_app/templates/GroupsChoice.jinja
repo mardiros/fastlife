@@ -1,18 +1,18 @@
 {# def widget #}
 <pydantic_form.Widget :widget="widget" :removable="widget.removable">
-    <details id="{{widget.id}}" open>
-        <summary class="justify-between items-center font-medium cursor-pointer">
-            <H3>{{widget.title}}</H3>
-            <pydantic_form.Error :text="widget.error" />
-        </summary>
-        <div>
-            {% for group in groups %}
-            <div class="flex items-center">
-                <Checkbox :id="group.id" :name={{widget.name + '[]' }} :value="group.name"
-                    :checked="widget.value and group.name in widget.value" />
-                <Label class="ms-2 text-base text-neutral-900 dark:text-white" :for="group.id">{{group.name}} </Label>
-            </div>
-            {% endfor %}
-        </div>
-    </details>
+  <Details :id="widget.id">
+    <Summary :id="widget.id + '-summary'">
+      <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
+      <pydantic_form.Error :text="widget.error" />
+    </Summary>
+    <div>
+      {% for group in groups %}
+      <div class="flex items-center">
+        <Checkbox :id="group.id" :name={{widget.name + '[]' }} :value="group.name"
+          :checked="widget.value and group.name in widget.value" />
+        <Label class="ms-2 text-base text-neutral-900 dark:text-white" :for="group.id">{{group.name}} </Label>
+      </div>
+      {% endfor %}
+    </div>
+  </Details>
 </pydantic_form.Widget>
