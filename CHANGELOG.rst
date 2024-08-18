@@ -1,3 +1,8 @@
+0.9.6  - Released on 2024-08-18
+-------------------------------
+* Add more buttons options for htmx ajax call
+* Fix Option id
+
 0.9.5  - Released on 2024-08-17
 -------------------------------
 * Use icons to customize collapsible widget for sequence
