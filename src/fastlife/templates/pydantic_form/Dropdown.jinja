@@ -2,15 +2,16 @@
 
 <pydantic_form.Widget :widget="widget" :removable="widget.removable">
   <div class="pt-4">
-   <Label :for="widget.id">{{widget.title}}</Label>
-   <Select :name="widget.name" :id="widget.id">
+    <Label :for="widget.id">{{widget.title}}</Label>
+    <Select :name="widget.name" :id="widget.id">
       {%- for opt in widget.options -%}
-     <Option :value="opt.value" id={{widget.id + "-" + opt.value}} :selected="widget.value==opt.value">
-        {{ opt.text }}
+      <Option :value="opt.value" id={{widget.id + "-" + opt.value.replace(" ", " -")}}
+        :selected="widget.value==opt.value">
+        {{- opt.text -}}
       </Option>
       {%- endfor -%}
     </Select>
-   <pydantic_form.Error :text="widget.error" />
-   <pydantic_form.Hint :text="widget.hint" />
+    <pydantic_form.Error :text="widget.error" />
+    <pydantic_form.Hint :text="widget.hint" />
   </div>
 </pydantic_form.Widget>
