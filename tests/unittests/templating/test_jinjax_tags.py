@@ -138,6 +138,30 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
             value="submit" class="css">Go</button>""",
             id="button-hx-disable-push-url",
         ),
+        pytest.param(
+            """<Button hx-post="/" hx-params="none" class="css">Go</Button>""",
+            """<button hx-post="/" hx-params="none" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-disable-push-url",
+        ),
+        pytest.param(
+            """<Button hx-put="/" hx-params="none" class="css">Go</Button>""",
+            """<button hx-put="/" hx-params="none" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-disable-push-url",
+        ),
+        pytest.param(
+            """<Button hx-patch="/" hx-params="none" class="css">Go</Button>""",
+            """<button hx-patch="/" hx-params="none" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-disable-push-url",
+        ),
+        pytest.param(
+            """<Button hx-delete="/" hx-params="none" class="css">Go</Button>""",
+            """<button hx-delete="/" hx-params="none" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-disable-push-url",
+        ),
     ],
 )
 def test_render_Button(node: bs4.PageElement, expected: bs4.PageElement):

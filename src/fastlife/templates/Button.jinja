@@ -8,11 +8,14 @@ aria_label="",
 onclick="",
 hx_target="",
 hx_swap="",
-hx_get="",
 hx_select="",
 hx_after_request="",
 hx_vals="",
 hx_confirm="",
+hx_get="",
+hx_post="",
+hx_put="",
+hx_patch="",
 hx_delete="",
 hx_params=None,
 hx_push_url=false,
@@ -20,11 +23,13 @@ full_width=false,
 #}
 <button type="{{type}}" {%if id %}id="{{id}}" {%endif%} name="{{name}}" value="{{value}}" {% if
   hx_target%}hx-target="{{hx_target}}" {% endif %} {% if hx_swap %}hx-swap="{{hx_swap}}" {% endif %} {% if hx_select
-  %}hx-select="{{hx_select}}" {% endif %} {% if hx_get %}hx-get="{{hx_get}}" {% endif %} {% if onclick
-  %}onclick="{{onclick}}" {% endif %}{% if hx_after_request %}hx-on::after-request="{{hx_after_request}}" {% endif %} {%
-  if hx_vals %}hx-vals='{{hx_vals|safe}}' {% endif %} {% if hx_confirm %}hx-confirm="{{hx_confirm}}" {% endif %} {% if
-  hx_delete %}hx-delete="{{hx_delete}}" {% endif %} {% if hx_get and hx_push_url %} hx-push-url="true" {%- endif %} {%
-  if hx_params %} hx-params="{{hx_params}}" {%- endif %}{% if aria_label %}aria-label="{{aria_label}}" {% endif %}
-  class="{% if full_width %}w-full {% endif %}{{attrs.class or BUTTON_CLASS}}" {% if hidden %}hidden{% endif %}>
+  %}hx-select="{{hx_select}}" {% endif %} {% if onclick %}onclick="{{onclick}}" {% endif %}{% if hx_after_request
+  %}hx-on::after-request="{{hx_after_request}}" {% endif %} {% if hx_vals %}hx-vals='{{hx_vals|safe}}' {% endif %} {% if
+  hx_confirm %}hx-confirm="{{hx_confirm}}" {% endif %} {% if hx_get %}hx-get="{{hx_get}}" {% endif %} {% if hx_post
+  %}hx-post="{{hx_post}}" {% endif %} {% if hx_put %}hx-put="{{hx_put}}" {% endif %}{% if hx_patch
+  %}hx-patch="{{hx_patch}}" {% endif %}{% if hx_delete %}hx-delete="{{hx_delete}}" {% endif %} {% if hx_push_url %}
+  hx-push-url="true" {%- endif %} {% if hx_params %} hx-params="{{hx_params}}" {%- endif %}{% if aria_label
+  %}aria-label="{{aria_label}}" {% endif %} class="{% if full_width %}w-full {% endif %}{{attrs.class or BUTTON_CLASS}}"
+  {% if hidden %}hidden{% endif %}>
   {{- content -}}
 </button>

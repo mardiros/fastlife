@@ -53,6 +53,24 @@ class Constants(BaseModel):
         "dark:hover:bg-neutral-300",
     )
 
+    ICON_BUTTON_CLASS: str = space_join(
+        "bg-white",
+        "p-1",
+        "rounded-sm",
+        "text-primary-600",
+        "border",
+        "border-primary-600",
+        "hover:bg-primary-200",
+        "focus:outline-none",
+        "focus:ring-4",
+        "focus:ring-primary-500",
+        "dark:bg-primary-900",
+        "dark:text-neutral-300",
+        "dark:hover:bg-primary-800",
+        "dark:focus:ring-primary-500",
+        "dark:hover:text-primary-300",
+    )
+
     CHECKBOX_CLASS: str = space_join(
         "bg-neutral-100",
         "border-neutral-300",
