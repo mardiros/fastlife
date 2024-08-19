@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import sys
 from collections import defaultdict
 from importlib import util
@@ -20,10 +21,16 @@ def to_name(filename: str) -> str:
 
 
 def add_attrs(content: str) -> str:
-    return "{# def id=None #}\n\n" + content.replace(
+    ret = "{# def id=None, title=None #}\n\n" + content.replace(
         'viewBox="',
         '{% if id %}id="{{id}}" {%endif%}class="{{attrs.class or \'\'}}" viewBox="',
     )
+    ret = re.sub(
+        r"(<path[^>]*?)/>",
+        r"\1>{% if title %}<title>{{title}}</title>{% endif %}</path>",
+        ret,
+    )
+    return ret
 
 
 def iter_zip(heroicons_path: Path) -> Iterator[Tuple[str, str]]:
@@ -67,7 +74,7 @@ def main():
                 if_stmt = f'{{% elif mode == "{mode}"%}}'
             components.append(
                 f'{if_stmt}<icons.{mode}.{name} :id="id" '
-                ":class=\"attrs.class or ''\"/>\n",
+                ':class="attrs.class or \'\'" :title="title" />\n',
             )
 
         stmt = f"{'                '.join(components)}                {{%endif%}}"
@@ -75,7 +82,11 @@ def main():
         (iconsdir / f"{name}.jinja").write_text(
             dedent(
                 f"""\
-                {{# def id=None, mode: Literal["{'","'.join(modes)}"] = "solid"  #}}
+                {{# def
+                    id=None,
+                    title=None,
+                    mode: Literal["{'","'.join(modes)}"] = "solid"
+                #}}
 
                 {stmt}
                 """,
@@ -108,7 +119,7 @@ def main():
                 '<div class="flex flex-col items-center text-center cursor-pointer" '
                 f"onclick=\"copyText('&lt;icons.{name} /&gt;')\">"
             )
-            fw.write(f'<icons.{name} class="w-16 h-16" />\n')
+            fw.write(f'<icons.{name} class="w-16 h-16" title="{name}" />\n')
             fw.write(f'<p class="mt-2">{name}</p>\n')
             fw.write("</div>\n")
 

@@ -1,5 +1,5 @@
-{# def id=None #}
+{# def id=None, title=None #}
 
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" {% if id %}id="{{id}}" {%endif%}class="{{attrs.class or ''}}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M5.248 20.246H9.05m0 0h3.696m-3.696 0 5.893-16.502m0 0h-3.697m3.697 0h3.803"/>
+  <path stroke-linecap="round" stroke-linejoin="round" d="M5.248 20.246H9.05m0 0h3.696m-3.696 0 5.893-16.502m0 0h-3.697m3.697 0h3.803">{% if title %}<title>{{title}}</title>{% endif %}</path>
 </svg>

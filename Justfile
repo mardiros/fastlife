@@ -46,11 +46,14 @@ playwrightserver:
     docker run -p 3000:3000 --rm --init -it mcr.microsoft.com/playwright:v1.41.0-jammy /bin/sh -c "cd /home/pwuser && npx -y playwright@1.41.0 run-server --port 3000 --host 0.0.0.0"
 
 functest test_suite=default_functest_suite:
-    poetry run behave --tags=-dev --no-capture {{test_suite}}
+    poetry run behave --tags=-dev --tags=-icons --no-capture {{test_suite}}
 
 
 funcdevtest:
     poetry run behave --tags=dev --no-capture tests/functionals/
+
+showicons:
+    poetry run behave --tags=icons --no-capture tests/functionals/
 
 mypy:
     poetry run mypy src/ tests/
