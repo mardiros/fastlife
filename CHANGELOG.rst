@@ -1,3 +1,7 @@
+0.9.7  - Released on 2024-08-21
+-------------------------------
+* Add title attribute to icons
+
 0.9.6  - Released on 2024-08-18
 -------------------------------
 * Add more buttons options for htmx ajax call
