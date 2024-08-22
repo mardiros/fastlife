@@ -11,7 +11,8 @@ async def app():
     conf = Configurator(
         Settings(
             template_search_path="fastlife:templates,tests.fastlife_app:templates",
-            # check_permission="tests.fastlife_app.security:check_permission",
+            session_secret_key="supasickret",
+            check_permission="tests.fastlife_app.security:check_permission",
             jinjax_auto_reload=True,
         )
     )

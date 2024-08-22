@@ -52,11 +52,20 @@ pytailwindcss = "^0.2.0"
 [tool.pyright]
 include = ["src"]
 typeCheckingMode = "strict"
+reportMissingTypeStubs = false
 
 [[tool.mypy.overrides]]
+module =  "fastlife.*"
 disallow_any_generics = true
 disallow_untyped_defs = true
-module = "fastlife.*"
+
+[[tool.mypy.overrides]]
+module = [
+  "behave",
+  "venusian"
+]
+ignore_missing_imports = true
+
 
 [tool.isort]
 profile = "black"
