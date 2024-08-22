@@ -21,7 +21,7 @@ from typing import (
     Union,
 )
 
-import venusian  # type: ignore
+import venusian
 from fastapi import Depends, FastAPI, Request, Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
