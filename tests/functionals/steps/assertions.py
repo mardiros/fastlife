@@ -1,11 +1,10 @@
 # type: ignore
+import json
 
 from behave import then
-from playwright.sync_api import Page, expect
+from playwright.sync_api import expect
 
-
-class Context:
-    browser: Page
+from tests.functionals.context import Context
 
 
 @then('I see the text "{text}"')
@@ -24,3 +23,11 @@ def assert_not_text(context: Context, text: str):
 def assert_h1(context: Context, text: str):
     loc = context.browser.locator(f"xpath=//h1[contains(text(), '{text}')]")
     expect(loc).to_be_visible()
+
+
+@then("I see the json")
+def assert_json(context: Context):
+    assert context.response is not None
+    actual_json = context.response.json()
+    expected = json.loads(context.text)
+    assert actual_json == expected, f"{context.text} != {json.dumps(actual_json)}"

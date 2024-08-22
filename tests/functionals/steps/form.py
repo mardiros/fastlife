@@ -1,3 +1,4 @@
+# type: ignore
 import string
 from typing import Literal
 
@@ -120,3 +121,12 @@ def click_element_nth(context: Context, position: str, role: Role, name: str) ->
 def click_element(context: Context, role: Role, name: str) -> None:
     element = context.browser.get_by_role(role, name=name)
     element.click()
+
+
+@when('I click on the "{role}" "{name}" with response info')
+def click_element_api(context: Context, role: Role, name: str) -> None:
+    element = context.browser.get_by_role(role, name=name)
+
+    with context.browser.expect_response("**") as response_info:
+        element.click()
+    context.response = response_info.value

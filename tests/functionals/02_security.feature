@@ -1,6 +1,6 @@
-Feature: Basic form
+Feature: Authentication/Authorization
 
-  Scenario: Permissions
+  Scenario: Redirect to login page, view secured page, logout and redirect home
     Given anonymous user on "/secured"
     Then I see the text "Let's authenticate"
     When I fill the field "username" with "Alice"

@@ -22,8 +22,7 @@ async def hello_world(
 async def autoform(
     template: Annotated[Template, template("AutoForm")],
     account: Annotated[ModelResult[Account], model(Account)],
-):
-    print(account.errors)
+) -> Response:
     return template(
         model=account,
         globals={

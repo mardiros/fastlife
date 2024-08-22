@@ -1,0 +1,9 @@
+{# def model #}
+<Layout>
+  <div class="max-w-screen-lg mx-auto px-5 bg-white min-h-sceen">
+    <Form :hx-disable="true" method="post">
+      {{ pydantic_form(model=model) }}
+      <Button>Submit</Button>
+    </Form>
+  </div>
+</Layout>
