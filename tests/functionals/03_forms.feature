@@ -27,14 +27,14 @@ Feature: Pydantic Form Generation
       {"fm": 103.3}
       """
 
-  # not implemented yet
-  # Scenario: datetime
-  #   Given anonymous user on "/form/datetimefield"
-  #   When I fill the field "rendez-vous" with "2024-01-02"
-  #   Then I see the json
-  #     """
-  #     {"rdv": "2024-01-02T00:00:00Z"}
-  #     """
+  # # not implemented yet
+  # # Scenario: datetime
+  # #   Given anonymous user on "/form/datetimefield"
+  # #   When I fill the field "rendez-vous" with "2024-01-02"
+  # #   Then I see the json
+  # #     """
+  # #     {"rdv": "2024-01-02T00:00:00Z"}
+  # #     """
 
   Scenario: Bool
     Given anonymous user on "/form/booleanfield"
@@ -50,10 +50,7 @@ Feature: Pydantic Form Generation
     When I click on the "checkbox" "cooking"
     When I click on the "checkbox" "reading"
     And I click on the "button" "submit" with response info
-    Then I see the json
-      """
-      {"hobbies": ["reading", "cooking"]}
-      """
+    Then I see the python set "{"reading", "cooking"}" in "hobbies"
 
   Scenario: Enum
     Given anonymous user on "/form/enumfield"
@@ -69,7 +66,32 @@ Feature: Pydantic Form Generation
     When I click on the "checkbox" "lazy dog"
     When I click on the "checkbox" "crazy cat"
     And I click on the "button" "submit" with response info
+    Then I see the python set "{"dog", "cat"}" in "pets"
+
+  Scenario: Sequence[str]
+    Given anonymous user on "/form/string_sequence"
+    When I click on the "button" "Add"
+    And I fill the field "0" with "foo"
+    When I click on the "button" "Add"
+    And I fill the field "1" with "bar"
+    And I click on the "button" "submit" with response info
+      """
+      {"aliases": ["foo", "bar"]}
+      """
+
+  Scenario: Model
+    Given anonymous user on "/form/model"
+    When I fill the field "First name" with "John"
+    And I fill the field "Last name" with "Connor"
+    And I fill the field "Age" with "16"
+    And I click on the "button" "submit" with response info
     Then I see the json
       """
-      {"pets": ["dog", "cat"]}
+      {
+        "person": {
+          "fistname": "John",
+          "lastname": "Connor",
+          "age": 16
+        }
+      }
       """
