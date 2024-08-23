@@ -9,7 +9,7 @@ Feature: Pydantic Form Generation
       {"nick":"Alice"}
       """
 
-  Scenario: Intfield
+  Scenario: integer
     Given anonymous user on "/form/intfield"
     When I fill the field "seconds" with "42"
     And I click on the "button" "submit" with response info
@@ -18,7 +18,7 @@ Feature: Pydantic Form Generation
       {"seconds": 42}
       """
 
-  Scenario: Float
+  Scenario: float
     Given anonymous user on "/form/floatfield"
     When I fill the field "fm station" with "103.3"
     And I click on the "button" "submit" with response info
@@ -27,6 +27,14 @@ Feature: Pydantic Form Generation
       {"fm": 103.3}
       """
 
+  # not implemented yet
+  # Scenario: datetime
+  #   Given anonymous user on "/form/datetimefield"
+  #   When I fill the field "rendez-vous" with "2024-01-02"
+  #   Then I see the json
+  #     """
+  #     {"rdv": "2024-01-02T00:00:00Z"}
+  #     """
 
   Scenario: Bool
     Given anonymous user on "/form/booleanfield"

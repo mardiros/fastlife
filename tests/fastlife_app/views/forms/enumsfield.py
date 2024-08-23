@@ -1,5 +1,6 @@
 import enum
 from typing import Set
+
 from pydantic import BaseModel, Field
 
 
