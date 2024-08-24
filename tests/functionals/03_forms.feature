@@ -111,7 +111,6 @@ Feature: Pydantic Form Generation
       }
       """
 
-
   Scenario: Sequence[str] with custom widget
     Given anonymous user on "/form/string_sequence_widget"
     When I fill the field "Aliases" with
@@ -129,4 +128,16 @@ Feature: Pydantic Form Generation
       }
       """
 
+  @wip
+  Scenario: Hidden field
+    Given anonymous user on "/form/hiddenfield"
+    When I fill the field "name" with "Bob"
+    And I click on the "button" "submit" with response info
+    Then I see the json
+      """
+      {
+        "id": 42,
+        "name": "Bob"
+      }
+      """
 

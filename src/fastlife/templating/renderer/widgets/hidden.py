@@ -1,3 +1,4 @@
+from typing import Any
 from .base import Widget
 
 
@@ -8,6 +9,7 @@ class HiddenWidget(Widget[str]):
         *,
         value: str,
         token: str,
+        **kwargs: Any,
     ) -> None:
         super().__init__(name, value=value, token=token)
 
