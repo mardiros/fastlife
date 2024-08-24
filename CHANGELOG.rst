@@ -1,3 +1,12 @@
+0.10.0  - Released on 2024-08-24
+--------------------------------
+* Rename model_result and ModelResult to form_model and FormModel
+* Add an edit method for FormModel
+* Add a Textarea widget and fix Hidden widget
+* Fix rendering of sequence
+* Do not render main form as nested models
+* Add many functional tests for form field generations
+
 0.9.7  - Released on 2024-08-21
 -------------------------------
 * Add title attribute to icons

@@ -119,6 +119,7 @@ Feature: Pydantic Form Generation
       bar
       """
     And I click on the "button" "submit" with response info
+    Then I see the json
       """
       {
         "aliases": [
@@ -140,4 +141,6 @@ Feature: Pydantic Form Generation
         "name": "Bob"
       }
       """
+
+
 
