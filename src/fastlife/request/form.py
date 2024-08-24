@@ -29,6 +29,16 @@ class FormModel(Generic[T]):
     def default(cls, prefix: str, pydantic_type: Type[T]) -> "FormModel[T]":
         return cls(prefix, pydantic_type.model_construct(), {})
 
+    def edit(self, pydantic_type: T) -> None:
+        """
+        Load the form with the given model and consider it as valid for the user.
+
+        No error will be reported.
+        """
+        self.model = pydantic_type
+        self.errors = {}
+        self.is_valid = True
+
     @property
     def form_data(self) -> Mapping[str, Any]:
         return {self.prefix: self.model.model_dump()}
