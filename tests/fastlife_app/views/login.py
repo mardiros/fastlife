@@ -5,7 +5,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.request.model_result import ModelResult, model
+from fastlife.request.form import FormModel, form_model
 from tests.fastlife_app.security import AuthenticationPolicy
 
 
@@ -16,7 +16,7 @@ class LoginForm(BaseModel):
 
 async def login(
     request: Request,
-    loginform: Annotated[ModelResult[LoginForm], model(LoginForm)],
+    loginform: Annotated[FormModel[LoginForm], form_model(LoginForm)],
     template: Annotated[Template, template("Login")],
     policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
 ) -> Response:

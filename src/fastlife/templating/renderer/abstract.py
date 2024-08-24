@@ -5,7 +5,7 @@ from fastapi import Request
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
-from fastlife.request.model_result import ModelResult
+from fastlife.request.form import FormModel
 
 
 class AbstractTemplateRenderer(abc.ABC):
@@ -46,7 +46,7 @@ class AbstractTemplateRenderer(abc.ABC):
 
     @abc.abstractmethod
     def pydantic_form(
-        self, model: ModelResult[Any], *, token: Optional[str] = None
+        self, model: FormModel[Any], *, token: Optional[str] = None
     ) -> Markup:
         """
         Render an http form from a given model.

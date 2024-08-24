@@ -11,7 +11,7 @@ T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
 
 
-class ModelResult(Generic[T]):
+class FormModel(Generic[T]):
     prefix: str
     model: T
     errors: Mapping[str, str]
@@ -26,7 +26,7 @@ class ModelResult(Generic[T]):
         self.is_valid = is_valid
 
     @classmethod
-    def default(cls, prefix: str, pydantic_type: Type[T]) -> "ModelResult[T]":
+    def default(cls, prefix: str, pydantic_type: Type[T]) -> "FormModel[T]":
         return cls(prefix, pydantic_type.model_construct(), {})
 
     @property
@@ -36,7 +36,7 @@ class ModelResult(Generic[T]):
     @classmethod
     def from_payload(
         cls, prefix: str, pydantic_type: Type[T], data: Mapping[str, Any]
-    ) -> "ModelResult[T]":
+    ) -> "FormModel[T]":
         try:
             return cls(prefix, pydantic_type(**data.get(prefix, {})), {}, True)
         except ValidationError as exc:
@@ -75,17 +75,17 @@ class ModelResult(Generic[T]):
             return cls(prefix, model, errors)
 
 
-def model(
+def form_model(
     cls: Type[T], name: str | None = None
-) -> Callable[[Mapping[str, Any]], ModelResult[T]]:
+) -> Callable[[Mapping[str, Any]], FormModel[T]]:
     """
     Build a model, a class of type T based on Pydandic Base Model from a form payload.
     """
 
-    def to_model(data: MappingFormData, registry: Registry) -> ModelResult[T]:
+    def to_model(data: MappingFormData, registry: Registry) -> FormModel[T]:
         prefix = name or registry.settings.form_data_model_prefix
         if not data:
-            return ModelResult[T].default(prefix, cls)
-        return ModelResult[T].from_payload(prefix, cls, data)
+            return FormModel[T].default(prefix, cls)
+        return FormModel[T].from_payload(prefix, cls, data)
 
     return Depends(to_model)

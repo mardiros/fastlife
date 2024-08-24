@@ -3,12 +3,12 @@ from typing import Any, Mapping
 import pytest
 from pydantic import SecretStr
 
-from fastlife.request.model_result import ModelResult
+from fastlife.request.form import FormModel
 from tests.fastlife_app.models import Account
 
 
 def test_default():
-    account = ModelResult[Account].default("p", Account)
+    account = FormModel[Account].default("p", Account)
     assert account.is_valid is False
     assert account.form_data == {
         "p": {"aliases": [], "groups": [], "interest": set(), "recovery_address": None}
@@ -116,7 +116,7 @@ def test_from_payload(
     expected_form_data: Mapping[str, Any],
     expected_errors: Mapping[str, str],
 ):
-    account = ModelResult[Account].from_payload("p", Account, payload)
+    account = FormModel[Account].from_payload("p", Account, payload)
     assert account.is_valid is expected_valid
     assert account.form_data == expected_form_data
     assert account.errors == expected_errors

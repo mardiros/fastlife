@@ -4,7 +4,7 @@ from typing import Annotated, Any, Callable, Literal, Sequence, Set
 import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
-from fastlife.request.model_result import ModelResult
+from fastlife.request.form import FormModel
 from fastlife.templating.renderer.jinjax import JinjaxRenderer
 from fastlife.templating.renderer.widgets.base import Widget
 
@@ -74,7 +74,7 @@ def test_render_template(
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=ModelResult[DummyModel].default("payload", DummyModel),
+        model=FormModel[DummyModel].default("payload", DummyModel),
         token="tkt",
     )
     html = soup(result)
@@ -165,7 +165,7 @@ def test_render_template_values(
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=ModelResult[DummyModel].from_payload(
+        model=FormModel[DummyModel].from_payload(
             "payload",
             DummyModel,
             {
@@ -253,7 +253,7 @@ def test_render_custom_list(
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=ModelResult[Banger].from_payload(
+        model=FormModel[Banger].from_payload(
             "payload",
             Banger,
             {
@@ -276,7 +276,7 @@ def test_render_custom_list(
 def test_render_set(renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]):
     result = renderer.render_template(
         "DummyForm",
-        model=ModelResult[MultiSet].default("payload", MultiSet),
+        model=FormModel[MultiSet].default("payload", MultiSet),
         token="tkt",
     )
     html = soup(result)
@@ -306,7 +306,7 @@ def test_render_set_checked(
 ):
     result = renderer.render_template(
         "DummyForm",
-        model=ModelResult[MultiSet].from_payload(
+        model=FormModel[MultiSet].from_payload(
             "payload",
             MultiSet,
             {"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
