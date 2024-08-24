@@ -78,7 +78,6 @@ Feature: Pydantic Form Generation
       """
       {"aliases": ["foo", "bar"]}
       """
-
   Scenario: Model
     Given anonymous user on "/form/model"
     When I fill the field "First name" with "John"

@@ -48,6 +48,8 @@ playwrightserver:
 functest test_suite=default_functest_suite:
     poetry run behave --tags=-dev --tags=-icons --no-capture {{test_suite}}
 
+wip:
+    poetry run behave --tags=wip --no-capture tests/functionals/
 
 funcdevtest:
     poetry run behave --tags=dev --no-capture tests/functionals/

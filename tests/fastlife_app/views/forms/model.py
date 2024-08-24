@@ -8,4 +8,4 @@ class Person(BaseModel):
 
 
 class Form(BaseModel):
-    person: Person = Field(title="person")
+    professor: Person = Field(title="Knowledge Guru")

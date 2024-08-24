@@ -20,7 +20,7 @@ from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
 from fastlife.templating.renderer.widgets.sequence import SequenceWidget
 
-from .base import Widget, get_title
+from .base import Widget
 from .model import ModelWidget
 from .text import TextWidget
 from .union import UnionWidget
@@ -154,18 +154,18 @@ class WidgetFactory:
         removable: bool,
     ) -> Widget[Any]:
         ret: dict[str, Any] = {}
-        for key, field in typ.model_fields.items():
+        for key, child_field in typ.model_fields.items():
             child_key = f"{field_name}.{key}" if field_name else key
-            if field.exclude:
+            if child_field.exclude:
                 continue
-            if field.annotation is None:
+            if child_field.annotation is None:
                 raise ValueError(  # coverage: ignore
-                    f"Missing annotation for {field} in {child_key}"
+                    f"Missing annotation for {child_field} in {child_key}"
                 )
             ret[key] = self.build(
-                field.annotation,
+                child_field.annotation,
                 name=child_key,
-                field=field,
+                field=child_field,
                 value=value.get(key),
                 form_errors=form_errors,
                 removable=False,
@@ -174,9 +174,10 @@ class WidgetFactory:
             field_name,
             value=list(ret.values()),
             removable=removable,
-            title=get_title(typ),
+            title=field.title if field and field.title else "",
             token=self.token,
             error=form_errors.get(field_name),
+            nested=field is not None,
         )
 
     def build_union(

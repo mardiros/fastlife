@@ -1,7 +1,8 @@
 {# def widget, children_widget #}
 
 <pydantic_form.Widget :widget="widget" :removable="widget.removable">
-  <div id="{{widget.id}}" class="m-4">
+  <div id="{{widget.id}}"{% if widget.nested %} class="m-4"{%endif%}>
+    {% if widget.nested %}
     <Details>
       <Summary :id="widget.id + '-summary'">
         <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
@@ -13,5 +14,10 @@
         {% endfor %}
       </div>
     </Details>
+    {% else %}
+        {% for child in children_widget %}
+        {{ child }}
+        {% endfor %}
+    {% endif %}
   </div>
 </pydantic_form.Widget>

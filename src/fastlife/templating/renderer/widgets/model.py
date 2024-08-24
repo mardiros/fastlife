@@ -17,6 +17,7 @@ class ModelWidget(Widget[Sequence[Widget[Any]]]):
         removable: bool,
         title: str,
         token: str,
+        nested: bool,
     ):
         super().__init__(
             name,
@@ -26,6 +27,7 @@ class ModelWidget(Widget[Sequence[Widget[Any]]]):
             removable=removable,
             token=token,
         )
+        self.nested = nested
 
     def get_template(self) -> str:
         return "pydantic_form.Model"

@@ -144,10 +144,29 @@ def test_render_model(
         value=[TextWidget("name", title="n", token="x", removable=True)],
         removable=False,
         token="x",
+        nested=False,
     )
     result = model.to_html(renderer)
     html = soup(result)
     assert html.find("div", attrs={"id": "foo-x"})
+    assert html.find("input", attrs={"id": "name-x", "type": "text"})
+
+
+def test_render_nested_model(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    model = ModelWidget(
+        "foo",
+        title="Foo",
+        value=[TextWidget("name", title="n", token="x", removable=True)],
+        removable=False,
+        token="x",
+        nested=True,
+    )
+    result = model.to_html(renderer)
+    html = soup(result)
+    assert html.find("div", attrs={"id": "foo-x"})
+    assert html.find("summary", attrs={"id": "foo-x-summary"})
     assert html.find("input", attrs={"id": "name-x", "type": "text"})
 
 
@@ -331,6 +350,7 @@ def test_render_custom(
                 error="It did not work",
                 removable=False,
                 token="x",
+                nested=True,
             ),
             id="model-widget",
         ),
