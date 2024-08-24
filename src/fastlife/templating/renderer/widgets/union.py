@@ -14,6 +14,8 @@ class UnionWidget(Widget[Widget[Any]]):
         name: str,
         *,
         title: Optional[str],
+        hint: Optional[str] = None,
+        aria_label: Optional[str] = None,
         value: Optional[Widget[Any]],
         error: str | None = None,
         children_types: Sequence[Type[BaseModel]],
@@ -25,6 +27,8 @@ class UnionWidget(Widget[Widget[Any]]):
             value=value,
             error=error,
             title=title,
+            hint=hint,
+            aria_label=aria_label,
             token=token,
             removable=removable,
         )

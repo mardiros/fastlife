@@ -16,12 +16,16 @@ class ModelWidget(Widget[Sequence[Widget[Any]]]):
         error: str | None = None,
         removable: bool,
         title: str,
+        hint: str | None = None,
+        aria_label: str | None = None,
         token: str,
         nested: bool,
     ):
         super().__init__(
             name,
             title=title,
+            hint=hint,
+            aria_label=aria_label,
             value=value,
             error=error,
             removable=removable,

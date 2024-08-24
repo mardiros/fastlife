@@ -9,12 +9,13 @@ class DropDownWidget(Widget[str]):
         name: str,
         *,
         title: Optional[str],
+        hint: Optional[str] = None,
+        aria_label: Optional[str] = None,
         value: Optional[str] = None,
         error: str | None = None,
         options: Sequence[Tuple[str, str]] | Sequence[str],
         removable: bool = False,
         token: Optional[str] = None,
-        hint: Optional[str] = None,
     ) -> None:
         super().__init__(
             name,
@@ -23,6 +24,8 @@ class DropDownWidget(Widget[str]):
             title=title,
             token=token,
             removable=removable,
+            hint=hint,
+            aria_label=aria_label,
         )
         self.options: list[dict[str, str]] = []
         for opt in options:
@@ -30,7 +33,6 @@ class DropDownWidget(Widget[str]):
                 self.options.append({"value": opt[0], "text": opt[1]})
             else:
                 self.options.append({"value": opt, "text": opt})
-        self.hint = hint
 
     def get_template(self) -> str:
         return "pydantic_form.Dropdown"

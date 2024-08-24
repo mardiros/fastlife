@@ -23,6 +23,8 @@ class Widget(abc.ABC, Generic[T]):
     "variable name, nested variables have dots"
     title: str
     "Human title for the widget"
+    hint: str
+    "A help message for the the widget"
     aria_label: str
     "Non visible text alternative"
     token: str
@@ -37,6 +39,7 @@ class Widget(abc.ABC, Generic[T]):
         value: T | None = None,
         error: str | None = None,
         title: str | None = None,
+        hint: str | None = None,
         token: str | None = None,
         aria_label: str | None = None,
         removable: bool = False,
@@ -45,6 +48,7 @@ class Widget(abc.ABC, Generic[T]):
         self.value = value
         self.error = error
         self.title = title or name.split(".")[-1]
+        self.hint = hint or ""
         self.aria_label = aria_label or ""
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.removable = removable

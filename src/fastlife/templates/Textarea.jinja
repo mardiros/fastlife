@@ -1,0 +1,11 @@
+{# def
+name,
+value="",
+id="",
+aria_label="",
+placeholder="",
+#}
+
+<textarea name="{{name}}" {% if id %}id="{{id}}" {% endif %}{% if aria_label
+  %}aria-label="{{aria_label}}" {% endif %} {% if placeholder %}placeholder="{{placeholder}}" {% endif %}
+  class="{{attrs.class or INPUT_CLASS}}">{{content}}</textarea>

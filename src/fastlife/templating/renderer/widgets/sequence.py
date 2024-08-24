@@ -1,4 +1,4 @@
-from typing import Any, Optional, Sequence, Type
+from typing import Any, Sequence, Type
 
 from markupsafe import Markup
 
@@ -12,9 +12,10 @@ class SequenceWidget(Widget[Sequence[Widget[Any]]]):
         self,
         name: str,
         *,
-        title: Optional[str],
-        hint: Optional[str],
-        value: Optional[Sequence[Widget[Any]]],
+        title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
+        value: Sequence[Widget[Any]] | None,
         error: str | None = None,
         item_type: Type[Any],
         token: str,
@@ -25,11 +26,12 @@ class SequenceWidget(Widget[Sequence[Widget[Any]]]):
             value=value,
             error=error,
             title=title,
+            hint=hint,
+            aria_label=aria_label,
             token=token,
             removable=removable,
         )
         self.item_type = item_type
-        self.hint = hint
 
     def get_template(self) -> str:
         return "pydantic_form/Sequence"

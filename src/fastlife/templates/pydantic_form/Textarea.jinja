@@ -1,0 +1,10 @@
+{# def widget #}
+<pydantic_form.Widget :widget="widget" :removable="widget.removable">
+  <div class="pt-4">
+    <Label :for="widget.id">{{widget.title}}</Label>
+    <pydantic_form.Error :text="widget.error" />
+    <Textarea :name="widget.name" :id="widget.id" :aria-label="widget.aria_label">{% for v in widget.value%}{{v}}
+{% endfor %}</Textarea>
+    <pydantic_form.Hint :text="widget.hint" />
+  </div>
+</pydantic_form.Widget>

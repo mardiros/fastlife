@@ -86,7 +86,12 @@ class WidgetFactory:
                             value=value,
                             removable=removable,
                             title=field.title if field else "",
-                            aria_label=field.description if field else None,
+                            hint=field.description if field else None,
+                            aria_label=(
+                                field.json_schema_extra.get("aria_label")  # type:ignore
+                                if field and field.json_schema_extra
+                                else None
+                            ),
                             token=self.token,
                             error=form_errors.get(name),
                         ),
@@ -175,6 +180,12 @@ class WidgetFactory:
             value=list(ret.values()),
             removable=removable,
             title=field.title if field and field.title else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             error=form_errors.get(field_name),
             nested=field is not None,
@@ -234,6 +245,12 @@ class WidgetFactory:
             value=child,
             children_types=types,  # type: ignore
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             removable=removable,
             error=form_errors.get(field_name),
@@ -265,8 +282,13 @@ class WidgetFactory:
         ]
         return SequenceWidget(
             field_name,
-            hint=field.description if field else "",
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             value=items,
             item_type=typ,  # type: ignore
             token=self.token,
@@ -321,6 +343,12 @@ class WidgetFactory:
         return ChecklistWidget(
             field_name,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             value=choices,
             removable=removable,
@@ -340,6 +368,12 @@ class WidgetFactory:
             field_name,
             removable=removable,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             value=value,
             error=form_errors.get(field_name),
@@ -356,11 +390,16 @@ class WidgetFactory:
     ) -> Widget[Any]:
         return TextWidget(
             field_name,
-            hint=field.description if field else "",
             input_type="email",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             value=str(value),
             error=form_errors.get(field_name),
@@ -377,11 +416,16 @@ class WidgetFactory:
     ) -> Widget[Any]:
         return TextWidget(
             field_name,
-            hint=field.description if field else "",
             input_type="password",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             value=value.get_secret_value() if isinstance(value, SecretStr) else value,
             error=form_errors.get(field_name),
@@ -408,6 +452,12 @@ class WidgetFactory:
             options=choices,
             removable=removable,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             value=str(value),
             error=form_errors.get(field_name),
@@ -428,6 +478,12 @@ class WidgetFactory:
             options=options,  # type: ignore
             removable=removable,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
             token=self.token,
             value=str(value),
             error=form_errors.get(field_name),
@@ -444,11 +500,15 @@ class WidgetFactory:
     ) -> Widget[Any]:
         return TextWidget(
             field_name,
-            hint=field.description if field else None,
             placeholder=str(field.examples[0]) if field and field.examples else None,
-            aria_label=field.description if field else None,
-            removable=removable,
             title=field.title if field else "",
+            hint=field.description if field else None,
+            aria_label=(
+                field.json_schema_extra.get("aria_label")  # type:ignore
+                if field and field.json_schema_extra
+                else None
+            ),
+            removable=removable,
             token=self.token,
             value=str(value),
             error=form_errors.get(field_name),

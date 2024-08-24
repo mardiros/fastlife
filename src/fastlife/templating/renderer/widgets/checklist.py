@@ -29,6 +29,8 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
         name: str,
         *,
         title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
         value: Sequence[Checkable],
         error: str | None = None,
         token: str,
@@ -40,6 +42,8 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
             error=error,
             token=token,
             title=title,
+            hint=hint,
+            aria_label=aria_label,
             removable=removable,
         )
 

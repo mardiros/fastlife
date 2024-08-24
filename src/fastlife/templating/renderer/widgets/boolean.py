@@ -7,6 +7,8 @@ class BooleanWidget(Widget[bool]):
         name: str,
         *,
         title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
         value: bool = False,
         error: str | None = None,
         removable: bool = False,
@@ -15,6 +17,8 @@ class BooleanWidget(Widget[bool]):
         super().__init__(
             name,
             title=title,
+            hint=hint,
+            aria_label=aria_label,
             value=value,
             error=error,
             removable=removable,

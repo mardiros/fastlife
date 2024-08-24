@@ -98,6 +98,12 @@ def fill_input(context: Context, label: str, value: str):
     field.fill(value)
 
 
+@when('I fill the field "{label}" with')
+def fill_textarea(context: Context, label: str):
+    field = context.browser.get_by_label(label)
+    field.fill(context.text)
+
+
 @when('I select the option "{value}" of "{label}"')
 def select_option(context: Context, value: str, label: str):
     field = context.browser.get_by_label(label)

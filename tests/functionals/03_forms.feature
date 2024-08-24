@@ -6,7 +6,9 @@ Feature: Pydantic Form Generation
     And I click on the "button" "submit" with response info
     Then I see the json
       """
-      {"nick":"Alice"}
+      {
+        "nick": "Alice"
+      }
       """
 
   Scenario: integer
@@ -15,7 +17,9 @@ Feature: Pydantic Form Generation
     And I click on the "button" "submit" with response info
     Then I see the json
       """
-      {"seconds": 42}
+      {
+        "seconds": 42
+      }
       """
 
   Scenario: float
@@ -24,7 +28,9 @@ Feature: Pydantic Form Generation
     And I click on the "button" "submit" with response info
     Then I see the json
       """
-      {"fm": 103.3}
+      {
+        "fm": 103.3
+      }
       """
 
   # # not implemented yet
@@ -42,7 +48,9 @@ Feature: Pydantic Form Generation
     And I click on the "button" "submit" with response info
     Then I see the json
       """
-      {"aggreed": true}
+      {
+        "aggreed": true
+      }
       """
 
   Scenario: Set[Literal]
@@ -58,7 +66,9 @@ Feature: Pydantic Form Generation
     And I click on the "button" "submit" with response info
     Then I see the json
       """
-      {"gender": "female"}
+      {
+        "gender": "female"
+      }
       """
 
   Scenario: Set[Enum]
@@ -76,7 +86,12 @@ Feature: Pydantic Form Generation
     And I fill the field "1" with "bar"
     And I click on the "button" "submit" with response info
       """
-      {"aliases": ["foo", "bar"]}
+      {
+        "aliases": [
+          "foo",
+          "bar"
+        ]
+      }
       """
 
   Scenario: Model
@@ -95,3 +110,23 @@ Feature: Pydantic Form Generation
         }
       }
       """
+
+
+  Scenario: Sequence[str] with custom widget
+    Given anonymous user on "/form/string_sequence_widget"
+    When I fill the field "Aliases" with
+      """
+      foo
+      bar
+      """
+    And I click on the "button" "submit" with response info
+      """
+      {
+        "aliases": [
+          "foo",
+          "bar"
+        ]
+      }
+      """
+
+
