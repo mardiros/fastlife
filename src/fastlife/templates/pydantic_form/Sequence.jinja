@@ -18,15 +18,15 @@
       </script>
 
       <div id="{{widget.id}}-content" class="m-4" data-length="{{children_widgets|length|string}}">
-        {% for child in children_widgets %}
-        {% set container_id = widget.id + "-container" %}
+        {% set container_id = widget.id + "-children-container" %}
         <div id="{{container_id}}">
+          {% for child in children_widgets %}
           {{ child }}
+          {% endfor%}
         </div>
-        {% endfor%}
       </div>
       <div>
-        {% set container_id = "#" + widget.id + "-container" %}
+        {% set container_id = "#" + widget.id + "-children-container" %}
         {% set add_id = widget.id + "-add" %}
         {% set vals = 'js:{"name": '+ fnGetName + '(), "token": "' + type.token + '", "removable": true}' %}
         <Button type="button" :hx-target="container_id" hx-swap="beforeend" :id="add_id" :hx-vals="vals" :hx-get="type.url">
