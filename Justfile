@@ -5,7 +5,7 @@ default_functest_suite := 'tests/functionals'
 export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
 
 install:
-    poetry install
+    poetry install --with dev --with doc
 
 doc:
     cd docs && poetry run make html
@@ -65,8 +65,7 @@ black:
     poetry run black .
 
 gh-pages:
-    # poetry export --with dev -f requirements.txt -o docs/requirements.txt --without-hashes
-    echo "No docs built"
+    poetry export --with doc -f requirements.txt -o docs/requirements.txt --without-hashes
 
 release major_minor_patch: test gh-pages && changelog
     poetry version {{major_minor_patch}}
