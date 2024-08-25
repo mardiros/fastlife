@@ -1,21 +1,28 @@
+"""
+Bind template to the view in order to build an html response.
+"""
+
 from typing import Any, Callable
 
-from fastapi import Depends, Request, Response
+from fastapi import Depends, Response
 
-from fastlife.config.registry import Registry
+from fastlife.request import Request
 from fastlife.security.csrf import create_csrf_token
 
 Template = Callable[..., Response]
-TemplateEngine = Callable[["Registry", Request], Template]
+"""Type to annotate a FastAPI depency injection."""
+
+TemplateEngine = Callable[[Request], Template]
 
 
 def get_template(template: str, *, content_type: str = "text/html") -> TemplateEngine:
     def render_template(
-        reg: "Registry",
         request: Request,
         *,
         _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Template:
+        reg = request.registry
+
         def parametrizer(**kwargs: Any) -> Response:
             request.scope[reg.settings.csrf_token_name] = (
                 request.cookies.get(reg.settings.csrf_token_name)

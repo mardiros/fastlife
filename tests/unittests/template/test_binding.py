@@ -1,9 +1,8 @@
 from typing import Any
 
 import pytest
-from fastapi import Request
 
-from fastlife.config.registry import AppRegistry
+from fastlife.request import Request
 from fastlife.templating.binding import get_template
 
 
@@ -17,11 +16,9 @@ from fastlife.templating.binding import get_template
         }
     ],
 )
-async def test_get_csrf_token_reuse_token(
-    dummy_request_param: Request, default_registry: AppRegistry
-):
+async def test_get_csrf_token_reuse_token(dummy_request_param: Request):
     template = get_template("Layout")
-    renderer = template(default_registry, dummy_request_param)
+    renderer = template(dummy_request_param)
     response = renderer()
     assert "set-cookie" in response.headers
     assert (
@@ -40,15 +37,12 @@ async def test_get_csrf_token_reuse_token(
         }
     ],
 )
-async def test_create_csrf_token(
-    dummy_request_param: Request, default_registry: AppRegistry
-):
+async def test_create_csrf_token(dummy_request_param: Request):
     def create_token():
         return "xxxCsrfTokenxxx"
 
     template = get_template("Layout")
     renderer: Any = template(
-        default_registry,
         dummy_request_param,
         _create_csrf_token=create_token,  # type: ignore
     )
@@ -71,11 +65,9 @@ async def test_create_csrf_token(
         }
     ],
 )
-async def test_get_csrf_token_https(
-    dummy_request_param: Request, default_registry: AppRegistry
-):
+async def test_get_csrf_token_https(dummy_request_param: Request):
     template = get_template("Layout")
-    renderer = template(default_registry, dummy_request_param)
+    renderer = template(dummy_request_param)
     response = renderer()
     assert "set-cookie" in response.headers
     assert (
