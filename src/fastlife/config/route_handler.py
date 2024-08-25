@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Callable, Coroutine, override
+from typing import TYPE_CHECKING, Any, Callable, Coroutine
 
 from fastapi.routing import APIRoute
 from starlette.requests import Request as StarletteRequest
@@ -29,7 +29,6 @@ class FastlifeRoute(APIRoute):
     :class:`fastlife.config.Registry` depenency injection.
     """
 
-    @override
     def get_route_handler(
         self,
     ) -> Callable[[StarletteRequest], Coroutine[Any, Any, Response]]:
