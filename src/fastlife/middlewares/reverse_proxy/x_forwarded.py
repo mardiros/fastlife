@@ -16,7 +16,7 @@ from typing import Optional, Sequence, Tuple
 
 from starlette.types import ASGIApp, Receive, Scope, Send
 
-from fastlife.config.base import AbstractMiddleware
+from fastlife.middlewares.base import AbstractMiddleware
 
 log = logging.getLogger(__name__)
 

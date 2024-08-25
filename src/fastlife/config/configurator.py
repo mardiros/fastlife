@@ -28,8 +28,8 @@ from fastapi import Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 
-from fastlife.config.base import AbstractMiddleware
 from fastlife.config.route_handler import FastlifeRoute
+from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.request.request import Request
 from fastlife.security.csrf import check_csrf
 

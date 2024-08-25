@@ -5,7 +5,7 @@ from starlette.datastructures import MutableHeaders
 from starlette.requests import HTTPConnection
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from fastlife.config.base import AbstractMiddleware
+from fastlife.middlewares.base import AbstractMiddleware
 
 from .serializer import AbsractSessionSerializer, SignedSessionSerializer
 
