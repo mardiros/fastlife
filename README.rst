@@ -3,7 +3,7 @@ Fastlife
 ========
 
 .. image:: https://github.com/mardiros/fastlife/actions/workflows/gh-pages.yml/badge.svg
-   :target: https://mardiros.github.io/fastlife/user/introduction.html
+   :target: https://mardiros.github.io/fastlife/
    :alt: Documentation
 
 .. image:: https://github.com/mardiros/fastlife/actions/workflows/main.yml/badge.svg
