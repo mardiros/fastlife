@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from fastapi import Request
 
-from fastlife.configurator.registry import AppRegistry
+from fastlife.config.registry import AppRegistry
 from fastlife.templating.binding import get_template
 
 

@@ -4,7 +4,7 @@ from fastapi import Path, Response
 from pydantic import BaseModel
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.configurator.route_handler import FastlifeRequest
+from fastlife.config.route_handler import FastlifeRequest
 from fastlife.request.form import FormModel
 from fastlife.request.form_data import MappingFormData
 from fastlife.shared_utils.resolver import resolve

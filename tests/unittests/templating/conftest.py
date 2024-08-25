@@ -4,7 +4,7 @@ import bs4
 import pytest
 from fastapi import Request
 
-from fastlife.configurator.settings import Settings
+from fastlife.config.settings import Settings
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
 
 

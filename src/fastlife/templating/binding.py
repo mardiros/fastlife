@@ -2,7 +2,7 @@ from typing import Any, Callable
 
 from fastapi import Depends, Request, Response
 
-from fastlife.configurator.registry import Registry
+from fastlife.config.registry import Registry
 from fastlife.security.csrf import create_csrf_token
 
 Template = Callable[..., Response]

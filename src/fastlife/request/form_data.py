@@ -10,7 +10,7 @@ from typing import (
 
 from fastapi import Depends, Request
 
-from fastlife.configurator.registry import Registry
+from fastlife.config.registry import Registry
 
 
 def unflatten_struct(

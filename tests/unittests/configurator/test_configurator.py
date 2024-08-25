@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from fastlife.configurator.configurator import Configurator, Settings
+from fastlife.config.configurator import Configurator, Settings
 
-# from fastlife.configurator.registry import cleanup_registry
+# from fastlife.config.registry import cleanup_registry
 
 
 async def test_app():

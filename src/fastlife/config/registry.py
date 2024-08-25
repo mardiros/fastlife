@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends
 
-from fastlife.configurator.route_handler import FastlifeRequest
+from fastlife.config.route_handler import FastlifeRequest
 from fastlife.security.policy import CheckPermission
 from fastlife.shared_utils.resolver import resolve
 

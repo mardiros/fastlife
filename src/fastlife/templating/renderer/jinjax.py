@@ -9,7 +9,7 @@ from fastlife.request.form import FormModel
 from fastlife.templating.renderer.widgets.factory import WidgetFactory
 
 if TYPE_CHECKING:
-    from fastlife.configurator.settings import Settings  # coverage: ignore
+    from fastlife.config.settings import Settings  # coverage: ignore
 
 from fastlife.shared_utils.resolver import resolve, resolve_path
 

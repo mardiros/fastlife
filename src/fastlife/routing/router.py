@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi import APIRouter
 
-from fastlife.configurator.route_handler import FastlifeRoute
+from fastlife.config.route_handler import FastlifeRoute
 
 
 class FastLifeRouter(APIRouter):

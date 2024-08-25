@@ -3,7 +3,7 @@ from typing import Any, Callable, Generic, Mapping, Type, TypeVar, get_origin
 from fastapi import Depends
 from pydantic import BaseModel, ValidationError
 
-from fastlife.configurator.registry import Registry
+from fastlife.config.registry import Registry
 from fastlife.request.form_data import MappingFormData
 from fastlife.shared_utils.infer import is_union
 

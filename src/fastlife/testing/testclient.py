@@ -13,7 +13,7 @@ from fastapi.testclient import TestClient
 from multidict import MultiDict
 from starlette.types import ASGIApp
 
-from fastlife.configurator.settings import Settings
+from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 from fastlife.shared_utils.resolver import resolve
 

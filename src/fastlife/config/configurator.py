@@ -26,8 +26,8 @@ from fastapi import Depends, FastAPI, Request, Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 
-from fastlife.configurator.base import AbstractMiddleware
-from fastlife.configurator.route_handler import FastlifeRoute
+from fastlife.config.base import AbstractMiddleware
+from fastlife.config.route_handler import FastlifeRoute
 from fastlife.security.csrf import check_csrf
 
 from .route_handler import FastlifeRequest

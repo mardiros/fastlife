@@ -7,8 +7,8 @@ from urllib.parse import urlencode
 import pytest
 from fastapi import APIRouter, Request
 
-from fastlife.configurator.registry import AppRegistry
-from fastlife.configurator.settings import Settings
+from fastlife.config.registry import AppRegistry
+from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 
 

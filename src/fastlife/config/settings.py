@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     a python module name. for instance `fastlife:templates` is the direcotry templates
     found in the fastlife package.
     """
-    registry_class: str = Field(default="fastlife.configurator.registry:AppRegistry")
+    registry_class: str = Field(default="fastlife.config.registry:AppRegistry")
     """Implementation class for the application regitry."""
     template_renderer_class: str = Field(
         default="fastlife.templating.renderer:JinjaxTemplateRenderer"

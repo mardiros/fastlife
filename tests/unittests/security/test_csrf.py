@@ -1,7 +1,7 @@
 import pytest
 from fastapi import Request
 
-from fastlife.configurator.registry import AppRegistry
+from fastlife.config.registry import AppRegistry
 from fastlife.security.csrf import CSRFAttack, check_csrf, create_csrf_token
 
 

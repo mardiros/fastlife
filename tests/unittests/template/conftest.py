@@ -3,7 +3,7 @@ from pathlib import Path
 import bs4
 import pytest
 
-from fastlife.configurator.settings import Settings
+from fastlife.config.settings import Settings
 from fastlife.templating.renderer import JinjaxTemplateRenderer
 
 template_path = str(Path(__file__).parent / "components")

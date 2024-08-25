@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import Response
 from starlette.responses import FileResponse
 
-from fastlife.configurator import Configurator, configure
+from fastlife.config import Configurator, configure
 
 static_dir = Path(__file__).parent
 favicon_path = Path(__file__).parent / "favicon.ico"

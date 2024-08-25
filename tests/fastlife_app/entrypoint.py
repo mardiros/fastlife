@@ -4,7 +4,7 @@ from hypercorn.asyncio import serve
 from hypercorn.config import Config
 
 from fastlife import Configurator
-from fastlife.configurator.configurator import Settings
+from fastlife.config.configurator import Settings
 
 
 async def app():

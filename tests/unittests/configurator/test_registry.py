@@ -1,5 +1,5 @@
-from fastlife.configurator import registry
-from fastlife.configurator.settings import Settings
+from fastlife.config import registry
+from fastlife.config.settings import Settings
 
 
 def test_initialize_registry(settings: Settings):

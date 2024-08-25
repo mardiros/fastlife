@@ -4,7 +4,7 @@ from fastapi import Query, Request, Response
 from pydantic.fields import FieldInfo
 
 from fastlife import Configurator, configure
-from fastlife.configurator.registry import Registry
+from fastlife.config.registry import Registry
 from fastlife.shared_utils.resolver import resolve_extended
 
 

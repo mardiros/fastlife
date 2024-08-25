@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 
 from fastlife import Configurator
-from fastlife.configurator.configurator import Settings
+from fastlife.config.configurator import Settings
 from fastlife.testing import WebTestClient
 
 
