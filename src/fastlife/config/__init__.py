@@ -1,4 +1,11 @@
 """Configure fastlife app for dependency injection."""
-from .configurator import Configurator, configure
 
-__all__ = ["Configurator", "configure"]
+from .configurator import Configurator, configure
+from .registry import AppRegistry, Registry
+
+__all__ = [
+    "Configurator",
+    "configure",
+    "Registry",
+    "AppRegistry",
+]

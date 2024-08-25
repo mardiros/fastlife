@@ -4,14 +4,14 @@ from fastapi import Path, Response
 from pydantic import BaseModel
 
 from fastlife import Configurator, Template, configure, template
-from fastlife.config.route_handler import FastlifeRequest
 from fastlife.request.form import FormModel
 from fastlife.request.form_data import MappingFormData
+from fastlife.request.request import Request
 from fastlife.shared_utils.resolver import resolve
 
 
 async def testform(
-    request: FastlifeRequest,
+    request: Request,
     type: Annotated[str, Path],
     data: MappingFormData,
     template: Annotated[Template, template("TestForm")],

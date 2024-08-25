@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Annotated
 
 from fastapi import Depends
 
-from fastlife.config.route_handler import FastlifeRequest
+from fastlife.request.request import Request
 from fastlife.security.policy import CheckPermission
 from fastlife.shared_utils.resolver import resolve
 
@@ -41,7 +41,7 @@ def initialize_registry(settings: Settings) -> AppRegistry:
     return AppRegistryCls(settings)  # type: ignore
 
 
-def get_registry(request: FastlifeRequest) -> AppRegistry:
+def get_registry(request: Request) -> AppRegistry:
     return request.registry
 
 
