@@ -16,6 +16,7 @@
    develop/shared_utils/index
    develop/templating/index
    develop/testing/index
+   develop/views/index
 
 
 Indices and tables
