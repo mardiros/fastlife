@@ -78,7 +78,9 @@ class Configurator:
 
     def include(self, module: str | ModuleType) -> "Configurator":
         """
-        Include a module in order to load its views.
+        Include a module in order to load its configuration.
+
+        It will load and include all the submodule as well.
 
         Here is an example.
 
