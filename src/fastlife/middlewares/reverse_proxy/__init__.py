@@ -10,7 +10,7 @@ notethat the ``x-forwarded-port`` header is not used.
 
 Note that uvicorn or hypercorn offer the same kind middleware.
 
-Norwadays, every website is in https, so, this middleware is active by default.
+Norw, every website is in https, so, this middleware is active by default.
 """
 from fastlife import Configurator, configure
 
