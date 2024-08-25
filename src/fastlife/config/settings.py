@@ -42,7 +42,9 @@ class Settings(BaseSettings):
     Pydantic form default model prefix for serialized field in www-urlencoded-form.
     """
     csrf_token_name: str = Field(default="csrf_token")
-    """Name of the html input field for csrf token."""
+    """
+    Name of the html input field and for the http cookie for csrf token.
+    """
 
     jinjax_use_cache: bool = Field(default=True)
     """

@@ -5,11 +5,13 @@ from typing import Any, Mapping, MutableMapping, Sequence, Tuple, Type, cast
 from urllib.parse import urlencode
 
 import pytest
-from fastapi import APIRouter, Request
+from fastapi.requests import Request as FastApiRequest
 
 from fastlife.config.registry import AppRegistry
 from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
+from fastlife.request import Request
+from fastlife.routing.router import Router
 
 
 @pytest.fixture()
@@ -23,11 +25,13 @@ def python_path(root_dir: Path) -> None:
 
 
 @pytest.fixture()
-def dummy_request_param(params: Mapping[str, Any]) -> Request:
+def dummy_request_param(
+    default_registry: AppRegistry, params: Mapping[str, Any]
+) -> Request:
     scope = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
-        "router": APIRouter(),
+        "router": Router(),
         "query_string": b"",
         "scheme": "http",
         "server": ("testserver", 80),
@@ -50,7 +54,7 @@ def dummy_request_param(params: Mapping[str, Any]) -> Request:
         )
     body = req_params.pop("body", None)
     scope.update(req_params)
-    req = Request(scope)
+    req = Request(default_registry, FastApiRequest(scope))
     if body:
         req._body = body.encode("utf-8")  # type: ignore
     return req

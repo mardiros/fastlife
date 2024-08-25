@@ -1,3 +1,7 @@
+"""
+Set of functions to unserialize www-form-urlencoded format to python simple types.
+"""
+
 from typing import (
     Annotated,
     Any,
@@ -20,6 +24,12 @@ def unflatten_struct(
     *,
     csrf_token_name: Optional[str] = None,
 ) -> Mapping[str, Any] | Sequence[Any]:
+    """
+    Take a flatten_input map, with key segmented by `.` and build a nested dict.
+
+    Fastlife use plain old web form to send data via HTTP POST, this function
+    prepare the data before get injected to pydantic for serialization.
+    """
     # we sort to ensure that list index are ordered
     # formkeys = sorted(flatten_input.keys())
     for key in flatten_input:
@@ -71,8 +81,12 @@ def unflatten_struct(
 
 
 async def unflatten_mapping_form_data(
-    request: Request, reg: Registry
+    request: Request, registry: Registry
 ) -> Mapping[str, Any]:
+    """
+    Parse the :meth:`fastlife.request.request.form` and build a nested structure.
+    """
+
     form_data = await request.form()
     form_data_decode_list: MutableMapping[str, Any] = {}
     for key, val in form_data.multi_items():
@@ -90,7 +104,7 @@ async def unflatten_mapping_form_data(
             form_data_decode_list[key] = val
 
     ret = unflatten_struct(
-        form_data_decode_list, {}, csrf_token_name=reg.settings.csrf_token_name
+        form_data_decode_list, {}, csrf_token_name=registry.settings.csrf_token_name
     )  # type: ignore
     return ret  # type: ignore
 
@@ -98,6 +112,9 @@ async def unflatten_mapping_form_data(
 async def unflatten_sequence_form_data(
     request: Request, reg: Registry
 ) -> Sequence[str]:
+    """
+    Parse the :meth:`fastlife.request.request.form` and build a list of structure.
+    """
     form_data = await request.form()
     # Could raise a value error !
     return unflatten_struct(
@@ -106,4 +123,12 @@ async def unflatten_sequence_form_data(
 
 
 MappingFormData = Annotated[Mapping[str, Any], Depends(unflatten_mapping_form_data)]
+"""
+Fast API Dependency to deserialize a :meth:`fastlife.request.request.Request.form`
+to a dict.
+"""
 SequenceFormData = Annotated[Sequence[str], Depends(unflatten_sequence_form_data)]
+"""
+Fast API Dependency to deserialize a :meth:`fastlife.request.request.Request.form`
+to a list.
+"""

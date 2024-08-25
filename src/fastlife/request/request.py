@@ -7,6 +7,11 @@ if TYPE_CHECKING:
 
 
 class Request(BaseRequest):
+    """HTTP Request representation."""
+
+    registry: "AppRegistry"
+    """Direct access to the application registry."""
+
     def __init__(self, registry: "AppRegistry", request: BaseRequest) -> None:
         super().__init__(request.scope, request.receive)
         self.registry = registry

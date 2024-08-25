@@ -9,4 +9,4 @@
    configurator
    settings
    registry
-   route_handler
+

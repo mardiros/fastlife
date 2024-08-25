@@ -1,7 +1,6 @@
 import pytest
-from fastapi import Request
 
-from fastlife.config.registry import AppRegistry
+from fastlife.request import Request
 from fastlife.security.csrf import CSRFAttack, check_csrf, create_csrf_token
 
 
@@ -39,8 +38,8 @@ def test_create_csrf_token():
         ),
     ],
 )
-async def test_check_csrf(dummy_request_param: Request, default_registry: AppRegistry):
-    assert await check_csrf(default_registry)(dummy_request_param) is True
+async def test_check_csrf(dummy_request_param: Request):
+    assert await check_csrf()(dummy_request_param) is True
 
 
 @pytest.mark.parametrize(
@@ -86,8 +85,6 @@ async def test_check_csrf(dummy_request_param: Request, default_registry: AppReg
         ),
     ],
 )
-async def test_check_csrf_raises(
-    dummy_request_param: Request, default_registry: AppRegistry
-):
+async def test_check_csrf_raises(dummy_request_param: Request):
     with pytest.raises(CSRFAttack):
-        await check_csrf(default_registry)(dummy_request_param)
+        await check_csrf()(dummy_request_param)

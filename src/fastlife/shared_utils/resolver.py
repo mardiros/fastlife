@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
-from typing import Any, Type, Union
+from types import UnionType
+from typing import Any, Union
 
 
 def resolve(value: str) -> Any:
@@ -24,7 +25,8 @@ def resolve(value: str) -> Any:
     return attr
 
 
-def resolve_extended(value: str) -> Type[Any]:
+def resolve_extended(value: str) -> UnionType:
+    """Resolve many types separed by a pipe (``|``), the union separator."""
     values = value.split("|")
     if len(values) == 1:
         return resolve(value)
@@ -33,6 +35,11 @@ def resolve_extended(value: str) -> Type[Any]:
 
 
 def resolve_path(value: str) -> str:
+    """
+    Resole a path on the disk from a python package name.
+
+    This helper is used to find static assets inside a python package.
+    """
     package_name, resource_name = value.split(":", 1)
     spec = importlib.util.find_spec(package_name)
     if not spec or not spec.origin:

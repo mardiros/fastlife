@@ -1,3 +1,4 @@
+"""HTTP Route."""
 from typing import TYPE_CHECKING, Any, Callable, Coroutine
 
 from fastapi.routing import APIRoute
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
     from fastlife.config.registry import AppRegistry  # coverage: ignore
 
 
-class FastlifeRoute(APIRoute):
+class Route(APIRoute):
     """
     Routing for fastlife application.
 

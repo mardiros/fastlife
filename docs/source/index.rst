@@ -10,6 +10,10 @@
 
    develop/config/index
    develop/middlewares/index
+   develop/request/index
+   develop/routing/index
+   develop/security/index
+   develop/shared_utils/index
 
 
 Indices and tables

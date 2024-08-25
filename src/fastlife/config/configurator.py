@@ -28,9 +28,9 @@ from fastapi import Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 
-from fastlife.config.route_handler import FastlifeRoute
 from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.request.request import Request
+from fastlife.routing.route import Route
 from fastlife.security.csrf import check_csrf
 
 from .settings import Settings
@@ -58,12 +58,12 @@ class Configurator:
 
         self.registry = initialize_registry(settings)
         self._app = FastAPI(
-            dependencies=[Depends(check_csrf(self.registry))],
+            dependencies=[Depends(check_csrf())],
             docs_url=None,
             redoc_url=None,
         )
-        FastlifeRoute._registry = self.registry  # type: ignore
-        self._app.router.route_class = FastlifeRoute
+        Route._registry = self.registry  # type: ignore
+        self._app.router.route_class = Route
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
@@ -144,7 +144,26 @@ class Configurator:
         #     generate_unique_id
         # ),
     ) -> "Configurator":
-        """Add a route to the app."""
+        """
+        Add a route to the app.
+
+        Fastlife does not use a decorator to attach routes, instead the decorator
+        :func:`fastlife.config.configurator.configure` has to be used to
+        inject routes inside a method and call the add_route method.
+
+        :param name: name of the route, used to build route from the helper
+            :meth:`fastlife.request.request.Request.url_for` in order to create links.
+        :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
+            parameters.
+        :param endpoint: the function that will reveive the request.
+        :param permission: a permission to validate by the
+            :attr:`fastlife.config.settings.Settings.check_permission` function.
+
+        :param methods: restrict route to a list of http methods.
+        :param response_description: description for the response.
+        :param deprecated: mark the route as deprecated.
+        :return: the configurator
+        """
         dependencies: List[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
