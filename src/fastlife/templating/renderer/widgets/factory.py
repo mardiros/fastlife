@@ -14,16 +14,15 @@ from pydantic.fields import FieldInfo
 from fastlife.request.form import FormModel
 from fastlife.shared_utils.infer import is_complex_type, is_union
 from fastlife.templating.renderer.abstract import AbstractTemplateRenderer
+from fastlife.templating.renderer.widgets.base import Widget
 from fastlife.templating.renderer.widgets.boolean import BooleanWidget
 from fastlife.templating.renderer.widgets.checklist import Checkable, ChecklistWidget
 from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
 from fastlife.templating.renderer.widgets.hidden import HiddenWidget
+from fastlife.templating.renderer.widgets.model import ModelWidget
 from fastlife.templating.renderer.widgets.sequence import SequenceWidget
-
-from .base import Widget
-from .model import ModelWidget
-from .text import TextWidget
-from .union import UnionWidget
+from fastlife.templating.renderer.widgets.text import TextWidget
+from fastlife.templating.renderer.widgets.union import UnionWidget
 
 
 class WidgetFactory:

@@ -1,3 +1,13 @@
+"""
+Base class to of the template renderer.
+
+Fastlife comes with :class:`fastlife.templating.renderer.jinjax.JinjaxTemplateRenderer`,
+the rendering engine, it can be overriden from the setting
+:attr:`fastlife.config.settings.Settings.template_renderer_class`.
+
+In that case, those base classes have to be implemented.
+
+"""
 import abc
 from typing import Any, Mapping, Optional, Type
 
@@ -57,13 +67,13 @@ class AbstractTemplateRenderer(abc.ABC):
 
         this function is used inside the template directly. And it will not render the
         <form> tag so the action/httpx post is not handled byu the method..
-        Somethinging like this
+        Somethinging like this:
 
         ::
 
-            <form action="" method="post">
+            <Form action="" method="post">
                 {{ pydantic_form(model) }}
-            </form>
+            </Form>
 
 
         :param model: model to render
@@ -94,6 +104,9 @@ class AbstractTemplateRenderer(abc.ABC):
 class AbstractTemplateRendererFactory(abc.ABC):
     """
     The template render factory.
+
+    The implementation of this class is found using the settings
+    :attr:`fastlife.config.settings.Settings.template_renderer_class`.
     """
 
     @abc.abstractmethod

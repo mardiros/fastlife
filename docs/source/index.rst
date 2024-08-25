@@ -14,6 +14,7 @@
    develop/routing/index
    develop/security/index
    develop/shared_utils/index
+   develop/templating/index
 
 
 Indices and tables
