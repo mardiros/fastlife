@@ -4,6 +4,14 @@
 
 
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Developers Documentation:
+
+   develop/config/index
+   develop/middlewares/index
+
+
 Indices and tables
 ==================
 

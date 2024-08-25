@@ -1,5 +1,4 @@
-from .config import Configurator, configure
-from .config.registry import Registry
+from .config import Configurator, Registry, configure
 
 # from .request.form_data import model
 from .templating import Template, template

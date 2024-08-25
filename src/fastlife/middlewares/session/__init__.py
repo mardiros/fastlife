@@ -1,7 +1,23 @@
+"""
+Initialize a session.
+
+
+The session :attr:`fastlife.config.settings.Settings.session_secret_key` must
+be set in order to create a session.
+
+This secret is used to sign session content in order to prevent malicious user
+to write their own session content. Note that the provided session implementation
+does not cipher session content, it just sign. No secret should be placed in the
+session.
+"""
+
 from fastlife import Configurator, configure
 from fastlife.shared_utils.resolver import resolve
 
 from .middleware import SessionMiddleware
+from .serializer import AbsractSessionSerializer, SignedSessionSerializer
+
+__all__ = ["SessionMiddleware", "AbsractSessionSerializer", "SignedSessionSerializer"]
 
 
 @configure

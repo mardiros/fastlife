@@ -15,7 +15,9 @@ class Settings(BaseSettings):
     """
 
     model_config = SettingsConfigDict(env_prefix="fastlife_")
-    """Set the prefix fastlife_ for configuration using operating system environment."""
+    """
+    Set the prefix ``fastlife_`` for configuration using operating system environment.
+    """
 
     fastlife_route_prefix: str = Field(default="/_fl")
     """Route prefix used for fastlife internal views."""

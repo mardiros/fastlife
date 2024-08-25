@@ -1,16 +1,3 @@
-"""
-A middleware that update the request scope for https behind a proxy.
-
-The attempt of this middleware is to fix Starlette behavior that use client and scheme
-header based on the header x-forwarded-* headers and the x-real-ip.
-
-the x-forwarded-for header is not parsed to find the appropriate value,
-the x-real-ip is used.
-notethat the x-forwarded-port header is not used.
-
-Note that uvicorn or hypercorn offer the same kind middleware.
-"""
-
 import logging
 from typing import Optional, Sequence, Tuple
 

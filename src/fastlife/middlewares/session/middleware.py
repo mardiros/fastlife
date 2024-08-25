@@ -1,3 +1,5 @@
+"""Deal with http session."""
+
 from datetime import timedelta
 from typing import Literal, Type
 
@@ -11,6 +13,8 @@ from .serializer import AbsractSessionSerializer, SignedSessionSerializer
 
 
 class SessionMiddleware(AbstractMiddleware):
+    """Http session based on cookie."""
+
     def __init__(
         self,
         app: ASGIApp,
@@ -36,6 +40,7 @@ class SessionMiddleware(AbstractMiddleware):
             self.security_flags += f"; Domain={cookie_domain}"
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        """Initialize a session based on cookie."""
         if scope["type"] not in ("http", "websocket"):  # pragma: no cover
             await self.app(scope, receive, send)
             return
