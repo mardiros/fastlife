@@ -10,7 +10,7 @@ from fastlife.testing import WebTestClient
 async def app(settings: Settings):
     conf = Configurator(settings=settings)
     conf.include("tests.fastlife_app.views")
-    yield conf.get_app()
+    yield conf.get_asgi_app()
 
 
 @pytest.fixture

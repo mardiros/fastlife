@@ -32,6 +32,7 @@ from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.request.request import Request
 from fastlife.routing.route import Route
 from fastlife.security.csrf import check_csrf
+from fastlife.shared_utils.resolver import resolve
 
 from .settings import Settings
 
@@ -54,9 +55,8 @@ class Configurator:
     registry: "AppRegistry"
 
     def __init__(self, settings: Settings) -> None:
-        from .registry import initialize_registry  # XXX circular import
-
-        self.registry = initialize_registry(settings)
+        registry_cls = resolve(settings.registry_class)
+        self.registry = registry_cls(settings)
         self._app = FastAPI(
             dependencies=[Depends(check_csrf())],
             docs_url=None,
@@ -68,7 +68,7 @@ class Configurator:
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
 
-    def get_app(self) -> FastAPI:
+    def get_asgi_app(self) -> FastAPI:
         """
         Get the app after configuration in order to start after beeing configured.
 

@@ -3,6 +3,13 @@
 .. include:: ../../README.rst
 
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Users Documentation:
+
+   user/introduction
+   user/getting_started
+
 
 .. toctree::
    :maxdepth: 1

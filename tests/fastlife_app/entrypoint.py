@@ -18,7 +18,7 @@ async def app():
     )
     conf.include("tests.fastlife_app.views")
     conf.include("tests.fastlife_app.static")
-    app = conf.get_app()
+    app = conf.get_asgi_app()
     config = Config()
     config.bind = ["0.0.0.0:8888", "[::1]:8888"]
     await serve(app, config)  # type: ignore

@@ -33,14 +33,6 @@ class AppRegistry:
         self.check_permission = resolve(settings.check_permission)
 
 
-def initialize_registry(settings: Settings) -> AppRegistry:
-    # global DEFAULT_REGISTRY
-    # if DEFAULT_REGISTRY is not None:  # type: ignore
-    #     raise ValueError("Registry is already set")
-    AppRegistryCls = resolve(settings.registry_class)
-    return AppRegistryCls(settings)  # type: ignore
-
-
 def get_registry(request: Request) -> AppRegistry:
     return request.registry
 
