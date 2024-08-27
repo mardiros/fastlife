@@ -13,7 +13,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    Coroutine,
     List,
     Optional,
     Self,
@@ -24,7 +23,6 @@ from typing import (
 import venusian
 from fastapi import Depends, FastAPI
 from fastapi import Request as BaseRequest
-from fastapi import Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 

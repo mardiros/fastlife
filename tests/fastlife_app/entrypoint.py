@@ -7,7 +7,7 @@ from fastlife import Configurator
 from fastlife.config.configurator import Settings
 
 
-async def build_app():
+def build_app():
     conf = Configurator(
         Settings(
             template_search_path="fastlife:templates,tests.fastlife_app:templates",
@@ -25,12 +25,10 @@ app = build_app()
 
 
 def main():
-
     config = Config()
     config.bind = ["0.0.0.0:8888", "[::1]:8888"]
-
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(serve(app, config))
+    loop.run_until_complete(serve(app, config))  # type: ignore
 
 
 if __name__ == "__main__":

@@ -3,12 +3,12 @@ from typing import Any, Iterator
 
 from behave import fixture  # type: ignore
 
-from tests.fastlife_app.entrypoint import serve_app
+from tests.fastlife_app.entrypoint import main
 
 
 @fixture
 def fastlife_app(context: Any, **kwargs: Any) -> Iterator[None]:
-    proc = Process(target=serve_app, daemon=True)
+    proc = Process(target=main, daemon=True)
     proc.start()
     yield
     proc.kill()
@@ -27,4 +27,4 @@ def browser(context: Any, **kwargs: Any) -> Iterator[None]:
 
 
 if __name__ == "__main__":
-    serve_app()
+    main()
