@@ -84,14 +84,13 @@ class Configurator:
 
         Here is an example.
 
-        ::
+        ```python
+        from fastlife import Configurator, configure
 
-            from fastlife import Configurator, configure
-
-            @configure
-            def includeme(config: Configurator) -> None:
-                config.include(".views")
-
+        @configure
+        def includeme(config: Configurator) -> None:
+            config.include(".views")
+        ```
 
         :param module: a module to include.
         """
@@ -118,7 +117,7 @@ class Configurator:
         self,
         name: str,
         path: str,
-        endpoint: Callable[..., Coroutine[Any, Any, Response]],
+        endpoint: Callable[..., Any],
         *,
         permission: str | None = None,
         status_code: int | None = None,

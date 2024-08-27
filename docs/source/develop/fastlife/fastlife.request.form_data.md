@@ -1,0 +1,91 @@
+# {py:mod}`fastlife.request.form_data`
+
+```{py:module} fastlife.request.form_data
+```
+
+```{autodoc2-docstring} fastlife.request.form_data
+:allowtitles:
+```
+
+## Module Contents
+
+### Functions
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`unflatten_struct <fastlife.request.form_data.unflatten_struct>`
+  - ```{autodoc2-docstring} fastlife.request.form_data.unflatten_struct
+    :summary:
+    ```
+* - {py:obj}`unflatten_mapping_form_data <fastlife.request.form_data.unflatten_mapping_form_data>`
+  - ```{autodoc2-docstring} fastlife.request.form_data.unflatten_mapping_form_data
+    :summary:
+    ```
+* - {py:obj}`unflatten_sequence_form_data <fastlife.request.form_data.unflatten_sequence_form_data>`
+  - ```{autodoc2-docstring} fastlife.request.form_data.unflatten_sequence_form_data
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`MappingFormData <fastlife.request.form_data.MappingFormData>`
+  - ```{autodoc2-docstring} fastlife.request.form_data.MappingFormData
+    :summary:
+    ```
+* - {py:obj}`SequenceFormData <fastlife.request.form_data.SequenceFormData>`
+  - ```{autodoc2-docstring} fastlife.request.form_data.SequenceFormData
+    :summary:
+    ```
+````
+
+### API
+
+````{py:function} unflatten_struct(flatten_input: typing.Mapping[str, typing.Any], unflattened_output: typing.MutableMapping[str, typing.Any] | typing.MutableSequence[typing.Any], level: int = 0, *, csrf_token_name: typing.Optional[str] = None) -> typing.Mapping[str, typing.Any] | typing.Sequence[typing.Any]
+:canonical: fastlife.request.form_data.unflatten_struct
+
+```{autodoc2-docstring} fastlife.request.form_data.unflatten_struct
+```
+````
+
+````{py:function} unflatten_mapping_form_data(request: fastapi.Request, registry: fastlife.config.registry.Registry) -> typing.Mapping[str, typing.Any]
+:canonical: fastlife.request.form_data.unflatten_mapping_form_data
+:async:
+
+```{autodoc2-docstring} fastlife.request.form_data.unflatten_mapping_form_data
+```
+````
+
+````{py:function} unflatten_sequence_form_data(request: fastapi.Request, reg: fastlife.config.registry.Registry) -> typing.Sequence[str]
+:canonical: fastlife.request.form_data.unflatten_sequence_form_data
+:async:
+
+```{autodoc2-docstring} fastlife.request.form_data.unflatten_sequence_form_data
+```
+````
+
+````{py:data} MappingFormData
+:canonical: fastlife.request.form_data.MappingFormData
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.request.form_data.MappingFormData
+```
+
+````
+
+````{py:data} SequenceFormData
+:canonical: fastlife.request.form_data.SequenceFormData
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.request.form_data.SequenceFormData
+```
+
+````

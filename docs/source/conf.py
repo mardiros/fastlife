@@ -43,13 +43,37 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
+    "myst_parser",
+    "autodoc2",
 ]
+
+
+autodoc2_packages = [
+    "../../src/fastlife",
+]
+
+autodoc2_render_plugin = "myst"
+
+autodoc2_output_dir = "develop"
 
 autodoc_default_options = {
     "member-order": "bysource",
     "undoc-members": True,
 }
+
+
+# Configure MyST parser
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+    "html_admonition",
+    "html_image",
+    "replacements",
+    "smartquotes",
+    "substitution",
+    "tasklist",
+]
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
