@@ -1,9 +1,14 @@
+---
+orphan: true
+---
+
 # {py:mod}`fastlife.views.pydantic_form`
 
 ```{py:module} fastlife.views.pydantic_form
 ```
 
 ```{autodoc2-docstring} fastlife.views.pydantic_form
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,10 +22,7 @@
 
 * - {py:obj}`show_widget <fastlife.views.pydantic_form.show_widget>`
   - ```{autodoc2-docstring} fastlife.views.pydantic_form.show_widget
-    :summary:
-    ```
-* - {py:obj}`includeme <fastlife.views.pydantic_form.includeme>`
-  - ```{autodoc2-docstring} fastlife.views.pydantic_form.includeme
+    :parser: myst
     :summary:
     ```
 ````
@@ -32,12 +34,6 @@
 :async:
 
 ```{autodoc2-docstring} fastlife.views.pydantic_form.show_widget
-```
-````
-
-````{py:function} includeme(config: fastlife.Configurator) -> None
-:canonical: fastlife.views.pydantic_form.includeme
-
-```{autodoc2-docstring} fastlife.views.pydantic_form.includeme
+:parser: myst
 ```
 ````

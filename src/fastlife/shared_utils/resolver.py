@@ -1,3 +1,4 @@
+"""Resolution of python objects for dependency injection and more."""
 import importlib.util
 from pathlib import Path
 from types import UnionType

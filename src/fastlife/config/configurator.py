@@ -1,6 +1,14 @@
 """
-The configurator is here to register routes in a fastapi app,
-with dependency injection.
+The configurator registers routes in a FastAPI application while
+adding support for dependency injection during the configuration phase.
+
+FastAPI does not provide any built-in support for dependency injection
+during the configuration phase.
+Instead, it only resolves dependencies at request time, ensuring they
+are dynamically handled per request.
+
+The configurator is designed to handle the setup during the configuration
+phase.
 """
 
 import importlib
@@ -46,13 +54,14 @@ class Configurator:
     Configure and build an application.
 
     Initialize the app from the settings.
-
-    :param settings: Application settings.
     """
 
     registry: "AppRegistry"
 
     def __init__(self, settings: Settings) -> None:
+        """
+        :param settings: Application settings.
+        """
         registry_cls = resolve(settings.registry_class)
         self.registry = registry_cls(settings)
         self._app = FastAPI(

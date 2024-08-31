@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares.session.middleware
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`SessionMiddleware <fastlife.middlewares.session.middleware.SessionMiddleware>`
   - ```{autodoc2-docstring} fastlife.middlewares.session.middleware.SessionMiddleware
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,12 +31,14 @@
 Bases: {py:obj}`fastlife.middlewares.base.AbstractMiddleware`
 
 ```{autodoc2-docstring} fastlife.middlewares.session.middleware.SessionMiddleware
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares.session.middleware.SessionMiddleware.__init__
+:parser: myst
 ```
 
 ````{py:method} __call__(scope: starlette.types.Scope, receive: starlette.types.Receive, send: starlette.types.Send) -> None
@@ -42,6 +46,7 @@ Bases: {py:obj}`fastlife.middlewares.base.AbstractMiddleware`
 :async:
 
 ```{autodoc2-docstring} fastlife.middlewares.session.middleware.SessionMiddleware.__call__
+:parser: myst
 ```
 
 ````

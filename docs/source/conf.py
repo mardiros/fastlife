@@ -52,26 +52,29 @@ autodoc2_packages = [
     "../../src/fastlife",
 ]
 
+autodoc2_docstring_parser_regexes = [
+    # this will render all docstrings as Markdown
+    (r".*", "myst"),
+]
+
+autodoc2_hidden_objects = ["undoc", "private", "inherited"]
 autodoc2_render_plugin = "myst"
 
 autodoc2_output_dir = "develop"
-
-autodoc_default_options = {
-    "member-order": "bysource",
-    "undoc-members": True,
-}
+autodoc2_sort_names = True
 
 
 # Configure MyST parser
 myst_enable_extensions = [
     "colon_fence",
-    "deflist",
     "html_admonition",
     "html_image",
     "replacements",
     "smartquotes",
     "substitution",
     "tasklist",
+    "deflist",
+    "fieldlist",
 ]
 
 

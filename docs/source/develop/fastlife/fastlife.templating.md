@@ -4,16 +4,8 @@
 ```
 
 ```{autodoc2-docstring} fastlife.templating
+:parser: myst
 :allowtitles:
-```
-
-## Subpackages
-
-```{toctree}
-:titlesonly:
-:maxdepth: 3
-
-fastlife.templating.renderer
 ```
 
 ## Submodules
@@ -24,29 +16,3 @@ fastlife.templating.renderer
 
 fastlife.templating.binding
 ```
-
-## Package Contents
-
-### Data
-
-````{list-table}
-:class: autosummary longtable
-:align: left
-
-* - {py:obj}`__all__ <fastlife.templating.__all__>`
-  - ```{autodoc2-docstring} fastlife.templating.__all__
-    :summary:
-    ```
-````
-
-### API
-
-````{py:data} __all__
-:canonical: fastlife.templating.__all__
-:value: >
-   ['AbstractTemplateRendererFactory', 'JinjaxTemplateRenderer', 'Template', 'template']
-
-```{autodoc2-docstring} fastlife.templating.__all__
-```
-
-````

@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares.base
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`AbstractMiddleware <fastlife.middlewares.base.AbstractMiddleware>`
   - ```{autodoc2-docstring} fastlife.middlewares.base.AbstractMiddleware
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,6 +31,7 @@
 Bases: {py:obj}`abc.ABC`
 
 ```{autodoc2-docstring} fastlife.middlewares.base.AbstractMiddleware
+:parser: myst
 ```
 
 ````{py:method} __call__(scope: starlette.types.Scope, receive: starlette.types.Receive, send: starlette.types.Send) -> None
@@ -37,6 +40,7 @@ Bases: {py:obj}`abc.ABC`
 :async:
 
 ```{autodoc2-docstring} fastlife.middlewares.base.AbstractMiddleware.__call__
+:parser: myst
 ```
 
 ````

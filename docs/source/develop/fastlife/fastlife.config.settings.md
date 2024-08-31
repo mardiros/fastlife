@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.config.settings
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`Settings <fastlife.config.settings.Settings>`
   - ```{autodoc2-docstring} fastlife.config.settings.Settings
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,75 +31,24 @@
 Bases: {py:obj}`pydantic_settings.BaseSettings`
 
 ```{autodoc2-docstring} fastlife.config.settings.Settings
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.config.settings.Settings.__init__
+:parser: myst
 ```
 
-````{py:attribute} model_config
-:canonical: fastlife.config.settings.Settings.model_config
-:value: >
-   'SettingsConfigDict(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.model_config
-```
-
-````
-
-````{py:attribute} fastlife_route_prefix
-:canonical: fastlife.config.settings.Settings.fastlife_route_prefix
+````{py:attribute} check_permission
+:canonical: fastlife.config.settings.Settings.check_permission
 :type: str
 :value: >
    'Field(...)'
 
-```{autodoc2-docstring} fastlife.config.settings.Settings.fastlife_route_prefix
-```
-
-````
-
-````{py:attribute} template_search_path
-:canonical: fastlife.config.settings.Settings.template_search_path
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.template_search_path
-```
-
-````
-
-````{py:attribute} registry_class
-:canonical: fastlife.config.settings.Settings.registry_class
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.registry_class
-```
-
-````
-
-````{py:attribute} template_renderer_class
-:canonical: fastlife.config.settings.Settings.template_renderer_class
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.template_renderer_class
-```
-
-````
-
-````{py:attribute} form_data_model_prefix
-:canonical: fastlife.config.settings.Settings.form_data_model_prefix
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.form_data_model_prefix
+```{autodoc2-docstring} fastlife.config.settings.Settings.check_permission
+:parser: myst
 ```
 
 ````
@@ -109,149 +60,7 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
    'Field(...)'
 
 ```{autodoc2-docstring} fastlife.config.settings.Settings.csrf_token_name
-```
-
-````
-
-````{py:attribute} jinjax_use_cache
-:canonical: fastlife.config.settings.Settings.jinjax_use_cache
-:type: bool
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_use_cache
-```
-
-````
-
-````{py:attribute} jinjax_auto_reload
-:canonical: fastlife.config.settings.Settings.jinjax_auto_reload
-:type: bool
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_auto_reload
-```
-
-````
-
-````{py:attribute} jinjax_global_catalog_class
-:canonical: fastlife.config.settings.Settings.jinjax_global_catalog_class
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_global_catalog_class
-```
-
-````
-
-````{py:attribute} session_secret_key
-:canonical: fastlife.config.settings.Settings.session_secret_key
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_secret_key
-```
-
-````
-
-````{py:attribute} session_cookie_name
-:canonical: fastlife.config.settings.Settings.session_cookie_name
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_name
-```
-
-````
-
-````{py:attribute} session_cookie_domain
-:canonical: fastlife.config.settings.Settings.session_cookie_domain
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_domain
-```
-
-````
-
-````{py:attribute} session_cookie_path
-:canonical: fastlife.config.settings.Settings.session_cookie_path
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_path
-```
-
-````
-
-````{py:attribute} session_duration
-:canonical: fastlife.config.settings.Settings.session_duration
-:type: datetime.timedelta
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_duration
-```
-
-````
-
-````{py:attribute} session_cookie_same_site
-:canonical: fastlife.config.settings.Settings.session_cookie_same_site
-:type: typing.Literal[lax, strict, none]
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_same_site
-```
-
-````
-
-````{py:attribute} session_cookie_secure
-:canonical: fastlife.config.settings.Settings.session_cookie_secure
-:type: bool
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_secure
-```
-
-````
-
-````{py:attribute} session_serializer
-:canonical: fastlife.config.settings.Settings.session_serializer
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.session_serializer
-```
-
-````
-
-````{py:attribute} domain_name
-:canonical: fastlife.config.settings.Settings.domain_name
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.domain_name
-```
-
-````
-
-````{py:attribute} check_permission
-:canonical: fastlife.config.settings.Settings.check_permission
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.check_permission
+:parser: myst
 ```
 
 ````
@@ -263,6 +72,222 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
    'Field(...)'
 
 ```{autodoc2-docstring} fastlife.config.settings.Settings.decode_reverse_proxy_headers
+:parser: myst
+```
+
+````
+
+````{py:attribute} domain_name
+:canonical: fastlife.config.settings.Settings.domain_name
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.domain_name
+:parser: myst
+```
+
+````
+
+````{py:attribute} fastlife_route_prefix
+:canonical: fastlife.config.settings.Settings.fastlife_route_prefix
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.fastlife_route_prefix
+:parser: myst
+```
+
+````
+
+````{py:attribute} form_data_model_prefix
+:canonical: fastlife.config.settings.Settings.form_data_model_prefix
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.form_data_model_prefix
+:parser: myst
+```
+
+````
+
+````{py:attribute} jinjax_auto_reload
+:canonical: fastlife.config.settings.Settings.jinjax_auto_reload
+:type: bool
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_auto_reload
+:parser: myst
+```
+
+````
+
+````{py:attribute} jinjax_global_catalog_class
+:canonical: fastlife.config.settings.Settings.jinjax_global_catalog_class
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_global_catalog_class
+:parser: myst
+```
+
+````
+
+````{py:attribute} jinjax_use_cache
+:canonical: fastlife.config.settings.Settings.jinjax_use_cache
+:type: bool
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_use_cache
+:parser: myst
+```
+
+````
+
+````{py:attribute} model_config
+:canonical: fastlife.config.settings.Settings.model_config
+:value: >
+   'SettingsConfigDict(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.model_config
+:parser: myst
+```
+
+````
+
+````{py:attribute} registry_class
+:canonical: fastlife.config.settings.Settings.registry_class
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.registry_class
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_cookie_domain
+:canonical: fastlife.config.settings.Settings.session_cookie_domain
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_domain
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_cookie_name
+:canonical: fastlife.config.settings.Settings.session_cookie_name
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_name
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_cookie_path
+:canonical: fastlife.config.settings.Settings.session_cookie_path
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_path
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_cookie_same_site
+:canonical: fastlife.config.settings.Settings.session_cookie_same_site
+:type: typing.Literal[lax, strict, none]
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_same_site
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_cookie_secure
+:canonical: fastlife.config.settings.Settings.session_cookie_secure
+:type: bool
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_cookie_secure
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_duration
+:canonical: fastlife.config.settings.Settings.session_duration
+:type: datetime.timedelta
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_duration
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_secret_key
+:canonical: fastlife.config.settings.Settings.session_secret_key
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_secret_key
+:parser: myst
+```
+
+````
+
+````{py:attribute} session_serializer
+:canonical: fastlife.config.settings.Settings.session_serializer
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.session_serializer
+:parser: myst
+```
+
+````
+
+````{py:attribute} template_renderer_class
+:canonical: fastlife.config.settings.Settings.template_renderer_class
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.template_renderer_class
+:parser: myst
+```
+
+````
+
+````{py:attribute} template_search_path
+:canonical: fastlife.config.settings.Settings.template_search_path
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.template_search_path
+:parser: myst
 ```
 
 ````

@@ -1,9 +1,14 @@
+---
+orphan: true
+---
+
 # {py:mod}`fastlife.config.registry`
 
 ```{py:module} fastlife.config.registry
 ```
 
 ```{autodoc2-docstring} fastlife.config.registry
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,18 +22,7 @@
 
 * - {py:obj}`AppRegistry <fastlife.config.registry.AppRegistry>`
   - ```{autodoc2-docstring} fastlife.config.registry.AppRegistry
-    :summary:
-    ```
-````
-
-### Functions
-
-````{list-table}
-:class: autosummary longtable
-:align: left
-
-* - {py:obj}`get_registry <fastlife.config.registry.get_registry>`
-  - ```{autodoc2-docstring} fastlife.config.registry.get_registry
+    :parser: myst
     :summary:
     ```
 ````
@@ -41,64 +35,27 @@
 
 * - {py:obj}`Registry <fastlife.config.registry.Registry>`
   - ```{autodoc2-docstring} fastlife.config.registry.Registry
+    :parser: myst
     :summary:
     ```
 ````
 
 ### API
 
-`````{py:class} AppRegistry(settings: fastlife.config.settings.Settings)
+````{py:class} AppRegistry(settings: fastlife.config.settings.Settings)
 :canonical: fastlife.config.registry.AppRegistry
 
 ```{autodoc2-docstring} fastlife.config.registry.AppRegistry
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.config.registry.AppRegistry.__init__
+:parser: myst
 ```
 
-````{py:attribute} settings
-:canonical: fastlife.config.registry.AppRegistry.settings
-:type: fastlife.config.settings.Settings
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.registry.AppRegistry.settings
-```
-
-````
-
-````{py:attribute} renderer
-:canonical: fastlife.config.registry.AppRegistry.renderer
-:type: fastlife.templating.renderer.AbstractTemplateRendererFactory
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.registry.AppRegistry.renderer
-```
-
-````
-
-````{py:attribute} check_permission
-:canonical: fastlife.config.registry.AppRegistry.check_permission
-:type: fastlife.security.policy.CheckPermission
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.registry.AppRegistry.check_permission
-```
-
-````
-
-`````
-
-````{py:function} get_registry(request: fastlife.request.request.Request) -> fastlife.config.registry.AppRegistry
-:canonical: fastlife.config.registry.get_registry
-
-```{autodoc2-docstring} fastlife.config.registry.get_registry
-```
 ````
 
 ````{py:data} Registry
@@ -107,6 +64,7 @@
    None
 
 ```{autodoc2-docstring} fastlife.config.registry.Registry
+:parser: myst
 ```
 
 ````

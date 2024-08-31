@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.routing.router
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`Router <fastlife.routing.router.Router>`
   - ```{autodoc2-docstring} fastlife.routing.router.Router
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,12 +31,14 @@
 Bases: {py:obj}`fastapi.APIRouter`
 
 ```{autodoc2-docstring} fastlife.routing.router.Router
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.routing.router.Router.__init__
+:parser: myst
 ```
 
 ````

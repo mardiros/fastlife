@@ -1,9 +1,14 @@
+---
+orphan: true
+---
+
 # {py:mod}`fastlife.shared_utils.infer`
 
 ```{py:module} fastlife.shared_utils.infer
 ```
 
 ```{autodoc2-docstring} fastlife.shared_utils.infer
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,10 +22,12 @@
 
 * - {py:obj}`is_complex_type <fastlife.shared_utils.infer.is_complex_type>`
   - ```{autodoc2-docstring} fastlife.shared_utils.infer.is_complex_type
+    :parser: myst
     :summary:
     ```
 * - {py:obj}`is_union <fastlife.shared_utils.infer.is_union>`
   - ```{autodoc2-docstring} fastlife.shared_utils.infer.is_union
+    :parser: myst
     :summary:
     ```
 ````
@@ -31,6 +38,7 @@
 :canonical: fastlife.shared_utils.infer.is_complex_type
 
 ```{autodoc2-docstring} fastlife.shared_utils.infer.is_complex_type
+:parser: myst
 ```
 ````
 
@@ -38,5 +46,6 @@
 :canonical: fastlife.shared_utils.infer.is_union
 
 ```{autodoc2-docstring} fastlife.shared_utils.infer.is_union
+:parser: myst
 ```
 ````

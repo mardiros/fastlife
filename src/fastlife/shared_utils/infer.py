@@ -1,3 +1,4 @@
+"""Type inference."""
 from types import UnionType
 from typing import Any, Type, Union, get_origin
 

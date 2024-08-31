@@ -1,3 +1,12 @@
+"""
+Template Constants injects as global variables in templates.
+
+Those constants are configurable in the settings
+
+:attrs:`jinjax_global_catalog_class`
+
+"""
+
 from pydantic import BaseModel
 
 

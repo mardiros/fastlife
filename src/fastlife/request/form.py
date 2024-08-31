@@ -1,3 +1,5 @@
+"""HTTP Form serialization."""
+
 from typing import Any, Callable, Generic, Mapping, Type, TypeVar, get_origin
 
 from fastapi import Depends

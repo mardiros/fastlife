@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares
+:parser: myst
 :allowtitles:
 ```
 
@@ -13,8 +14,8 @@
 :titlesonly:
 :maxdepth: 3
 
-fastlife.middlewares.session
 fastlife.middlewares.reverse_proxy
+fastlife.middlewares.session
 ```
 
 ## Submodules

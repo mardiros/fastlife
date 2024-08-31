@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.templating.binding
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,10 +18,12 @@
 
 * - {py:obj}`get_template <fastlife.templating.binding.get_template>`
   - ```{autodoc2-docstring} fastlife.templating.binding.get_template
+    :parser: myst
     :summary:
     ```
 * - {py:obj}`template <fastlife.templating.binding.template>`
   - ```{autodoc2-docstring} fastlife.templating.binding.template
+    :parser: myst
     :summary:
     ```
 ````
@@ -33,10 +36,7 @@
 
 * - {py:obj}`Template <fastlife.templating.binding.Template>`
   - ```{autodoc2-docstring} fastlife.templating.binding.Template
-    :summary:
-    ```
-* - {py:obj}`TemplateEngine <fastlife.templating.binding.TemplateEngine>`
-  - ```{autodoc2-docstring} fastlife.templating.binding.TemplateEngine
+    :parser: myst
     :summary:
     ```
 ````
@@ -49,16 +49,7 @@
    None
 
 ```{autodoc2-docstring} fastlife.templating.binding.Template
-```
-
-````
-
-````{py:data} TemplateEngine
-:canonical: fastlife.templating.binding.TemplateEngine
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.templating.binding.TemplateEngine
+:parser: myst
 ```
 
 ````
@@ -67,6 +58,7 @@
 :canonical: fastlife.templating.binding.get_template
 
 ```{autodoc2-docstring} fastlife.templating.binding.get_template
+:parser: myst
 ```
 ````
 
@@ -74,5 +66,6 @@
 :canonical: fastlife.templating.binding.template
 
 ```{autodoc2-docstring} fastlife.templating.binding.template
+:parser: myst
 ```
 ````

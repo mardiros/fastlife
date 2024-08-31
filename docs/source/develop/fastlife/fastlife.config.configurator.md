@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.config.configurator
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`Configurator <fastlife.config.configurator.Configurator>`
   - ```{autodoc2-docstring} fastlife.config.configurator.Configurator
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,83 +31,32 @@
 
 * - {py:obj}`configure <fastlife.config.configurator.configure>`
   - ```{autodoc2-docstring} fastlife.config.configurator.configure
-    :summary:
-    ```
-````
-
-### Data
-
-````{list-table}
-:class: autosummary longtable
-:align: left
-
-* - {py:obj}`log <fastlife.config.configurator.log>`
-  - ```{autodoc2-docstring} fastlife.config.configurator.log
-    :summary:
-    ```
-* - {py:obj}`VENUSIAN_CATEGORY <fastlife.config.configurator.VENUSIAN_CATEGORY>`
-  - ```{autodoc2-docstring} fastlife.config.configurator.VENUSIAN_CATEGORY
+    :parser: myst
     :summary:
     ```
 ````
 
 ### API
 
-````{py:data} log
-:canonical: fastlife.config.configurator.log
-:value: >
-   'getLogger(...)'
-
-```{autodoc2-docstring} fastlife.config.configurator.log
-```
-
-````
-
-````{py:data} VENUSIAN_CATEGORY
-:canonical: fastlife.config.configurator.VENUSIAN_CATEGORY
-:value: >
-   'fastlife'
-
-```{autodoc2-docstring} fastlife.config.configurator.VENUSIAN_CATEGORY
-```
-
-````
-
 `````{py:class} Configurator(settings: fastlife.config.settings.Settings)
 :canonical: fastlife.config.configurator.Configurator
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.__init__
+:parser: myst
 ```
 
-````{py:attribute} registry
-:canonical: fastlife.config.configurator.Configurator.registry
-:type: fastlife.config.registry.AppRegistry
-:value: >
-   None
+````{py:method} add_exception_handler(status_code_or_exc: int | typing.Type[Exception], handler: typing.Any) -> fastlife.config.configurator.Configurator
+:canonical: fastlife.config.configurator.Configurator.add_exception_handler
 
-```{autodoc2-docstring} fastlife.config.configurator.Configurator.registry
-```
-
-````
-
-````{py:method} get_asgi_app() -> fastapi.FastAPI
-:canonical: fastlife.config.configurator.Configurator.get_asgi_app
-
-```{autodoc2-docstring} fastlife.config.configurator.Configurator.get_asgi_app
-```
-
-````
-
-````{py:method} include(module: str | types.ModuleType) -> fastlife.config.configurator.Configurator
-:canonical: fastlife.config.configurator.Configurator.include
-
-```{autodoc2-docstring} fastlife.config.configurator.Configurator.include
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_exception_handler
+:parser: myst
 ```
 
 ````
@@ -114,6 +65,7 @@
 :canonical: fastlife.config.configurator.Configurator.add_middleware
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_middleware
+:parser: myst
 ```
 
 ````
@@ -122,6 +74,7 @@
 :canonical: fastlife.config.configurator.Configurator.add_route
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_route
+:parser: myst
 ```
 
 ````
@@ -130,14 +83,25 @@
 :canonical: fastlife.config.configurator.Configurator.add_static_route
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_static_route
+:parser: myst
 ```
 
 ````
 
-````{py:method} add_exception_handler(status_code_or_exc: int | typing.Type[Exception], handler: typing.Any) -> fastlife.config.configurator.Configurator
-:canonical: fastlife.config.configurator.Configurator.add_exception_handler
+````{py:method} get_asgi_app() -> fastapi.FastAPI
+:canonical: fastlife.config.configurator.Configurator.get_asgi_app
 
-```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_exception_handler
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.get_asgi_app
+:parser: myst
+```
+
+````
+
+````{py:method} include(module: str | types.ModuleType) -> fastlife.config.configurator.Configurator
+:canonical: fastlife.config.configurator.Configurator.include
+
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.include
+:parser: myst
 ```
 
 ````
@@ -148,5 +112,6 @@
 :canonical: fastlife.config.configurator.configure
 
 ```{autodoc2-docstring} fastlife.config.configurator.configure
+:parser: myst
 ```
 ````

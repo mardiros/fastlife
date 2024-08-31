@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.testing
+:parser: myst
 :allowtitles:
 ```
 
@@ -15,29 +16,3 @@
 
 fastlife.testing.testclient
 ```
-
-## Package Contents
-
-### Data
-
-````{list-table}
-:class: autosummary longtable
-:align: left
-
-* - {py:obj}`__all__ <fastlife.testing.__all__>`
-  - ```{autodoc2-docstring} fastlife.testing.__all__
-    :summary:
-    ```
-````
-
-### API
-
-````{py:data} __all__
-:canonical: fastlife.testing.__all__
-:value: >
-   ['WebTestClient']
-
-```{autodoc2-docstring} fastlife.testing.__all__
-```
-
-````

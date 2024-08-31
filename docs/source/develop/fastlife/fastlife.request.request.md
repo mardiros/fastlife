@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.request.request
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`Request <fastlife.request.request.Request>`
   - ```{autodoc2-docstring} fastlife.request.request.Request
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,12 +31,14 @@
 Bases: {py:obj}`fastapi.Request`
 
 ```{autodoc2-docstring} fastlife.request.request.Request
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.request.request.Request.__init__
+:parser: myst
 ```
 
 ````{py:attribute} registry
@@ -44,6 +48,7 @@ Bases: {py:obj}`fastapi.Request`
    None
 
 ```{autodoc2-docstring} fastlife.request.request.Request.registry
+:parser: myst
 ```
 
 ````

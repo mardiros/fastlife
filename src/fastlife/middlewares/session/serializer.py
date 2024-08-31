@@ -30,6 +30,10 @@ class SignedSessionSerializer(AbsractSessionSerializer):
     The default fastlife session serializer.
 
     It's based on the itsdangerous package to sign the session with a secret key.
+
+    :param secret_key: a secret used to sign the session payload.
+
+    :param max_age: session lifetime in seconds.
     """
 
     def __init__(self, secret_key: str, max_age: int) -> None:

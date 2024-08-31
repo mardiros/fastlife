@@ -1,3 +1,5 @@
+"""Template renderer."""
+
 from .abstract import AbstractTemplateRendererFactory
 from .constants import Constants
 from .jinjax import JinjaxTemplateRenderer

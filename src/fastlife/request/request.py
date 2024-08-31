@@ -1,3 +1,4 @@
+"""HTTP Request representation in a python object."""
 from typing import TYPE_CHECKING
 
 from fastapi import Request as BaseRequest

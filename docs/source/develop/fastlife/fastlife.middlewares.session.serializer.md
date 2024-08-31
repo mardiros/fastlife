@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,10 +18,12 @@
 
 * - {py:obj}`AbsractSessionSerializer <fastlife.middlewares.session.serializer.AbsractSessionSerializer>`
   - ```{autodoc2-docstring} fastlife.middlewares.session.serializer.AbsractSessionSerializer
+    :parser: myst
     :summary:
     ```
 * - {py:obj}`SignedSessionSerializer <fastlife.middlewares.session.serializer.SignedSessionSerializer>`
   - ```{autodoc2-docstring} fastlife.middlewares.session.serializer.SignedSessionSerializer
+    :parser: myst
     :summary:
     ```
 ````
@@ -33,28 +36,32 @@
 Bases: {py:obj}`abc.ABC`
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer.AbsractSessionSerializer
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer.AbsractSessionSerializer.__init__
+:parser: myst
 ```
-
-````{py:method} serialize(data: typing.Mapping[str, typing.Any]) -> bytes
-:canonical: fastlife.middlewares.session.serializer.AbsractSessionSerializer.serialize
-:abstractmethod:
-
-```{autodoc2-docstring} fastlife.middlewares.session.serializer.AbsractSessionSerializer.serialize
-```
-
-````
 
 ````{py:method} deserialize(data: bytes) -> typing.Tuple[typing.Mapping[str, typing.Any], bool]
 :canonical: fastlife.middlewares.session.serializer.AbsractSessionSerializer.deserialize
 :abstractmethod:
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer.AbsractSessionSerializer.deserialize
+:parser: myst
+```
+
+````
+
+````{py:method} serialize(data: typing.Mapping[str, typing.Any]) -> bytes
+:canonical: fastlife.middlewares.session.serializer.AbsractSessionSerializer.serialize
+:abstractmethod:
+
+```{autodoc2-docstring} fastlife.middlewares.session.serializer.AbsractSessionSerializer.serialize
+:parser: myst
 ```
 
 ````
@@ -67,26 +74,30 @@ Bases: {py:obj}`abc.ABC`
 Bases: {py:obj}`fastlife.middlewares.session.serializer.AbsractSessionSerializer`
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer.SignedSessionSerializer
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer.SignedSessionSerializer.__init__
+:parser: myst
 ```
-
-````{py:method} serialize(data: typing.Mapping[str, typing.Any]) -> bytes
-:canonical: fastlife.middlewares.session.serializer.SignedSessionSerializer.serialize
-
-```{autodoc2-docstring} fastlife.middlewares.session.serializer.SignedSessionSerializer.serialize
-```
-
-````
 
 ````{py:method} deserialize(data: bytes) -> typing.Tuple[typing.Mapping[str, typing.Any], bool]
 :canonical: fastlife.middlewares.session.serializer.SignedSessionSerializer.deserialize
 
 ```{autodoc2-docstring} fastlife.middlewares.session.serializer.SignedSessionSerializer.deserialize
+:parser: myst
+```
+
+````
+
+````{py:method} serialize(data: typing.Mapping[str, typing.Any]) -> bytes
+:canonical: fastlife.middlewares.session.serializer.SignedSessionSerializer.serialize
+
+```{autodoc2-docstring} fastlife.middlewares.session.serializer.SignedSessionSerializer.serialize
+:parser: myst
 ```
 
 ````

@@ -4,6 +4,7 @@
 ```
 
 ```{autodoc2-docstring} fastlife.routing.route
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,6 +18,7 @@
 
 * - {py:obj}`Route <fastlife.routing.route.Route>`
   - ```{autodoc2-docstring} fastlife.routing.route.Route
+    :parser: myst
     :summary:
     ```
 ````
@@ -29,29 +31,21 @@
 Bases: {py:obj}`fastapi.routing.APIRoute`
 
 ```{autodoc2-docstring} fastlife.routing.route.Route
+:parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
 ```{autodoc2-docstring} fastlife.routing.route.Route.__init__
+:parser: myst
 ```
-
-````{py:attribute} _registry
-:canonical: fastlife.routing.route.Route._registry
-:type: fastlife.config.registry.AppRegistry
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.routing.route.Route._registry
-```
-
-````
 
 ````{py:method} get_route_handler() -> typing.Callable[[starlette.requests.Request], typing.Coroutine[typing.Any, typing.Any, starlette.responses.Response]]
 :canonical: fastlife.routing.route.Route.get_route_handler
 
 ```{autodoc2-docstring} fastlife.routing.route.Route.get_route_handler
+:parser: myst
 ```
 
 ````

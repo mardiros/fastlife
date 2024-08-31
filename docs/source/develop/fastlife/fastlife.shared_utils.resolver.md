@@ -1,9 +1,14 @@
+---
+orphan: true
+---
+
 # {py:mod}`fastlife.shared_utils.resolver`
 
 ```{py:module} fastlife.shared_utils.resolver
 ```
 
 ```{autodoc2-docstring} fastlife.shared_utils.resolver
+:parser: myst
 :allowtitles:
 ```
 
@@ -17,14 +22,17 @@
 
 * - {py:obj}`resolve <fastlife.shared_utils.resolver.resolve>`
   - ```{autodoc2-docstring} fastlife.shared_utils.resolver.resolve
+    :parser: myst
     :summary:
     ```
 * - {py:obj}`resolve_extended <fastlife.shared_utils.resolver.resolve_extended>`
   - ```{autodoc2-docstring} fastlife.shared_utils.resolver.resolve_extended
+    :parser: myst
     :summary:
     ```
 * - {py:obj}`resolve_path <fastlife.shared_utils.resolver.resolve_path>`
   - ```{autodoc2-docstring} fastlife.shared_utils.resolver.resolve_path
+    :parser: myst
     :summary:
     ```
 ````
@@ -35,6 +43,7 @@
 :canonical: fastlife.shared_utils.resolver.resolve
 
 ```{autodoc2-docstring} fastlife.shared_utils.resolver.resolve
+:parser: myst
 ```
 ````
 
@@ -42,6 +51,7 @@
 :canonical: fastlife.shared_utils.resolver.resolve_extended
 
 ```{autodoc2-docstring} fastlife.shared_utils.resolver.resolve_extended
+:parser: myst
 ```
 ````
 
@@ -49,5 +59,6 @@
 :canonical: fastlife.shared_utils.resolver.resolve_path
 
 ```{autodoc2-docstring} fastlife.shared_utils.resolver.resolve_path
+:parser: myst
 ```
 ````
