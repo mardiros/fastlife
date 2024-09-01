@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.templating.renderer`
 
 ```{py:module} fastlife.templating.renderer
@@ -19,4 +15,5 @@ orphan: true
 :maxdepth: 1
 
 fastlife.templating.renderer.abstract
+fastlife.templating.renderer.constants
 ```

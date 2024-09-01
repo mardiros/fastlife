@@ -36,6 +36,8 @@ version = str(pkg_meta["version"])
 # The full version, including alpha/beta/rc tags
 release = version
 
+# fastapi_tag = pkg_meta["dependencies"]["fastapi"].lstrip("^")
+
 
 # -- General configuration ---------------------------------------------------
 
@@ -49,7 +51,11 @@ extensions = [
 
 
 autodoc2_packages = [
-    "../../src/fastlife",
+    {"path": "../../src/fastlife"},
+    # {
+    #     "path": "fastapi",
+    #     "from_git_clone": ("https://github.com/fastapi/fastapi.git", fastapi_tag),
+    # },
 ]
 
 autodoc2_docstring_parser_regexes = [

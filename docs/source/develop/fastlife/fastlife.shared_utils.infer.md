@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.shared_utils.infer`
 
 ```{py:module} fastlife.shared_utils.infer

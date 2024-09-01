@@ -94,9 +94,12 @@ class Configurator:
         ```python
         from fastlife import Configurator, configure
 
+        def home() -> dict[str, str]:
+            return {"hello": "world"}
+
         @configure
         def includeme(config: Configurator) -> None:
-            config.include(".views")
+            config.add_route("home", "/", home)
         ```
 
         :param module: a module to include.

@@ -8,6 +8,15 @@
 :allowtitles:
 ```
 
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+fastlife.templating.renderer
+```
+
 ## Submodules
 
 ```{toctree}

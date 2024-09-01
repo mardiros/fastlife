@@ -21,6 +21,10 @@ orphan: true
 fastlife.config
 fastlife.middlewares
 fastlife.request
+fastlife.routing
+fastlife.security
+fastlife.shared_utils
+fastlife.templates
 fastlife.templating
 fastlife.testing
 ```

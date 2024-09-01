@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.templating.renderer.constants`
 
 ```{py:module} fastlife.templating.renderer.constants

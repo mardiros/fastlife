@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.security`
 
 ```{py:module} fastlife.security

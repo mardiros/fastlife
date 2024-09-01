@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.shared_utils.resolver`
 
 ```{py:module} fastlife.shared_utils.resolver

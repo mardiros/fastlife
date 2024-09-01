@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.templates`
 
 ```{py:module} fastlife.templates

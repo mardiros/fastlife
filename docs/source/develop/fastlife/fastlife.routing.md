@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.routing`
 
 ```{py:module} fastlife.routing
