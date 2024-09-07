@@ -33,24 +33,31 @@ from fastlife.shared_utils.resolver import resolve, resolve_path
 from .abstract import AbstractTemplateRenderer, AbstractTemplateRendererFactory
 
 RX_DOC_START = re.compile(r"{#-?\s*doc\s+")
+RX_CONTENT = re.compile(r"\{\{-?\s*content\s*-?\}\}", re.DOTALL)
+RX_COMMENT_REPLACE = re.compile(r"{#[^#]+#}")
 
 
-def generate_docstring(func_def: ast.FunctionDef, component_name: str) -> str:
+def has_content(source: str) -> bool:
+    nocomment = RX_COMMENT_REPLACE.sub("", source)
+    return len(RX_CONTENT.findall(nocomment)) > 0
+
+
+def generate_docstring(
+    func_def: ast.FunctionDef, component_name: str, add_content: bool
+) -> str:
     """Generate a docstring for the component."""
     # Extract function name and docstring
-    docstring = ast.get_docstring(func_def, clean=True) or "-"
-    docstring_lines = [f"   {l}" for l in docstring.split("\n")]
-
+    docstring = (ast.get_docstring(func_def, clean=True) or "-").strip()
+    docstring_lines = [l.strip() for l in docstring.split("\n")]
     # Add a newline for separation after the function docstring
-    if docstring_lines[0]:
-        docstring_lines.append("")
+    docstring_lines.append("")
 
     component_params: list[str] = []
 
     # Function for processing an argument and adding its docstring lines
     def process_arg(arg: ast.arg, default_value: Any = None) -> None:
         arg_name = arg.arg
-
+        param_desc = ""
         # Extract the type annotation (if any)
         if (
             isinstance(arg.annotation, ast.Subscript)
@@ -59,17 +66,19 @@ def generate_docstring(func_def: ast.FunctionDef, component_name: str) -> str:
         ):
             # For Annotated types, we expect the first argument to be the type and
             # the second to be the description
-            type_annotation = arg.annotation.slice.elts[0]
-            description_annotation = arg.annotation.slice.elts[1]
+            type_annotation = arg.annotation.slice.elts[0]  # type: ignore
             param_type = ast.unparse(type_annotation)
-            param_desc = ast.unparse(description_annotation)
+
+            if len(arg.annotation.slice.elts) > 1 and isinstance(  # type: ignore
+                arg.annotation.slice.elts[1], ast.Constant  # type: ignore
+            ):
+                param_desc = arg.annotation.slice.elts[1].value  # type: ignore
         else:
             # Otherwise, just use the type if available
             param_type = ast.unparse(arg.annotation) if arg.annotation else "Any"
-            param_desc = ""
 
         # Build the parameter docstring line
-        docstring_lines.append(f":param {arg_name}: {param_desc}")
+        docstring_lines.append(f":param {arg_name}: {param_desc}".strip())
 
         # Build the string representation of the parameter
         param_str = f"{arg_name}: {param_type}"
@@ -85,11 +94,15 @@ def generate_docstring(func_def: ast.FunctionDef, component_name: str) -> str:
     for arg, default in zip(kwonlyargs, kw_defaults):
         process_arg(arg, default)
 
+    if add_content:
+        component_params.append("content: Any")
+        docstring_lines.append(":param content: child none")
+
     return (
         f"{component_name}({', '.join(component_params)})"
         + "\n"
         + "\n    "
-        + "\n    ".join(docstring_lines).strip()
+        + ("\n    ".join(docstring_lines).strip()).replace("\n    \n", "\n\n")
         + "\n"
     )
 
@@ -174,9 +187,8 @@ class InspectableComponent(Component):
         func_def = self.as_def()
         prefix = f"{self.prefix}." if self.prefix else ""
         ret = ".. jinjax:component:: " + generate_docstring(
-            func_def, f"{prefix}{self.name}"
+            func_def, f"{prefix}{self.name}", has_content(self.source)
         )
-        print(ret)
         return ret
 
 

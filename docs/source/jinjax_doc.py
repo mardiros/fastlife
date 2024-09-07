@@ -33,7 +33,7 @@ class JinjaxComponent(ObjectDescription[str]):
 
     def run(self):
         """Generate structured and styled documentation for the directive."""
-        container_node = nodes.container(classes=['jinjax-component'])
+        container_node = nodes.container(classes=["jinjax-component"])
 
         # Extract the signature (first line of arguments)
         signature_text = self.arguments[0]
@@ -51,41 +51,62 @@ class JinjaxComponent(ObjectDescription[str]):
         func_def = cast(ast.FunctionDef, astree.body[0])
 
         # Create a colorized signature line with separate spans for each part
-        signature_node = nodes.literal(classes=['jinjax-signature'])
+        signature_node = nodes.literal(classes=["jinjax-signature"])
         signature_node += nodes.inline(text="<")
-        signature_node += nodes.inline(text=component_name, classes=['jinjax-component-name'])
+        signature_node += nodes.inline(
+            text=component_name, classes=["jinjax-component-name"]
+        )
 
         def process_arg(arg: ast.arg, default_value: Any, signature_node: Any):
             arg_name = arg.arg.replace("_", "-")
             arg_type = ast.unparse(arg.annotation) if arg.annotation else "Any"
 
             signature_node += nodes.inline(text=" ")
-            signature_node += nodes.inline(text=arg_name, classes=['jinjax-arg'])
+            signature_node += nodes.inline(text=arg_name, classes=["jinjax-arg"])
             signature_node += nodes.inline(text=": ")
-            signature_node += nodes.inline(text=arg_type, classes=['jinjax-type'])
+            signature_node += nodes.inline(text=arg_type, classes=["jinjax-type"])
             if default_value is not None:
                 signature_node += nodes.inline(text=" = ")
-                signature_node += nodes.inline(text=ast.unparse(default_value), classes=['jinjax-default'])
+                signature_node += nodes.inline(
+                    text=ast.unparse(default_value), classes=["jinjax-default"]
+                )
 
         # Process keyword-only arguments
         kwonlyargs = func_def.args.kwonlyargs
         kw_defaults = func_def.args.kw_defaults
 
+        has_content = False
         for arg, default in zip(kwonlyargs, kw_defaults):
-            process_arg(arg, default, signature_node)
+            if arg.arg == "content":
+                has_content = True
+            else:
+                process_arg(arg, default, signature_node)
 
+        signature_close_wrapper = nodes.container(classes=["jinjax-signature-close"])
+        if has_content:
+            signature_node += nodes.inline(text=">")
+            signature_node += nodes.inline(
+                text="{{- content -}}", classes=["jinjax-child-content"]
+            )
+            signature_close_wrapper += nodes.inline(text="</")
+            signature_close_wrapper += nodes.inline(
+                text=component_name, classes=["jinjax-component-name"]
+            )
+            signature_close_wrapper += nodes.inline(text=">")
+        else:
+            signature_node += nodes.inline(text=" />")
+            signature_close_wrapper += nodes.inline(text="")
+        signature_node += signature_close_wrapper
 
-        signature_node += nodes.inline(text=">")
-
-        signature_node_wrapper = nodes.container(classes=['jinjax-signature-wrapper'])
+        signature_node_wrapper = nodes.container(classes=["jinjax-signature-wrapper"])
         signature_node_wrapper += signature_node
 
-        container_node += nodes.paragraph('', '', signature_node_wrapper)
+        container_node += nodes.paragraph("", "", signature_node_wrapper)
 
         # Add the component description (self.content[0] is the first line of content)
         description = self.content[0] if self.content else "-"
         if description != "-":
-            description_node = nodes.paragraph('', description)
+            description_node = nodes.paragraph("", description)
             container_node += description_node
 
         # Handle the parameters (e.g., :param)
@@ -93,18 +114,21 @@ class JinjaxComponent(ObjectDescription[str]):
         for i in range(1, len(self.content)):
             content_line = self.content[i]
             if content_line.startswith(":param "):
-                param_info = content_line[len(":param "):].split(":", 1)
+                param_info = content_line[len(":param ") :].split(":", 1)
                 param_name = param_info[0].strip()
                 param_description = param_info[1].strip() if len(param_info) > 1 else ""
 
                 # Create param definition entry
-                term_node = nodes.term('', '', nodes.strong(text=param_name))
-                definition_node = nodes.definition('', nodes.paragraph('', param_description))
-                param_list += nodes.definition_list_item('', term_node, definition_node)
+                term_node = nodes.term("", "", nodes.strong(text=param_name))
+                definition_node = nodes.definition(
+                    "", nodes.paragraph("", param_description)
+                )
+                param_list += nodes.definition_list_item("", term_node, definition_node)
 
         container_node += param_list
 
         return [container_node]
+
 
 class JinjaxDomain(Domain):
     """Custom domain for Jinjax components."""

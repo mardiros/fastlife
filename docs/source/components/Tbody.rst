@@ -1,6 +1,8 @@
 Tbody
 =====
 
-.. jinjax:component:: Tbody()
+.. jinjax:component:: Tbody(content: Any)
 
     -
+
+    :param content: child none

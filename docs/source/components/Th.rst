@@ -1,6 +1,8 @@
 Th
 ==
 
-.. jinjax:component:: Th()
+.. jinjax:component:: Th(content: Any)
 
     -
+
+    :param content: child none

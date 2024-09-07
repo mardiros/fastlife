@@ -1,6 +1,8 @@
 H4
 ==
 
-.. jinjax:component:: H4()
+.. jinjax:component:: H4(content: Any)
 
     -
+
+    :param content: child none

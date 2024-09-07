@@ -1,9 +1,10 @@
 Summary
 =======
 
-.. jinjax:component:: Summary(id: Any, open: Any = True)
+.. jinjax:component:: Summary(id: Any, open: Any = True, content: Any)
 
     -
-    
-    :param id: 
+
+    :param id:
     :param open:
+    :param content: child none

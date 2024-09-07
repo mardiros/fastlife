@@ -123,7 +123,7 @@ Bases: {py:obj}`fastlife.templating.renderer.abstract.AbstractTemplateRendererFa
 
 `````
 
-````{py:function} generate_docstring(func_def: ast.FunctionDef, component_name: str) -> str
+````{py:function} generate_docstring(func_def: ast.FunctionDef, component_name: str, add_content: bool) -> str
 :canonical: fastlife.templating.renderer.jinjax.generate_docstring
 
 ```{autodoc2-docstring} fastlife.templating.renderer.jinjax.generate_docstring

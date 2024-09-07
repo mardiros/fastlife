@@ -1,6 +1,8 @@
 Tr
 ==
 
-.. jinjax:component:: Tr()
+.. jinjax:component:: Tr(content: Any)
 
     -
+
+    :param content: child none

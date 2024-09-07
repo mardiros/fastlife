@@ -1,9 +1,10 @@
 Details
 =======
 
-.. jinjax:component:: Details(id: Any = None, open: Any = True)
+.. jinjax:component:: Details(id: Any = None, open: Any = True, content: Any)
 
     -
-    
-    :param id: 
+
+    :param id:
     :param open:
+    :param content: child none

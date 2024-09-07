@@ -3,6 +3,7 @@ body {
   --jinjax-arg-color: var(--color-admonition-title--attention,  #ff6f61);
   --jinjax-type-color: var(--color-admonition-title--admonition-todo,  #999);
   --jinjax-default-color: var( --color-admonition-title--note,  #6a5acd);
+  --jinjax-content-color: var( --color-admonition-title--attention,  #cd5a5a);
 }
 
 .jinjax-component {
@@ -11,7 +12,7 @@ body {
 
 .jinjax-signature-wrapper {
   display: block;
-  padding: 1.5em 1.5em 1.5em 3em !important;
+  padding: 1.5em 1.5em 0em 3em !important;
   background: var(--color-inline-code-background);
 }
 
@@ -56,4 +57,16 @@ body {
   font-family: monospace;
   font-size: 1.5em;
   white-space: nowrap;
+}
+
+.jinjax-child-content {
+  display: block;
+  margin: 1em 2em 0;
+  color: var(--jinjax-content-color);
+}
+
+.jinjax-signature-close {
+  display: block;
+  padding: 0;
+  margin-left: -2em;
 }
