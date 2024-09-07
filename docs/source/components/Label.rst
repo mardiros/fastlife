@@ -1,0 +1,6 @@
+Label
+=====
+
+.. jinjax:component:: Label()
+
+    -

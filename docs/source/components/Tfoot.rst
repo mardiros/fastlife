@@ -1,0 +1,6 @@
+Tfoot
+=====
+
+.. jinjax:component:: Tfoot()
+
+    -

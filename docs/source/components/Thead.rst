@@ -1,0 +1,6 @@
+Thead
+=====
+
+.. jinjax:component:: Thead()
+
+    -

@@ -1,0 +1,6 @@
+H2
+==
+
+.. jinjax:component:: H2()
+
+    -

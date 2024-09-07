@@ -1,0 +1,59 @@
+body {
+  --jinjax-component-color: var(--color-topic-title, #2a9d8f);
+  --jinjax-arg-color: var(--color-admonition-title--attention,  #ff6f61);
+  --jinjax-type-color: var(--color-admonition-title--admonition-todo,  #999);
+  --jinjax-default-color: var( --color-admonition-title--note,  #6a5acd);
+}
+
+.jinjax-component {
+  display: block;
+}
+
+.jinjax-signature-wrapper {
+  display: block;
+  padding: 1.5em 1.5em 1.5em 3em !important;
+  background: var(--color-inline-code-background);
+}
+
+.jinjax-signature {
+  display: block;
+  text-indent: -2em;   /* Negative indent to pull the first line */
+  padding-left: 2em;   /* Positive padding to offset the rest */
+  white-space: pre-wrap; /* Ensures line breaks wrap as needed */
+  background-color: transparent;
+  border: none;
+}
+
+.jinjax-component-name {
+  color: var(--jinjax-component-color);
+  font-family: monospace;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.jinjax-arg:not(:first-child)::before {
+  content: '\A';
+  white-space: pre;
+}
+
+.jinjax-arg {
+  color: var(--jinjax-arg-color);
+  font-family: monospace;
+  font-size: 1.5em;
+  white-space: nowrap;
+}
+
+
+.jinjax-type {
+  color: var(--jinjax-type-color);
+  font-style: italic;
+  font-size: 1.1em;
+  white-space: nowrap;
+}
+
+.jinjax-default {
+  color: var(--jinjax-default-color);
+  font-family: monospace;
+  font-size: 1.5em;
+  white-space: nowrap;
+}

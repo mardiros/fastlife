@@ -15,6 +15,7 @@ import sys
 
 import tomlkit
 
+sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath("../../src"))
 
 
@@ -45,10 +46,12 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "jinjax_doc",
     "myst_parser",
     "autodoc2",
 ]
 
+jinjax_doc_output_dir = "components"
 
 autodoc2_packages = [
     {"path": "../../src/fastlife"},
@@ -102,8 +105,14 @@ html_theme = "furo"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = []  # "_static"]
+html_static_path = ['static']
 
+# -- Options for HTML output -------------------------------------------------
+
+# Add custom CSS file to the HTML output
+html_css_files = [
+    'jinjax_doc.css',  # Make sure this file exists in the '_static' directory
+]
 
 # -- Hack --------------------------------------------------------------------
 

@@ -1,0 +1,6 @@
+Tr
+==
+
+.. jinjax:component:: Tr()
+
+    -

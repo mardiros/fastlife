@@ -17,16 +17,7 @@ import logging
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    List,
-    Optional,
-    Self,
-    Type,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Self, Type, Union
 
 import venusian
 from fastapi import Depends, FastAPI

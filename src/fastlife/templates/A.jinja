@@ -1,10 +1,15 @@
+{# doc
+  Create html `<a>` node with htmx support by default.
+  The `hx-get` parameter is set with the href directly unless the
+  `disabled-htmx` attribute has been set.
+#}
 {# def
-href,
-disable_htmx=false,
-hx_target="#maincontent",
-hx_select=None,
-hx_swap="innerHTML show:body:top",
-hx_push_url=true
+href: Annotated[str, "target link"],
+hx_target: str = "#maincontent",
+hx_select: str | None = None,
+hx_swap: str = "innerHTML show:body:top",
+hx_push_url: bool = True,
+disable_htmx: bool = False
 #}
 
 <a href="{{href}}" {% if not disable_htmx %} hx-get="{{href}}" hx-target="{{hx_target}}" hx-swap="{{hx_swap}}" {% if

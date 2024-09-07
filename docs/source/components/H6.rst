@@ -1,0 +1,6 @@
+H6
+==
+
+.. jinjax:component:: H6()
+
+    -

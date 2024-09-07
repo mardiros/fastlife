@@ -1,0 +1,6 @@
+Table
+=====
+
+.. jinjax:component:: Table()
+
+    -
