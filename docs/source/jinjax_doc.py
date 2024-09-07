@@ -167,9 +167,9 @@ def run_autodoc(app: Sphinx) -> str | None:
         )
         toctree += f"   {component.name}\n"
 
-    outfile = outdir / f"index.rst"
-    outfile.write_text(INDEX_TPL.format(toctree=toctree))
     outfile = outdir / "index.rst"
+    outfile.write_text(INDEX_TPL.format(toctree=toctree))
+
 
 INDEX_TPL = """\
 

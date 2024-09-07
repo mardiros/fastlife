@@ -148,10 +148,10 @@ class InspectableComponent(Component):
         signature = "def component(): pass"
         match = RX_META_HEADER.match(self.source)
         if match:
-            header = match.group(0)
-            header = header.split("#}")[:-1]
             headers = match.group(0)
             header = headers.split("#}")[:-1]
+            def_found = False
+            docstring = ""
 
             expr = None
             while header:
