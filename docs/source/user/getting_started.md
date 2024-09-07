@@ -99,7 +99,7 @@ Fastlife use [JinjaX](https://jinjax.scaletti.dev/) template engine, a modern an
 modular template engine. lets write a simple template.
 
 ```{literalinclude} examples/modular/HelloWorld.jinja.sh
-  :language: html
+  :language: bash
 ```
 
 Now to run our app, we need to add a settings to find the templates.
