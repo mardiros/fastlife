@@ -20,7 +20,6 @@ version = "0.10.0"
 [tool.poetry.dependencies]
 python = "^3.11"
 beautifulsoup4 = {version = "^4.12.2", extras = ["testing"]}
-behave = "^1.2.6"
 fastapi = "^0.112.0"
 itsdangerous = "^2.1.2"
 jinjax = "^0.44"
@@ -36,6 +35,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 beautifulsoup4 = "^4.12.2"
+behave = "^1.2.6"
 black = "^23.3.0"
 flake8 = "^6.1.0"
 heroicons = "^2.7.0"

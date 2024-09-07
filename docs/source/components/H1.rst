@@ -1,0 +1,8 @@
+H1
+==
+
+.. jinjax:component:: H1(content: Any)
+
+    -
+
+    :param content: child none

@@ -15,6 +15,7 @@ user/getting_started
 :caption: Developers Documentation:
 
 develop/fastlife/fastlife
+components/index
 ```
 
 

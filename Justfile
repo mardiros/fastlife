@@ -13,6 +13,8 @@ doc:
 
 cleandoc:
     cd docs && poetry run make clean
+    rm -rf docs/source/components
+    rm -rf docs/source/develop
 
 lint:
     poetry run flake8 && echo "$(tput setaf 10)Success: no lint issue$(tput setaf 7)"
