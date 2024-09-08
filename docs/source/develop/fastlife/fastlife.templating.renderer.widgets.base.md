@@ -26,7 +26,10 @@ orphan: true
     :summary:
     ```
 * - {py:obj}`Widget <fastlife.templating.renderer.widgets.base.Widget>`
-  -
+  - ```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget
+    :parser: myst
+    :summary:
+    ```
 ````
 
 ### API
@@ -92,6 +95,17 @@ orphan: true
 
 Bases: {py:obj}`abc.ABC`, {py:obj}`typing.Generic`\[{py:obj}`fastlife.templating.renderer.widgets.base.T`\]
 
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget
+:parser: myst
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget.__init__
+:parser: myst
+```
+
 ````{py:attribute} aria_label
 :canonical: fastlife.templating.renderer.widgets.base.Widget.aria_label
 :type: str
@@ -99,6 +113,16 @@ Bases: {py:obj}`abc.ABC`, {py:obj}`typing.Generic`\[{py:obj}`fastlife.templating
    None
 
 ```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget.aria_label
+:parser: myst
+```
+
+````
+
+````{py:method} get_template() -> str
+:canonical: fastlife.templating.renderer.widgets.base.Widget.get_template
+:abstractmethod:
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget.get_template
 :parser: myst
 ```
 
@@ -168,6 +192,18 @@ Bases: {py:obj}`abc.ABC`, {py:obj}`typing.Generic`\[{py:obj}`fastlife.templating
    None
 
 ```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget.token
+:parser: myst
+```
+
+````
+
+````{py:attribute} value
+:canonical: fastlife.templating.renderer.widgets.base.Widget.value
+:type: fastlife.templating.renderer.widgets.base.T | None
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.Widget.value
 :parser: myst
 ```
 

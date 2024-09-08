@@ -9,6 +9,21 @@ from .base import TypeWrapper, Widget
 
 
 class UnionWidget(Widget[Widget[Any]]):
+    """
+    Widget for union types.
+
+    :param name: input name.
+    :param title: title for the widget.
+    :param hint: hint for human.
+    :param aria_label: html input aria-label value.
+    :param value: current value.
+    :param error: error of the value if any.
+    :param children_types: childrens types list.
+    :param removable: display a button to remove the widget for optional fields.
+    :param token: token used to get unique id on the form.
+
+    """
+
     def __init__(
         self,
         name: str,
@@ -19,8 +34,8 @@ class UnionWidget(Widget[Widget[Any]]):
         value: Optional[Widget[Any]],
         error: str | None = None,
         children_types: Sequence[Type[BaseModel]],
+        removable: bool = False,
         token: str,
-        removable: bool,
     ):
         super().__init__(
             name,

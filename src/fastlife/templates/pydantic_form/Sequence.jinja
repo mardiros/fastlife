@@ -1,4 +1,12 @@
-{# def widget, children_widgets, type #}
+{# doc Widget for pydantic BaseModel subclasses. #}
+{# def
+    widget: Annotated[fastlife.templating.renderer.widgets.sequence.SequenceWidget, "widget to display."],
+    children_widgets : Annotated[
+        Sequence[fastlife.templating.renderer.widgets.base.BaseWidget],
+        "child widgets for every fields of the model."
+    ],
+    type: Annotated[fastlife.templating.renderer.widgets.base.TypeWrapper, "child type wrapped."]
+#}
 
 <pydantic_form.Widget :widget="widget">
   <Details :id="widget.id">

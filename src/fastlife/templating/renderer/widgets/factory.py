@@ -4,7 +4,7 @@ from decimal import Decimal
 from enum import Enum
 from inspect import isclass
 from types import NoneType
-from typing import Any, Literal, Mapping, Optional, Type, cast, get_origin
+from typing import Any, Literal, Mapping, Type, cast, get_origin
 from uuid import UUID
 
 from markupsafe import Markup
@@ -26,7 +26,14 @@ from fastlife.templating.renderer.widgets.union import UnionWidget
 
 
 class WidgetFactory:
-    def __init__(self, renderer: AbstractTemplateRenderer, token: Optional[str] = None):
+    """
+    Form builder for pydantic model.
+
+    :param renderer: template engine to render widget.
+    :param token: reuse a token
+    """
+
+    def __init__(self, renderer: AbstractTemplateRenderer, token: str | None = None):
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
 
@@ -152,7 +159,7 @@ class WidgetFactory:
         self,
         field_name: str,
         typ: Type[BaseModel],
-        field: Optional[FieldInfo],
+        field: FieldInfo | None,
         value: Mapping[str, Any],
         form_errors: Mapping[str, Any],
         removable: bool,
@@ -194,7 +201,7 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: Optional[FieldInfo],
+        field: FieldInfo | None,
         value: Any,
         form_errors: Mapping[str, Any],
         removable: bool,
@@ -261,8 +268,8 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: Optional[FieldInfo],
-        value: Optional[Sequence[Any]],
+        field: FieldInfo | None,
+        value: Sequence[Any] | None,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
@@ -299,8 +306,8 @@ class WidgetFactory:
         self,
         field_name: str,
         field_type: Type[Any],
-        field: Optional[FieldInfo],
-        value: Optional[Sequence[Any]],
+        field: FieldInfo | None,
+        value: Sequence[Any] | None,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:

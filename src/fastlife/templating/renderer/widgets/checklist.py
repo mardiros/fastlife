@@ -6,6 +6,8 @@ from .base import Widget
 
 
 class Checkable(BaseModel):
+    """A checkable field from a checklist."""
+
     label: str
     name: str
     value: str
@@ -24,6 +26,19 @@ class Checkable(BaseModel):
 
 
 class ChecklistWidget(Widget[Sequence[Checkable]]):
+    """
+    Widget for field of type Set.
+
+    :param name: field name.
+    :param title: title for the widget.
+    :param hint: hint for human.
+    :param aria_label: html input aria-label value.
+    :param value: current value.
+    :param error: error of the value if any.
+    :param removable: display a button to remove the widget for optional fields.
+    :param token: token used to get unique id on the form.
+    """
+
     def __init__(
         self,
         name: str,

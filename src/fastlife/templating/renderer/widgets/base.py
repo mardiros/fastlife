@@ -19,18 +19,35 @@ def get_title(typ: Type[Any]) -> str:
 
 
 class Widget(abc.ABC, Generic[T]):
+    """
+    Base class for widget of pydantic fields.
+
+    :param name: field name.
+    :param value: field value.
+    :param title: title for the widget.
+    :param hint: hint for human.
+    :param aria_label: html input aria-label value.
+    :param value: current value.
+    :param error: error of the value if any.
+    :param children_types: childrens types list.
+    :param removable: display a button to remove the widget for optional fields.
+    :param token: token used to get unique id on the form.
+    """
+
     name: str
-    "variable name, nested variables have dots"
+    "variable name, nested variables have dots."
+    value: T | None
+    """Value of the field."""
     title: str
-    "Human title for the widget"
+    "Human title for the widget."
     hint: str
-    "A help message for the the widget"
+    "A help message for the the widget."
     aria_label: str
-    "Non visible text alternative"
+    "Non visible text alternative."
     token: str
-    "unique token to ensure id are unique in the DOM"
+    "unique token to ensure id are unique in the DOM."
     removable: bool
-    "Indicate that the widget is removable from the dom"
+    "Indicate that the widget is removable from the dom."
 
     def __init__(
         self,
@@ -56,10 +73,10 @@ class Widget(abc.ABC, Generic[T]):
 
     @abc.abstractmethod
     def get_template(self) -> str:
-        ...
+        """Get the widget component template."""
 
     def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
-        """Return the html version"""
+        """Return the html version."""
         return Markup(renderer.render_template(self.get_template(), widget=self))
 
 

@@ -1,8 +1,8 @@
 pydantic_form.Boolean
 =====================
 
-.. jinjax:component:: pydantic_form.Boolean(widget: Any)
+.. jinjax:component:: pydantic_form.Boolean(widget: fastlife.templating.renderer.widgets.boolean.BooleanWidget)
 
-    -
+    Render a checkbox and a label for boolean field.
 
-    :param widget:
+    :param widget: widget to display.

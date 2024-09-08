@@ -1,8 +1,8 @@
 pydantic_form.Error
 ===================
 
-.. jinjax:component:: pydantic_form.Error(text: Any)
+.. jinjax:component:: pydantic_form.Error(text: str | None)
 
-    -
+    display an error for a field.
 
-    :param text:
+    :param text: error message

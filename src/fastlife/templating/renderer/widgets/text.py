@@ -4,6 +4,20 @@ from .base import Widget
 
 
 class TextWidget(Widget[str]):
+    """
+    Widget for text like field (email, ...).
+
+    :param name: input name.
+    :param title: title for the widget.
+    :param hint: hint for human.
+    :param aria_label: html input aria-label value.
+    :param placeholder: html input placeholder value.
+    :param error: error of the value if any.
+    :param value: current value.
+    :param removable: display a button to remove the widget for optional fields.
+    :param token: token used to get unique id on the form.
+    """
+
     def __init__(
         self,
         name: str,
@@ -13,10 +27,10 @@ class TextWidget(Widget[str]):
         aria_label: Optional[str] = None,
         placeholder: Optional[str] = None,
         error: str | None = None,
-        removable: bool = False,
         value: str = "",
-        token: Optional[str] = None,
         input_type: str = "text",
+        removable: bool = False,
+        token: str,
     ) -> None:
         super().__init__(
             name,
@@ -36,6 +50,38 @@ class TextWidget(Widget[str]):
 
 
 class TextareaWidget(Widget[str]):
+    """
+    Render a Textearea for a string or event a sequence of string.
+
+    ```
+    from fastlife.templating.renderer.widgets.text import TextareaWidget
+    from pydantic import BaseModel, Field, field_validator
+
+    class TaggedParagraphForm(BaseModel):
+        paragraph: Annotated[str, TextareaWidget] = Field(...)
+        tags: Annotated[Sequence[str], TextareaWidget] = Field(
+            default_factory=list,
+            title="Tags",
+            description="One tag per line",
+        )
+
+        @field_validator("tags", mode="before")
+        def split(cls, s: Any) -> Sequence[str]:
+            return s.split() if s else []
+    ```
+
+    :param name: input name.
+    :param title: title for the widget.
+    :param hint: hint for human.
+    :param aria_label: html input aria-label value.
+    :param placeholder: html input placeholder value.
+    :param error: error of the value if any.
+    :param value: current value.
+    :param removable: display a button to remove the widget for optional fields.
+    :param token: token used to get unique id on the form.
+
+    """
+
     def __init__(
         self,
         name: str,
@@ -45,9 +91,9 @@ class TextareaWidget(Widget[str]):
         aria_label: Optional[str] = None,
         placeholder: Optional[str] = None,
         error: str | None = None,
-        removable: bool = False,
         value: str = "",
-        token: Optional[str] = None,
+        removable: bool = False,
+        token: str,
     ) -> None:
         super().__init__(
             name,

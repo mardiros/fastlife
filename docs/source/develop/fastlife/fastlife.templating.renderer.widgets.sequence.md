@@ -31,6 +31,11 @@ orphan: true
 
 Bases: {py:obj}`fastlife.templating.renderer.widgets.base.Widget`\[{py:obj}`typing.Sequence`\[{py:obj}`fastlife.templating.renderer.widgets.base.Widget`\[{py:obj}`typing.Any`\]\]\]
 
+````{py:method} get_template() -> str
+:canonical: fastlife.templating.renderer.widgets.sequence.SequenceWidget.get_template
+
+````
+
 ````{py:method} to_html(renderer: fastlife.templating.renderer.abstract.AbstractTemplateRenderer) -> markupsafe.Markup
 :canonical: fastlife.templating.renderer.widgets.sequence.SequenceWidget.to_html
 

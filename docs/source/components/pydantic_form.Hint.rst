@@ -1,8 +1,8 @@
 pydantic_form.Hint
 ==================
 
-.. jinjax:component:: pydantic_form.Hint(text: Any)
+.. jinjax:component:: pydantic_form.Hint(text: str | None)
 
     -
 
-    :param text:
+    :param text: hint text.
