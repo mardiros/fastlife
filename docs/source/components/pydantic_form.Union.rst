@@ -1,11 +1,11 @@
 pydantic_form.Union
 ===================
 
-.. jinjax:component:: pydantic_form.Union(widget: Any, child: Any, types: Any, parent_type: Any)
+.. jinjax:component:: pydantic_form.Union(widget: fastlife.templating.renderer.widgets.base.Widget, child: fastlife.templating.renderer.widgets.base.Widget, types: Sequence[fastlife.templating.renderer.widgets.base.TypeWrapper], parent_type: fastlife.templating.renderer.widgets.base.TypeWrapper)
 
-    -
+    display widget for union type field
 
-    :param widget:
-    :param child:
-    :param types:
-    :param parent_type:
+    :param widget: widget to display
+    :param child: current widget if any
+    :param types: Child types to choose
+    :param parent_type: parent type

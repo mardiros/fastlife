@@ -11,9 +11,46 @@ from sphinx.directives import ObjectDescription
 from sphinx.domains import Domain, ObjType
 from sphinx.roles import XRefRole
 
-
 from fastlife.config.settings import Settings
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
+
+
+def create_ref_node(arg_type: str) -> nodes.Node:
+    """
+    Creates a cross-reference node if a type has been inferred.
+
+    At the monent, type inferred are types containing a `.`, otherwise
+    considered as a simple type from the python standard library.
+
+    :param arg_type: type to render
+    """
+    if "." in arg_type:
+        ref_node = pending_xref(
+            "",
+            refdomain="py",
+            reftype="class",
+            reftarget=arg_type,
+            refexplicit=True,
+            refwarn=True,
+        )
+        ref_node += nodes.Text(arg_type)
+        return ref_node
+    else:
+        return nodes.inline(text=arg_type, classes=["jinjax-type"])
+
+
+def handle_arg_type(arg_type: str, signature_node: nodes.literal) -> None:
+    """Add arg_type to signature_node."""
+    complex_type_pattern = r"(\w+)\[(.+)\]"
+
+    match = re.match(complex_type_pattern, arg_type)
+    if match:
+        outer_type, inner_type = match.groups()
+        signature_node += nodes.inline(text=f"{outer_type}[", classes=["jinjax-type"])
+        signature_node += create_ref_node(inner_type)
+        signature_node += nodes.inline(text="]", classes=["jinjax-type"])
+    else:
+        signature_node += create_ref_node(arg_type)
 
 
 class JinjaxComponent(ObjectDescription[str]):
@@ -25,14 +62,14 @@ class JinjaxComponent(ObjectDescription[str]):
             signode.append(node)
         return sig
 
-    def add_target_and_index(self, name, sig, signode):
+    def add_target_and_index(self, name: str, sig: str, signode: nodes.Node) -> None:
         """Add anchor for references and indexing."""
         targetname = f"jinjax.{name}"
         signode["names"].append(targetname)
         self.state.document.note_explicit_target(signode)
         self.env.domaindata["jinjax"]["components"][name] = self.env.docname
 
-    def run(self):
+    def run(self) -> list[nodes.Node]:
         """Generate structured and styled documentation for the directive."""
         container_node = nodes.container(classes=["jinjax-component"])
 
@@ -66,19 +103,8 @@ class JinjaxComponent(ObjectDescription[str]):
             signature_node += nodes.inline(text=arg_name, classes=["jinjax-arg"])
             signature_node += nodes.inline(text=": ")
 
-            if "." in arg_type:
-                ref_node = pending_xref(
-                    '',
-                    refdomain='py',
-                    reftype='class',
-                    reftarget=arg_type,
-                    refexplicit=True,
-                    refwarn=True
-                )
-                ref_node += nodes.Text(arg_type)
-                signature_node += ref_node
-            else:
-                signature_node += nodes.inline(text=arg_type, classes=["jinjax-type"])
+            handle_arg_type(arg_type, signature_node)
+
             if default_value is not None:
                 signature_node += nodes.inline(text=" = ")
                 signature_node += nodes.inline(

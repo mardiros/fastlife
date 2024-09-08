@@ -20,11 +20,72 @@ orphan: true
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`TypeWrapper <fastlife.templating.renderer.widgets.base.TypeWrapper>`
+  - ```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper
+    :parser: myst
+    :summary:
+    ```
 * - {py:obj}`Widget <fastlife.templating.renderer.widgets.base.Widget>`
   -
 ````
 
 ### API
+
+`````{py:class} TypeWrapper(typ: typing.Type[typing.Any], route_prefix: str, name: str, token: str, title: str | None = None)
+:canonical: fastlife.templating.renderer.widgets.base.TypeWrapper
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper
+:parser: myst
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper.__init__
+:parser: myst
+```
+
+````{py:property} fullname
+:canonical: fastlife.templating.renderer.widgets.base.TypeWrapper.fullname
+:type: str
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper.fullname
+:parser: myst
+```
+
+````
+
+````{py:property} id
+:canonical: fastlife.templating.renderer.widgets.base.TypeWrapper.id
+:type: str
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper.id
+:parser: myst
+```
+
+````
+
+````{py:property} params
+:canonical: fastlife.templating.renderer.widgets.base.TypeWrapper.params
+:type: typing.Mapping[str, str]
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper.params
+:parser: myst
+```
+
+````
+
+````{py:property} url
+:canonical: fastlife.templating.renderer.widgets.base.TypeWrapper.url
+:type: str
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.base.TypeWrapper.url
+:parser: myst
+```
+
+````
+
+`````
 
 `````{py:class} Widget(name: str, *, value: fastlife.templating.renderer.widgets.base.T | None = None, error: str | None = None, title: str | None = None, hint: str | None = None, token: str | None = None, aria_label: str | None = None, removable: bool = False)
 :canonical: fastlife.templating.renderer.widgets.base.Widget

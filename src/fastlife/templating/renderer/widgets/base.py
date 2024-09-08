@@ -71,6 +71,17 @@ def _get_fullname(typ: Type[Any]) -> str:
 
 
 class TypeWrapper:
+    """
+    Wrap type for union
+
+    :param typ: Wrapped type
+    :param route_prefix: route prefix used for ajax query to build type
+    :param name: name of the field wrapped
+    :param token: unique token to render unique id
+    :param title: title to display
+
+    """
+
     def __init__(
         self,
         typ: Type[Any],
@@ -87,19 +98,23 @@ class TypeWrapper:
 
     @property
     def fullname(self) -> str:
+        """Full name for the type"""
         return _get_fullname(self.typ)
 
     @property
     def id(self) -> str:
+        """Unique id to inject in the DOM"""
         name = self.name.replace("_", "-").replace(".", "-").replace(":", "-")
         typ = self.typ.__name__.replace("_", "-")
         return f"{name}-{typ}-{self.token}"
 
     @property
     def params(self) -> Mapping[str, str]:
+        """Params for the widget to render."""
         return {"name": self.name, "token": self.token, "title": self.title}
 
     @property
     def url(self) -> str:
+        """Url to fetch the widget"""
         ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
         return ret
