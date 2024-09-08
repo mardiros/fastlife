@@ -1,5 +1,5 @@
 {# def widget #}
-<pydantic_form.Widget :widget="widget" :removable="widget.removable">
+<pydantic_form.Widget :widget="widget">
   <div class="pt-4">
     <Label :for="widget.id">{{widget.title}}</Label>
     <pydantic_form.Error :text="widget.error" />

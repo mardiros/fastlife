@@ -79,13 +79,11 @@ def test_jinjax_template_includes():
         docstring
         == """\
 .. jinjax:component:: pydantic_form.Widget(widget: \
-fastlife.templating.renderer.widgets.base.Widget, \
-removable: bool = False, content: Any)
+fastlife.templating.renderer.widgets.base.Widget, content: Any)
 
     Base component for widget
 
     :param widget: widget to display
-    :param removable: Is ce component removable
     :param content: child node
 """
     )
