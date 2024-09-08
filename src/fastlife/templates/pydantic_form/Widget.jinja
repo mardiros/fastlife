@@ -1,4 +1,8 @@
-{# def widget, removable=false #}
+{# doc Base component for widget #}
+{# def
+widget: Annotated[fastlife.templating.renderer.widgets.base.Widget, "widget to display"],
+removable: Annotated[bool, "Is ce component removable"] = False
+#}
 {% set container_id = widget.id + "-container" %}
 <div id="{{container_id}}">
   {{ content }}

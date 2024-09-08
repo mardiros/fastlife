@@ -194,9 +194,10 @@ class InspectableComponent(Component):
 
 class InspectableCatalog(Catalog):
     def iter_components(
-        self, ignores: Sequence[re.Pattern[str]] | None = None
+        self,
+        ignores: Sequence[re.Pattern[str]] | None = None,
+        includes: Sequence[re.Pattern[str]] | None = None,
     ) -> Iterator[InspectableComponent]:
-        ignores = ignores or []
         for prefix, loader in self.prefixes.items():
             for t in loader.list_templates():
                 name, file_ext = t.split(".", maxsplit=1)
@@ -204,10 +205,21 @@ class InspectableCatalog(Catalog):
                 path, tmpl_name = self._get_component_path(
                     prefix, name, file_ext=file_ext
                 )
-                for ignore in ignores:
-                    if ignore.match(name):
-                        break
-                else:
+
+                to_include = True
+                if includes:
+                    to_include = False
+                    for include in includes:
+                        if include.match(name):
+                            to_include = True
+                            break
+                if to_include and ignores:
+                    for ignore in ignores:
+                        if ignore.match(name):
+                            to_include = False
+                            break
+
+                if to_include:
                     component = InspectableComponent(
                         name=name, prefix=prefix, path=path, source=path.read_text()
                     )

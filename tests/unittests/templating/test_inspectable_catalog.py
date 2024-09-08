@@ -31,7 +31,7 @@ def test_has_content(content: str, expected: bool):
     assert has_content(content) is expected
 
 
-def test_jinjax_template():
+def test_jinjax_template_ignores():
     renderer = JinjaxTemplateRenderer(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(ignores=[re.compile(r"^[^A]")]):
@@ -61,6 +61,31 @@ request.
 of an AJAX request.
     :param hx_push_url: replace the browser url with the link.
     :param disable_htmx: do not add any `hx-*` attibute to the link.
+    :param content: child node
+"""
+    )
+
+
+def test_jinjax_template_includes():
+    renderer = JinjaxTemplateRenderer(Settings())
+    components: list[InspectableComponent] = []
+    for component in renderer.catalog.iter_components(
+        includes=[re.compile(r"^pydantic_form\.Widget$")]
+    ):
+        components.append(component)
+    assert len(components) == 1
+    docstring = components[0].build_docstring()
+    assert (
+        docstring
+        == """\
+.. jinjax:component:: pydantic_form.Widget(widget: \
+fastlife.templating.renderer.widgets.base.Widget, \
+removable: bool = False, content: Any)
+
+    Base component for widget
+
+    :param widget: widget to display
+    :param removable: Is ce component removable
     :param content: child node
 """
     )

@@ -5,11 +5,12 @@ from typing import Any, cast
 
 from docutils import nodes
 from jinjax import InvalidArgument
-from sphinx.addnodes import desc_signature
+from sphinx.addnodes import desc_signature, pending_xref
 from sphinx.application import Sphinx
 from sphinx.directives import ObjectDescription
 from sphinx.domains import Domain, ObjType
 from sphinx.roles import XRefRole
+
 
 from fastlife.config.settings import Settings
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
@@ -60,11 +61,24 @@ class JinjaxComponent(ObjectDescription[str]):
         def process_arg(arg: ast.arg, default_value: Any, signature_node: Any):
             arg_name = arg.arg.replace("_", "-")
             arg_type = ast.unparse(arg.annotation) if arg.annotation else "Any"
-
             signature_node += nodes.inline(text=" ")
+
             signature_node += nodes.inline(text=arg_name, classes=["jinjax-arg"])
             signature_node += nodes.inline(text=": ")
-            signature_node += nodes.inline(text=arg_type, classes=["jinjax-type"])
+
+            if "." in arg_type:
+                ref_node = pending_xref(
+                    '',
+                    refdomain='py',
+                    reftype='class',
+                    reftarget=arg_type,
+                    refexplicit=True,
+                    refwarn=True
+                )
+                ref_node += nodes.Text(arg_type)
+                signature_node += ref_node
+            else:
+                signature_node += nodes.inline(text=arg_type, classes=["jinjax-type"])
             if default_value is not None:
                 signature_node += nodes.inline(text=" = ")
                 signature_node += nodes.inline(
