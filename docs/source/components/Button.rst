@@ -26,4 +26,4 @@ Button
     :param hx_params:
     :param hx_push_url:
     :param full_width: Append tailwind class w-full to get full width
-    :param content: child none
+    :param content: child node

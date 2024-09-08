@@ -5,4 +5,4 @@ Label
 
     -
 
-    :param content: child none
+    :param content: child node

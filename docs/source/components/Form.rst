@@ -9,4 +9,4 @@ Form
     :param action:
     :param hx_post:
     :param hx_disable:
-    :param content: child none
+    :param content: child node

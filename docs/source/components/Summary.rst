@@ -7,4 +7,4 @@ Summary
 
     :param id:
     :param open:
-    :param content: child none
+    :param content: child node

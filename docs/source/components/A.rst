@@ -13,4 +13,4 @@ A
     :param hx_swap: speify how the response will be swapped in relative to the target of an AJAX request.
     :param hx_push_url: replace the browser url with the link.
     :param disable_htmx: do not add any `hx-*` attibute to the link.
-    :param content: child none
+    :param content: child node
