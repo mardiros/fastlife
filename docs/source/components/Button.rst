@@ -1,11 +1,11 @@
 Button
 ======
 
-.. jinjax:component:: Button(type: Any = 'submit', id: Any = '', name: Any = 'action', value: Any = 'submit', hidden: Any = false, aria_label: Any = '', onclick: Any = '', hx_target: Any = '', hx_swap: Any = '', hx_select: Any = '', hx_after_request: Any = '', hx_vals: Any = '', hx_confirm: Any = '', hx_get: Any = '', hx_post: Any = '', hx_put: Any = '', hx_patch: Any = '', hx_delete: Any = '', hx_params: Any = None, hx_push_url: Any = false, full_width: Any = false, content: Any)
+.. jinjax:component:: Button(type: Literal['submit', 'button', 'reset'] = 'submit', id: str | None = None, name: str = 'action', value: str = 'submit', hidden: bool = False, aria_label: str | None = None, onclick: str | None = None, hx_target: str | None = None, hx_swap: str | None = None, hx_select: str | None = None, hx_after_request: str = '', hx_vals: str | None = None, hx_confirm: str | None = None, hx_get: str | None = None, hx_post: str | None = None, hx_put: str | None = None, hx_patch: str | None = None, hx_delete: str | None = None, hx_params: str | None = None, hx_push_url: str = false, full_width: str = false, content: Any)
 
-    -
+    Create html `<button>` node.
 
-    :param type:
+    :param type: Define button behavior.
     :param id:
     :param name:
     :param value:
@@ -15,7 +15,7 @@ Button
     :param hx_target:
     :param hx_swap:
     :param hx_select:
-    :param hx_after_request:
+    :param hx_after_request: Produce the hx-on::after-request
     :param hx_vals:
     :param hx_confirm:
     :param hx_get:
@@ -25,5 +25,5 @@ Button
     :param hx_delete:
     :param hx_params:
     :param hx_push_url:
-    :param full_width:
+    :param full_width: Append tailwind class w-full to get full width
     :param content: child none

@@ -8,9 +8,9 @@ A
     `disabled-htmx` attribute has been set.
 
     :param href: target link
-    :param hx_target:
-    :param hx_select:
-    :param hx_swap:
-    :param hx_push_url:
-    :param disable_htmx:
+    :param hx_target: target the element for swapping than the one issuing the AJAX request.
+    :param hx_select: select the content swapped from response of the AJAX request.
+    :param hx_swap: speify how the response will be swapped in relative to the target of an AJAX request.
+    :param hx_push_url: replace the browser url with the link.
+    :param disable_htmx: do not add any `hx-*` attibute to the link.
     :param content: child none
