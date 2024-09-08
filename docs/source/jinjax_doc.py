@@ -5,7 +5,7 @@ from typing import Any, cast
 
 from docutils import nodes
 from jinjax import InvalidArgument
-from sphinx.addnodes import desc_signature, pending_xref
+from sphinx.addnodes import desc_signature, index, pending_xref
 from sphinx.application import Sphinx
 from sphinx.directives import ObjectDescription
 from sphinx.domains import Domain, ObjType
@@ -167,7 +167,18 @@ class JinjaxComponent(ObjectDescription[str]):
 
         container_node += param_list
 
-        return [container_node]
+        index_entry = index(
+            entries=[
+                (
+                    "single",
+                    f"{component_name} (JinjaX component)",
+                    f"jinjax-component-{component_name}",
+                    "",
+                    None,
+                )
+            ]
+        )
+        return [index_entry, container_node]
 
 
 class JinjaxDomain(Domain):
