@@ -216,49 +216,37 @@ def test_render_CSRFToken(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Form>XxX</Form>""",
             """<form class="space-y-4 md:space-y-6">
-  <input name="csrf_token" type="hidden" value=""/>
-  XxX
-</form>""",
+  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
             id="form",
         ),
         pytest.param(
             """<Form class="form">XxX</Form>""",
             """<form class="form">
-  <input name="csrf_token" type="hidden" value=""/>
-  XxX
-</form>""",
+  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
             id="form-css",
         ),
         pytest.param(
             """<Form class="form" action="" method="post">XxX</Form>""",
             """<form class="form" action="" method="post">
-  <input name="csrf_token" type="hidden" value=""/>
-  XxX
-</form>""",
+  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
             id="form-post",
         ),
         pytest.param(
             """<Form class="form" hx-post>XxX</Form>""",
             """<form class="form" hx-post="">
-  <input name="csrf_token" type="hidden" value=""/>
-  XxX
-</form>""",
+  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
             id="form-hx-post",
         ),
         pytest.param(
             """<Form hx-post="/go" class="form">XxX</Form>""",
             """<form class="form" hx-post="/go">
-  <input name="csrf_token" type="hidden" value=""/>
-  XxX
-</form>""",
+  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
             id="form-hx-post-url",
         ),
         pytest.param(
             """<Form method="get" hx-post="/go" class="form">XxX</Form>""",
             """<form class="form" hx-post="/go" method="get">
-  <input name="csrf_token" type="hidden" value=""/>
-  XxX
-</form>""",
+  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
             id="form-hx-get",
         ),
     ],

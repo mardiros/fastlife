@@ -46,7 +46,7 @@
   {%- if hx_push_url %} hx-push-url="true" {%- endif %}
   {%- if hx_params %} hx-params="{{ hx_params }}" {%- endif %}
   {%- if aria_label %} aria-label="{{ aria_label }}" {%- endif %}
-  class="{% if full_width %}w-full {%- endif %}{{ attrs.class or BUTTON_CLASS }}"
+  class="{% if full_width %}w-full {% endif %}{{ attrs.class or BUTTON_CLASS }}"
   {%- if hidden %} hidden{% endif -%}
 >
     {{- content -}}

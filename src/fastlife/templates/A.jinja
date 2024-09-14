@@ -5,7 +5,7 @@
 #}
 {# def
   href: Annotated[str, "target link."],
-  id: Annotated[str | None, "**unique identifier** of the element."] = None,
+  id: Annotated[str | None, "unique identifier of the element."] = None,
   hx_target: Annotated[str, "target the element for swapping than the one issuing the AJAX request."] = "#maincontent",
   hx_select: Annotated[str | None, "select the content swapped from response of the AJAX request."] = None,
   hx_swap: Annotated[
@@ -17,8 +17,8 @@
 #}
 
 <a href="{{href}}"
-  {%if- id %} id="{{ id }}" {%- endif %}
-  {% if not disable_htmx -%}
+  {%- if id %} id="{{ id }}" {%- endif %}
+  {%- if not disable_htmx %}
     hx-get="{{ href }}"
     hx-target="{{ hx_target }}"
     hx-swap="{{ hx_swap }}"

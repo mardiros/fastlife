@@ -50,7 +50,7 @@ hx_push_url: bool = True, \
 disable_htmx: bool = False, \
 content: Any)
 
-    Create html `<a>` node with htmx support by default.
+    Create html ``<a>`` node with htmx support by default.
     The `hx-get` parameter is set with the href directly unless the
     `disabled-htmx` attribute has been set.
 
@@ -105,7 +105,7 @@ def test_jinjax_template_render_no_params():
         == """\
 .. jinjax:component:: CsrfToken()
 
-    :jinjax:component:`Hidden` field automaticaly injected in every
+    a :jinjax:component:`Hidden` field automaticaly injected in every
     :jinjax:component:`Form` to protect against CSRF Attacks.
 """
     )

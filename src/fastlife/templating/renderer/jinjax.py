@@ -79,7 +79,7 @@ def generate_docstring(
             param_type = ast.unparse(type_annotation)
 
             if len(arg.annotation.slice.elts) > 1 and isinstance(  # type: ignore
-                arg.annotation.slice.elts[1],
+                arg.annotation.slice.elts[1],  # type: ignore
                 ast.Constant,  # type: ignore
             ):
                 param_desc = arg.annotation.slice.elts[1].value  # type: ignore
@@ -93,7 +93,7 @@ def generate_docstring(
         # Build the string representation of the parameter
         param_str = f"{arg_name}: {param_type}"
         if default_value is not None:
-            param_str += f" = {ast.unparse(default_value)}"
+            param_str += f" = {ast.unparse(default_value)}"  # type: ignore
 
         component_params.append(param_str)
 
@@ -301,7 +301,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         """
         Build globals variables accessible in any templates.
 
-        * `request` is the  {py:class}`current request <fastlife.request.request.Request>`
+        * `request` is the {class}`current request <fastlife.request.request.Request>`
         * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
         """
         return {
