@@ -19,8 +19,8 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
     """
     Return a closure to render the given template.
 
-    :param template: path to template to render
-    :param content_type: response ``Content-Type`` header
+    :param template: path to template to render.
+    :param content_type: response ``Content-Type`` header.
     """
 
     def render_template(

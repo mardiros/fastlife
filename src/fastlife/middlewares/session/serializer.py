@@ -1,4 +1,4 @@
-"""Serialize session"""
+"""Serialize session."""
 import abc
 import json
 from base64 import b64decode, b64encode

@@ -70,7 +70,7 @@ class Configurator:
         """
         Get the app after configuration in order to start after beeing configured.
 
-        :return: FastAPI application
+        :return: FastAPI application.
         """
         return self._app
 
@@ -164,7 +164,7 @@ class Configurator:
         :param methods: restrict route to a list of http methods.
         :param response_description: description for the response.
         :param deprecated: mark the route as deprecated.
-        :return: the configurator
+        :return: the configurator.
         """
         dependencies: List[DependsType] = []
         if permission:
@@ -204,7 +204,7 @@ class Configurator:
         """
         Mount a directory to an http endpoint.
 
-        :param route_path: the root path for the statics
+        :param route_path: the root path for the statics.
         :param directory: the directory on the filesystem where the statics files are.
         :param name: a name for the route in the starlette app.
         :return: the configurator

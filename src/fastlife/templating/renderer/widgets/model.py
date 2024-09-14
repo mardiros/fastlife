@@ -37,7 +37,7 @@ class ModelWidget(Widget[Sequence[Widget[Any]]]):
         return "pydantic_form.Model"
 
     def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
-        """Return the html version"""
+        """Return the html version."""
         children_widget = [child.to_html(renderer) for child in self.value or []]
         kwargs = {
             "widget": self,

@@ -25,7 +25,7 @@ class AbstractTemplateRenderer(abc.ABC):
     """
 
     route_prefix: str
-    """Used to buid pydantic form"""
+    """Used to buid pydantic form."""
 
     @abc.abstractmethod
     def render_template(
@@ -48,7 +48,7 @@ class AbstractTemplateRenderer(abc.ABC):
         to every templates. This can be used to fillout options in a select without
         performing an ajax request for example.
 
-        :param template: name of the template to render
+        :param template: name of the template to render.
         :param globals: some variable that will be passed to all rendered templates.
         :param params: paramaters that are limited to the main rendered templates.
         :return: The template rendering result.
@@ -76,7 +76,7 @@ class AbstractTemplateRenderer(abc.ABC):
             </Form>
 
 
-        :param model: model to render
+        :param model: model to render.
         :param token: a random string that can be passed for testing purpose.
         """
         ...

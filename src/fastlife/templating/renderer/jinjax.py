@@ -96,7 +96,7 @@ def generate_docstring(
 
     if add_content:
         component_params.append("content: Any")
-        docstring_lines.append(":param content: child node")
+        docstring_lines.append(":param content: child node.")
 
     return (
         f"{component_name}({', '.join(component_params)})"

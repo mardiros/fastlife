@@ -1,1 +1,1 @@
-"""Security features"""
+"""Security features."""

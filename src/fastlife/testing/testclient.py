@@ -153,7 +153,7 @@ class Element:
 
 class WebForm:
     """
-    Handle form.
+    Handle html form.
 
     Form are filled out and submit with methods and try to avoid invalid
     usage, such as selecting an option that don't exists is not possible here.
@@ -504,7 +504,7 @@ class WebTestClient:
 
     @property
     def cookies(self) -> Cookies:
-        """HTTP Cookies"""
+        """HTTP Cookies."""
         return self.testclient.cookies
 
     @property

@@ -1,5 +1,5 @@
 """
-Prevents CSRF attack using cookie and html hidden field comparaison.
+Prevents CSRF attack using cookie and html hidden field comparison.
 
 Fast life did not reinvent the wheel on CSRF Protection.
 

@@ -1,3 +1,7 @@
+"""
+Widget for field of type bool.
+"""
+
 from .base import Widget
 
 

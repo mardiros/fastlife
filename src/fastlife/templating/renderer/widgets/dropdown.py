@@ -1,3 +1,7 @@
+"""
+Widget for field of type Enum or Literal.
+"""
+
 from typing import Optional, Sequence, Tuple
 
 from .base import Widget

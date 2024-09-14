@@ -22,7 +22,7 @@ def create_ref_node(arg_type: str) -> nodes.Node:
     At the monent, type inferred are types containing a `.`, otherwise
     considered as a simple type from the python standard library.
 
-    :param arg_type: type to render
+    :param arg_type: type to render.
     """
     if "." in arg_type:
         ref_node = pending_xref(

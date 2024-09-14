@@ -81,7 +81,6 @@ class TextareaWidget(Widget[str]):
     :param token: token used to get unique id on the form.
 
     """
-
     def __init__(
         self,
         name: str,

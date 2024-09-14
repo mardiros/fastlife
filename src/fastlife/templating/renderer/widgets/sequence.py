@@ -40,7 +40,7 @@ class SequenceWidget(Widget[Sequence[Widget[Any]]]):
         return TypeWrapper(self.item_type, route_prefix, self.name, self.token)
 
     def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
-        """Return the html version"""
+        """Return the html version."""
         children = [Markup(item.to_html(renderer)) for item in self.value or []]
         return Markup(
             renderer.render_template(

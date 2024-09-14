@@ -13,7 +13,7 @@ class HiddenWidget(Widget[str]):
 
         class MyForm(BaseModel):
             id: Annotated[str, HiddenWidget] = Field(...)
-            """Identifier in the database.""""
+            """Identifier in the database."""
 
     '''
 

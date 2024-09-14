@@ -53,7 +53,7 @@ def test_jinjax_template_ignores():
     The `hx-get` parameter is set with the href directly unless the
     `disabled-htmx` attribute has been set.
 
-    :param href: target link
+    :param href: target link.
     :param hx_target: target the element for swapping than the one issuing the AJAX \
 request.
     :param hx_select: select the content swapped from response of the AJAX request.
@@ -61,7 +61,7 @@ request.
 of an AJAX request.
     :param hx_push_url: replace the browser url with the link.
     :param disable_htmx: do not add any `hx-*` attibute to the link.
-    :param content: child node
+    :param content: child node.
 """
     )
 
@@ -83,7 +83,7 @@ fastlife.templating.renderer.widgets.base.Widget, content: Any)
 
     Base component for widget
 
-    :param widget: widget to display
-    :param content: child node
+    :param widget: widget to display.
+    :param content: child node.
 """
     )

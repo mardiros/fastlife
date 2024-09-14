@@ -1,3 +1,7 @@
+"""
+Transform.
+"""
+
 import secrets
 from collections.abc import MutableSequence, Sequence
 from decimal import Decimal
@@ -30,7 +34,7 @@ class WidgetFactory:
     Form builder for pydantic model.
 
     :param renderer: template engine to render widget.
-    :param token: reuse a token
+    :param token: reuse a token.
     """
 
     def __init__(self, renderer: AbstractTemplateRenderer, token: str | None = None):

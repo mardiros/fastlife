@@ -1,3 +1,6 @@
+"""
+Widget for field of type Union.
+"""
 from typing import Any, Optional, Sequence, Type, Union
 
 from markupsafe import Markup
@@ -51,6 +54,7 @@ class UnionWidget(Widget[Widget[Any]]):
         self.parent_name = name
 
     def build_types(self, route_prefix: str) -> Sequence[TypeWrapper]:
+        """Wrap types in the union in order to get the in their own widgets."""
         return [
             TypeWrapper(typ, route_prefix, self.name, self.token)
             for typ in self.children_types
@@ -60,7 +64,7 @@ class UnionWidget(Widget[Widget[Any]]):
         return "pydantic_form.Union"
 
     def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
-        """Return the html version"""
+        """Return the html version."""
         child = Markup(self.value.to_html(renderer)) if self.value else ""
         return Markup(
             renderer.render_template(
