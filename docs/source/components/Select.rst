@@ -8,4 +8,4 @@ Select
     :param name:
     :param id:
     :param multiple:
-    :param content: child node
+    :param content: child node.

@@ -6,9 +6,7 @@ body {
   --jinjax-content-color: var( --color-admonition-title--attention,  #cd5a5a);
 }
 
-.jinjax-component {
-  display: block;
-}
+.jinjax-component {}
 
 .jinjax-signature-wrapper {
   display: block;

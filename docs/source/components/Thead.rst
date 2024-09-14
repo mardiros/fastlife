@@ -5,4 +5,4 @@ Thead
 
     -
 
-    :param content: child node
+    :param content: child node.

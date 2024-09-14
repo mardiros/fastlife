@@ -1,3 +1,6 @@
+"""Template rending based on JinjaX."""
+
+import logging
 import ast
 import re
 from pathlib import Path
@@ -15,6 +18,7 @@ from typing import (
 
 from fastapi import Request
 from jinja2 import Template
+from jinja2.exceptions import TemplateSyntaxError
 from jinjax import InvalidArgument
 from jinjax.catalog import Catalog
 from jinjax.component import RX_ARGS_START, RX_META_HEADER, Component
@@ -31,6 +35,8 @@ if TYPE_CHECKING:
 from fastlife.shared_utils.resolver import resolve, resolve_path
 
 from .abstract import AbstractTemplateRenderer, AbstractTemplateRendererFactory
+
+log = logging.getLogger(__name__)
 
 RX_DOC_START = re.compile(r"{#-?\s*doc\s+")
 RX_CONTENT = re.compile(r"\{\{-?\s*content\s*-?\}\}", re.DOTALL)
@@ -70,7 +76,8 @@ def generate_docstring(
             param_type = ast.unparse(type_annotation)
 
             if len(arg.annotation.slice.elts) > 1 and isinstance(  # type: ignore
-                arg.annotation.slice.elts[1], ast.Constant  # type: ignore
+                arg.annotation.slice.elts[1],
+                ast.Constant,  # type: ignore
             ):
                 param_desc = arg.annotation.slice.elts[1].value  # type: ignore
         else:
@@ -176,6 +183,13 @@ class InspectableComponent(Component):
                     '''
                     ...
                 """
+            elif docstring:
+                signature = f"""def component():
+                    '''
+                    {docstring}
+                    '''
+                    ...
+                """
 
         try:
             astree = ast.parse(signature)
@@ -193,6 +207,10 @@ class InspectableComponent(Component):
 
 
 class InspectableCatalog(Catalog):
+    """
+    Override the catalog in order to iterate over components to build the doc.
+    """
+
     def iter_components(
         self,
         ignores: Sequence[re.Pattern[str]] | None = None,
@@ -223,14 +241,30 @@ class InspectableCatalog(Catalog):
                     component = InspectableComponent(
                         name=name, prefix=prefix, path=path, source=path.read_text()
                     )
+
                     self.jinja_env.loader = loader
-                    component.tmpl = self.jinja_env.get_template(
-                        tmpl_name, globals=self._tmpl_globals
-                    )
+                    try:
+                        component.tmpl = self.jinja_env.get_template(
+                            tmpl_name, globals=self._tmpl_globals
+                        )
+                    except TemplateSyntaxError as exc:
+                        log.error(f"Syntax Error: {exc} on {exc.lineno} :")
+                        log.error(path.read_text())
+                        continue
                     yield component
 
 
 def build_searchpath(template_search_path: str) -> Sequence[str]:
+    """
+    Build the path containing templates.
+
+    Path may be absolute directories or directories relative to a python
+    package. For instance, the `fastlife:templates` is the directory templates
+    inside the fastlife installation dir.
+
+    :param template_search_path: list of path separated by a comma (`,`).
+    :return: List resolved path.
+    """
     searchpath: list[str] = []
     paths = template_search_path.split(",")
 
@@ -243,6 +277,8 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
 
 
 class JinjaxRenderer(AbstractTemplateRenderer):
+    """Render templates using JinjaX."""
+
     def __init__(
         self,
         catalog: InspectableCatalog,
@@ -259,6 +295,12 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self.globals: MutableMapping[str, Any] = {}
 
     def build_globals(self) -> Mapping[str, Any]:
+        """
+        Build globals variables accessible in any templates.
+
+        * `request` is the  {py:class}`current request <fastlife.request.request.Request>`
+        * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
+        """
         return {
             "request": self.request,
             "csrf_token": {

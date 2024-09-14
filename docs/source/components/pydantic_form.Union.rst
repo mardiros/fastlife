@@ -5,7 +5,7 @@ pydantic_form.Union
 
     display widget for union type field
 
-    :param widget: widget to display
+    :param widget: widget to display.
     :param child: current widget if any
     :param types: Child types to choose
     :param parent_type: parent type

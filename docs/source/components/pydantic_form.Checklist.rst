@@ -5,4 +5,4 @@ pydantic_form.Checklist
 
     Render a list of checkbox and a label for Literal and enum fields
 
-    :param widget: widget to display
+    :param widget: widget to display.

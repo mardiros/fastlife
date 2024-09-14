@@ -10,4 +10,4 @@ Textarea
     :param id:
     :param aria_label:
     :param placeholder:
-    :param content: child node
+    :param content: child node.

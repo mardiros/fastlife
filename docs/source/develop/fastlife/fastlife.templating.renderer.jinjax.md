@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.templating.renderer.jinjax`
 
 ```{py:module} fastlife.templating.renderer.jinjax
@@ -21,11 +17,17 @@ orphan: true
 :align: left
 
 * - {py:obj}`InspectableCatalog <fastlife.templating.renderer.jinjax.InspectableCatalog>`
-  -
+  - ```{autodoc2-docstring} fastlife.templating.renderer.jinjax.InspectableCatalog
+    :parser: myst
+    :summary:
+    ```
 * - {py:obj}`InspectableComponent <fastlife.templating.renderer.jinjax.InspectableComponent>`
   -
 * - {py:obj}`JinjaxRenderer <fastlife.templating.renderer.jinjax.JinjaxRenderer>`
-  -
+  - ```{autodoc2-docstring} fastlife.templating.renderer.jinjax.JinjaxRenderer
+    :parser: myst
+    :summary:
+    ```
 * - {py:obj}`JinjaxTemplateRenderer <fastlife.templating.renderer.jinjax.JinjaxTemplateRenderer>`
   - ```{autodoc2-docstring} fastlife.templating.renderer.jinjax.JinjaxTemplateRenderer
     :parser: myst
@@ -39,6 +41,11 @@ orphan: true
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`build_searchpath <fastlife.templating.renderer.jinjax.build_searchpath>`
+  - ```{autodoc2-docstring} fastlife.templating.renderer.jinjax.build_searchpath
+    :parser: myst
+    :summary:
+    ```
 * - {py:obj}`generate_docstring <fastlife.templating.renderer.jinjax.generate_docstring>`
   - ```{autodoc2-docstring} fastlife.templating.renderer.jinjax.generate_docstring
     :parser: myst
@@ -48,12 +55,23 @@ orphan: true
 
 ### API
 
-```{py:class} InspectableCatalog(*, globals: dict[str, t.Any] | None = None, filters: dict[str, t.Any] | None = None, tests: dict[str, t.Any] | None = None, extensions: list | None = None, jinja_env: jinja2.Environment | None = None, root_url: str = DEFAULT_URL_ROOT, file_ext: str | tuple[str, ...] = DEFAULT_EXTENSION, use_cache: bool = True, auto_reload: bool = True, fingerprint: bool = False)
+````{py:class} InspectableCatalog(*, globals: dict[str, t.Any] | None = None, filters: dict[str, t.Any] | None = None, tests: dict[str, t.Any] | None = None, extensions: list | None = None, jinja_env: jinja2.Environment | None = None, root_url: str = DEFAULT_URL_ROOT, file_ext: str | tuple[str, ...] = DEFAULT_EXTENSION, use_cache: bool = True, auto_reload: bool = True, fingerprint: bool = False)
 :canonical: fastlife.templating.renderer.jinjax.InspectableCatalog
 
 Bases: {py:obj}`jinjax.catalog.Catalog`
 
+```{autodoc2-docstring} fastlife.templating.renderer.jinjax.InspectableCatalog
+:parser: myst
 ```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} fastlife.templating.renderer.jinjax.InspectableCatalog.__init__
+:parser: myst
+```
+
+````
 
 ```{py:class} InspectableComponent(*, name: str, prefix: str = '', url_prefix: str = '', source: str = '', mtime: float = 0, tmpl: Template | None = None, path: Path | None = None)
 :canonical: fastlife.templating.renderer.jinjax.InspectableComponent
@@ -66,6 +84,26 @@ Bases: {py:obj}`jinjax.component.Component`
 :canonical: fastlife.templating.renderer.jinjax.JinjaxRenderer
 
 Bases: {py:obj}`fastlife.templating.renderer.abstract.AbstractTemplateRenderer`
+
+```{autodoc2-docstring} fastlife.templating.renderer.jinjax.JinjaxRenderer
+:parser: myst
+```
+
+```{rubric} Initialization
+```
+
+```{autodoc2-docstring} fastlife.templating.renderer.jinjax.JinjaxRenderer.__init__
+:parser: myst
+```
+
+````{py:method} build_globals() -> typing.Mapping[str, typing.Any]
+:canonical: fastlife.templating.renderer.jinjax.JinjaxRenderer.build_globals
+
+```{autodoc2-docstring} fastlife.templating.renderer.jinjax.JinjaxRenderer.build_globals
+:parser: myst
+```
+
+````
 
 ````{py:method} pydantic_form(model: fastlife.request.form.FormModel[typing.Any], *, token: typing.Optional[str] = None) -> markupsafe.Markup
 :canonical: fastlife.templating.renderer.jinjax.JinjaxRenderer.pydantic_form
@@ -122,6 +160,14 @@ Bases: {py:obj}`fastlife.templating.renderer.abstract.AbstractTemplateRendererFa
 ````
 
 `````
+
+````{py:function} build_searchpath(template_search_path: str) -> typing.Sequence[str]
+:canonical: fastlife.templating.renderer.jinjax.build_searchpath
+
+```{autodoc2-docstring} fastlife.templating.renderer.jinjax.build_searchpath
+:parser: myst
+```
+````
 
 ````{py:function} generate_docstring(func_def: ast.FunctionDef, component_name: str, add_content: bool) -> str
 :canonical: fastlife.templating.renderer.jinjax.generate_docstring

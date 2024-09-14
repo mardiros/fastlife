@@ -41,23 +41,25 @@ def test_jinjax_template_ignores():
     assert (
         docstring
         == """\
-.. jinjax:component:: A(href: str,\
- hx_target: str = '#maincontent',\
- hx_select: str | None = None,\
- hx_swap: str = 'innerHTML show:body:top',\
- hx_push_url: bool = True,\
- disable_htmx: bool = False,\
- content: Any)
+.. jinjax:component:: A(href: str, \
+id: str | None = None, \
+hx_target: str = '#maincontent', \
+hx_select: str | None = None, \
+hx_swap: str = 'innerHTML show:body:top', \
+hx_push_url: bool = True, \
+disable_htmx: bool = False, \
+content: Any)
 
     Create html `<a>` node with htmx support by default.
     The `hx-get` parameter is set with the href directly unless the
     `disabled-htmx` attribute has been set.
 
     :param href: target link.
+    :param id: unique identifier of the element.
     :param hx_target: target the element for swapping than the one issuing the AJAX \
 request.
     :param hx_select: select the content swapped from response of the AJAX request.
-    :param hx_swap: speify how the response will be swapped in relative to the target \
+    :param hx_swap: specify how the response will be swapped in relative to the target \
 of an AJAX request.
     :param hx_push_url: replace the browser url with the link.
     :param disable_htmx: do not add any `hx-*` attibute to the link.
@@ -85,5 +87,25 @@ fastlife.templating.renderer.widgets.base.Widget, content: Any)
 
     :param widget: widget to display.
     :param content: child node.
+"""
+    )
+
+
+def test_jinjax_template_render_no_params():
+    renderer = JinjaxTemplateRenderer(Settings())
+    components: list[InspectableComponent] = []
+    for component in renderer.catalog.iter_components(
+        includes=[re.compile(r"^CsrfToken$")]
+    ):
+        components.append(component)
+    assert len(components) == 1
+    docstring = components[0].build_docstring()
+    assert (
+        docstring
+        == """\
+.. jinjax:component:: CsrfToken()
+
+    :jinjax:component:`Hidden` field automaticaly injected in every
+    :jinjax:component:`Form` to protect against CSRF Attacks.
 """
     )

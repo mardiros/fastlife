@@ -1,12 +1,12 @@
 Button
 ======
 
-.. jinjax:component:: Button(type: Literal['submit', 'button', 'reset'] = 'submit', id: str | None = None, name: str = 'action', value: str = 'submit', hidden: bool = False, aria_label: str | None = None, onclick: str | None = None, hx_target: str | None = None, hx_swap: str | None = None, hx_select: str | None = None, hx_after_request: str = '', hx_vals: str | None = None, hx_confirm: str | None = None, hx_get: str | None = None, hx_post: str | None = None, hx_put: str | None = None, hx_patch: str | None = None, hx_delete: str | None = None, hx_params: str | None = None, hx_push_url: str = false, full_width: str = false, content: Any)
+.. jinjax:component:: Button(type: Literal['submit', 'button', 'reset'] = 'submit', id: str | None = None, name: str = 'action', value: str = 'submit', hidden: bool = False, aria_label: str | None = None, onclick: str | None = None, hx_target: str | None = None, hx_swap: str | None = None, hx_select: str | None = None, hx_after_request: str = '', hx_vals: str | None = None, hx_confirm: str | None = None, hx_get: str | None = None, hx_post: str | None = None, hx_put: str | None = None, hx_patch: str | None = None, hx_delete: str | None = None, hx_params: str | None = None, hx_push_url: bool = false, full_width: str = false, content: Any)
 
     Create html `<button>` node.
 
     :param type: Define button behavior.
-    :param id:
+    :param id: unique identifier of the element.
     :param name:
     :param value:
     :param hidden:
@@ -24,6 +24,6 @@ Button
     :param hx_patch:
     :param hx_delete:
     :param hx_params:
-    :param hx_push_url:
+    :param hx_push_url: Replace the browser url by the ajax request
     :param full_width: Append tailwind class w-full to get full width
-    :param content: child node
+    :param content: child node.

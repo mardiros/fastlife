@@ -1,7 +1,7 @@
 pydantic_form.Sequence
 ======================
 
-.. jinjax:component:: pydantic_form.Sequence(widget: fastlife.templating.renderer.widgets.sequence.SequenceWidget, children_widgets: Sequence[fastlife.templating.renderer.widgets.base.BaseWidget], type: fastlife.templating.renderer.widgets.base.TypeWrapper)
+.. jinjax:component:: pydantic_form.Sequence(widget: fastlife.templating.renderer.widgets.sequence.SequenceWidget, children_widgets: Sequence[fastlife.templating.renderer.widgets.base.Widget], type: fastlife.templating.renderer.widgets.base.TypeWrapper)
 
     Widget for pydantic BaseModel subclasses.
 

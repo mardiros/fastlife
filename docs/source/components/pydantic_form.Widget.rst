@@ -5,5 +5,5 @@ pydantic_form.Widget
 
     Base component for widget
 
-    :param widget: widget to display
-    :param content: child node
+    :param widget: widget to display.
+    :param content: child node.

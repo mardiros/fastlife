@@ -6,4 +6,4 @@ P
     -
 
     :param id:
-    :param content: child node
+    :param content: child node.

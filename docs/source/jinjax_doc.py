@@ -9,7 +9,10 @@ from sphinx.addnodes import desc_signature, index, pending_xref
 from sphinx.application import Sphinx
 from sphinx.directives import ObjectDescription
 from sphinx.domains import Domain, ObjType
+from sphinx.environment import BuildEnvironment
+from sphinx.builders import Builder
 from sphinx.roles import XRefRole
+from sphinx.util import relative_uri  # type: ignore
 
 from fastlife.config.settings import Settings
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
@@ -196,6 +199,74 @@ class JinjaxDomain(Domain):
         "component": ObjType("component", "component"),
     }
 
+    _components: list[str] = []
+
+    @classmethod
+    def register(cls, component: str) -> None:
+        cls._components.append(component)
+
+    def resolve_xref(
+        self,
+        env: BuildEnvironment,
+        fromdocname: str,
+        builder: Builder,
+        typ: str,
+        target: str,
+        node: pending_xref,
+        contnode: nodes.Element,
+    ) -> nodes.Element | None:
+        """Resolve the pending_xref *node* with the given *typ* and *target*.
+
+        This method should return a new node, to replace the xref node,
+        containing the *contnode* which is the markup content of the
+        cross-reference.
+
+        If no resolution can be found, None can be returned; the xref node will
+        then given to the :event:`missing-reference` event, and if that yields no
+        resolution, replaced by *contnode*.
+
+        The method can also raise :exc:`sphinx.environment.NoUri` to suppress
+        the :event:`missing-reference` event being emitted.
+        """
+        ret = self.resolve_any_xref(env, fromdocname, builder, target, node, contnode)
+        return ret[0][1] if ret else None
+
+    def resolve_any_xref(
+        self,
+        env: BuildEnvironment,
+        fromdocname: str,
+        builder: Builder,
+        target: str,
+        node: pending_xref,
+        contnode: nodes.Element,
+    ) -> list[tuple[str, nodes.Element]]:
+        """Resolve the pending_xref *node* with the given *target*.
+
+        The reference comes from an "any" or similar role, which means that we
+        don't know the type.  Otherwise, the arguments are the same as for
+        :meth:`resolve_xref`.
+
+        The method must return a list (potentially empty) of tuples
+        ``('domain:role', newnode)``, where ``'domain:role'`` is the name of a
+        role that could have created the same reference, e.g. ``'py:func'``.
+        ``newnode`` is what :meth:`resolve_xref` would return.
+
+        .. versionadded:: 1.3
+        """
+        if target in self._components:
+            # Create a reference node that links to the correct component's .rst file
+            ref_uri = f"components/{target}.html"  # Assuming the RST files are converted to HTML
+            # Create a reference node linking to the document
+            relative_link = relative_uri(fromdocname, ref_uri)
+
+            if isinstance(contnode, nodes.literal) and contnode.astext() == target:
+                contnode = nodes.literal("", f"<{target}/>")
+
+            newnode = nodes.reference("", "", contnode, refuri=relative_link)
+            return [("jinjax:component", newnode)]
+
+        return []
+
 
 def run_autodoc(app: Sphinx) -> str | None:
     """Run autodoc for a single package.
@@ -217,6 +288,7 @@ def run_autodoc(app: Sphinx) -> str | None:
             f"\n{component.build_docstring()}"
         )
         toctree += f"   {component.name}\n"
+        JinjaxDomain.register(component.name)
 
     outfile = outdir / "index.rst"
     outfile.write_text(INDEX_TPL.format(toctree=toctree))

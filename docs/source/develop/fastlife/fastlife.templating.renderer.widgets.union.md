@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.templating.renderer.widgets.union`
 
 ```{py:module} fastlife.templating.renderer.widgets.union
@@ -44,6 +40,15 @@ Bases: {py:obj}`fastlife.templating.renderer.widgets.base.Widget`\[{py:obj}`fast
 ```{autodoc2-docstring} fastlife.templating.renderer.widgets.union.UnionWidget.__init__
 :parser: myst
 ```
+
+````{py:method} build_types(route_prefix: str) -> typing.Sequence[fastlife.templating.renderer.widgets.base.TypeWrapper]
+:canonical: fastlife.templating.renderer.widgets.union.UnionWidget.build_types
+
+```{autodoc2-docstring} fastlife.templating.renderer.widgets.union.UnionWidget.build_types
+:parser: myst
+```
+
+````
 
 ````{py:method} get_template() -> str
 :canonical: fastlife.templating.renderer.widgets.union.UnionWidget.get_template

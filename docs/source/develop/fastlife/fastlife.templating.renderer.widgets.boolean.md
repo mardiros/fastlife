@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.templating.renderer.widgets.boolean`
 
 ```{py:module} fastlife.templating.renderer.widgets.boolean

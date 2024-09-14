@@ -16,4 +16,5 @@
 
 fastlife.templating.renderer.abstract
 fastlife.templating.renderer.constants
+fastlife.templating.renderer.jinjax
 ```

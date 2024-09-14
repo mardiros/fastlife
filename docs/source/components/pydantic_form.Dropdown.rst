@@ -5,4 +5,4 @@ pydantic_form.Dropdown
 
     Render a Select with options
 
-    :param widget: widget to display
+    :param widget: widget to display.
