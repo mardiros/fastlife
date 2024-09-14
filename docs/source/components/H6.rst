@@ -3,6 +3,4 @@ H6
 
 .. jinjax:component:: H6(content: Any)
 
-    -
-
     :param content: child node.

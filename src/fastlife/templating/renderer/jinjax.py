@@ -1,7 +1,7 @@
 """Template rending based on JinjaX."""
 
-import logging
 import ast
+import logging
 import re
 from pathlib import Path
 from typing import (
@@ -53,10 +53,13 @@ def generate_docstring(
 ) -> str:
     """Generate a docstring for the component."""
     # Extract function name and docstring
-    docstring = (ast.get_docstring(func_def, clean=True) or "-").strip()
-    docstring_lines = [l.strip() for l in docstring.split("\n")]
-    # Add a newline for separation after the function docstring
-    docstring_lines.append("")
+    docstring = (ast.get_docstring(func_def, clean=True) or "").strip()
+    if docstring:
+        docstring_lines = [l.strip() for l in docstring.split("\n")]
+        # Add a newline for separation after the function docstring
+        docstring_lines.append("")
+    else:
+        docstring_lines = []
 
     component_params: list[str] = []
 
@@ -179,7 +182,7 @@ class InspectableComponent(Component):
             if expr:
                 signature = f"""def component(*, {expr}):
                     '''
-                    {docstring or "-"}
+                    {docstring or ""}
                     '''
                     ...
                 """

@@ -7,10 +7,10 @@ from docutils import nodes
 from jinjax import InvalidArgument
 from sphinx.addnodes import desc_signature, index, pending_xref
 from sphinx.application import Sphinx
+from sphinx.builders import Builder
 from sphinx.directives import ObjectDescription
 from sphinx.domains import Domain, ObjType
 from sphinx.environment import BuildEnvironment
-from sphinx.builders import Builder
 from sphinx.roles import XRefRole
 from sphinx.util import relative_uri  # type: ignore
 
@@ -79,6 +79,7 @@ class JinjaxComponent(ObjectDescription[str]):
         # Extract the signature (first line of arguments)
         signature_text = self.arguments[0]
         component_name, rest = signature_text.split("(", 1)
+
         params = rest.rstrip(")")
         if params:
             signature = f"def component(*, {params}): pass"
@@ -146,29 +147,10 @@ class JinjaxComponent(ObjectDescription[str]):
 
         container_node += nodes.paragraph("", "", signature_node_wrapper)
 
-        # Add the component description (self.content[0] is the first line of content)
-        description = self.content[0] if self.content else "-"
-        if description != "-":
-            description_node = nodes.paragraph("", description)
-            container_node += description_node
-
-        # Handle the parameters (e.g., :param)
-        param_list = nodes.definition_list()
-        for i in range(1, len(self.content)):
-            content_line = self.content[i]
-            if content_line.startswith(":param "):
-                param_info = content_line[len(":param ") :].split(":", 1)
-                param_name = param_info[0].strip()
-                param_description = param_info[1].strip() if len(param_info) > 1 else ""
-
-                # Create param definition entry
-                term_node = nodes.term("", "", nodes.strong(text=param_name))
-                definition_node = nodes.definition(
-                    "", nodes.paragraph("", param_description)
-                )
-                param_list += nodes.definition_list_item("", term_node, definition_node)
-
-        container_node += param_list
+        if self.content:
+            content = self.parse_content_to_nodes(allow_section_headings=True)
+            for content_node in content:
+                container_node += content_node
 
         index_entry = index(
             entries=[
@@ -254,9 +236,7 @@ class JinjaxDomain(Domain):
         .. versionadded:: 1.3
         """
         if target in self._components:
-            # Create a reference node that links to the correct component's .rst file
-            ref_uri = f"components/{target}.html"  # Assuming the RST files are converted to HTML
-            # Create a reference node linking to the document
+            ref_uri = f"components/{target}.html"
             relative_link = relative_uri(fromdocname, ref_uri)
 
             if isinstance(contnode, nodes.literal) and contnode.astext() == target:

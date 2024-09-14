@@ -3,8 +3,6 @@ Input
 
 .. jinjax:component:: Input(name: str, value: str = '', type: str = 'text', id: str | None = None, aria_label: str | None = None, placeholder: str | None = None)
 
-    -
-
     :param name: submitted name in the form
     :param value: submitted value in the form
     :param type: type of the control
