@@ -53,7 +53,7 @@ jobs:
           poetry run pytest tests/unittests  --junitxml=junit/test-results-${{ matrix.python-version }}.xml --cov=fastlife --cov-report=xml --cov-report=html
 
       - name: Upload pytest test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-results-${{ matrix.python-version }}
           path: junit/test-results-${{ matrix.python-version }}.xml
