@@ -8,7 +8,7 @@ A
     `disabled-htmx` attribute has been set.
 
     :param href: target link.
-    :param id: **unique identifier** of the element.
+    :param id: unique identifier of the element.
     :param hx_target: target the element for swapping than the one issuing the AJAX request.
     :param hx_select: select the content swapped from response of the AJAX request.
     :param hx_swap: specify how the response will be swapped in relative to the target of an AJAX request.

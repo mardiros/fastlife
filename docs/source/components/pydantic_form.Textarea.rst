@@ -7,19 +7,19 @@ pydantic_form.Textarea
 
     ::
 
-    from fastlife.templating.renderer.widgets.text import TextareaWidget
-    from pydantic import BaseModel, Field, field_validator
+        from fastlife.templating.renderer.widgets.text import TextareaWidget
+        from pydantic import BaseModel, Field, field_validator
 
-    class TagsForm(BaseModel):
+        class TagsForm(BaseModel):
 
-    tags: Annotated[Sequence[str], TextareaWidget] = Field(
-    default_factory=list,
-    title="Tags",
-    description="One tag per line",
-    )
+            tags: Annotated[Sequence[str], TextareaWidget] = Field(
+                default_factory=list,
+                title="Tags",
+                description="One tag per line",
+            )
 
-    @field_validator("tags", mode="before")
-    def split(cls, s: Any) -> Sequence[str]:
-    return s.split() if s else []
+            @field_validator("tags", mode="before")
+            def split(cls, s: Any) -> Sequence[str]:
+                return s.split() if s else []
 
     :param widget: widget to display.

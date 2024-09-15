@@ -3,6 +3,7 @@
 import ast
 import logging
 import re
+import textwrap
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -55,7 +56,8 @@ def generate_docstring(
     # Extract function name and docstring
     docstring = (ast.get_docstring(func_def, clean=True) or "").strip()
     if docstring:
-        docstring_lines = [l.strip() for l in docstring.split("\n")]
+        docstring = textwrap.dedent(docstring)
+        docstring_lines = [l for l in docstring.split("\n")]
         # Add a newline for separation after the function docstring
         docstring_lines.append("")
     else:
@@ -180,19 +182,21 @@ class InspectableComponent(Component):
                     continue
 
             if expr:
-                signature = f"""def component(*, {expr}):
-                    '''
-                    {docstring or ""}
-                    '''
-                    ...
-                """
+                signature = f"""\
+def component(*, {expr}):
+    '''
+    {docstring or ""}
+    '''
+    ...
+"""
             elif docstring:
-                signature = f"""def component():
-                    '''
-                    {docstring}
-                    '''
-                    ...
-                """
+                signature = f"""\
+def component():
+    '''
+    {docstring}
+    '''
+    ...
+"""
 
         try:
             astree = ast.parse(signature)
