@@ -39,8 +39,13 @@ def check_csrf() -> Callable[[Request], Coroutine[Any, Any, bool]]:
     """
     A global application dependency, that is always active.
 
-    If you don't want csrf token, its simple don't use the
+    If you don't want csrf token, its simple: don't use the
     application/x-www-form-urlencoded on a POST method.
+
+    For security reason, there it no other options to disable this policy.
+
+    :raises: {class}`.CSRFAttack` if the cookie and the csrf
+        posted in the form does not match.
     """
 
     async def check_csrf(request: Request) -> bool:
