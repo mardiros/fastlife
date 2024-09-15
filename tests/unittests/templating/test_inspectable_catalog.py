@@ -43,6 +43,7 @@ def test_jinjax_template_ignores() -> None:
         == """\
 .. jinjax:component:: A(href: str, \
 id: str | None = None, \
+class_: str | None = None, \
 hx_target: str = '#maincontent', \
 hx_select: str | None = None, \
 hx_swap: str = 'innerHTML show:body:top', \
@@ -56,6 +57,8 @@ content: Any)
 
     :param href: target link.
     :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to \
+:attr:`fastlife.templating.renderer.constants.Constants.A_CLASS`
     :param hx_target: target the element for swapping than the one issuing the AJAX \
 request.
     :param hx_select: select the content swapped from response of the AJAX request.
@@ -123,7 +126,8 @@ def test_jinjax_template_render_codeblock() -> None:
     assert (
         docstring
         == """\
-.. jinjax:component:: Details(id: str | None = None, open: bool = True, content: Any)
+.. jinjax:component:: Details(id: str | None = None, class_: str | None = None, \
+open: bool = True, content: Any)
 
     Produce a ``<details>`` html node in order to create a collapsible box.
 
@@ -139,6 +143,8 @@ def test_jinjax_template_render_codeblock() -> None:
       </Details>
 
     :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to \
+:attr:`fastlife.templating.renderer.constants.Constants.DETAILS_CLASS`
     :param open: open/close state.
     :param content: child node.
 """

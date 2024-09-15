@@ -14,6 +14,12 @@
 #}
 
 {# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templating.renderer.constants.Constants.FORM_CLASS`"
+  ] = None,
   method: Annotated[Literal["get", "post"] | None, "Http method used"] = None,
   action: Annotated[str | None, "url where the form will be submitted"] = None,
   hx_post: Annotated[
@@ -26,6 +32,7 @@
   ] = None,
 #}
 <form
+    {%- if id %} id="{{id}}" {% endif %}
     class="{{attrs.class or FORM_CLASS}}"
     {%- if hx_disable %}
       hx-disable

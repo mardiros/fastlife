@@ -1,7 +1,7 @@
 Details
 =======
 
-.. jinjax:component:: Details(id: str | None = None, open: bool = True, content: Any)
+.. jinjax:component:: Details(id: str | None = None, class_: str | None = None, open: bool = True, content: Any)
 
     Produce a ``<details>`` html node in order to create a collapsible box.
 
@@ -17,5 +17,6 @@ Details
       </Details>
 
     :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.DETAILS_CLASS`
     :param open: open/close state.
     :param content: child node.

@@ -1,9 +1,10 @@
 H6
 ==
 
-.. jinjax:component:: H6(id: str | None = None, content: Any)
+.. jinjax:component:: H6(id: str | None = None, class_: str | None = None, content: Any)
 
     html ``<h6>`` node.
 
     :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.H6_CLASS`
     :param content: child node.

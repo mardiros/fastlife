@@ -1,9 +1,10 @@
 H1
 ==
 
-.. jinjax:component:: H1(id: str | None = None, content: Any)
+.. jinjax:component:: H1(id: str | None = None, class_: str | None = None, content: Any)
 
     html ``<h1>`` node.
 
     :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.H1_CLASS`
     :param content: child node.

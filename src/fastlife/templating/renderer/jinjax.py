@@ -90,7 +90,7 @@ def generate_docstring(
             param_type = ast.unparse(arg.annotation) if arg.annotation else "Any"
 
         # Build the parameter docstring line
-        docstring_lines.append(f":param {arg_name}: {param_desc}".strip())
+        docstring_lines.append(f":param {arg_name.rstrip('_')}: {param_desc}".strip())
 
         # Build the string representation of the parameter
         param_str = f"{arg_name}: {param_type}"

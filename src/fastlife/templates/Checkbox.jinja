@@ -4,6 +4,11 @@
 {# def
   name: Annotated[str, "Name of the checkbox"],
   id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templating.renderer.constants.Constants.CHECKBOX_CLASS`"
+  ] = None,
   value: Annotated[str | None, "http submitted value if the checkbox is checked"] = None,
   checked: Annotated[bool, "Initialized the checkbox as ticked"] = False,
 #}

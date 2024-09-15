@@ -100,7 +100,7 @@ class JinjaxComponent(ObjectDescription[str]):
         )
 
         def process_arg(arg: ast.arg, default_value: Any, signature_node: Any):
-            arg_name = arg.arg.replace("_", "-")
+            arg_name = arg.arg.replace("_", "-").rstrip("-")
             arg_type = ast.unparse(arg.annotation) if arg.annotation else "Any"
             signature_node += nodes.inline(text=" ")
 
