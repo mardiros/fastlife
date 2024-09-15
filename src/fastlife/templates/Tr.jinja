@@ -1,3 +1,13 @@
-<tr class="{{attrs.class}}">
+{# doc html ``<tr>`` node. #}
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node."
+  ] = None,
+#}
+<tr
+  {%- if id %} id="{{id}}" {%- endif %}
+  {%- if class %} class="{{attrs.class}}" {%- endif %}>
   {{- content -}}
 </tr>

@@ -58,7 +58,7 @@ content: Any)
     :param href: target link.
     :param id: unique identifier of the element.
     :param class: css class for the node, defaults to \
-:attr:`fastlife.templating.renderer.constants.Constants.A_CLASS`
+:attr:`fastlife.templating.renderer.constants.Constants.A_CLASS`.
     :param hx_target: target the element for swapping than the one issuing the AJAX \
 request.
     :param hx_select: select the content swapped from response of the AJAX request.
@@ -144,7 +144,7 @@ open: bool = True, content: Any)
 
     :param id: unique identifier of the element.
     :param class: css class for the node, defaults to \
-:attr:`fastlife.templating.renderer.constants.Constants.DETAILS_CLASS`
+:attr:`fastlife.templating.renderer.constants.Constants.DETAILS_CLASS`.
     :param open: open/close state.
     :param content: child node.
 """

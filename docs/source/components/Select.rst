@@ -1,9 +1,12 @@
 Select
 ======
 
-.. jinjax:component:: Select(name: Any, id: Any, multiple: Any = False, content: Any)
+.. jinjax:component:: Select(name: str, id: str | None = None, class_: str | None = None, multiple: bool = False, content: Any)
 
-    :param name:
-    :param id:
-    :param multiple:
+    Create html ``<select>`` node.
+
+    :param name: name of the submitted
+    :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.SELECT_CLASS`.
+    :param multiple: Mark as multiple
     :param content: child node.

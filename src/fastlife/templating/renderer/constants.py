@@ -312,6 +312,9 @@ class Constants(BaseModel):
     )
     """Default css class for {jinjax:component}`Select`."""
 
+    SUMMARY_CLASS: str = "flex items-center items-center font-medium cursor-pointer"
+    """Default css class for {jinjax:component}`Summary`."""
+
     TABLE_CLASS: str = "table-auto w-full text-left border-colapse"
     """Default css class for {jinjax:component}`Table`."""
 

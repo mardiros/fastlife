@@ -1,3 +1,13 @@
-<thead>
+{# doc html ``<thead>`` node. #}
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node"
+  ] = None,
+#}
+<thead
+  {%- if id %} id="{{id}}" {%- endif %}
+  {%- if class %} class="{{attrs.class}}" {%- endif %}>
   {{- content -}}
 </thead>

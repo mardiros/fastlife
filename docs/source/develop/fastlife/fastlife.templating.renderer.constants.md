@@ -293,6 +293,18 @@ Bases: {py:obj}`pydantic.BaseModel`
 
 ````
 
+````{py:attribute} SUMMARY_CLASS
+:canonical: fastlife.templating.renderer.constants.Constants.SUMMARY_CLASS
+:type: str
+:value: >
+   'flex items-center items-center font-medium cursor-pointer'
+
+```{autodoc2-docstring} fastlife.templating.renderer.constants.Constants.SUMMARY_CLASS
+:parser: myst
+```
+
+````
+
 ````{py:attribute} TABLE_CLASS
 :canonical: fastlife.templating.renderer.constants.Constants.TABLE_CLASS
 :type: str

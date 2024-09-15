@@ -1,11 +1,12 @@
 Textarea
 ========
 
-.. jinjax:component:: Textarea(name: Any, value: Any = '', id: Any = '', aria_label: Any = '', placeholder: Any = '', content: Any)
+.. jinjax:component:: Textarea(name: str, id: str | None, aria_label: str | None = None, placeholder: str | None = None, content: Any)
 
-    :param name:
-    :param value:
-    :param id:
-    :param aria_label:
-    :param placeholder:
+    html ``<textarea>`` node.
+
+    :param name: name of the submitted
+    :param id: unique identifier of the element.
+    :param aria_label: aria-label
+    :param placeholder: brief hint to the user as to what kind of information is expected in the field
     :param content: child node.
