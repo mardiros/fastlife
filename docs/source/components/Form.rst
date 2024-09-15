@@ -18,5 +18,5 @@ Form
     :param method: Http method used
     :param action: url where the form will be submitted
     :param hx_post: url where the form will be submitted using htmx. if ``True``, the current url is used.
-    :param hx_disable: if true, then htmx will be disabled
+    :param hx_disable: if true, then htmx will be disabled for the form and for all its children nodes.
     :param content: child node.

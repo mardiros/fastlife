@@ -27,11 +27,11 @@ from fastlife.templating.renderer.jinjax import (
         ),
     ],
 )
-def test_has_content(content: str, expected: bool):
+def test_has_content(content: str, expected: bool) -> None:
     assert has_content(content) is expected
 
 
-def test_jinjax_template_ignores():
+def test_jinjax_template_ignores() -> None:
     renderer = JinjaxTemplateRenderer(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(ignores=[re.compile(r"^[^A]")]):
@@ -68,7 +68,7 @@ of an AJAX request.
     )
 
 
-def test_jinjax_template_includes():
+def test_jinjax_template_includes() -> None:
     renderer = JinjaxTemplateRenderer(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(
@@ -91,7 +91,7 @@ fastlife.templating.renderer.widgets.base.Widget, content: Any)
     )
 
 
-def test_jinjax_template_render_no_params():
+def test_jinjax_template_render_no_params() -> None:
     renderer = JinjaxTemplateRenderer(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(
@@ -111,7 +111,7 @@ def test_jinjax_template_render_no_params():
     )
 
 
-def test_jinjax_template_render_codeblock():
+def test_jinjax_template_render_codeblock() -> None:
     renderer = JinjaxTemplateRenderer(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(

@@ -1,6 +1,9 @@
 H5
 ==
 
-.. jinjax:component:: H5(content: Any)
+.. jinjax:component:: H5(id: str | None = None, content: Any)
 
+    html ``<h5>`` node.
+
+    :param id: unique identifier of the element.
     :param content: child node.

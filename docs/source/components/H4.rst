@@ -1,6 +1,9 @@
 H4
 ==
 
-.. jinjax:component:: H4(content: Any)
+.. jinjax:component:: H4(id: str | None = None, content: Any)
 
+    html ``<h4>`` node.
+
+    :param id: unique identifier of the element.
     :param content: child node.

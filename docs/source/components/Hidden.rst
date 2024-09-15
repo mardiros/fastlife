@@ -5,4 +5,4 @@ Hidden
 
     :param name: submitted name in the form
     :param value: submitted value in the form
-    :param id: id in the dom
+    :param id: unique identifier of the element.

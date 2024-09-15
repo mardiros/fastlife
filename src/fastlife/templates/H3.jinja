@@ -1,1 +1,9 @@
-<h3 class="{{attrs.class or H3_CLASS}}">{{ content }}</h3>
+{# doc html ``<h3>`` node. #}
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+#}
+<h3
+  {%- if id %} id="{{id}}" {%- endif %}
+  class="{{attrs.class or H3_CLASS}}">
+  {{- content -}}
+</h3>

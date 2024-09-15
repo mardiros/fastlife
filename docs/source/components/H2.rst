@@ -1,6 +1,9 @@
 H2
 ==
 
-.. jinjax:component:: H2(content: Any)
+.. jinjax:component:: H2(id: str | None = None, content: Any)
 
+    html ``<h2>`` node.
+
+    :param id: unique identifier of the element.
     :param content: child node.

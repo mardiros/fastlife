@@ -1,6 +1,9 @@
 H3
 ==
 
-.. jinjax:component:: H3(content: Any)
+.. jinjax:component:: H3(id: str | None = None, content: Any)
 
+    html ``<h3>`` node.
+
+    :param id: unique identifier of the element.
     :param content: child node.
