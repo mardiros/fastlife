@@ -75,10 +75,10 @@ release major_minor_patch: test gh-pages && changelog
 
 changelog:
     poetry run python scripts/write_changelog.py
-    cat CHANGELOG.rst >> CHANGELOG.rst.new
-    rm CHANGELOG.rst
-    mv CHANGELOG.rst.new CHANGELOG.rst
-    $EDITOR CHANGELOG.rst
+    cat CHANGELOG.md >> CHANGELOG.md.new
+    rm CHANGELOG.md
+    mv CHANGELOG.md.new CHANGELOG.md
+    $EDITOR CHANGELOG.md
 
 publish:
     git commit -am "Release $(poetry version -s)"

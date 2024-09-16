@@ -8,6 +8,7 @@
 
 user/introduction
 user/getting_started
+user/changelog
 ```
 
 ```{toctree}
