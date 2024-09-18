@@ -20,14 +20,14 @@ version = "0.11.0"
 [tool.poetry.dependencies]
 python = "^3.11"
 beautifulsoup4 = {version = "^4.12.2", extras = ["testing"]}
-fastapi = "^0.112.0"
+fastapi = { version = "^0.115.0", extras = ["standard"]}
 itsdangerous = "^2.1.2"
 jinjax = "^0.44"
 markupsafe = "^2.1.3"
 multidict = "^6.0.5"
 pydantic = "^2.5.3"
 pydantic-settings = "^2.0.3"
-python-multipart = "^0.0.6"
+python-multipart = "^0.0.9"
 venusian = "^3.0.0"
 
 [tool.poetry.group.dev]
