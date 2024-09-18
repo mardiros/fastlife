@@ -1,3 +1,6 @@
+## 0.11.1  - Released on 2024-09-18
+* Update FastAPI version
+
 ## 0.11.0  - Released on 2024-09-18
 * Huge documentation update
   * Use sphinx-autodoc2
