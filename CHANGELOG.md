@@ -1,3 +1,11 @@
+## 0.11.0  - Released on 2024-09-18
+* Huge documentation update
+  * Use sphinx-autodoc2
+  * Add documentation for the components.
+* Breaking change in the configurator.
+  * get_app has been renamed get_asgi_app
+  * a few internals classes moved/renamed.
+
 ## 0.10.0  - Released on 2024-08-24
 
 * Rename model_result and ModelResult to form_model and FormModel
