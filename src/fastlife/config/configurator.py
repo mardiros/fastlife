@@ -17,18 +17,7 @@ import logging
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    List,
-    Optional,
-    Self,
-    Tuple,
-    Type,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, Callable, Self, Tuple, Type, cast
 
 import venusian
 from fastapi import Depends, FastAPI
@@ -185,14 +174,14 @@ class Configurator:
         *,
         permission: str | None = None,
         status_code: int | None = None,
-        tags: List[Union[str, Enum]] | None = None,
+        tags: list[str | Enum] | None = None,
         summary: str | None = None,
         description: str | None = None,
         response_description: str = "Successful Response",
         # responses: Dict[Union[int, str], Dict[str, Any]] | None = None,
         deprecated: bool | None = None,
-        methods: List[str] | None = None,
-        operation_id: Optional[str] = None,
+        methods: list[str] | None = None,
+        operation_id: str | None = None,
         # response_model: Any = Default(None),
         response_model_include: IncEx | None = None,
         response_model_exclude: IncEx | None = None,
@@ -252,7 +241,7 @@ class Configurator:
 
         :return: the configurator.
         """
-        dependencies: List[DependsType] = []
+        dependencies: list[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
 
@@ -292,13 +281,13 @@ class Configurator:
         *,
         permission: str | None = None,
         status_code: int | None = None,
-        # tags: List[Union[str, Enum]] | None = None,
+        # tags: list[Union[str, Enum]] | None = None,
         # summary: Optional[str] = None,
         # description: Optional[str] = None,
         # response_description: str = "Successful Response",
         # responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
         # deprecated: Optional[bool] = None,
-        methods: List[str] | None = None,
+        methods: list[str] | None = None,
         # operation_id: Optional[str] = None,
         # response_model: Any = Default(None),
         # response_model_include: Optional[IncEx] = None,
@@ -334,7 +323,7 @@ class Configurator:
         :param methods: restrict route to a list of http methods.
         :return: the configurator.
         """
-        dependencies: List[DependsType] = []
+        dependencies: list[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
 
