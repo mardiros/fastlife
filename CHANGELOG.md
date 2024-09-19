@@ -1,3 +1,6 @@
+## 0.12.0  - Released on 2024-09-19
+* Add a way to register API routes and expose api doc
+
 ## 0.11.1  - Released on 2024-09-18
 * Update FastAPI version
 
