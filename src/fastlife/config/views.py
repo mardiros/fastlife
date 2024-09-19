@@ -33,7 +33,7 @@ def view_config(
     #     HTMLResponse
     # ),
     openapi_extra: dict[str, Any] | None = None,
-):
+) -> Callable[..., Any]:
     view_name = name
 
     def configure(
