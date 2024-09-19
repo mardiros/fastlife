@@ -15,5 +15,6 @@
 :maxdepth: 1
 
 fastlife.config.configurator
+fastlife.config.resources
 fastlife.config.settings
 ```

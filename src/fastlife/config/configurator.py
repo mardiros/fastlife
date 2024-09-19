@@ -25,6 +25,7 @@ from fastapi import Request as BaseRequest
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
+from pydantic import BaseModel, Field
 
 from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.request.request import Request
@@ -40,6 +41,17 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
+
+
+class ExternalDocs(BaseModel):
+    description: str
+    url: str
+
+
+class OpenApiTag(BaseModel):
+    name: str
+    description: str
+    external_docs: ExternalDocs | None = Field(alias="externalDocs", default=None)
 
 
 class Configurator:
@@ -62,6 +74,7 @@ class Configurator:
         self.middlewares: list[Tuple[Type[AbstractMiddleware], Any]] = []
         self.exception_handlers: list[Tuple[int | Type[Exception], Any]] = []
         self.mounts: list[Tuple[str, Path, str]] = []
+        self.tags: dict[str, OpenApiTag] = {}
 
         self.api_title = "FastAPI"
         self.api_version = "1"
@@ -83,6 +96,9 @@ class Configurator:
             dependencies=[Depends(check_csrf())],
             docs_url=self.registry.settings.api_swagger_ui_url,
             redoc_url=self.registry.settings.api_redocs_url,
+            openapi_tags=[tag.model_dump(by_alias=True) for tag in self.tags.values()]
+            if self.tags
+            else None,
         )
         _app.router.route_class = Route
         for _route in self.router.routes:
@@ -157,6 +173,12 @@ class Configurator:
         self.api_version = version
         return self
 
+    def add_open_tag(self, tag: OpenApiTag) -> Self:
+        if tag.name in self.tags:
+            raise RuntimeError(f"Tag {tag.name} can't be registered twice.")
+        self.tags[tag.name] = tag
+        return self
+
     def add_middleware(
         self, middleware_class: Type[AbstractMiddleware], **options: Any
     ) -> Self:
@@ -219,13 +241,13 @@ class Configurator:
             :attr:`fastlife.config.settings.Settings.check_permission` function.
 
         :param methods: restrict route to a list of http methods.
-        :param description: description for the route.
-        :param summary: summary for the route.
-        :param response_description: description for the response.
+        :param description:OpenAPI description for the route.
+        :param summary: OpenAPI summary for the route.
+        :param response_description: OpenAPI description for the response.
         :param operation_id: OpenAPI optional unique string used to identify an
             operation.
-        :param tags: openapi tags for the route.
-        :param deprecated: mark the route as deprecated.
+        :param tags: OpenAPI tags for the route.
+        :param deprecated: OpenAPI deprecated annotation for the route.
 
         :param response_model_include: customize fields list to include in repsonse.
         :param response_model_exclude: customize fields list to exclude in repsonse.

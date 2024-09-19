@@ -39,9 +39,6 @@ def view_config(
     def configure(
         wrapped: Callable[..., Any],
     ) -> Callable[..., Any]:
-        """
-        Decorator used to attach route in a submodule while using the configurator.include.
-        """
 
         def callback(
             scanner: venusian.Scanner, name: str, ob: Callable[..., Any]

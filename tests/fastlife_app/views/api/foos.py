@@ -4,6 +4,7 @@ from fastapi import Body, Path, Response
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
+from fastlife.config.configurator import ExternalDocs
 from fastlife.config.resources import resource, resource_view
 
 
@@ -26,6 +27,10 @@ instances: dict[str, Foo] = {}
     collection_path="/api/foos",
     path="/api/foos/{name}",
     description="Manage foos, not bars.",
+    external_docs=ExternalDocs(
+        description="Discover what foos are at http://localhost/",
+        url="http://localhost/",
+    ),
 )
 class Foos:
     @resource_view(
@@ -74,4 +79,12 @@ class Foos:
     )
     async def delete(self, name: Annotated[str, Path(...)]) -> Ok:
         del instances[name]
+        return Ok()
+
+    @resource_view(
+        permission="foos:delete",
+        summary="CORS preflight request",
+        include_in_schema=False,
+    )
+    async def options(self, name: Annotated[str, Path(...)]) -> Ok:
         return Ok()

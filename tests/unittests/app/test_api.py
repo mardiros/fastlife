@@ -43,7 +43,7 @@ def test_resource_config_crud(apiclient: TestClient):
 def test_openapi(apiclient: TestClient):
     resp = apiclient.get("/openapi.json")
     response = resp.json()
-    assert set(response.keys()) == {"paths", "info", "components", "openapi"}
+    assert set(response.keys()) == {"paths", "info", "components", "openapi", "tags"}
 
     assert response["info"] == {"title": "Dummy API", "version": "4.2"}
     assert response["openapi"] == "3.1.0"
