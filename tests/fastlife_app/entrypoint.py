@@ -14,6 +14,8 @@ def build_app():
             session_secret_key="supasickret",
             check_permission="tests.fastlife_app.security:check_permission",
             jinjax_auto_reload=True,
+            api_swagger_ui_url="/api/doc",
+            api_redocs_url="/api/redoc",
         )
     )
     conf.include("tests.fastlife_app.views")
