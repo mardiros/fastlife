@@ -17,18 +17,7 @@ import logging
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    List,
-    Optional,
-    Self,
-    Tuple,
-    Type,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, Callable, Self, Tuple, Type, cast
 
 import venusian
 from fastapi import Depends, FastAPI
@@ -36,6 +25,7 @@ from fastapi import Request as BaseRequest
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
+from pydantic import BaseModel, Field
 
 from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.request.request import Request
@@ -53,6 +43,32 @@ log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
 
 
+class ConfigurationError(Exception):
+    """
+    Error raised during configuration, to avoid errors at runtime.
+    """
+
+
+class ExternalDocs(BaseModel):
+    """OpenAPI externalDocs object."""
+
+    description: str
+    """link's description."""
+    url: str
+    """link's URL."""
+
+
+class OpenApiTag(BaseModel):
+    """OpenAPI tag object."""
+
+    name: str
+    """name of the tag."""
+    description: str
+    """explanation of the tag."""
+    external_docs: ExternalDocs | None = Field(alias="externalDocs", default=None)
+    """external link to the doc."""
+
+
 class Configurator:
     """
     Configure and build an application.
@@ -64,7 +80,7 @@ class Configurator:
 
     def __init__(self, settings: Settings) -> None:
         """
-        :param settings: Application settings.
+        :param settings: application settings.
         """
         registry_cls = resolve(settings.registry_class)
         self.registry = registry_cls(settings)
@@ -73,6 +89,7 @@ class Configurator:
         self.middlewares: list[Tuple[Type[AbstractMiddleware], Any]] = []
         self.exception_handlers: list[Tuple[int | Type[Exception], Any]] = []
         self.mounts: list[Tuple[str, Path, str]] = []
+        self.tags: dict[str, OpenApiTag] = {}
 
         self.api_title = "FastAPI"
         self.api_version = "1"
@@ -94,6 +111,9 @@ class Configurator:
             dependencies=[Depends(check_csrf())],
             docs_url=self.registry.settings.api_swagger_ui_url,
             redoc_url=self.registry.settings.api_redocs_url,
+            openapi_tags=[tag.model_dump(by_alias=True) for tag in self.tags.values()]
+            if self.tags
+            else None,
         )
         _app.router.route_class = Route
         for _route in self.router.routes:
@@ -132,7 +152,7 @@ class Configurator:
             _app.mount(route_path, StaticFiles(directory=directory), name=name)
         return _app
 
-    def include(self, module: str | ModuleType) -> "Configurator":
+    def include(self, module: str | ModuleType) -> Self:
         """
         Include a module in order to load its configuration.
 
@@ -164,8 +184,16 @@ class Configurator:
         return self
 
     def set_api_documentation_info(self, title: str, version: str) -> Self:
+        """Set your api documentation title for application that expose an API."""
         self.api_title = title
         self.api_version = version
+        return self
+
+    def add_open_tag(self, tag: OpenApiTag) -> Self:
+        """Register a tag description in the documentation."""
+        if tag.name in self.tags:
+            raise ConfigurationError(f"Tag {tag.name} can't be registered twice.")
+        self.tags[tag.name] = tag
         return self
 
     def add_middleware(
@@ -185,14 +213,14 @@ class Configurator:
         *,
         permission: str | None = None,
         status_code: int | None = None,
-        tags: List[Union[str, Enum]] | None = None,
+        tags: list[str | Enum] | None = None,
         summary: str | None = None,
         description: str | None = None,
         response_description: str = "Successful Response",
         # responses: Dict[Union[int, str], Dict[str, Any]] | None = None,
         deprecated: bool | None = None,
-        methods: List[str] | None = None,
-        operation_id: Optional[str] = None,
+        methods: list[str] | None = None,
+        operation_id: str | None = None,
         # response_model: Any = Default(None),
         response_model_include: IncEx | None = None,
         response_model_exclude: IncEx | None = None,
@@ -208,7 +236,7 @@ class Configurator:
         # generate_unique_id_function: Callable[[APIRoute], str] = Default(
         #     generate_unique_id
         # ),
-    ) -> "Configurator":
+    ) -> Self:
         """
         Add an API route to the app.
 
@@ -230,13 +258,13 @@ class Configurator:
             :attr:`fastlife.config.settings.Settings.check_permission` function.
 
         :param methods: restrict route to a list of http methods.
-        :param description: description for the route.
-        :param summary: summary for the route.
-        :param response_description: description for the response.
+        :param description:OpenAPI description for the route.
+        :param summary: OpenAPI summary for the route.
+        :param response_description: OpenAPI description for the response.
         :param operation_id: OpenAPI optional unique string used to identify an
             operation.
-        :param tags: openapi tags for the route.
-        :param deprecated: mark the route as deprecated.
+        :param tags: OpenAPI tags for the route.
+        :param deprecated: OpenAPI deprecated annotation for the route.
 
         :param response_model_include: customize fields list to include in repsonse.
         :param response_model_exclude: customize fields list to exclude in repsonse.
@@ -252,7 +280,7 @@ class Configurator:
 
         :return: the configurator.
         """
-        dependencies: List[DependsType] = []
+        dependencies: list[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
 
@@ -292,13 +320,13 @@ class Configurator:
         *,
         permission: str | None = None,
         status_code: int | None = None,
-        # tags: List[Union[str, Enum]] | None = None,
+        # tags: list[Union[str, Enum]] | None = None,
         # summary: Optional[str] = None,
         # description: Optional[str] = None,
         # response_description: str = "Successful Response",
         # responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
         # deprecated: Optional[bool] = None,
-        methods: List[str] | None = None,
+        methods: list[str] | None = None,
         # operation_id: Optional[str] = None,
         # response_model: Any = Default(None),
         # response_model_include: Optional[IncEx] = None,
@@ -315,7 +343,7 @@ class Configurator:
         # generate_unique_id_function: Callable[[APIRoute], str] = Default(
         #     generate_unique_id
         # ),
-    ) -> "Configurator":
+    ) -> Self:
         """
         Add a route to the app.
 
@@ -334,7 +362,7 @@ class Configurator:
         :param methods: restrict route to a list of http methods.
         :return: the configurator.
         """
-        dependencies: List[DependsType] = []
+        dependencies: list[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
 
@@ -368,7 +396,7 @@ class Configurator:
 
     def add_static_route(
         self, route_path: str, directory: Path, name: str = "static"
-    ) -> "Configurator":
+    ) -> Self:
         """
         Mount a directory to an http endpoint.
 
@@ -383,7 +411,7 @@ class Configurator:
 
     def add_exception_handler(
         self, status_code_or_exc: int | Type[Exception], handler: Any
-    ) -> "Configurator":
+    ) -> Self:
         """Add an exception handler the application."""
 
         def exception_handler(request: BaseRequest, exc: Exception) -> Any:

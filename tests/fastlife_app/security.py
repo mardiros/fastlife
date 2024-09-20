@@ -73,8 +73,12 @@ def check_permission(permission_name: str) -> CheckPermissionHook:
 
     async def check_perm(
         request: Request,
-        user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
+        user: Annotated[AuthenticatedUser | None, Depends(authenticated_user)],
     ) -> None:
+        if request.url.path.startswith("/api/"):
+            # we are not testing creds for api here
+            return
+
         if not user:
             raise HTTPException(
                 303, "See Other", {"Location": str(request.url_for("login"))}

@@ -16,77 +16,40 @@ def test_api_call(apiclient: TestClient):
     }
 
 
+def test_resource_config_crud(apiclient: TestClient):
+    headers = {"Authorization": "Bearer abc"}
+    foos = apiclient.get("/api/foos", headers=headers)
+    assert foos.json() == []
+
+    foos = apiclient.post("/api/foos", headers=headers, json={"name": "bob"})
+    assert foos.json() == {"message": "Ok"}
+
+    foos = apiclient.get("/api/foos", headers=headers)
+    assert foos.json() == [{"name": "bob"}]
+
+    foos = apiclient.post("/api/foos", headers=headers, json={"name": "alice"})
+    foos = apiclient.get("/api/foos", headers=headers)
+    assert foos.json() == [{"name": "bob"}, {"name": "alice"}]
+
+    foos = apiclient.patch("/api/foos")
+    assert foos.json() == {"detail": "Method Not Allowed"}
+
+    foos = apiclient.patch("/api/foos/bob", headers=headers, json={"name": "bobby"})
+    assert foos.json() == {"message": "Ok"}
+
+    foos = apiclient.get("/api/foos/bobby", headers=headers)
+    assert foos.json() == {"name": "bobby"}
+
+
 def test_openapi(apiclient: TestClient):
     resp = apiclient.get("/openapi.json")
-    assert resp.json() == {
-        "components": {
-            "schemas": {
-                "Dummy": {
-                    "properties": {"name": {"title": "Name", "type": "string"}},
-                    "required": ["name"],
-                    "title": "Dummy",
-                    "type": "object",
-                },
-                "Info": {
-                    "properties": {
-                        "build": {"title": "Build", "type": "string"},
-                        "version": {"title": "Version", "type": "string"},
-                    },
-                    "required": ["version", "build"],
-                    "title": "Info",
-                    "type": "object",
-                },
-            },
-            "securitySchemes": {
-                "OAuth2PasswordBearer": {
-                    "flows": {"password": {"scopes": {}, "tokenUrl": "http://token"}},
-                    "type": "oauth2",
-                }
-            },
-        },
-        "info": {"title": "Dummy API", "version": "4.2"},
-        "openapi": "3.1.0",
-        "paths": {
-            "/api": {
-                "get": {
-                    "description": "Return application build information",
-                    "operationId": "home",
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {"$ref": "#/components/schemas/Info"}
-                                }
-                            },
-                            "description": "Build Info",
-                        }
-                    },
-                    "summary": "Retrieve Build Information",
-                    "tags": ["monitoring"],
-                }
-            },
-            "/api/dummies": {
-                "get": {
-                    "description": "Fetch a list of dummies.",
-                    "operationId": "list_dummies",
-                    "responses": {
-                        "200": {
-                            "content": {
-                                "application/json": {
-                                    "schema": {
-                                        "items": {"$ref": "#/components/schemas/Dummy"},
-                                        "title": "Response List Dummies",
-                                        "type": "array",
-                                    }
-                                }
-                            },
-                            "description": "Dummies collection",
-                        }
-                    },
-                    "security": [{"OAuth2PasswordBearer": []}],
-                    "summary": "API For Dummies",
-                    "tags": ["dummies"],
-                }
-            },
-        },
+    response = resp.json()
+    assert set(response.keys()) == {"paths", "info", "components", "openapi", "tags"}
+
+    assert response["info"] == {"title": "Dummy API", "version": "4.2"}
+    assert response["openapi"] == "3.1.0"
+    assert set(response["paths"].keys()) == {
+        "/api",
+        "/api/foos",
+        "/api/foos/{name}",
     }

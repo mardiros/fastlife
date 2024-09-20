@@ -25,7 +25,7 @@
 
 ### API
 
-`````{py:class} Settings(_case_sensitive: bool | None = None, _env_prefix: str | None = None, _env_file: pydantic_settings.sources.DotenvType | None = ENV_FILE_SENTINEL, _env_file_encoding: str | None = None, _env_ignore_empty: bool | None = None, _env_nested_delimiter: str | None = None, _env_parse_none_str: str | None = None, _env_parse_enums: bool | None = None, _cli_prog_name: str | None = None, _cli_parse_args: bool | list[str] | tuple[str, ...] | None = None, _cli_settings_source: pydantic_settings.sources.CliSettingsSource[typing.Any] | None = None, _cli_parse_none_str: str | None = None, _cli_hide_none_type: bool | None = None, _cli_avoid_json: bool | None = None, _cli_enforce_required: bool | None = None, _cli_use_class_docs_for_groups: bool | None = None, _cli_exit_on_error: bool | None = None, _cli_prefix: str | None = None, _secrets_dir: str | pathlib.Path | None = None, **values: typing.Any)
+`````{py:class} Settings(_case_sensitive: bool | None = None, _nested_model_default_partial_update: bool | None = None, _env_prefix: str | None = None, _env_file: pydantic_settings.sources.DotenvType | None = ENV_FILE_SENTINEL, _env_file_encoding: str | None = None, _env_ignore_empty: bool | None = None, _env_nested_delimiter: str | None = None, _env_parse_none_str: str | None = None, _env_parse_enums: bool | None = None, _cli_prog_name: str | None = None, _cli_parse_args: bool | list[str] | tuple[str, ...] | None = None, _cli_settings_source: pydantic_settings.sources.CliSettingsSource[typing.Any] | None = None, _cli_parse_none_str: str | None = None, _cli_hide_none_type: bool | None = None, _cli_avoid_json: bool | None = None, _cli_enforce_required: bool | None = None, _cli_use_class_docs_for_groups: bool | None = None, _cli_exit_on_error: bool | None = None, _cli_prefix: str | None = None, _cli_implicit_flags: bool | None = None, _secrets_dir: pydantic_settings.sources.PathType | None = None, **values: typing.Any)
 :canonical: fastlife.config.settings.Settings
 
 Bases: {py:obj}`pydantic_settings.BaseSettings`
@@ -40,6 +40,30 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
 ```{autodoc2-docstring} fastlife.config.settings.Settings.__init__
 :parser: myst
 ```
+
+````{py:attribute} api_redocs_url
+:canonical: fastlife.config.settings.Settings.api_redocs_url
+:type: str | None
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.api_redocs_url
+:parser: myst
+```
+
+````
+
+````{py:attribute} api_swagger_ui_url
+:canonical: fastlife.config.settings.Settings.api_swagger_ui_url
+:type: str | None
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.api_swagger_ui_url
+:parser: myst
+```
+
+````
 
 ````{py:attribute} check_permission
 :canonical: fastlife.config.settings.Settings.check_permission

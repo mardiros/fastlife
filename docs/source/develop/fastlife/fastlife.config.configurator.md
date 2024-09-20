@@ -21,6 +21,10 @@
     :parser: myst
     :summary:
     ```
+* - {py:obj}`ExternalDocs <fastlife.config.configurator.ExternalDocs>`
+  -
+* - {py:obj}`OpenApiTag <fastlife.config.configurator.OpenApiTag>`
+  -
 ````
 
 ### Functions
@@ -52,6 +56,15 @@
 :parser: myst
 ```
 
+````{py:method} add_api_route(name: str, path: str, endpoint: typing.Callable[..., typing.Any], *, permission: str | None = None, status_code: int | None = None, tags: list[str | enum.Enum] | None = None, summary: str | None = None, description: str | None = None, response_description: str = 'Successful Response', deprecated: bool | None = None, methods: list[str] | None = None, operation_id: str | None = None, response_model_include: fastapi.types.IncEx | None = None, response_model_exclude: fastapi.types.IncEx | None = None, response_model_by_alias: bool = True, response_model_exclude_unset: bool = False, response_model_exclude_defaults: bool = False, response_model_exclude_none: bool = False, include_in_schema: bool = True, openapi_extra: dict[str, typing.Any] | None = None) -> fastlife.config.configurator.Configurator
+:canonical: fastlife.config.configurator.Configurator.add_api_route
+
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_api_route
+:parser: myst
+```
+
+````
+
 ````{py:method} add_exception_handler(status_code_or_exc: int | typing.Type[Exception], handler: typing.Any) -> fastlife.config.configurator.Configurator
 :canonical: fastlife.config.configurator.Configurator.add_exception_handler
 
@@ -70,7 +83,7 @@
 
 ````
 
-````{py:method} add_route(name: str, path: str, endpoint: typing.Callable[..., typing.Any], *, permission: str | None = None, status_code: int | None = None, tags: typing.List[typing.Union[str, enum.Enum]] | None = None, summary: typing.Optional[str] = None, description: typing.Optional[str] = None, response_description: str = 'Successful Response', deprecated: typing.Optional[bool] = None, methods: typing.Optional[typing.List[str]] = None) -> fastlife.config.configurator.Configurator
+````{py:method} add_route(name: str, path: str, endpoint: typing.Callable[..., typing.Any], *, permission: str | None = None, status_code: int | None = None, methods: list[str] | None = None) -> fastlife.config.configurator.Configurator
 :canonical: fastlife.config.configurator.Configurator.add_route
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_route
@@ -107,6 +120,20 @@
 ````
 
 `````
+
+```{py:class} ExternalDocs(/, **data: typing.Any)
+:canonical: fastlife.config.configurator.ExternalDocs
+
+Bases: {py:obj}`pydantic.BaseModel`
+
+```
+
+```{py:class} OpenApiTag(/, **data: typing.Any)
+:canonical: fastlife.config.configurator.OpenApiTag
+
+Bases: {py:obj}`pydantic.BaseModel`
+
+```
 
 ````{py:function} configure(wrapped: typing.Callable[[fastlife.config.configurator.Configurator], None]) -> typing.Callable[[fastlife.config.configurator.Configurator], None]
 :canonical: fastlife.config.configurator.configure
