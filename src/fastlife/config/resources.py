@@ -1,11 +1,25 @@
-"""API Resources declaration using a decorator."""
+"""
+API Resources declaration using a decorator.
+
+
+```{literalinclude} ../../../../tests/fastlife_app/views/api/foos.py
+
+```
+
+"""
 
 from typing import Any, Callable
 
 import venusian
 from fastapi.types import IncEx
 
-from .configurator import VENUSIAN_CATEGORY, Configurator, ExternalDocs, OpenApiTag
+from .configurator import (
+    VENUSIAN_CATEGORY,
+    ConfigurationError,
+    Configurator,
+    ExternalDocs,
+    OpenApiTag,
+)
 
 
 def resource(
@@ -48,7 +62,7 @@ def resource(
     ) -> Callable[..., Any]:
         def callback(scanner: venusian.Scanner, name: str, ob: type[Any]) -> None:
             if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return
+                return  # coverage: ignore
 
             config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
             if description:
@@ -68,7 +82,7 @@ def resource(
             ) -> None:
                 if bind_path is None:
                     prefix = "collection_" if method.startswith("collection_") else ""
-                    raise RuntimeError(f"{prefix}path not set on resource {tag}")
+                    raise ConfigurationError(f"{prefix}path not set on resource {tag}")
 
                 bind_config.add_api_route(
                     name=f"{method}_{tag}",

@@ -43,15 +43,30 @@ log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
 
 
+class ConfigurationError(Exception):
+    """
+    Error raised during configuration, to avoid errors at runtime.
+    """
+
+
 class ExternalDocs(BaseModel):
+    """OpenAPI externalDocs object."""
+
     description: str
+    """link's description."""
     url: str
+    """link's URL."""
 
 
 class OpenApiTag(BaseModel):
+    """OpenAPI tag object."""
+
     name: str
+    """name of the tag."""
     description: str
+    """explanation of the tag."""
     external_docs: ExternalDocs | None = Field(alias="externalDocs", default=None)
+    """external link to the doc."""
 
 
 class Configurator:
@@ -65,7 +80,7 @@ class Configurator:
 
     def __init__(self, settings: Settings) -> None:
         """
-        :param settings: Application settings.
+        :param settings: application settings.
         """
         registry_cls = resolve(settings.registry_class)
         self.registry = registry_cls(settings)
@@ -137,7 +152,7 @@ class Configurator:
             _app.mount(route_path, StaticFiles(directory=directory), name=name)
         return _app
 
-    def include(self, module: str | ModuleType) -> "Configurator":
+    def include(self, module: str | ModuleType) -> Self:
         """
         Include a module in order to load its configuration.
 
@@ -169,13 +184,15 @@ class Configurator:
         return self
 
     def set_api_documentation_info(self, title: str, version: str) -> Self:
+        """Set your api documentation title for application that expose an API."""
         self.api_title = title
         self.api_version = version
         return self
 
     def add_open_tag(self, tag: OpenApiTag) -> Self:
+        """Register a tag description in the documentation."""
         if tag.name in self.tags:
-            raise RuntimeError(f"Tag {tag.name} can't be registered twice.")
+            raise ConfigurationError(f"Tag {tag.name} can't be registered twice.")
         self.tags[tag.name] = tag
         return self
 
@@ -219,7 +236,7 @@ class Configurator:
         # generate_unique_id_function: Callable[[APIRoute], str] = Default(
         #     generate_unique_id
         # ),
-    ) -> "Configurator":
+    ) -> Self:
         """
         Add an API route to the app.
 
@@ -326,7 +343,7 @@ class Configurator:
         # generate_unique_id_function: Callable[[APIRoute], str] = Default(
         #     generate_unique_id
         # ),
-    ) -> "Configurator":
+    ) -> Self:
         """
         Add a route to the app.
 
@@ -379,7 +396,7 @@ class Configurator:
 
     def add_static_route(
         self, route_path: str, directory: Path, name: str = "static"
-    ) -> "Configurator":
+    ) -> Self:
         """
         Mount a directory to an http endpoint.
 
@@ -394,7 +411,7 @@ class Configurator:
 
     def add_exception_handler(
         self, status_code_or_exc: int | Type[Exception], handler: Any
-    ) -> "Configurator":
+    ) -> Self:
         """Add an exception handler the application."""
 
         def exception_handler(request: BaseRequest, exc: Exception) -> Any:

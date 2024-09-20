@@ -1,10 +1,8 @@
 from typing import Annotated
 
-from fastapi import Request, Response
 from pydantic import BaseModel, SecretStr
 
-from fastlife import Template, template, view_config
-from fastlife.config.views import view_config
+from fastlife import Request, Response, Template, template, view_config
 
 
 class LoginForm(BaseModel):

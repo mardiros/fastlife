@@ -17,4 +17,5 @@
 fastlife.config.configurator
 fastlife.config.resources
 fastlife.config.settings
+fastlife.config.views
 ```

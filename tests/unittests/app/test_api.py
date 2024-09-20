@@ -17,26 +17,27 @@ def test_api_call(apiclient: TestClient):
 
 
 def test_resource_config_crud(apiclient: TestClient):
-    foos = apiclient.get("/api/foos")
+    headers = {"Authorization": "Bearer abc"}
+    foos = apiclient.get("/api/foos", headers=headers)
     assert foos.json() == []
 
-    foos = apiclient.post("/api/foos", json={"name": "bob"})
+    foos = apiclient.post("/api/foos", headers=headers, json={"name": "bob"})
     assert foos.json() == {"message": "Ok"}
 
-    foos = apiclient.get("/api/foos")
+    foos = apiclient.get("/api/foos", headers=headers)
     assert foos.json() == [{"name": "bob"}]
 
-    foos = apiclient.post("/api/foos", json={"name": "alice"})
-    foos = apiclient.get("/api/foos")
+    foos = apiclient.post("/api/foos", headers=headers, json={"name": "alice"})
+    foos = apiclient.get("/api/foos", headers=headers)
     assert foos.json() == [{"name": "bob"}, {"name": "alice"}]
 
     foos = apiclient.patch("/api/foos")
     assert foos.json() == {"detail": "Method Not Allowed"}
 
-    foos = apiclient.patch("/api/foos/bob", json={"name": "bobby"})
+    foos = apiclient.patch("/api/foos/bob", headers=headers, json={"name": "bobby"})
     assert foos.json() == {"message": "Ok"}
 
-    foos = apiclient.get("/api/foos/bobby")
+    foos = apiclient.get("/api/foos/bobby", headers=headers)
     assert foos.json() == {"name": "bobby"}
 
 
