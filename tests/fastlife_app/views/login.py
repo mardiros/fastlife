@@ -4,7 +4,7 @@ from fastapi import Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
-from fastlife import Configurator, Template, configure, template
+from fastlife import Template, template, view_config
 from fastlife.request.form import FormModel, form_model
 from tests.fastlife_app.security import AuthenticationPolicy
 
@@ -14,6 +14,7 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
+@view_config("login", "/login", methods=["GET", "POST"])
 async def login(
     request: Request,
     loginform: Annotated[FormModel[LoginForm], form_model(LoginForm)],
@@ -29,15 +30,10 @@ async def login(
     return template(model=loginform)
 
 
+@view_config("logout", "/logout", methods=["GET"])
 async def logout(
     request: Request,
     policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)],
 ) -> Response:
     policy.forget()
     return RedirectResponse(request.url_for("home"), status_code=302)
-
-
-@configure
-def includeme(config: Configurator):
-    config.add_route("login", "/login", login, methods=["GET", "POST"])
-    config.add_route("logout", "/logout", logout, methods=["GET"])

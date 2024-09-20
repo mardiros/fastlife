@@ -49,7 +49,6 @@ def test_openapi(apiclient: TestClient):
     assert response["openapi"] == "3.1.0"
     assert set(response["paths"].keys()) == {
         "/api",
-        "/api/dummies",
         "/api/foos",
         "/api/foos/{name}",
     }

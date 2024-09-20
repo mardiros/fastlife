@@ -3,7 +3,8 @@ from typing import Annotated
 from fastapi import Request, Response
 from pydantic import BaseModel, SecretStr
 
-from fastlife import Configurator, Template, configure, template
+from fastlife import Template, template, view_config
+from fastlife.config.views import view_config
 
 
 class LoginForm(BaseModel):
@@ -11,13 +12,9 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
+@view_config("login", "/icons", methods=["GET"])
 async def icons(
     request: Request,
     template: Annotated[Template, template("IconsWall")],
 ) -> Response:
     return template()
-
-
-@configure
-def includeme(config: Configurator):
-    config.add_route("login", "/icons", icons, methods=["GET"])
