@@ -12,7 +12,7 @@ revisited.
 ```
 
 In the example above, we can see that the FastAPI app has been encapsulated
-inside a :class:`fastlife.config.configurator.Configurator` object.
+inside a {class}`Configurator <fastlife.config.configurator.Configurator>` object.
 The Configurator is responsible of the ASGI app construction, a FastAPI
 app behind the scene.
 
@@ -31,20 +31,23 @@ fastapi dev hello_world.py
 ```
 
 The Configurator role, a builder pattern, is about reading settings, loading
-routes, and configure an :class:`fastlife.config.registry.Registry`.
+routes, and configure a {class}`Registry <fastlife.config.registry.Registry>`.
 
 If you have already built a FastAPI application or a framework using route decorators,
 splitting the routes into submodules requires careful handling to avoid issues.
-Have you ever encountered circular import problems?
+
+Have you ever encountered circular import errors?
+
 The configurator helps solve these issues.
 
-With Fastlife, you never use a global app object,
-which helps prevent circular dependencies.
+With Fastlife, you never use a global app object, which helps prevent circular dependencies.
 
-Instead, The application is build using the
-{method}`Configurator.build_asgi_app() <fastlife.config.configurator.Configurator.build_asgi_app>`.
+Instead, the application is build using the
+{meth}`Configurator.build_asgi_app() <fastlife.config.configurator.Configurator.build_asgi_app>`.
+after grabbing all its needs using decorated methods and package import scanning.
 
-This entry point provides access to HTTP routes without being the application directly.
+The configurator object enables the dependency injection while building the app,
+that we will be discussed below.
 
 
 ## modular approach

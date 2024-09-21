@@ -3,7 +3,6 @@
 [![Documentation](https://github.com/mardiros/fastlife/actions/workflows/gh-pages.yml/badge.svg)](https://mardiros.github.io/fastlife/)
 [![Continuous Integration](https://github.com/mardiros/fastlife/actions/workflows/main.yml/badge.svg)](https://github.com/mardiros/fastlife/actions/workflows/main.yml)
 [![Coverage Report](https://codecov.io/gh/mardiros/fastlife/graph/badge.svg?token=DTpi73d7mf)](https://codecov.io/gh/mardiros/fastlife)
-![Under Heavy Development](https://img.shields.io/badge/under%20heavy%20development-red)
 
 
 > ⚠️ **Under Heavy Development**
