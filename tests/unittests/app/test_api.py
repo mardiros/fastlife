@@ -1,3 +1,5 @@
+import textwrap
+
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -46,7 +48,29 @@ def test_openapi(apiclient: TestClient):
     response = resp.json()
     assert set(response.keys()) == {"paths", "info", "components", "openapi", "tags"}
 
-    assert response["info"] == {"title": "Dummy API", "version": "4.2"}
+    assert response["info"] == {
+        "description": textwrap.dedent(
+            """
+            In a unit test suite, a dummy is a simple placeholder object used to
+            satisfy the parameter requirements of a method or function but isn't
+            actively used in the test.
+
+            Its primary role is to avoid null or undefined values when a method
+            expects an argument, but the argument itself is irrelevant to the
+            test being performed.
+
+            For example, if a function requires multiple parameters and you're
+            only interested in testing the behavior of one of them, you
+            can use a **dummy** for the others to focus on the aspect you're testing.
+
+            Unlike **mocks** or **stubs**, a **dummy doesn't have any behavior
+            or interactions** it's just there to fulfill the method's signature.
+            """
+        ),
+        "summary": "API for dummies",
+        "title": "Dummy API",
+        "version": "4.2",
+    }
     assert response["openapi"] == "3.1.0"
     assert set(response["paths"].keys()) == {
         "/api",

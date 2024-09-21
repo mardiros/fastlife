@@ -91,8 +91,10 @@ class Configurator:
         self.mounts: list[Tuple[str, Path, str]] = []
         self.tags: dict[str, OpenApiTag] = {}
 
-        self.api_title = "FastAPI"
-        self.api_version = "1"
+        self.api_title = "OpenAPI"
+        self.api_version = "v1"
+        self.api_description: str = ""
+        self.api_summary: str | None = None
 
         self.router = Router()
         self.scanner = venusian.Scanner(fastlife=self)
@@ -108,6 +110,8 @@ class Configurator:
         _app = FastAPI(
             title=self.api_title,
             version=self.api_version,
+            description=self.api_description,
+            summary=self.api_summary,
             dependencies=[Depends(check_csrf())],
             docs_url=self.registry.settings.api_swagger_ui_url,
             redoc_url=self.registry.settings.api_redocs_url,
@@ -183,10 +187,25 @@ class Configurator:
         self.scanner.scan(module, categories=[VENUSIAN_CATEGORY])  # type: ignore
         return self
 
-    def set_api_documentation_info(self, title: str, version: str) -> Self:
-        """Set your api documentation title for application that expose an API."""
+    def set_api_documentation_info(
+        self,
+        title: str,
+        version: str,
+        description: str,
+        summary: str | None = None,
+    ) -> Self:
+        """
+        Set your api documentation title for application that expose an API.
+
+        :param title: OpenAPI documentation title
+        :param version: OpenAPI api version
+        :param description: OpenAPI documentation description
+        :param summary: OpenAPI documentation summary
+        """
         self.api_title = title
         self.api_version = version
+        self.api_description = description
+        self.api_summary = summary
         return self
 
     def add_open_tag(self, tag: OpenApiTag) -> Self:
