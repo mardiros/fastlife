@@ -19,8 +19,8 @@ app behind the scene.
 ```{note}
 
    If you have used the Pyramid framework, you are already familiar with its
-   Configurator. Keep in mind that the Fastlife Configurator is a more naive
-   implementation and less feature-rich.
+   Configurator. The Fastlife Configurator is a more naive implementation and
+   less feature-rich.
 
 ```
 
@@ -40,9 +40,12 @@ The configurator helps solve these issues.
 
 With Fastlife, you never use a global app object,
 which helps prevent circular dependencies.
-Instead, you construct an application where the app singleton refers to an entry point,
-not the application itself.
+
+Instead, The application is build using the
+{method}`Configurator.build_asgi_app() <fastlife.config.configurator.Configurator.build_asgi_app>`.
+
 This entry point provides access to HTTP routes without being the application directly.
+
 
 ## modular approach
 

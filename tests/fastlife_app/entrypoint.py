@@ -20,7 +20,7 @@ def build_app():
     )
     conf.include("tests.fastlife_app.views")
     conf.include("tests.fastlife_app.static")
-    return conf.get_asgi_app()
+    return conf.build_asgi_app()
 
 
 app = build_app()

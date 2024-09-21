@@ -99,9 +99,9 @@ class Configurator:
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
 
-    def get_asgi_app(self) -> FastAPI:
+    def build_asgi_app(self) -> FastAPI:
         """
-        Get the app after configuration in order to start after beeing configured.
+        Build the app after configuration in order to start after beeing configured.
 
         :return: FastAPI application.
         """
