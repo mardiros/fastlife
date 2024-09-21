@@ -412,6 +412,11 @@ def test_render_Hidden(node: bs4.PageElement, expected: bs4.PageElement):
             """<input id="k" name="key" value="val" type="text" class="x" />""",
             id="Input-id-css",
         ),
+        pytest.param(
+            """<Input name="key" value="" class="x" inputmode="tel" />""",
+            """<input name="key" value="" type="text" inputmode="tel" class="x" />""",
+            id="Input-inputmode",
+        ),
     ],
 )
 def test_render_Input(node: bs4.PageElement, expected: bs4.PageElement):
