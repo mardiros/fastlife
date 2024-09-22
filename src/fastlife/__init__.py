@@ -12,7 +12,7 @@ from .config import (
 from .request import Request
 
 # from .request.form_data import model
-from .templating import Template, template
+from .templates import Template, template
 
 __all__ = [
     # Config

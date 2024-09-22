@@ -7,7 +7,7 @@ from fastapi import Request as FastApiRequest
 from fastlife import Request
 from fastlife.config.registry import Registry
 from fastlife.config.settings import Settings
-from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
+from fastlife.templates.renderer.jinjax import JinjaxTemplateRenderer
 
 
 @pytest.fixture(scope="session")

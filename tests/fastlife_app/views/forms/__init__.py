@@ -14,7 +14,7 @@ async def testform(
     request: Request,
     type: Annotated[str, Path],
     data: MappingFormData,
-    template: Annotated[Template, template("TestForm")],
+    template: Annotated[Template, template("TestForm.jinja")],
 ) -> Response:
     cls = resolve(f"tests.fastlife_app.views.forms.{type}:Form")
     if request.method == "POST":

@@ -4,7 +4,7 @@ import bs4
 import pytest
 
 from fastlife.config.settings import Settings
-from fastlife.templating.renderer import JinjaxTemplateRenderer
+from fastlife.templates.renderer import JinjaxTemplateRenderer
 
 template_path = str(Path(__file__).parent / "components")
 

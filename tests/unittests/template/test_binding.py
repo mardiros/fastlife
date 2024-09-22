@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 
 from fastlife.request import Request
-from fastlife.templating.binding import get_template
+from fastlife.templates.binding import get_template
 
 
 @pytest.mark.parametrize(
@@ -17,7 +17,7 @@ from fastlife.templating.binding import get_template
     ],
 )
 async def test_get_csrf_token_reuse_token(dummy_request_param: Request):
-    template = get_template("Layout")
+    template = get_template("Layout.jinja")
     renderer = template(dummy_request_param)
     response = renderer()
     assert "set-cookie" in response.headers
@@ -41,7 +41,7 @@ async def test_create_csrf_token(dummy_request_param: Request):
     def create_token():
         return "xxxCsrfTokenxxx"
 
-    template = get_template("Layout")
+    template = get_template("Layout.jinja")
     renderer: Any = template(
         dummy_request_param,
         _create_csrf_token=create_token,  # type: ignore
@@ -66,7 +66,7 @@ async def test_create_csrf_token(dummy_request_param: Request):
     ],
 )
 async def test_get_csrf_token_https(dummy_request_param: Request):
-    template = get_template("Layout")
+    template = get_template("Layout.jinja")
     renderer = template(dummy_request_param)
     response = renderer()
     assert "set-cookie" in response.headers

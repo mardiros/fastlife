@@ -13,6 +13,6 @@ class LoginForm(BaseModel):
 @view_config("login", "/icons", methods=["GET"])
 async def icons(
     request: Request,
-    template: Annotated[Template, template("IconsWall")],
+    template: Annotated[Template, template("IconsWall.jinja")],
 ) -> Response:
     return template()

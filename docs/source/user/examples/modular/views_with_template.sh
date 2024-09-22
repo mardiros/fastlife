@@ -5,7 +5,7 @@ from fastlife import Configurator, Template, configure, template
 
 
 async def hello_world(
-    template: Annotated[Template, template("HelloWorld")],
+    template: Annotated[Template, template("HelloWorld.jinja")],
 ):
     return template()
 

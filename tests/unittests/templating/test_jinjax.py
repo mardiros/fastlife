@@ -1,8 +1,8 @@
-from fastlife.templating.renderer.jinjax import AbstractTemplateRenderer
+from fastlife.templates.renderer.jinjax import AbstractTemplateRenderer
 
 
 def test_render_template(renderer: AbstractTemplateRenderer):
-    res = renderer.render_template("Page")
+    res = renderer.render_template("Page.jinja")
     assert (
         res
         == """\

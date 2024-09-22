@@ -4,16 +4,16 @@ import bs4
 import pytest
 from pydantic import BaseModel
 
-from fastlife.templating.renderer.jinjax import AbstractTemplateRenderer
-from fastlife.templating.renderer.widgets.base import Widget
-from fastlife.templating.renderer.widgets.boolean import BooleanWidget
-from fastlife.templating.renderer.widgets.checklist import Checkable, ChecklistWidget
-from fastlife.templating.renderer.widgets.dropdown import DropDownWidget
-from fastlife.templating.renderer.widgets.hidden import HiddenWidget
-from fastlife.templating.renderer.widgets.model import ModelWidget
-from fastlife.templating.renderer.widgets.sequence import SequenceWidget
-from fastlife.templating.renderer.widgets.text import TextWidget
-from fastlife.templating.renderer.widgets.union import UnionWidget
+from fastlife.templates.renderer.jinjax import AbstractTemplateRenderer
+from fastlife.templates.renderer.widgets.base import Widget
+from fastlife.templates.renderer.widgets.boolean import BooleanWidget
+from fastlife.templates.renderer.widgets.checklist import Checkable, ChecklistWidget
+from fastlife.templates.renderer.widgets.dropdown import DropDownWidget
+from fastlife.templates.renderer.widgets.hidden import HiddenWidget
+from fastlife.templates.renderer.widgets.model import ModelWidget
+from fastlife.templates.renderer.widgets.sequence import SequenceWidget
+from fastlife.templates.renderer.widgets.text import TextWidget
+from fastlife.templates.renderer.widgets.union import UnionWidget
 
 
 class Foo(BaseModel):
@@ -21,7 +21,7 @@ class Foo(BaseModel):
 
 
 def test_render_template(renderer: AbstractTemplateRenderer):
-    res = renderer.render_template("Page")
+    res = renderer.render_template("Page.jinja")
     assert (
         res
         == """\
@@ -250,7 +250,7 @@ def test_render_custom(
 ):
     class CustomWidget(Widget[Any]):
         def get_template(self) -> str:
-            return "CustomWidget"
+            return "CustomWidget.jinja"
 
     model = CustomWidget(
         "foo",

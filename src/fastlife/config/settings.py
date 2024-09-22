@@ -32,10 +32,11 @@ class Settings(BaseSettings):
     registry_class: str = Field(default="fastlife.config.registry:AppRegistry")
     """Implementation class for the application regitry."""
     template_renderer_class: str = Field(
-        default="fastlife.templating.renderer:JinjaxTemplateRenderer"
+        default="fastlife.templates.renderer:JinjaxTemplateRenderer"
     )
     """
-    Implementation class for the :class:`fastlife.templatingAbstractTemplateRenderer`.
+    Implementation class for the
+    {class}`fastlife.templates.renderer.AbstractTemplateRenderer`.
     """
     form_data_model_prefix: str = Field(default="payload")
     """
@@ -44,6 +45,11 @@ class Settings(BaseSettings):
     csrf_token_name: str = Field(default="csrf_token")
     """
     Name of the html input field and for the http cookie for csrf token.
+    """
+
+    jinjax_file_ext: str = Field(default="jinja")
+    """
+    JinjaX file extention.
     """
 
     jinjax_use_cache: bool = Field(default=True)
@@ -59,7 +65,7 @@ class Settings(BaseSettings):
     Set to true while developing, set false for production.
     """
     jinjax_global_catalog_class: str = Field(
-        default="fastlife.templating.renderer:Constants"
+        default="fastlife.templates.renderer:Constants"
     )
     """
     Set global constants accessible in every templates.

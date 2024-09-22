@@ -14,7 +14,7 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
-@view_config("login", "/login", template="Login", methods=["GET", "POST"])
+@view_config("login", "/login", template="Login.jinja", methods=["GET", "POST"])
 async def login(
     request: Request,
     loginform: Annotated[FormModel[LoginForm], form_model(LoginForm)],

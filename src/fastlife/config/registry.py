@@ -7,7 +7,7 @@ from fastlife.security.policy import CheckPermission
 from fastlife.shared_utils.resolver import resolve
 
 if TYPE_CHECKING:
-    from fastlife.templating.renderer import (  # coverage: ignore
+    from fastlife.templates.renderer import (  # coverage: ignore
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
 

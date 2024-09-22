@@ -1,10 +1,9 @@
 from typing import Optional
 
 from fastapi import Query
-from fastlife import Request, Response
 from pydantic.fields import FieldInfo
 
-from fastlife import Configurator, configure
+from fastlife import Configurator, Request, Response, configure
 from fastlife.config.registry import Registry
 from fastlife.shared_utils.resolver import resolve_extended
 

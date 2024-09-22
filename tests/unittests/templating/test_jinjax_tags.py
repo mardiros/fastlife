@@ -4,7 +4,7 @@ from typing import Iterator
 import bs4
 import pytest
 
-from fastlife.templating.renderer.jinjax import JinjaxRenderer
+from fastlife.templates.renderer.jinjax import JinjaxRenderer
 
 
 @pytest.fixture(scope="module")
@@ -22,7 +22,7 @@ def node(
     component = tmp_dir / "X.jinja"
     component.write_text(template_string)
     try:
-        res = renderer.render_template("t.X")
+        res = renderer.render_template("t.X.jinja")
         bsoup = bs4.BeautifulSoup(res, features="html.parser")
         yield next(bsoup.children)  # type: ignore
     except Exception as exc:

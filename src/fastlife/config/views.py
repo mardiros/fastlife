@@ -12,7 +12,7 @@ from fastlife import Template, template, view_config
 
 @view_config("hello_world", "/", methods=["GET"])
 async def hello_world(
-    template: Annotated[Template, template("HelloWorld")],
+    template: Annotated[Template, template("HelloWorld.jinja")],
 ) -> Response:
     return template()
 ```

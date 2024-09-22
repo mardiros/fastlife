@@ -5,13 +5,13 @@ import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 from fastlife.request.form import FormModel
-from fastlife.templating.renderer.jinjax import JinjaxRenderer
-from fastlife.templating.renderer.widgets.base import Widget
+from fastlife.templates.renderer.jinjax import JinjaxRenderer
+from fastlife.templates.renderer.widgets.base import Widget
 
 
 class CustomWidget(Widget[Any]):
     def get_template(self) -> str:
-        return "CustomWidget"
+        return "CustomWidget.jinja"
 
 
 class Flavor(Enum):
@@ -56,7 +56,7 @@ class Tempo(BaseModel):
 
 class CustomSelect(Widget[Any]):
     def get_template(self) -> str:
-        return "CustomSelect"
+        return "CustomSelect.jinja"
 
 
 class Banger(BaseModel):
@@ -73,7 +73,7 @@ def test_render_template(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm",
+        "DummyForm.jinja",
         model=FormModel[DummyModel].default("payload", DummyModel),
         token="tkt",
     )
@@ -164,7 +164,7 @@ def test_render_template_values(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm",
+        "DummyForm.jinja",
         model=FormModel[DummyModel].from_payload(
             "payload",
             DummyModel,
@@ -252,7 +252,7 @@ def test_render_custom_list(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm",
+        "DummyForm.jinja",
         model=FormModel[Banger].from_payload(
             "payload",
             Banger,
@@ -275,7 +275,7 @@ def test_render_custom_list(
 
 def test_render_set(renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]):
     result = renderer.render_template(
-        "DummyForm",
+        "DummyForm.jinja",
         model=FormModel[MultiSet].default("payload", MultiSet),
         token="tkt",
     )
@@ -305,7 +305,7 @@ def test_render_set_checked(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     result = renderer.render_template(
-        "DummyForm",
+        "DummyForm.jinja",
         model=FormModel[MultiSet].from_payload(
             "payload",
             MultiSet,

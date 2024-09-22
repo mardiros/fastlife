@@ -2,7 +2,7 @@ from typing import Annotated
 
 from pydantic import BaseModel, Field
 
-from fastlife.templating.renderer.widgets.hidden import HiddenWidget
+from fastlife.templates.renderer.widgets.hidden import HiddenWidget
 
 
 class Form(BaseModel):

@@ -2,12 +2,12 @@ from typing import Annotated, Any, Literal, Sequence, Set
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
-from fastlife.templating.renderer.widgets.base import Widget
+from fastlife.templates.renderer.widgets.base import Widget
 
 
 class GroupsChoice(Widget[Any]):
     def get_template(self) -> str:
-        return "GroupsChoice"
+        return "GroupsChoice.jinja"
 
 
 class Permission(BaseModel):

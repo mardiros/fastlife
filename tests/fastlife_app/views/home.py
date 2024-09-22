@@ -13,14 +13,14 @@ class Person(BaseModel):
 
 
 async def hello_world(
-    template: Annotated[Template, template("HelloWorld")],
+    template: Annotated[Template, template("HelloWorld.jinja")],
     person: Annotated[FormModel[Person], form_model(Person, "person")],
 ) -> Response:
     return template(person=person.model)
 
 
 async def autoform(
-    template: Annotated[Template, template("AutoForm")],
+    template: Annotated[Template, template("AutoForm.jinja")],
     account: Annotated[FormModel[Account], form_model(Account)],
 ) -> Response:
     return template(
