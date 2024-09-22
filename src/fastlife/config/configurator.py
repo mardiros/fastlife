@@ -40,6 +40,7 @@ from .settings import Settings
 
 if TYPE_CHECKING:
     from fastlife.services.templates import AbstractTemplateRendererFactory
+
     from .registry import AppRegistry  # coverage: ignore
 
 log = logging.getLogger(__name__)

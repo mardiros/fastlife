@@ -10,13 +10,9 @@ In that case, those base classes have to be implemented.
 """
 
 import abc
-from typing import Any, Callable, Mapping, Type
-
-from markupsafe import Markup
-from pydantic.fields import FieldInfo
+from typing import Any, Callable, Mapping
 
 from fastlife import Request, Response
-from fastlife.request.form import FormModel
 from fastlife.security.csrf import create_csrf_token
 
 TemplateParams = Mapping[str, Any]
@@ -92,52 +88,6 @@ class AbstractTemplateRenderer(abc.ABC):
         :param globals: some variable that will be passed to all rendered templates.
         :param params: paramaters that are limited to the main rendered templates.
         :return: The template rendering result.
-        """
-
-    @abc.abstractmethod
-    def pydantic_form(
-        self, model: FormModel[Any], *, token: str | None = None
-    ) -> Markup:
-        """
-        Render an http form from a given model.
-
-        Because template post may be give back to users with errors,
-        the model is wrap in an object containing initial model, or validated model
-        and a set of errors.
-
-        this function is used inside the template directly. And it will not render the
-        <form> tag so the action/httpx post is not handled byu the method..
-        Somethinging like this:
-
-        ::
-
-            <Form action="" method="post">
-                {{ pydantic_form(model) }}
-            </Form>
-
-
-        :param model: model to render.
-        :param token: a random string that can be passed for testing purpose.
-        """
-        ...
-
-    @abc.abstractmethod
-    def pydantic_form_field(
-        self,
-        model: Type[Any],
-        *,
-        name: str | None,
-        token: str | None,
-        removable: bool,
-        field: FieldInfo | None,
-    ) -> Markup:
-        """
-        Render a field of a model inside a pydantic_form.
-
-        Models that contains field of type Union, for instance may have
-        many types of children and the form have a user interaction to choose
-        which sub type to select. When the user choose the type, the sub model is
-        rendered using this helper under the hood.
         """
 
 
