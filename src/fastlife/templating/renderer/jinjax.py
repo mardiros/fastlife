@@ -266,7 +266,7 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
     Build the path containing templates.
 
     Path may be absolute directories or directories relative to a python
-    package. For instance, the `fastlife:templates` is the directory templates
+    package. For instance, the `fastlife:components` is the directory components
     inside the fastlife installation dir.
 
     :param template_search_path: list of path separated by a comma (`,`).

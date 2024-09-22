@@ -41,8 +41,8 @@ def test_resolve_extended():
 
 
 def test_resolve_path(root_dir: Path):
-    path = resolver.resolve_path("fastlife:templates")
-    assert path == str(root_dir / "src" / "fastlife" / "templates")
+    path = resolver.resolve_path("fastlife:components")
+    assert path == str(root_dir / "src" / "fastlife" / "components")
 
 
 def test_resolve_path_error(root_dir: Path):

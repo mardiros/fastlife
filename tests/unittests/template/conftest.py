@@ -11,7 +11,7 @@ template_path = str(Path(__file__).parent / "components")
 
 @pytest.fixture()
 def renderer():
-    settings = Settings(template_search_path=f"{template_path},fastlife:templates")
+    settings = Settings(template_search_path=f"{template_path},fastlife:components")
     return JinjaxTemplateRenderer(settings)
 
 

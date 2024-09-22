@@ -17,7 +17,7 @@ def components_dir() -> Path:
 
 @pytest.fixture()
 def settings(components_dir: Path) -> Settings:
-    return Settings(template_search_path=f"{str(components_dir)},fastlife:templates")
+    return Settings(template_search_path=f"{str(components_dir)},fastlife:components")
 
 
 @pytest.fixture()

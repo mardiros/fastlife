@@ -51,7 +51,7 @@ def to_content(*filenames: str, version: str, selector: str) -> Iterator[str]:
 def write_fa(css_dir: Path, version: str) -> Iterator[str]:
     filename = "fontawesome.min.css"
     file = css_dir / filename
-    dir = root_dir / "src" / "fastlife" / "templates" / "fa"
+    dir = root_dir / "src" / "fastlife" / "components" / "fa"
     dir.mkdir(parents=True, exist_ok=True)
     for selector in yield_css_class(file):
         name = to_name(selector)
@@ -82,7 +82,7 @@ def to_content_brand(*filenames: str, version: str, selector: str) -> Iterator[s
 def write_fa_brands(css_dir: Path, version: str) -> Iterator[str]:
     filename = "brands.min.css"
     file = css_dir / filename
-    dir = root_dir / "src" / "fastlife" / "templates" / "fa" / "brands"
+    dir = root_dir / "src" / "fastlife" / "components" / "fa" / "brands"
     dir.mkdir(parents=True, exist_ok=True)
     for selector in yield_css_class(file):
         name = to_name(selector)
@@ -103,7 +103,7 @@ def write_fa_brands(css_dir: Path, version: str) -> Iterator[str]:
 # def write_fa_duotone(css_dir: Path, version: str) -> Iterator[str]:
 #     filename = "fontawesome.min.css"
 #     file = css_dir / filename
-#     dir = root_dir / "src" / "fastlife" / "templates" / "fa" / "duotone"
+#     dir = root_dir / "src" / "fastlife" / "components" / "fa" / "duotone"
 #     dir.mkdir(parents=True, exist_ok=True)
 #     for selector in yield_css_class(file):
 #         name = to_name(selector)
@@ -135,7 +135,7 @@ def main():
     fontawesome_path = Path(spec.origin).parent
     css_dir = fontawesome_path / "static" / "fontawesomefree" / "css"
 
-    icons_wall = root_dir / "tests" / "fastlife_app" / "templates" / "IconsWall.jinja"
+    icons_wall = root_dir / "tests" / "fastlife_app" / "components" / "IconsWall.jinja"
     icons_wall.unlink()
 
     with open(icons_wall, "w") as fw:

@@ -5,7 +5,7 @@ from fastlife.config.settings import Settings
 
 
 def test_resource_missing_path():
-    conf = Configurator(Settings(template_search_path="tests.fastlife_app:templates"))
+    conf = Configurator(Settings(template_search_path="tests.fastlife_app:components"))
     with pytest.raises(ConfigurationError) as ctx:
         conf.include("tests.unittests.configurator.my_broken_resource")
 
@@ -13,7 +13,7 @@ def test_resource_missing_path():
 
 
 def test_collection_missing_collection_path():
-    conf = Configurator(Settings(template_search_path="tests.fastlife_app:templates"))
+    conf = Configurator(Settings(template_search_path="tests.fastlife_app:components"))
     with pytest.raises(ConfigurationError) as ctx:
         conf.include("tests.unittests.configurator.my_broken_collection")
 

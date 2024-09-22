@@ -25,8 +25,14 @@ Render textarea widget for field of type text of event sequence.
   <div class="pt-4">
     <Label :for="widget.id">{{widget.title}}</Label>
     <pydantic_form.Error :text="widget.error" />
-    <Textarea :name="widget.name" :id="widget.id" :aria-label="widget.aria_label">{% for v in widget.value%}{{v}}
-{% endfor %}</Textarea>
+    <Textarea :name="widget.name" :id="widget.id" :aria-label="widget.aria_label">
+        {%- if v is string -%}
+        {{- v -}}}
+        {%- else -%}
+        {%- for v in widget.value %}{{v}}
+{% endfor -%}
+        {% endif %}
+    </Textarea>
     <pydantic_form.Hint :text="widget.hint" />
   </div>
 </pydantic_form.Widget>

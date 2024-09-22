@@ -21,12 +21,12 @@ class Settings(BaseSettings):
 
     fastlife_route_prefix: str = Field(default="/_fl")
     """Route prefix used for fastlife internal views."""
-    template_search_path: str = Field(default="fastlife:templates")
+    template_search_path: str = Field(default="fastlife:components")
     """
-    list of directories where templates could be found by the template engine.
+    list of directories where components could be found by the template engine.
 
     the list is a comma separated string. The directory resolution is made from
-    a python module name. for instance `fastlife:templates` is the direcotry templates
+    a python module name. for instance `fastlife:components` is the directory components
     found in the fastlife package.
     """
     registry_class: str = Field(default="fastlife.config.registry:AppRegistry")

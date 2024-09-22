@@ -10,7 +10,7 @@ from fastlife.config.configurator import Settings
 def build_app():
     conf = Configurator(
         Settings(
-            template_search_path="fastlife:templates,tests.fastlife_app:templates",
+            template_search_path="fastlife:components,tests.fastlife_app:templates",
             session_secret_key="supasickret",
             check_permission="tests.fastlife_app.security:check_permission",
             jinjax_auto_reload=True,
