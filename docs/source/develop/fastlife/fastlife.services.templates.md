@@ -46,27 +46,7 @@ Bases: {py:obj}`abc.ABC`
 :parser: myst
 ```
 
-````{py:method} pydantic_form(model: fastlife.request.form.FormModel[typing.Any], *, token: typing.Optional[str] = None) -> markupsafe.Markup
-:canonical: fastlife.services.templates.AbstractTemplateRenderer.pydantic_form
-:abstractmethod:
-
-```{autodoc2-docstring} fastlife.services.templates.AbstractTemplateRenderer.pydantic_form
-:parser: myst
-```
-
-````
-
-````{py:method} pydantic_form_field(model: typing.Type[typing.Any], *, name: str | None, token: str | None, removable: bool, field: pydantic.fields.FieldInfo | None) -> markupsafe.Markup
-:canonical: fastlife.services.templates.AbstractTemplateRenderer.pydantic_form_field
-:abstractmethod:
-
-```{autodoc2-docstring} fastlife.services.templates.AbstractTemplateRenderer.pydantic_form_field
-:parser: myst
-```
-
-````
-
-````{py:method} render(template: str, *, content_type: str = 'text/html', globals: typing.Optional[typing.Mapping[str, typing.Any]] = None, params: fastlife.services.templates.TemplateParams, _create_csrf_token: typing.Callable[..., str] = create_csrf_token) -> fastlife.Response
+````{py:method} render(template: str, *, content_type: str = 'text/html', globals: typing.Mapping[str, typing.Any] | None = None, params: fastlife.services.templates.TemplateParams, _create_csrf_token: typing.Callable[..., str] = create_csrf_token) -> fastlife.Response
 :canonical: fastlife.services.templates.AbstractTemplateRenderer.render
 
 ```{autodoc2-docstring} fastlife.services.templates.AbstractTemplateRenderer.render
@@ -75,7 +55,7 @@ Bases: {py:obj}`abc.ABC`
 
 ````
 
-````{py:method} render_template(template: str, *, globals: typing.Optional[typing.Mapping[str, typing.Any]] = None, **params: typing.Any) -> str
+````{py:method} render_template(template: str, *, globals: typing.Mapping[str, typing.Any] | None = None, **params: typing.Any) -> str
 :canonical: fastlife.services.templates.AbstractTemplateRenderer.render_template
 :abstractmethod:
 

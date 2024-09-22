@@ -146,16 +146,6 @@ Bases: {py:obj}`fastlife.services.templates.AbstractTemplateRenderer`
 
 ````
 
-````{py:method} pydantic_form(model: fastlife.request.form.FormModel[typing.Any], *, token: typing.Optional[str] = None) -> markupsafe.Markup
-:canonical: fastlife.adapters.jinjax.renderer.JinjaxRenderer.pydantic_form
-
-````
-
-````{py:method} pydantic_form_field(model: typing.Type[typing.Any], *, name: str | None, token: str | None, removable: bool, field: pydantic.fields.FieldInfo | None) -> markupsafe.Markup
-:canonical: fastlife.adapters.jinjax.renderer.JinjaxRenderer.pydantic_form_field
-
-````
-
 ````{py:method} render_template(template: str, *, globals: typing.Optional[typing.Mapping[str, typing.Any]] = None, **params: typing.Any) -> str
 :canonical: fastlife.adapters.jinjax.renderer.JinjaxRenderer.render_template
 

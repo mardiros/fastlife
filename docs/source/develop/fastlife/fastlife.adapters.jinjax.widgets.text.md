@@ -57,10 +57,10 @@ Bases: {py:obj}`fastlife.adapters.jinjax.widgets.base.Widget`\[{py:obj}`str`\]
 
 `````
 
-`````{py:class} TextareaWidget(name: str, *, title: typing.Optional[str], hint: typing.Optional[str] = None, aria_label: typing.Optional[str] = None, placeholder: typing.Optional[str] = None, error: str | None = None, value: str = '', removable: bool = False, token: str)
+`````{py:class} TextareaWidget(name: str, *, title: typing.Optional[str], hint: typing.Optional[str] = None, aria_label: typing.Optional[str] = None, placeholder: typing.Optional[str] = None, error: str | None = None, value: typing.Optional[collections.abc.Sequence[str]] = None, removable: bool = False, token: str)
 :canonical: fastlife.adapters.jinjax.widgets.text.TextareaWidget
 
-Bases: {py:obj}`fastlife.adapters.jinjax.widgets.base.Widget`\[{py:obj}`str`\]
+Bases: {py:obj}`fastlife.adapters.jinjax.widgets.base.Widget`\[{py:obj}`collections.abc.Sequence`\[{py:obj}`str`\]\]
 
 ```{autodoc2-docstring} fastlife.adapters.jinjax.widgets.text.TextareaWidget
 :parser: myst

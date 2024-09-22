@@ -264,7 +264,7 @@ class Configurator:
         Add an API route to the app.
 
         Fastlife does not use a decorator to attach routes, instead the decorator
-        :func:`fastlife.config.configurator.configure` has to be used to
+        {func}`fastlife.config.configurator.configure` has to be used to
         inject routes inside a method and call the add_route method.
 
         This route has to be used to add API Route, by API, to expose it in the
@@ -273,7 +273,7 @@ class Configurator:
         To add a route that serve HTML user the method {meth}`Configurator.add_route`
 
         :param name: name of the route, used to build route from the helper
-            :meth:`fastlife.request.request.Request.url_for` in order to create links.
+            {meth}`fastlife.request.request.Request.url_for` in order to create links.
         :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
             parameters.
         :param endpoint: the function that will reveive the request.
@@ -356,7 +356,7 @@ class Configurator:
         can decorate view functions.
 
         :param name: name of the route, used to build route from the helper
-            :meth:`fastlife.request.request.Request.url_for` in order to create links.
+            {meth}`fastlife.request.request.Request.url_for` in order to create links.
         :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
             parameters.
         :param endpoint: the function that will reveive the request.

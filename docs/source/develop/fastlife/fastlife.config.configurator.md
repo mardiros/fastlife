@@ -116,6 +116,15 @@ Bases: {py:obj}`Exception`
 
 ````
 
+````{py:method} add_renderer(file_ext: str, renderer: fastlife.services.templates.AbstractTemplateRendererFactory) -> typing.Self
+:canonical: fastlife.config.configurator.Configurator.add_renderer
+
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_renderer
+:parser: myst
+```
+
+````
+
 ````{py:method} add_route(name: str, path: str, endpoint: typing.Callable[..., typing.Any], *, permission: str | None = None, template: str | None = None, status_code: int | None = None, methods: list[str] | None = None) -> typing.Self
 :canonical: fastlife.config.configurator.Configurator.add_route
 

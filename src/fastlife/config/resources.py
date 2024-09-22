@@ -161,7 +161,7 @@ def resource_view(
     openapi_extra: dict[str, Any] | None = None,
 ) -> Callable[..., Any]:
     """ "
-    Decorator to use on a method of a class decorated with :func:`resource` in order
+    Decorator to use on a method of a class decorated with {func}`resource` in order
     to add OpenAPI information.
 
     This decorator has an effect if the decoratated method is named `collection_get`,

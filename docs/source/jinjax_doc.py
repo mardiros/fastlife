@@ -226,12 +226,12 @@ class JinjaxDomain(Domain):
 
         The reference comes from an "any" or similar role, which means that we
         don't know the type.  Otherwise, the arguments are the same as for
-        :meth:`resolve_xref`.
+        {meth}`JinjaxDomain.resolve_xref`.
 
         The method must return a list (potentially empty) of tuples
         ``('domain:role', newnode)``, where ``'domain:role'`` is the name of a
         role that could have created the same reference, e.g. ``'py:func'``.
-        ``newnode`` is what :meth:`resolve_xref` would return.
+        ``newnode`` is what {meth}`JinjaxDomain.resolve_xref` would return.
 
         .. versionadded:: 1.3
         """

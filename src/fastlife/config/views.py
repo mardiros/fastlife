@@ -37,11 +37,11 @@ def view_config(
     A decorator function to add a view in the app.
 
     :param name: name of the route, used to build route from the helper
-        :meth:`fastlife.request.request.Request.url_for` in order to create links.
+        {meth}`fastlife.request.request.Request.url_for` in order to create links.
     :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
         parameters.
     :param permission: a permission to validate by the
-        :attr:`fastlife.config.settings.Settings.check_permission` function.
+        {attr}`fastlife.config.settings.Settings.check_permission` function.
     :param methods: restrict route to a list of http methods.
 
     :return: the configuration callback.

@@ -27,7 +27,7 @@ class Route(APIRoute):
     the startup and keep the registry during the lifetime of the application.
 
     this variable should be accessed via the request object or the
-    :class:`fastlife.config.Registry` depenency injection.
+    {class}`fastlife.config.Registry` depenency injection.
     """
 
     def get_route_handler(
