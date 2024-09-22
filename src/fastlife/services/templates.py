@@ -19,6 +19,8 @@ from fastlife import Request, Response
 from fastlife.request.form import FormModel
 from fastlife.security.csrf import create_csrf_token
 
+TemplateParams = Mapping[str, Any]
+
 
 class AbstractTemplateRenderer(abc.ABC):
     """
@@ -43,7 +45,7 @@ class AbstractTemplateRenderer(abc.ABC):
         *,
         content_type: str = "text/html",
         globals: Optional[Mapping[str, Any]] = None,
-        params: Mapping[str, Any],
+        params: TemplateParams,
         _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Response:
         """

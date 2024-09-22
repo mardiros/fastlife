@@ -1,4 +1,6 @@
-"""Template rending based on JinjaX."""
+"""
+Template rending based on JinjaX.
+"""
 
 import ast
 import logging
@@ -122,6 +124,12 @@ def generate_docstring(
 
 
 class InspectableComponent(Component):
+    """
+    JinjaX Components override that support intropspection.
+
+    The Component class of JinjaX does not support documentation by default.
+    """
+
     __slots__ = (
         "name",
         "prefix",
@@ -159,6 +167,7 @@ class InspectableComponent(Component):
         self.source = source
 
     def as_def(self) -> ast.FunctionDef:
+        """Return the component definition as a python function definition."""
         signature = "def component(): pass"
         match = RX_META_HEADER.match(self.source)
         if match:
@@ -207,6 +216,7 @@ def component():
         return cast(ast.FunctionDef, astree.body[0])
 
     def build_docstring(self) -> str:
+        """Build a rst docstring for the jinjax component."""
         func_def = self.as_def()
         prefix = f"{self.prefix}." if self.prefix else ""
         ret = ".. jinjax:component:: " + generate_docstring(
@@ -217,6 +227,8 @@ def component():
 
 class InspectableCatalog(Catalog):
     """
+    JinjaX Catalog with introspection support.
+
     Override the catalog in order to iterate over components to build the doc.
     """
 
@@ -225,6 +237,12 @@ class InspectableCatalog(Catalog):
         ignores: Sequence[re.Pattern[str]] | None = None,
         includes: Sequence[re.Pattern[str]] | None = None,
     ) -> Iterator[InspectableComponent]:
+        """
+        Walk into every templates from the settings, iterate over components.
+
+        :params ignores: filter components using an block list.
+        :params includes: filter components using an allowed list.
+        """
         for prefix, loader in self.prefixes.items():
             for t in loader.list_templates():
                 name, file_ext = t.split(".", maxsplit=1)

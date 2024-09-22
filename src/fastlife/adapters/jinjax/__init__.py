@@ -1,4 +1,4 @@
-"""Template renderer."""
+"""Main template renderer based on JinjaX."""
 
 from .renderer import JinjaxTemplateRenderer
 

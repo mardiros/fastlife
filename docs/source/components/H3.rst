@@ -1,0 +1,10 @@
+H3
+==
+
+.. jinjax:component:: H3(id: str | None = None, class_: str | None = None, content: Any)
+
+    html ``<h3>`` node.
+
+    :param id: unique identifier of the element.
+    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.H3_CLASS`.
+    :param content: child node.
