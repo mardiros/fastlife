@@ -1,9 +1,9 @@
 {# doc display widget for union type field #}
 {# def
-widget: Annotated[fastlife.templates.renderer.widgets.base.Widget, "widget to display."],
-child: Annotated[fastlife.templates.renderer.widgets.base.Widget, "current widget if any"],
-types: Annotated[Sequence[fastlife.templates.renderer.widgets.base.TypeWrapper], "Child types to choose"],
-parent_type: Annotated[fastlife.templates.renderer.widgets.base.TypeWrapper, "parent type"]
+widget: Annotated[fastlife.adapters.jinjax.widgets.base.Widget, "widget to display."],
+child: Annotated[fastlife.adapters.jinjax.widgets.base.Widget, "current widget if any"],
+types: Annotated[Sequence[fastlife.adapters.jinjax.widgets.base.TypeWrapper], "Child types to choose"],
+parent_type: Annotated[fastlife.adapters.jinjax.widgets.base.TypeWrapper, "parent type"]
 #}
 
 <pydantic_form.Widget :widget="widget">

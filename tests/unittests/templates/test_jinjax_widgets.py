@@ -6,16 +6,16 @@ import bs4
 import pytest
 from pydantic import BaseModel
 
-from fastlife.templates.renderer.jinjax import AbstractTemplateRenderer
-from fastlife.templates.renderer.widgets.base import Widget
-from fastlife.templates.renderer.widgets.boolean import BooleanWidget
-from fastlife.templates.renderer.widgets.checklist import Checkable, ChecklistWidget
-from fastlife.templates.renderer.widgets.dropdown import DropDownWidget
-from fastlife.templates.renderer.widgets.hidden import HiddenWidget
-from fastlife.templates.renderer.widgets.model import ModelWidget
-from fastlife.templates.renderer.widgets.sequence import SequenceWidget
-from fastlife.templates.renderer.widgets.text import TextWidget
-from fastlife.templates.renderer.widgets.union import UnionWidget
+from fastlife.adapters.jinjax.widgets.base import Widget
+from fastlife.adapters.jinjax.widgets.boolean import BooleanWidget
+from fastlife.adapters.jinjax.widgets.checklist import Checkable, ChecklistWidget
+from fastlife.adapters.jinjax.widgets.dropdown import DropDownWidget
+from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
+from fastlife.adapters.jinjax.widgets.model import ModelWidget
+from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
+from fastlife.adapters.jinjax.widgets.text import TextareaWidget, TextWidget
+from fastlife.adapters.jinjax.widgets.union import UnionWidget
+from fastlife.services.templates import AbstractTemplateRenderer
 
 
 class Foo(BaseModel):

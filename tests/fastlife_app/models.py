@@ -2,7 +2,7 @@ from typing import Annotated, Any, Literal, Sequence, Set
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
-from fastlife.templates.renderer.widgets.base import Widget
+from fastlife.adapters.jinjax.widgets.base import Widget
 
 
 class GroupsChoice(Widget[Any]):

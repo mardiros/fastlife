@@ -15,18 +15,18 @@ from markupsafe import Markup
 from pydantic import BaseModel, EmailStr, SecretStr, ValidationError
 from pydantic.fields import FieldInfo
 
+from fastlife.adapters.jinjax.widgets.base import Widget
+from fastlife.adapters.jinjax.widgets.boolean import BooleanWidget
+from fastlife.adapters.jinjax.widgets.checklist import Checkable, ChecklistWidget
+from fastlife.adapters.jinjax.widgets.dropdown import DropDownWidget
+from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
+from fastlife.adapters.jinjax.widgets.model import ModelWidget
+from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
+from fastlife.adapters.jinjax.widgets.text import TextWidget
+from fastlife.adapters.jinjax.widgets.union import UnionWidget
 from fastlife.request.form import FormModel
 from fastlife.services.templates import AbstractTemplateRenderer
 from fastlife.shared_utils.infer import is_complex_type, is_union
-from fastlife.templates.renderer.widgets.base import Widget
-from fastlife.templates.renderer.widgets.boolean import BooleanWidget
-from fastlife.templates.renderer.widgets.checklist import Checkable, ChecklistWidget
-from fastlife.templates.renderer.widgets.dropdown import DropDownWidget
-from fastlife.templates.renderer.widgets.hidden import HiddenWidget
-from fastlife.templates.renderer.widgets.model import ModelWidget
-from fastlife.templates.renderer.widgets.sequence import SequenceWidget
-from fastlife.templates.renderer.widgets.text import TextWidget
-from fastlife.templates.renderer.widgets.union import UnionWidget
 
 
 class WidgetFactory:

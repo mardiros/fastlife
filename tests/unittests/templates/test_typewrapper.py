@@ -2,7 +2,7 @@ from typing import Any, Mapping, Optional, Union
 
 import pytest
 
-from fastlife.templates.renderer.widgets.base import TypeWrapper
+from fastlife.adapters.jinjax.widgets.base import TypeWrapper
 from tests.fastlife_app.models import Account, Email, PhoneNumber
 
 

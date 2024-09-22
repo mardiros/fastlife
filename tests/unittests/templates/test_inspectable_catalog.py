@@ -2,8 +2,7 @@ import re
 
 import pytest
 
-from fastlife.config.settings import Settings
-from fastlife.templates.renderer.jinjax import (
+from fastlife.adapters.jinjax.renderer import (
     InspectableComponent,
     JinjaxTemplateRenderer,
     has_content,
@@ -59,7 +58,7 @@ content: Any)
     :param href: target link.
     :param id: unique identifier of the element.
     :param class: css class for the node, defaults to \
-:attr:`fastlife.templates.renderer.constants.Constants.A_CLASS`.
+:attr:`fastlife.templates.constants.Constants.A_CLASS`.
     :param hx_target: target the element for swapping than the one issuing the AJAX \
 request.
     :param hx_select: select the content swapped from response of the AJAX request.
@@ -85,7 +84,7 @@ def test_jinjax_template_includes() -> None:
         docstring
         == """\
 .. jinjax:component:: pydantic_form.Widget(widget: \
-fastlife.templates.renderer.widgets.base.Widget, content: Any)
+fastlife.adapters.jinjax.widgets.base.Widget, content: Any)
 
     Base component for widget
 
@@ -145,7 +144,7 @@ open: bool = True, content: Any)
 
     :param id: unique identifier of the element.
     :param class: css class for the node, defaults to \
-:attr:`fastlife.templates.renderer.constants.Constants.DETAILS_CLASS`.
+:attr:`fastlife.templates.constants.Constants.DETAILS_CLASS`.
     :param open: open/close state.
     :param content: child node.
 """

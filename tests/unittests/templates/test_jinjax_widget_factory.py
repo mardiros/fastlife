@@ -4,9 +4,9 @@ from typing import Annotated, Any, Callable, Literal, Sequence, Set
 import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
+from fastlife.adapters.jinjax.renderer import JinjaxRenderer
+from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.request.form import FormModel
-from fastlife.templates.renderer.jinjax import JinjaxRenderer
-from fastlife.templates.renderer.widgets.base import Widget
 
 
 class CustomWidget(Widget[Any]):

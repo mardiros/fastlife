@@ -14,8 +14,8 @@ from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
 from sphinx.util import relative_uri  # type: ignore
 
+from fastlife.adapters.jinjax.renderer import JinjaxTemplateRenderer
 from fastlife.config.settings import Settings
-from fastlife.templates.renderer.jinjax import JinjaxTemplateRenderer
 
 
 def create_ref_node(arg_type: str) -> nodes.Node:

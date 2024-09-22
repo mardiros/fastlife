@@ -9,7 +9,7 @@ class HiddenWidget(Widget[str]):
 
     ::
         from pydantic import BaseModel
-        from fastlife.templates.renderer.widgets.hidden import HiddenWidget
+        from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
 
         class MyForm(BaseModel):
             id: Annotated[str, HiddenWidget] = Field(...)

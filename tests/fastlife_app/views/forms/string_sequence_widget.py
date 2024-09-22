@@ -2,7 +2,7 @@ from typing import Annotated, Any, Sequence
 
 from pydantic import BaseModel, Field, field_validator
 
-from fastlife.templates.renderer.widgets.text import TextareaWidget
+from fastlife.adapters.jinjax.widgets.text import TextareaWidget
 
 
 class Form(BaseModel):

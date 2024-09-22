@@ -4,7 +4,7 @@ from typing import Iterator
 import bs4
 import pytest
 
-from fastlife.templates.renderer.jinjax import JinjaxRenderer
+from fastlife.adapters.jinjax.renderer import JinjaxRenderer
 
 
 @pytest.fixture(scope="module")

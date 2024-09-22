@@ -28,7 +28,7 @@ class AppRegistry:
         self.check_permission = resolve(settings.check_permission)
         self.renderers = {
             f".{settings.jinjax_file_ext}": resolve(
-                "fastlife.templates.renderer.jinjax:JinjaxTemplateRenderer"
+                "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"
             )(settings),
         }
 

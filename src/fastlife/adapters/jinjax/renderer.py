@@ -27,8 +27,8 @@ from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
 from fastlife import Request
+from fastlife.adapters.jinjax.widgets.factory import WidgetFactory
 from fastlife.request.form import FormModel
-from fastlife.templates.renderer.widgets.factory import WidgetFactory
 
 if TYPE_CHECKING:
     from fastlife.config.settings import Settings  # coverage: ignore

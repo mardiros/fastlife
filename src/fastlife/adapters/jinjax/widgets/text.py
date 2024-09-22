@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from typing import Optional
 
 from .base import Widget
@@ -49,12 +50,12 @@ class TextWidget(Widget[str]):
         return "pydantic_form.Text.jinja"
 
 
-class TextareaWidget(Widget[str]):
+class TextareaWidget(Widget[Sequence[str]]):
     """
     Render a Textearea for a string or event a sequence of string.
 
     ```
-    from fastlife.templates.renderer.widgets.text import TextareaWidget
+    from fastlife.adapters.jinjax.widgets.text import TextareaWidget
     from pydantic import BaseModel, Field, field_validator
 
     class TaggedParagraphForm(BaseModel):
@@ -91,13 +92,13 @@ class TextareaWidget(Widget[str]):
         aria_label: Optional[str] = None,
         placeholder: Optional[str] = None,
         error: str | None = None,
-        value: str = "",
+        value: Optional[Sequence[str]] = None,
         removable: bool = False,
         token: str,
     ) -> None:
         super().__init__(
             name,
-            value=value,
+            value=value or [],
             title=title,
             hint=hint,
             aria_label=aria_label,
