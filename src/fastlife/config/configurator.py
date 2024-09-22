@@ -14,14 +14,16 @@ phase.
 import importlib
 import inspect
 import logging
+from collections.abc import Mapping
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Any, Callable, Self, Tuple, Type, cast
+from typing import TYPE_CHECKING, Annotated, Any, Callable, Self, Tuple, Type, cast
 
 import venusian
 from fastapi import Depends, FastAPI
 from fastapi import Request as BaseRequest
+from fastapi import Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
@@ -338,6 +340,7 @@ class Configurator:
         endpoint: Callable[..., Any],
         *,
         permission: str | None = None,
+        template: str | None = None,
         status_code: int | None = None,
         methods: list[str] | None = None,
     ) -> Self:
@@ -364,6 +367,21 @@ class Configurator:
         dependencies: list[DependsType] = []
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
+
+        if template:
+
+            def render(
+                request: Request,
+                resp: Annotated[Response | Mapping[str, Any], Depends(endpoint)],
+            ) -> Response:
+                if isinstance(resp, Response):
+                    return resp
+                return request.registry.renderer(request).render(
+                    template,
+                    params=resp,
+                )
+
+            endpoint = render
 
         self.router.add_api_route(
             path,

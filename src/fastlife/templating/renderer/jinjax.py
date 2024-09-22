@@ -17,7 +17,6 @@ from typing import (
     cast,
 )
 
-from fastapi import Request
 from jinja2 import Template
 from jinja2.exceptions import TemplateSyntaxError
 from jinjax import InvalidArgument
@@ -27,6 +26,7 @@ from jinjax.exceptions import DuplicateDefDeclaration
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
+from fastlife import Request
 from fastlife.request.form import FormModel
 from fastlife.templating.renderer.widgets.factory import WidgetFactory
 
@@ -290,15 +290,9 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self,
         catalog: InspectableCatalog,
         request: Request,
-        csrf_token_name: str,
-        form_data_model_prefix: str,
-        route_prefix: str,
     ):
-        self.route_prefix = route_prefix
+        super().__init__(request)
         self.catalog = catalog
-        self.request = request
-        self.csrf_token_name = csrf_token_name
-        self.form_data_model_prefix = form_data_model_prefix
         self.globals: MutableMapping[str, Any] = {}
 
     def build_globals(self) -> Mapping[str, Any]:
@@ -308,15 +302,17 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         * `request` is the {class}`current request <fastlife.request.request.Request>`
         * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
         """
-        return {
+        settings = self.request.registry.settings
+        ret = {
             "request": self.request,
             "csrf_token": {
-                "name": self.csrf_token_name,
-                "value": self.request.scope.get(self.csrf_token_name, ""),
+                "name": settings.csrf_token_name,
+                "value": self.request.scope.get(settings.csrf_token_name, ""),
             },
             "pydantic_form": self.pydantic_form,
             **self.globals,
         }
+        return ret
 
     def render_template(
         self,
@@ -351,7 +347,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
                 model,
                 form_data={},
                 form_errors={},
-                prefix=(name or self.form_data_model_prefix),
+                prefix=(name or self.request.registry.settings.form_data_model_prefix),
                 removable=removable,
                 field=field,
             )
@@ -366,13 +362,7 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
     :param settings: setting used to configure jinjax.
     """
 
-    route_prefix: str
-    """Used to prefix url to fetch fast life widgets."""
-
     def __init__(self, settings: "Settings") -> None:
-        self.route_prefix = settings.fastlife_route_prefix
-        self.form_data_model_prefix = settings.form_data_model_prefix
-        self.csrf_token_name = settings.csrf_token_name
         globals = resolve(settings.jinjax_global_catalog_class)().model_dump()
 
         self.catalog = InspectableCatalog(
@@ -388,7 +378,4 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
         return JinjaxRenderer(
             self.catalog,
             request,
-            self.csrf_token_name,
-            self.form_data_model_prefix,
-            self.route_prefix,
         )

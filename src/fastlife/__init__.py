@@ -1,4 +1,4 @@
-from fastapi import Request, Response
+from fastapi import Response
 
 from .config import (
     Configurator,
@@ -9,6 +9,7 @@ from .config import (
     resource_view,
     view_config,
 )
+from .request import Request
 
 # from .request.form_data import model
 from .templating import Template, template

@@ -2,8 +2,10 @@ from pathlib import Path
 
 import bs4
 import pytest
-from fastapi import Request
+from fastapi import Request as FastApiRequest
 
+from fastlife import Request
+from fastlife.config.registry import Registry
 from fastlife.config.settings import Settings
 from fastlife.templating.renderer.jinjax import JinjaxTemplateRenderer
 
@@ -14,7 +16,12 @@ def components_dir() -> Path:
 
 
 @pytest.fixture()
-def dummy_request() -> Request:
+def settings(components_dir: Path) -> Settings:
+    return Settings(template_search_path=f"{str(components_dir)},fastlife:templates")
+
+
+@pytest.fixture()
+def dummy_request(dummy_registry: Registry) -> Request:
     scope = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
@@ -23,15 +30,12 @@ def dummy_request() -> Request:
         "server": ("testserver", 80),
         "path": "/",
     }
-    req = Request(scope)
+    req = Request(dummy_registry, FastApiRequest(scope))
     return req
 
 
 @pytest.fixture()
-def renderer(dummy_request: Request, components_dir: Path):
-    settings = Settings(
-        template_search_path=f"{str(components_dir)},fastlife:templates"
-    )
+def renderer(settings: Settings, dummy_request: Request):
     return JinjaxTemplateRenderer(settings)(dummy_request)
 
 

@@ -31,20 +31,9 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
         reg = request.registry
 
         def parametrizer(**kwargs: Any) -> Response:
-            request.scope[reg.settings.csrf_token_name] = (
-                request.cookies.get(reg.settings.csrf_token_name)
-                or _create_csrf_token()
+            return reg.renderer(request).render(
+                template, content_type=content_type, params=kwargs
             )
-            data = reg.renderer(request).render_template(template, **kwargs)
-            resp = Response(data, headers={"Content-Type": content_type})
-            resp.set_cookie(
-                reg.settings.csrf_token_name,
-                request.scope[reg.settings.csrf_token_name],
-                secure=request.url.scheme == "https",
-                samesite="strict",
-                max_age=60 * 15,
-            )
-            return resp
 
         return parametrizer
 

@@ -8,14 +8,16 @@ the rendering engine, it can be overriden from the setting
 In that case, those base classes have to be implemented.
 
 """
-import abc
-from typing import Any, Mapping, Optional, Type
 
-from fastapi import Request
+import abc
+from typing import Any, Callable, Mapping, Optional, Type
+
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
+from fastlife import Request, Response
 from fastlife.request.form import FormModel
+from fastlife.security.csrf import create_csrf_token
 
 
 class AbstractTemplateRenderer(abc.ABC):
@@ -24,8 +26,44 @@ class AbstractTemplateRenderer(abc.ABC):
     passing the request to process.
     """
 
-    route_prefix: str
-    """Used to buid pydantic form."""
+    request: Request
+    """Associated request that needs a response."""
+
+    def __init__(self, request: Request) -> None:
+        self.request = request
+
+    @property
+    def route_prefix(self) -> str:
+        """Used to buid pydantic form widget that do ajax requests."""
+        return self.request.registry.settings.fastlife_route_prefix
+
+    def render(
+        self,
+        template: str,
+        *,
+        content_type: str = "text/html",
+        globals: Optional[Mapping[str, Any]] = None,
+        params: Mapping[str, Any],
+        _create_csrf_token: Callable[..., str] = create_csrf_token,
+    ) -> Response:
+        """
+        Render the template and build the HTTP Response.
+        """
+        request = self.request
+        reg = request.registry
+        request.scope[reg.settings.csrf_token_name] = (
+            request.cookies.get(reg.settings.csrf_token_name) or _create_csrf_token()
+        )
+        data = self.render_template(template, **params)
+        resp = Response(data, headers={"Content-Type": content_type})
+        resp.set_cookie(
+            reg.settings.csrf_token_name,
+            request.scope[reg.settings.csrf_token_name],
+            secure=request.url.scheme == "https",
+            samesite="strict",
+            max_age=60 * 15,
+        )
+        return resp
 
     @abc.abstractmethod
     def render_template(
