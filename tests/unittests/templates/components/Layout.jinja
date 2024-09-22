@@ -1,4 +1,4 @@
-{# def page_title #}
+{# def page_title: str = "untitled" #}
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,6 +6,6 @@
     <title>{{ page_title }}</title>
   </head>
   <body>
-    {{content}}
+    {{- content -}}
   </body>
 </html>

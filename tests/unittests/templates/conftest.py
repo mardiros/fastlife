@@ -2,12 +2,11 @@ from pathlib import Path
 
 import bs4
 import pytest
+
 from fastapi import Request as FastApiRequest
 
-from fastlife import Request
-from fastlife.config.registry import Registry
-from fastlife.config.settings import Settings
-from fastlife.templates.renderer.jinjax import JinjaxTemplateRenderer
+from fastlife import Request, Registry, Settings
+from fastlife.templates.renderer import JinjaxTemplateRenderer
 
 
 @pytest.fixture(scope="session")

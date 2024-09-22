@@ -1,4 +1,5 @@
 from typing import Any, Callable, Mapping
+import textwrap
 
 import bs4
 import pytest
@@ -21,23 +22,20 @@ class Foo(BaseModel):
 
 
 def test_render_template(renderer: AbstractTemplateRenderer):
-    res = renderer.render_template("Page.jinja")
-    assert (
-        res
-        == """\
-<!DOCTYPE html>
-<html>
+    res = renderer.render_template("Page.jinja", page_title="dummy title")
+    assert res == textwrap.dedent(
+        """
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8" />
+            <title>dummy title</title>
+          </head>
+          <body><div>Hello World</div></body>
+        </html>
+        """
+    ).strip()
 
-<head>
-  <meta charset="utf-8" />
-  <title>Fastlife</title>
-</head>
-
-<body><div>Hello World</div></body>
-
-</html>\
-"""
-    )
 
 
 def test_render_boolean(
@@ -133,6 +131,27 @@ def test_render_text_removable(
     result = text.to_html(renderer)
     html = soup(result)
     assert html.find("button", attrs={"type": "button"})
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        pytest.param("foobar", "foobar", id="str"),
+        pytest.param(["foo", "bar"], "foo\nbar", id="sequence"),
+    ],
+)
+def test_render_textarea(
+    renderer: AbstractTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+    value: str | Sequence[str],
+    expected: str,
+):
+    hid = TextareaWidget("foo", title="Foo", value=["foo", "bar"], token="x")
+    result = hid.to_html(renderer)
+    html = soup(result)
+    textarea = html.find("textarea", attrs={"id": "foo-x", "name": "foo"})
+    assert textarea
+    assert textarea.text == "foo\nbar"
 
 
 def test_render_model(

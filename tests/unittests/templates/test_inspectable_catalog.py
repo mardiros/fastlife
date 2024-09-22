@@ -8,6 +8,7 @@ from fastlife.templates.renderer.jinjax import (
     JinjaxTemplateRenderer,
     has_content,
 )
+from fastlife.config.settings import Settings
 
 
 @pytest.mark.parametrize(
