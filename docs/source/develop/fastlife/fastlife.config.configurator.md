@@ -152,7 +152,7 @@ Bases: {py:obj}`Exception`
 
 ````
 
-````{py:method} set_api_documentation_info(title: str, version: str) -> typing.Self
+````{py:method} set_api_documentation_info(title: str, version: str, description: str, summary: str | None = None) -> typing.Self
 :canonical: fastlife.config.configurator.Configurator.set_api_documentation_info
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.set_api_documentation_info

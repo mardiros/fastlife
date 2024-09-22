@@ -339,36 +339,16 @@ class Configurator:
         *,
         permission: str | None = None,
         status_code: int | None = None,
-        # tags: list[Union[str, Enum]] | None = None,
-        # summary: Optional[str] = None,
-        # description: Optional[str] = None,
-        # response_description: str = "Successful Response",
-        # responses: Optional[Dict[Union[int, str], Dict[str, Any]]] = None,
-        # deprecated: Optional[bool] = None,
         methods: list[str] | None = None,
-        # operation_id: Optional[str] = None,
-        # response_model: Any = Default(None),
-        # response_model_include: Optional[IncEx] = None,
-        # response_model_exclude: Optional[IncEx] = None,
-        # response_model_by_alias: bool = True,
-        # response_model_exclude_unset: bool = False,
-        # response_model_exclude_defaults: bool = False,
-        # response_model_exclude_none: bool = False,
-        # include_in_schema: bool = True,
-        # response_class: Union[Type[Response], DefaultPlaceholder] = Default(
-        #     HTMLResponse
-        # ),
-        # openapi_extra: Optional[Dict[str, Any]] = None,
-        # generate_unique_id_function: Callable[[APIRoute], str] = Default(
-        #     generate_unique_id
-        # ),
     ) -> Self:
         """
         Add a route to the app.
 
-        Fastlife does not use a decorator to attach routes, instead the decorator
-        :func:`fastlife.config.configurator.configure` has to be used to
-        inject routes inside a method and call the add_route method.
+        Fastlife does not use the FastAPI decorator to attach routes, instead the
+        decorator {func}`@configure <fastlife.config.configurator.configure>` has to
+        be used to inject routes inside a method and call the add_route method.
+        Or the decorator {func}`@view_config <fastlife.config.views.view_config>`
+        can decorate view functions.
 
         :param name: name of the route, used to build route from the helper
             :meth:`fastlife.request.request.Request.url_for` in order to create links.
@@ -388,28 +368,11 @@ class Configurator:
         self.router.add_api_route(
             path,
             endpoint,
-            # response_model=response_model,
             status_code=status_code,
-            # tags=tags,
             dependencies=dependencies,
-            # summary=summary,
-            # description=description,
-            # response_description=response_description,
-            # responses=responses,
-            # deprecated=deprecated,
             methods=methods,
-            # operation_id=operation_id,
-            # response_model_include=response_model_include,
-            # response_model_exclude=response_model_exclude,
-            # response_model_by_alias=response_model_by_alias,
-            # response_model_exclude_unset=response_model_exclude_unset,
-            # response_model_exclude_defaults=response_model_exclude_defaults,
-            # response_model_exclude_none=response_model_exclude_none,
             include_in_schema=False,
-            # response_class=response_class,
             name=name,
-            # openapi_extra=openapi_extra,
-            # generate_unique_id_function=generate_unique_id_function,
         )
         return self
 
