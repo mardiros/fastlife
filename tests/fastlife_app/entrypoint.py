@@ -18,6 +18,7 @@ def build_app():
             api_redocs_url="/api/redoc",
         )
     )
+    conf.include("tests.fastlife_app.adapters")
     conf.include("tests.fastlife_app.views")
     conf.include("tests.fastlife_app.static")
     return conf.build_asgi_app()

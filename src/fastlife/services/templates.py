@@ -10,7 +10,7 @@ In that case, those base classes have to be implemented.
 """
 
 import abc
-from typing import Any, Callable, Mapping, Optional, Type
+from typing import Any, Callable, Mapping, Type
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
@@ -44,7 +44,7 @@ class AbstractTemplateRenderer(abc.ABC):
         template: str,
         *,
         content_type: str = "text/html",
-        globals: Optional[Mapping[str, Any]] = None,
+        globals: Mapping[str, Any] | None = None,
         params: TemplateParams,
         _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Response:
@@ -72,7 +72,7 @@ class AbstractTemplateRenderer(abc.ABC):
         self,
         template: str,
         *,
-        globals: Optional[Mapping[str, Any]] = None,
+        globals: Mapping[str, Any] | None = None,
         **params: Any,
     ) -> str:
         """
@@ -96,7 +96,7 @@ class AbstractTemplateRenderer(abc.ABC):
 
     @abc.abstractmethod
     def pydantic_form(
-        self, model: FormModel[Any], *, token: Optional[str] = None
+        self, model: FormModel[Any], *, token: str | None = None
     ) -> Markup:
         """
         Render an http form from a given model.

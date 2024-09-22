@@ -39,6 +39,7 @@ from fastlife.shared_utils.resolver import resolve
 from .settings import Settings
 
 if TYPE_CHECKING:
+    from fastlife.services.templates import AbstractTemplateRendererFactory
     from .registry import AppRegistry  # coverage: ignore
 
 log = logging.getLogger(__name__)
@@ -419,6 +420,19 @@ class Configurator:
             return handler(req, exc)
 
         self.exception_handlers.append((status_code_or_exc, exception_handler))
+        return self
+
+    def add_renderer(
+        self, file_ext: str, renderer: "AbstractTemplateRendererFactory"
+    ) -> Self:
+        """
+        Add a render for a given file extension.
+
+        :param file_ext: the file extention of your templates.
+        :param renderer: the renderer that will render the template.
+        """
+        # we don't want to expose the renderer publicly as mutable
+        self.registry.renderers[f".{file_ext.lstrip('.')}"] = renderer  # type: ignore
         return self
 
 

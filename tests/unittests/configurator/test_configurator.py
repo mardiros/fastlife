@@ -7,6 +7,7 @@ from fastlife.config.configurator import (
     OpenApiTag,
     Settings,
 )
+from fastlife.testing.testclient import WebTestClient
 
 # from fastlife.config.registry import cleanup_registry
 
@@ -31,3 +32,13 @@ def test_add_open_tag():
         conf.add_open_tag(OpenApiTag(name="foo", description="Foo's bar"))
 
     assert str(ctx.value) == "Tag foo can't be registered twice."
+
+
+def test_add_renderer(settings: Settings):
+    conf = Configurator(settings=settings)
+    conf.include("tests.fastlife_app.adapters")
+    conf.include("tests.fastlife_app.views")
+    app = conf.build_asgi_app()
+    client = WebTestClient(app, settings=settings)
+    resp = client.get("/f-string")
+    assert resp.text == "Hello world!\n"
