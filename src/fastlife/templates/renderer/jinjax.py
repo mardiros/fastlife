@@ -33,9 +33,11 @@ from fastlife.templates.renderer.widgets.factory import WidgetFactory
 if TYPE_CHECKING:
     from fastlife.config.settings import Settings  # coverage: ignore
 
+from fastlife.services.templates import (
+    AbstractTemplateRenderer,
+    AbstractTemplateRendererFactory,
+)
 from fastlife.shared_utils.resolver import resolve, resolve_path
-
-from .abstract import AbstractTemplateRenderer, AbstractTemplateRendererFactory
 
 log = logging.getLogger(__name__)
 

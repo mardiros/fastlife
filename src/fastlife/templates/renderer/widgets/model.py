@@ -2,7 +2,7 @@ from typing import Any, Sequence
 
 from markupsafe import Markup
 
-from fastlife.templates.renderer.abstract import AbstractTemplateRenderer
+from fastlife.services.templates import AbstractTemplateRenderer
 
 from .base import Widget
 

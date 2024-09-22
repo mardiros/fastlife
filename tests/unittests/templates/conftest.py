@@ -2,10 +2,9 @@ from pathlib import Path
 
 import bs4
 import pytest
-
 from fastapi import Request as FastApiRequest
 
-from fastlife import Request, Registry, Settings
+from fastlife import Registry, Request, Settings
 from fastlife.templates.renderer import JinjaxTemplateRenderer
 
 

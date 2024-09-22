@@ -6,7 +6,7 @@ from typing import Any, Optional, Sequence, Type, Union
 from markupsafe import Markup
 from pydantic import BaseModel
 
-from fastlife.templates.renderer.abstract import AbstractTemplateRenderer
+from fastlife.services.templates import AbstractTemplateRenderer
 
 from .base import TypeWrapper, Widget
 

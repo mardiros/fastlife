@@ -16,8 +16,8 @@ from pydantic import BaseModel, EmailStr, SecretStr, ValidationError
 from pydantic.fields import FieldInfo
 
 from fastlife.request.form import FormModel
+from fastlife.services.templates import AbstractTemplateRenderer
 from fastlife.shared_utils.infer import is_complex_type, is_union
-from fastlife.templates.renderer.abstract import AbstractTemplateRenderer
 from fastlife.templates.renderer.widgets.base import Widget
 from fastlife.templates.renderer.widgets.boolean import BooleanWidget
 from fastlife.templates.renderer.widgets.checklist import Checkable, ChecklistWidget

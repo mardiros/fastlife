@@ -4,8 +4,8 @@ from typing import Any, Generic, Mapping, Type, TypeVar
 
 from markupsafe import Markup
 
+from fastlife.services.templates import AbstractTemplateRenderer
 from fastlife.shared_utils.infer import is_union
-from fastlife.templates.renderer.abstract import AbstractTemplateRenderer
 
 T = TypeVar("T")
 

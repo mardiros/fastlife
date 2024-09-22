@@ -1,5 +1,6 @@
-from typing import Any, Callable, Mapping
 import textwrap
+from collections.abc import Sequence
+from typing import Any, Callable, Mapping
 
 import bs4
 import pytest
@@ -23,8 +24,10 @@ class Foo(BaseModel):
 
 def test_render_template(renderer: AbstractTemplateRenderer):
     res = renderer.render_template("Page.jinja", page_title="dummy title")
-    assert res == textwrap.dedent(
-        """
+    assert (
+        res
+        == textwrap.dedent(
+            """
         <!DOCTYPE html>
         <html>
           <head>
@@ -34,8 +37,8 @@ def test_render_template(renderer: AbstractTemplateRenderer):
           <body><div>Hello World</div></body>
         </html>
         """
-    ).strip()
-
+        ).strip()
+    )
 
 
 def test_render_boolean(

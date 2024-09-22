@@ -24,7 +24,8 @@ async def show_widget(
     field = None
     if title:
         field = FieldInfo(title=title)
-    data = reg.renderer(request).pydantic_form_field(
+    # FIXME: .jinja should not be hardcoded
+    data = reg.get_renderer(".jinja")(request).pydantic_form_field(
         model=model_cls,  # type: ignore
         name=name,
         token=token,

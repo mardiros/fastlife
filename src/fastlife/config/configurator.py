@@ -376,7 +376,7 @@ class Configurator:
             ) -> Response:
                 if isinstance(resp, Response):
                     return resp
-                return request.registry.renderer(request).render(
+                return request.registry.get_renderer(template)(request).render(
                     template,
                     params=resp,
                 )

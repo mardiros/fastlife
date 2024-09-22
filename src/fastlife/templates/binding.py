@@ -31,7 +31,7 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
         reg = request.registry
 
         def parametrizer(**kwargs: Any) -> Response:
-            return reg.renderer(request).render(
+            return reg.get_renderer(template)(request).render(
                 template, content_type=content_type, params=kwargs
             )
 
