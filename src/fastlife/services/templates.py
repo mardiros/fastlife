@@ -39,6 +39,7 @@ class AbstractTemplateRenderer(abc.ABC):
         self,
         template: str,
         *,
+        status_code: int = 200,
         content_type: str = "text/html",
         globals: Mapping[str, Any] | None = None,
         params: TemplateParams,
@@ -53,7 +54,9 @@ class AbstractTemplateRenderer(abc.ABC):
             request.cookies.get(reg.settings.csrf_token_name) or _create_csrf_token()
         )
         data = self.render_template(template, **params)
-        resp = Response(data, headers={"Content-Type": content_type})
+        resp = Response(
+            data, status_code=status_code, headers={"Content-Type": content_type}
+        )
         resp.set_cookie(
             reg.settings.csrf_token_name,
             request.scope[reg.settings.csrf_token_name],
