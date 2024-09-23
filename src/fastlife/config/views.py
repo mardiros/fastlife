@@ -54,8 +54,8 @@ def view_config(
         def callback(
             scanner: venusian.Scanner, name: str, ob: Callable[..., Any]
         ) -> None:
-            if not hasattr(scanner, "fastlife"):
-                return
+            if not hasattr(scanner, VENUSIAN_CATEGORY):
+                return  # coverage: ignore
             config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
             config.add_route(
                 name=view_name,

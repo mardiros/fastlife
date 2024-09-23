@@ -1,3 +1,5 @@
+import pytest
+
 from fastlife.testing import WebTestClient
 
 
@@ -84,7 +86,32 @@ def test_redirect_on_logout(client: WebTestClient):
     )
 
 
-def test_exception_handler(client: WebTestClient):
-    resp = client.get("/failed")
+def test_exception_handler_with_template(client: WebTestClient):
+    resp = client.get("/failed-good")
+    assert resp.html.h2[0].text == "Internal Server Error"
+    assert resp.content_type == "text/html"
+    assert resp.status_code == 500
+
+
+def test_exception_handler_runtime_error(client: WebTestClient):
+    with pytest.raises(RuntimeError) as exc:
+        client.get("/failed-bad")
+    assert str(exc.value) == (
+        "No template set for "
+        "tests.fastlife_app.views.failed:MyBadException but "
+        "tests.fastlife_app.views.failed:my_bad_handler did not return a Response"
+    )
+
+
+def test_exception_handler_raw_response(client: WebTestClient):
+    resp = client.get("/failed-ugly")
     assert resp.text == "It's a trap"
     assert resp.content_type == "text/plain"
+    assert resp.status_code == 400
+
+
+def test_exception_handler_custom_status_code(client: WebTestClient):
+    resp = client.get("/your-fault")
+    assert resp.html.h2[0].text == "Invalid Parameter"
+    assert resp.content_type == "text/html"
+    assert resp.status_code == 422

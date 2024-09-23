@@ -412,13 +412,37 @@ class Configurator:
         return self
 
     def add_exception_handler(
-        self, status_code_or_exc: int | Type[Exception], handler: Any
+        self,
+        status_code_or_exc: int | Type[Exception],
+        handler: Any,
+        *,
+        template: str | None = None,
+        status_code: int = 500,
     ) -> Self:
-        """Add an exception handler the application."""
+        """
+        Add an exception handler the application.
+
+        """
 
         def exception_handler(request: BaseRequest, exc: Exception) -> Any:
-            req = Request(self.registry, request)
-            return handler(req, exc)
+            request = Request(self.registry, request)
+            resp = handler(request, exc)
+            if isinstance(resp, Response):
+                return resp
+
+            if not template:
+                raise RuntimeError(
+                    "No template set for "
+                    f"{exc.__module__}:{exc.__class__.__qualname__} but "
+                    f"{handler.__module__}:{handler.__qualname__} "
+                    "did not return a Response"
+                )
+
+            return request.registry.get_renderer(template)(request).render(
+                template,
+                params=resp,
+                status_code=status_code,
+            )
 
         self.exception_handlers.append((status_code_or_exc, exception_handler))
         return self
