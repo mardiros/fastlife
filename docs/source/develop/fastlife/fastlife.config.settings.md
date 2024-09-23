@@ -149,6 +149,18 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
 
 ````
 
+````{py:attribute} jinjax_file_ext
+:canonical: fastlife.config.settings.Settings.jinjax_file_ext
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.jinjax_file_ext
+:parser: myst
+```
+
+````
+
 ````{py:attribute} jinjax_global_catalog_class
 :canonical: fastlife.config.settings.Settings.jinjax_global_catalog_class
 :type: str

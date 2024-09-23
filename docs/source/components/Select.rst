@@ -7,6 +7,6 @@ Select
 
     :param name: name of the submitted
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.SELECT_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.SELECT_CLASS`.
     :param multiple: Mark as multiple
     :param content: child node.

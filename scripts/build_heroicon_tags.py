@@ -49,7 +49,7 @@ def main():
         print(f"Package {package_name} is probably not installed", file=sys.stderr)
         sys.exit(-1)
 
-    iconsdir = root_dir / "src" / "fastlife" / "templates" / "icons"
+    iconsdir = root_dir / "src" / "fastlife" / "components" / "icons"
 
     heroicons_path = Path(spec.origin).parent
     names: dict[str, set[str]] = defaultdict(set)
@@ -93,7 +93,7 @@ def main():
             )
         )
 
-    icons_wall = root_dir / "tests" / "fastlife_app" / "templates" / "IconsWall.jinja"
+    icons_wall = root_dir / "tests" / "fastlife_app" / "components" / "IconsWall.jinja"
     icons_wall.unlink()
     with open(icons_wall, "w") as fw:
         fw.write("<Layout>\n")

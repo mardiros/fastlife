@@ -1,0 +1,22 @@
+{# doc
+  Create html ``<input type="checkbox" />`` node.
+#}
+{# def
+  name: Annotated[str, "Name of the checkbox"],
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.CHECKBOX_CLASS`."
+  ] = None,
+  value: Annotated[str | None, "http submitted value if the checkbox is checked"] = None,
+  checked: Annotated[bool, "Initialized the checkbox as ticked"] = False,
+#}
+<input
+  name="{{ name }}"
+  type="checkbox"
+  {%- if id %} id="{{id}}" {%- endif %}
+  {%- if value is not none %} value="{{ value }}" {%- endif %}
+  class="{{ attrs.class or CHECKBOX_CLASS }}"
+  {%- if checked %} checked{% endif -%}
+/>

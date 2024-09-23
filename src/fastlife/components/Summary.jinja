@@ -1,0 +1,20 @@
+{# doc
+  Create html ``<summary>`` node for the :jinjax:component:`Details` component.
+#}
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.SUMMARY_CLASS`."
+  ] = None,
+  open: Annotated[bool, "Open or collapse the content of the details."] = True
+#}
+
+<summary id="{{id}}" :class="attrs.class or SUMMARY_CLASS"
+  style="list-style: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;"
+  onclick="document.getElementById('{{id}}-icon').classList.toggle('rotate-90')">
+  <icons.ChevronRight :id="id + '-icon'"
+    :class="'w-8 h-8 transform transition-transform duration-300' + {True: ' rotate-90', False: ''}[open]" />
+  {{ content }}
+</summary>

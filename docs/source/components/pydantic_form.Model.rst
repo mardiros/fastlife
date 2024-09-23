@@ -1,7 +1,7 @@
 pydantic_form.Model
 ===================
 
-.. jinjax:component:: pydantic_form.Model(widget: fastlife.templating.renderer.widgets.model.ModelWidget, children_widget: Sequence[fastlife.templating.renderer.widgets.base.Widget])
+.. jinjax:component:: pydantic_form.Model(widget: fastlife.adapters.jinjax.widgets.model.ModelWidget, children_widget: Sequence[fastlife.adapters.jinjax.widgets.base.Widget])
 
     Widget for pydantic BaseModel subclasses.
 

@@ -26,7 +26,7 @@ def python_path(root_dir: Path) -> None:
 
 @pytest.fixture()
 def dummy_request_param(
-    default_registry: AppRegistry, params: Mapping[str, Any]
+    dummy_registry: AppRegistry, params: Mapping[str, Any]
 ) -> Request:
     scope = {
         "type": "http",
@@ -54,7 +54,7 @@ def dummy_request_param(
         )
     body = req_params.pop("body", None)
     scope.update(req_params)
-    req = Request(default_registry, FastApiRequest(scope))
+    req = Request(dummy_registry, FastApiRequest(scope))
     if body:
         req._body = body.encode("utf-8")  # type: ignore
     return req
@@ -63,7 +63,7 @@ def dummy_request_param(
 @pytest.fixture()
 def settings() -> Settings:
     return Settings(
-        template_search_path="fastlife:templates,tests.fastlife_app:templates",
+        template_search_path="fastlife:components,tests.fastlife_app:templates",
         session_secret_key="labamba",
         check_permission="tests.fastlife_app.security:check_permission",
         domain_name="testserver.local",
@@ -72,7 +72,7 @@ def settings() -> Settings:
 
 
 @pytest.fixture()
-def default_registry(settings: Settings) -> AppRegistry:
+def dummy_registry(settings: Settings) -> AppRegistry:
     return AppRegistry(settings)
 
 

@@ -1,0 +1,14 @@
+{# doc html ``<h2>`` node. #}
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.H2_CLASS`."
+  ] = None,
+#}
+<h2
+  {%- if id %} id="{{id}}" {%- endif %}
+  class="{{attrs.class or H2_CLASS}}">
+  {{- content -}}
+</h2>

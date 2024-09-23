@@ -202,10 +202,10 @@ def test_unflatten_struct_error(params: Mapping[str, Any]):
     ],
 )
 async def test_unflatten_mapping_form_data(
-    params: Mapping[str, Any], dummy_request_param: Request, default_registry: Registry
+    params: Mapping[str, Any], dummy_request_param: Request, dummy_registry: Registry
 ):
     assert (
-        await unflatten_mapping_form_data(dummy_request_param, default_registry)
+        await unflatten_mapping_form_data(dummy_request_param, dummy_registry)
         == params["expected"]
     )
 
@@ -224,9 +224,9 @@ async def test_unflatten_mapping_form_data(
     ],
 )
 async def test_unflatten_sequence_form_data(
-    params: Mapping[str, Any], dummy_request_param: Request, default_registry: Registry
+    params: Mapping[str, Any], dummy_request_param: Request, dummy_registry: Registry
 ):
     assert (
-        await unflatten_sequence_form_data(dummy_request_param, default_registry)
+        await unflatten_sequence_form_data(dummy_request_param, dummy_registry)
         == params["expected"]
     )

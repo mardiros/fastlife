@@ -18,12 +18,13 @@ orphan: true
 :titlesonly:
 :maxdepth: 3
 
+fastlife.adapters
 fastlife.config
 fastlife.middlewares
 fastlife.request
 fastlife.routing
 fastlife.security
 fastlife.shared_utils
-fastlife.templating
+fastlife.templates
 fastlife.testing
 ```

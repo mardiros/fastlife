@@ -7,7 +7,7 @@ Button
 
     :param type: Define button behavior.
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.BUTTON_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.BUTTON_CLASS`.
     :param name:
     :param value:
     :param hidden:

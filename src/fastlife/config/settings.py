@@ -21,21 +21,22 @@ class Settings(BaseSettings):
 
     fastlife_route_prefix: str = Field(default="/_fl")
     """Route prefix used for fastlife internal views."""
-    template_search_path: str = Field(default="fastlife:templates")
+    template_search_path: str = Field(default="fastlife:components")
     """
-    list of directories where templates could be found by the template engine.
+    list of directories where components could be found by the template engine.
 
     the list is a comma separated string. The directory resolution is made from
-    a python module name. for instance `fastlife:templates` is the direcotry templates
+    a python module name. for instance `fastlife:components` is the directory components
     found in the fastlife package.
     """
     registry_class: str = Field(default="fastlife.config.registry:AppRegistry")
     """Implementation class for the application regitry."""
     template_renderer_class: str = Field(
-        default="fastlife.templating.renderer:JinjaxTemplateRenderer"
+        default="fastlife.templates.renderer:JinjaxTemplateRenderer"
     )
     """
-    Implementation class for the :class:`fastlife.templatingAbstractTemplateRenderer`.
+    Implementation class for the
+    {class}`fastlife.templates.renderer.AbstractTemplateRenderer`.
     """
     form_data_model_prefix: str = Field(default="payload")
     """
@@ -44,6 +45,11 @@ class Settings(BaseSettings):
     csrf_token_name: str = Field(default="csrf_token")
     """
     Name of the html input field and for the http cookie for csrf token.
+    """
+
+    jinjax_file_ext: str = Field(default="jinja")
+    """
+    JinjaX file extention.
     """
 
     jinjax_use_cache: bool = Field(default=True)
@@ -59,7 +65,7 @@ class Settings(BaseSettings):
     Set to true while developing, set false for production.
     """
     jinjax_global_catalog_class: str = Field(
-        default="fastlife.templating.renderer:Constants"
+        default="fastlife.templates.constants:Constants"
     )
     """
     Set global constants accessible in every templates.

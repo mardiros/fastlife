@@ -6,5 +6,5 @@ H5
     html ``<h5>`` node.
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.H5_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.H5_CLASS`.
     :param content: child node.

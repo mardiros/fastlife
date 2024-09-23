@@ -1,0 +1,38 @@
+{# doc
+Render textarea widget for field of type text of event sequence.
+
+::
+
+    from fastlife.adapters.jinjax.widgets.text import TextareaWidget
+    from pydantic import BaseModel, Field, field_validator
+
+    class TagsForm(BaseModel):
+
+        tags: Annotated[Sequence[str], TextareaWidget] = Field(
+            default_factory=list,
+            title="Tags",
+            description="One tag per line",
+        )
+
+        @field_validator("tags", mode="before")
+        def split(cls, s: Any) -> Sequence[str]:
+            return s.split() if s else []
+
+ #}
+{# def widget: Annotated[fastlife.adapters.jinjax.widgets.text.TextareaWidget, "widget to display."] #}
+
+<pydantic_form.Widget :widget="widget">
+  <div class="pt-4">
+    <Label :for="widget.id">{{widget.title}}</Label>
+    <pydantic_form.Error :text="widget.error" />
+    <Textarea :name="widget.name" :id="widget.id" :aria-label="widget.aria_label">
+        {%- if v is string -%}
+        {{- v -}}}
+        {%- else -%}
+        {%- for v in widget.value %}{{v}}
+{% endfor -%}
+        {% endif %}
+    </Textarea>
+    <pydantic_form.Hint :text="widget.hint" />
+  </div>
+</pydantic_form.Widget>

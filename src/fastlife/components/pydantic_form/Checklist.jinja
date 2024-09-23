@@ -1,0 +1,21 @@
+{# doc Render a list of checkbox and a label for Literal and enum fields #}
+{# def widget: Annotated[fastlife.adapters.jinjax.widgets.checklist.ChecklistWidget, "widget to display."] #}
+<pydantic_form.Widget :widget="widget">
+  <div class="pt-4">
+    <Details>
+      <Summary :id="widget.id + '-summary'">
+        <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
+        <pydantic_form.Error :text="widget.error" />
+      </Summary>
+      <div>
+        {% for value in widget.value %}
+        <div class="flex items-center mb-4">
+         <Checkbox :name="value.field_name" type="checkbox" :id="value.id" :value="value.value" :checked="value.checked" />
+         <Label :for="value.id" class="ms-2 text-base text-neutral-900 dark:text-white">{{value.label}}</Label>
+         <pydantic_form.Error :text="value.error" />
+        </div>
+        {% endfor %}
+      </div>
+    </Details>
+  </div>
+</pydantic_form.Widget>

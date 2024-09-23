@@ -9,7 +9,7 @@ A
 
     :param href: target link.
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.A_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.A_CLASS`.
     :param hx_target: target the element for swapping than the one issuing the AJAX request.
     :param hx_select: select the content swapped from response of the AJAX request.
     :param hx_swap: specify how the response will be swapped in relative to the target of an AJAX request.

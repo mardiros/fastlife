@@ -14,7 +14,7 @@ def check_permission(permission_name: str) -> CheckPermissionHook:
 
     When the check permission is properly set in the settings., the hook is called
     for every route added with a permission keyword.
-    :meth:`fastlife.config.configurator.Configurator.add_route`
+    {meth}`fastlife.config.configurator.Configurator.add_route`
 
     :param permission_name: a permission name set in a view to check access.
     :return: a function that raise http exceptions or any configured exception here.

@@ -12,7 +12,7 @@ from fastlife import Template, template, view_config
 
 @view_config("hello_world", "/", methods=["GET"])
 async def hello_world(
-    template: Annotated[Template, template("HelloWorld")],
+    template: Annotated[Template, template("HelloWorld.jinja")],
 ) -> Response:
     return template()
 ```
@@ -29,6 +29,7 @@ def view_config(
     path: str,
     *,
     permission: str | None = None,
+    template: str | None = None,
     status_code: int | None = None,
     methods: list[str] | None = None,
 ) -> Callable[..., Any]:
@@ -36,11 +37,11 @@ def view_config(
     A decorator function to add a view in the app.
 
     :param name: name of the route, used to build route from the helper
-        :meth:`fastlife.request.request.Request.url_for` in order to create links.
+        {meth}`fastlife.request.request.Request.url_for` in order to create links.
     :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
         parameters.
     :param permission: a permission to validate by the
-        :attr:`fastlife.config.settings.Settings.check_permission` function.
+        {attr}`fastlife.config.settings.Settings.check_permission` function.
     :param methods: restrict route to a list of http methods.
 
     :return: the configuration callback.
@@ -63,6 +64,7 @@ def view_config(
                 permission=permission,
                 status_code=status_code,
                 methods=methods,
+                template=template,
             )
 
         venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore

@@ -16,7 +16,7 @@ Form
       </Form>
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templating.renderer.constants.Constants.FORM_CLASS`
+    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.FORM_CLASS`
     :param method: Http method used
     :param action: url where the form will be submitted
     :param hx_post: url where the form will be submitted using htmx. if ``True``, the current url is used.

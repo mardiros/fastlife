@@ -1,7 +1,7 @@
 """
 FastApi router for fastlife application.
 
-The aim of this router is get :class:`fastlife.routing.route.Route`
+The aim of this router is get {class}`fastlife.routing.route.Route`
 available in the FastApi request depency injection.
 """
 from typing import Any

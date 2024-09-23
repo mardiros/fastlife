@@ -1,7 +1,7 @@
 pydantic_form.Dropdown
 ======================
 
-.. jinjax:component:: pydantic_form.Dropdown(widget: fastlife.templating.renderer.widgets.dropdown.DropDownWidget)
+.. jinjax:component:: pydantic_form.Dropdown(widget: fastlife.adapters.jinjax.widgets.dropdown.DropDownWidget)
 
     Render a Select with options
 

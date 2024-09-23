@@ -1,0 +1,58 @@
+{# doc
+  Create html ``<button>`` node.
+#}
+{# def
+  type: Annotated[
+    Literal["submit", "button", "reset"],
+    "Define button behavior."
+  ] = "submit",
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.BUTTON_CLASS`."
+  ] = None,
+  name: str = "action",
+  value: str = "submit",
+  hidden: bool = False,
+  aria_label: str | None = None,
+  onclick: str | None = None,
+  hx_target: str | None = None,
+  hx_swap: str | None = None,
+  hx_select: str | None = None,
+  hx_after_request: Annotated[str, "Produce the hx-on::after-request"] = "",
+  hx_vals: str | None = None,
+  hx_confirm: str | None = None,
+  hx_get: str | None = None,
+  hx_post: str | None = None,
+  hx_put: str | None = None,
+  hx_patch: str | None = None,
+  hx_delete: str | None = None,
+  hx_params: str | None = None,
+  hx_push_url: Annotated[bool, "Replace the browser url by the ajax request"] = false,
+  full_width: Annotated[str, "Append tailwind class w-full to get full width"] = false,
+#}
+<button type="{{ type }}"
+  name="{{ name }}"
+  value="{{ value }}"
+  {%- if id %} id="{{ id }}" {%- endif %}
+  {%- if hx_target %} hx-target="{{ hx_target }}" {%- endif %}
+  {%- if hx_swap %} hx-swap="{{ hx_swap }}" {%- endif %}
+  {%- if hx_select %} hx-select="{{ hx_select }}" {%- endif %}
+  {%- if onclick %} onclick="{{ onclick }}" {%- endif %}
+  {%- if hx_after_request %} hx-on::after-request="{{ hx_after_request }}" {%- endif %}
+  {%- if hx_vals %} hx-vals='{{ hx_vals|safe }}' {%- endif %}
+  {%- if hx_confirm %} hx-confirm="{{ hx_confirm }}" {%- endif %}
+  {%- if hx_get %} hx-get="{{ hx_get }}" {%- endif %}
+  {%- if hx_post %} hx-post="{{ hx_post }}" {%- endif %}
+  {%- if hx_put %} hx-put="{{ hx_put }}" {%- endif %}
+  {%- if hx_patch %} hx-patch="{{ hx_patch }}" {%- endif %}
+  {%- if hx_delete %} hx-delete="{{ hx_delete }}" {%- endif %}
+  {%- if hx_push_url %} hx-push-url="true" {%- endif %}
+  {%- if hx_params %} hx-params="{{ hx_params }}" {%- endif %}
+  {%- if aria_label %} aria-label="{{ aria_label }}" {%- endif %}
+  class="{% if full_width %}w-full {% endif %}{{ attrs.class or BUTTON_CLASS }}"
+  {%- if hidden %} hidden{% endif -%}
+>
+    {{- content -}}
+</button>

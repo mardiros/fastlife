@@ -10,7 +10,7 @@ from fastlife.config.configurator import Settings
 def build_app():
     conf = Configurator(
         Settings(
-            template_search_path="fastlife:templates,tests.fastlife_app:templates",
+            template_search_path="fastlife:components,tests.fastlife_app:templates",
             session_secret_key="supasickret",
             check_permission="tests.fastlife_app.security:check_permission",
             jinjax_auto_reload=True,
@@ -18,6 +18,7 @@ def build_app():
             api_redocs_url="/api/redoc",
         )
     )
+    conf.include("tests.fastlife_app.adapters")
     conf.include("tests.fastlife_app.views")
     conf.include("tests.fastlife_app.static")
     return conf.build_asgi_app()

@@ -84,7 +84,7 @@ async def unflatten_mapping_form_data(
     request: Request, registry: Registry
 ) -> Mapping[str, Any]:
     """
-    Parse the :meth:`fastlife.request.request.form` and build a nested structure.
+    Parse the {meth}`fastlife.request.request.form` and build a nested structure.
     """
 
     form_data = await request.form()
@@ -113,7 +113,7 @@ async def unflatten_sequence_form_data(
     request: Request, reg: Registry
 ) -> Sequence[str]:
     """
-    Parse the :meth:`fastlife.request.request.form` and build a list of structure.
+    Parse the {meth}`fastlife.request.request.form` and build a list of structure.
     """
     form_data = await request.form()
     # Could raise a value error !
@@ -124,11 +124,11 @@ async def unflatten_sequence_form_data(
 
 MappingFormData = Annotated[Mapping[str, Any], Depends(unflatten_mapping_form_data)]
 """
-Fast API Dependency to deserialize a :meth:`fastlife.request.request.Request.form`
+Fast API Dependency to deserialize a {meth}`fastlife.request.request.Request.form`
 to a dict.
 """
 SequenceFormData = Annotated[Sequence[str], Depends(unflatten_sequence_form_data)]
 """
-Fast API Dependency to deserialize a :meth:`fastlife.request.request.Request.form`
+Fast API Dependency to deserialize a {meth}`fastlife.request.request.Request.form`
 to a list.
 """

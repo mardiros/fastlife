@@ -1,0 +1,30 @@
+{# doc Widget for pydantic BaseModel subclasses. #}
+{# def
+    widget: Annotated[fastlife.adapters.jinjax.widgets.model.ModelWidget, "widget to display."],
+    children_widget : Annotated[
+        Sequence[fastlife.adapters.jinjax.widgets.base.Widget],
+        "child widgets for every fields of the model."
+    ],
+#}
+
+<pydantic_form.Widget :widget="widget">
+  <div id="{{widget.id}}"{% if widget.nested %} class="m-4"{%endif%}>
+    {% if widget.nested %}
+    <Details>
+      <Summary :id="widget.id + '-summary'">
+        <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
+        <pydantic_form.Error :text="widget.error" />
+      </Summary>
+      <div>
+        {% for child in children_widget %}
+        {{ child }}
+        {% endfor %}
+      </div>
+    </Details>
+    {% else %}
+        {% for child in children_widget %}
+        {{ child }}
+        {% endfor %}
+    {% endif %}
+  </div>
+</pydantic_form.Widget>

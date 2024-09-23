@@ -1,0 +1,49 @@
+{# doc
+  Create html ``<form>`` node with htmx support by default.
+  A :jinjax:component:`CsrfToken` will always be included in the form
+  and will be checked by the
+  :func:`csrf policy method <fastlife.security.csrf.check_csrf>`.
+
+  ::
+
+    <Form :hx-post="true">
+      <Input name="name" placeholder="Bob" />
+      <Button>Submit</Button>
+    </Form>
+
+#}
+
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.FORM_CLASS`"
+  ] = None,
+  method: Annotated[Literal["get", "post"] | None, "Http method used"] = None,
+  action: Annotated[str | None, "url where the form will be submitted"] = None,
+  hx_post: Annotated[
+    str | Literal[True] | None,
+    "url where the form will be submitted using htmx. if ``True``, the current url is used."\
+  ] = None,
+  hx_disable: Annotated[
+    Literal[True] | None,
+    "if true, then htmx will be disabled for the form and for all its children nodes."
+  ] = None,
+#}
+<form
+    {%- if id %} id="{{id}}" {% endif %}
+    class="{{attrs.class or FORM_CLASS}}"
+    {%- if hx_disable %}
+      hx-disable
+    {%- else %}
+      {%- if hx_post is not none %}
+        hx-post="{% if hx_post is not true %}{{hx_post}}{% endif %}"
+      {%- endif %}
+    {%- endif %}
+    {%- if action is not none %} action="{{action}}" {%- endif %}
+    {%- if method %} method="{{method}}" {%- endif -%}
+>
+  <CsrfToken />
+  {{- content -}}
+</form>

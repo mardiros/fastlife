@@ -1,0 +1,32 @@
+{# doc
+  Produce ``<input>`` node.
+#}
+{# def
+  name: Annotated[str, "submitted name in the form"],
+  value: Annotated[str, "submitted value in the form"] = "",
+  type: Annotated[str, "type of the control"] = "text",
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.INPUT_CLASS`."
+  ] = None,
+  aria_label: Annotated[str | None, "aria-label"] = None,
+  placeholder: Annotated[
+    str | None,
+    "brief hint to the user as to what kind of information is expected in the field."
+  ] = None,
+  inputmode: Annotated[
+      Literal[
+        "none", "text", "decimal", "numeric", "tel", "search", "email", "url"
+      ] | None,
+      "Define a virtual keyboard layout"
+  ] = None
+#}
+
+<input name="{{name}}" value="{{value}}" type="{{type}}"
+  {%- if id %} id="{{id}}" {%- endif %}
+  {%- if aria_label %} aria-label="{{aria_label}}" {%- endif %}
+  {%- if placeholder %} placeholder="{{placeholder}}" {%- endif %}
+  {%- if inputmode %} inputmode="{{inputmode}}" {%- endif %}
+  class="{{attrs.class or INPUT_CLASS}}" />

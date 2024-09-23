@@ -1,0 +1,18 @@
+{# doc
+  Produce ``<label>`` node.
+#}
+{# def
+  for_: Annotated[str | None, "unique identifier of the target element."] = None,
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.LABEL_CLASS`."
+  ] = None,
+#}
+<label
+    {%- if attrs.for %} for="{{attrs.for}}" {%- endif %}
+    class="{{attrs.class or LABEL_CLASS}}"
+    {%- if id %} id="{{id}}" {%- endif %}>
+  {{-content -}}
+</label>

@@ -1,0 +1,16 @@
+{# doc
+  Produce ``<p>`` node.
+#}
+{# def
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.P_CLASS`."
+  ] = None,
+#}
+<p
+  {%- if id %} id="{{id}}" {% endif %}
+  class="{{ attrs.class or P_CLASS }}">
+  {{- content -}}
+</p>

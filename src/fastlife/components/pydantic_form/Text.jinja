@@ -1,0 +1,11 @@
+{# def widget: Annotated[fastlife.adapters.jinjax.widgets.text.TextWidget, "widget to display."] #}
+
+<pydantic_form.Widget :widget="widget">
+  <div class="pt-4">
+    <Label :for="widget.id">{{widget.title}}</Label>
+    <pydantic_form.Error :text="widget.error" />
+    <Input :name="widget.name" :value="widget.value" :type="widget.input_type" :id="widget.id"
+      :aria-label="widget.aria_label" :placeholder="widget.placeholder" />
+    <pydantic_form.Hint :text="widget.hint" />
+  </div>
+</pydantic_form.Widget>

@@ -1,7 +1,7 @@
 pydantic_form.Union
 ===================
 
-.. jinjax:component:: pydantic_form.Union(widget: fastlife.templating.renderer.widgets.base.Widget, child: fastlife.templating.renderer.widgets.base.Widget, types: Sequence[fastlife.templating.renderer.widgets.base.TypeWrapper], parent_type: fastlife.templating.renderer.widgets.base.TypeWrapper)
+.. jinjax:component:: pydantic_form.Union(widget: fastlife.adapters.jinjax.widgets.base.Widget, child: fastlife.adapters.jinjax.widgets.base.Widget, types: Sequence[fastlife.adapters.jinjax.widgets.base.TypeWrapper], parent_type: fastlife.adapters.jinjax.widgets.base.TypeWrapper)
 
     display widget for union type field
 

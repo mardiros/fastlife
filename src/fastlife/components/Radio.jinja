@@ -1,0 +1,37 @@
+{# doc
+  Produce a ``<input type="radio">`` with its associated label inside a div.
+#}
+{# def
+  label: Annotated[str, "label text associated to the radio"],
+  name: Annotated[str, "name of the submitted"],
+  value: Annotated[str, "value that will be submitted if selected"],
+  id: Annotated[str | None, "unique identifier of the element."],
+  checked: Annotated[bool, "Tick the radio button"] = False,
+  disabled: Annotated[bool, "Mark the radio button as disabled"] = False,
+  onclick: Annotated[str | None, "execute some javascript while clicking"] = None,
+  div_class: Annotated[
+    str | None,
+    "css class for the div node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.RADIO_DIV_CLASS`"
+  ] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the input node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.RADIO_INPUT_CLASS`"
+  ] = None,
+  label_class: Annotated[
+    str | None,
+    "css class for the label node, defaults to "
+    ":attr:`fastlife.templates.constants.Constants.RADIO_LABEL_CLASS`"
+  ] = None,
+#}
+<div class="{{ div_class or RADIO_DIV_CLASS }}">
+  <input type="radio" name="{{ name }}" id="{{ id }}" value="{{ value }}"
+    class="{{ attrs.class or RADIO_INPUT_CLASS }}"
+    {%- if onclick %} onclick="{{onclick}}" {%- endif %}
+    {%- if checked %} checked {%- endif %}
+    {%- if disabled %} disabled {%- endif %}>
+  <Label :for="id" :class="label_class or RADIO_LABEL_CLASS">
+      {{- label -}}
+  </Label>
+</div>

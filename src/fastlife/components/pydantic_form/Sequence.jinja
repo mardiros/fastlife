@@ -1,0 +1,47 @@
+{# doc Widget for pydantic BaseModel subclasses. #}
+{# def
+    widget: Annotated[fastlife.adapters.jinjax.widgets.sequence.SequenceWidget, "widget to display."],
+    children_widgets : Annotated[
+        Sequence[fastlife.adapters.jinjax.widgets.base.Widget],
+        "child widgets for every fields of the model."
+    ],
+    type: Annotated[fastlife.adapters.jinjax.widgets.base.TypeWrapper, "child type wrapped."]
+#}
+
+<pydantic_form.Widget :widget="widget">
+  <Details :id="widget.id">
+    <Summary :id="widget.id + '-summary'">
+      <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
+      <pydantic_form.Error :text="widget.error" />
+    </Summary>
+    <div>
+      {% set fnGetName = "get" + widget.id.replace("-", "_") %}
+      <script>
+        function {{ fnGetName }} () {
+          const el = document.getElementById("{{widget.id}}-content");
+          const len = el.dataset.length;
+          el.dataset.length = parseInt(len) + 1;
+          return "{{type.name}}." + len;
+        }
+      </script>
+
+      <div id="{{widget.id}}-content" class="m-4" data-length="{{children_widgets|length|string}}">
+        {% set container_id = widget.id + "-children-container" %}
+        <div id="{{container_id}}">
+          {% for child in children_widgets %}
+          {{ child }}
+          {% endfor%}
+        </div>
+      </div>
+
+      <div>
+        {% set container_id = "#" + widget.id + "-children-container" %}
+        {% set add_id = widget.id + "-add" %}
+        {% set vals = 'js:{"name": '+ fnGetName + '(), "token": "' + type.token + '", "removable": true}' %}
+        <Button type="button" :hx-target="container_id" hx-swap="beforeend" :id="add_id" :hx-vals="vals" :hx-get="type.url">
+          Add
+        </Button>
+      </div>
+    </div>
+  </Details>
+</pydantic_form.Widget>

@@ -1,0 +1,13 @@
+{# doc Render a checkbox and a label for boolean field. #}
+{# def widget: Annotated[fastlife.adapters.jinjax.widgets.boolean.BooleanWidget, "widget to display."] #}
+<pydantic_form.Widget :widget="widget">
+  <div class="pt-4">
+    <div class="flex items-center">
+     <Checkbox :name="widget.name" type="checkbox" :id="widget.id" :checked="widget.value" value="1" />
+     <Label :for="widget.id" class="ms-2 text-base text-neutral-900 dark:text-white">
+        {{widget.title|safe}}
+      </Label>
+    </div>
+   <pydantic_form.Error :text="widget.error" />
+  </div>
+</pydantic_form.Widget>

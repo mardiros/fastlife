@@ -1,13 +1,13 @@
 pydantic_form.Textarea
 ======================
 
-.. jinjax:component:: pydantic_form.Textarea(widget: fastlife.templating.renderer.widgets.text.TextareaWidget)
+.. jinjax:component:: pydantic_form.Textarea(widget: fastlife.adapters.jinjax.widgets.text.TextareaWidget)
 
     Render textarea widget for field of type text of event sequence.
 
     ::
 
-        from fastlife.templating.renderer.widgets.text import TextareaWidget
+        from fastlife.adapters.jinjax.widgets.text import TextareaWidget
         from pydantic import BaseModel, Field, field_validator
 
         class TagsForm(BaseModel):

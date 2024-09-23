@@ -1,0 +1,34 @@
+{# doc display widget for union type field #}
+{# def
+widget: Annotated[fastlife.adapters.jinjax.widgets.base.Widget, "widget to display."],
+child: Annotated[fastlife.adapters.jinjax.widgets.base.Widget, "current widget if any"],
+types: Annotated[Sequence[fastlife.adapters.jinjax.widgets.base.TypeWrapper], "Child types to choose"],
+parent_type: Annotated[fastlife.adapters.jinjax.widgets.base.TypeWrapper, "parent type"]
+#}
+
+<pydantic_form.Widget :widget="widget">
+  <div id="{{widget.id}}">
+    <Details>
+      <Summary :id="widget.id + '-union-summary'">
+        <H3 :class="H3_SUMMARY_CLASS">{{widget.title}}</H3>
+        <pydantic_form.Error :text="widget.error" />
+      </Summary>
+      <div hx-sync="this" id="{{widget.id}}-child">
+        {% if child %}
+        {{ child }}
+        {% else %}
+        {% for typ in types %}
+        <Button type="button" hx-target="closest div" :hx-get="typ.url" :hx-vals="typ.params|tojson" :id="typ.id"
+          onclick={{ "document.getElementById('" + widget.id + "-remove-btn').hidden=false" }}
+          :class="SECONDARY_BUTTON_CLASS">{{typ.title}}</Button>
+        {% endfor %}
+        {% endif %}
+      </div>
+      <Button type="button" :id="widget.id + '-remove-btn'" :hx-target="'#' + widget.id"
+        :hx-vals="parent_type.params|tojson" :hx-get="parent_type.url" :hidden="not child"
+        :class="SECONDARY_BUTTON_CLASS">
+        Remove
+      </Button>
+    </Details>
+  </div>
+</pydantic_form.Widget>
