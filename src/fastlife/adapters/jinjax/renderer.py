@@ -19,6 +19,7 @@ from typing import (
     cast,
 )
 
+from babel.support import Translations
 from jinja2 import Template
 from jinja2.exceptions import TemplateSyntaxError
 from jinjax import InvalidArgument
@@ -46,6 +47,19 @@ log = logging.getLogger(__name__)
 RX_DOC_START = re.compile(r"{#-?\s*doc\s+")
 RX_CONTENT = re.compile(r"\{\{-?\s*content\s*-?\}\}", re.DOTALL)
 RX_COMMENT_REPLACE = re.compile(r"{#[^#]+#}")
+
+
+def load_translations(locale: str, domain: str) -> Translations:
+    """Load translations for the given locale."""
+    root_path = resolve_path("tests.fastlife_app:locales")
+    try:
+        with open(f"{root_path}/{locale}/LC_MESSAGES/{domain}.mo", "rb") as f:
+            return Translations(f, domain)
+    except FileNotFoundError:
+        # Fall back to a default locale if the requested one is not found
+        # (e.g., English)
+        with open("{root_path}/en/LC_MESSAGES/{domain}.mo", "rb") as f:
+            return Translations(f, domain)
 
 
 def has_content(source: str) -> bool:
@@ -347,6 +361,12 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         template = template[: -len(self.settings.jinjax_file_ext) - 1]
         if globals:
             self.globals.update(globals)
+
+        translations = load_translations(self.request.locale_name, "fastlife_test")
+        self.catalog.jinja_env.install_gettext_translations(  # type: ignore
+            translations, newstyle=True
+        )
+
         return self.catalog.render(  # type: ignore
             template, __globals=self.build_globals(), **params
         )
@@ -395,6 +415,7 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
             auto_reload=settings.jinjax_auto_reload,
             globals=globals,
         )
+        self.catalog.jinja_env.add_extension("jinja2.ext.i18n")
         for path in build_searchpath(settings.template_search_path):
             self.catalog.add_folder(path)
 

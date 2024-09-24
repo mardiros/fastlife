@@ -1,7 +1,8 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, Callable
 
 from fastapi import Depends
+from fastapi import Request as FastAPIRequest
 
 from fastlife.request.request import Request
 from fastlife.security.policy import CheckPermission
@@ -11,6 +12,15 @@ if TYPE_CHECKING:
     from fastlife.services.templates import AbstractTemplateRendererFactory
 
 from .settings import Settings
+
+LocaleNegociator = Callable[[Request], str]
+
+
+def _default_negociator(settings: Settings) -> LocaleNegociator:
+    def locale_negociator(request: FastAPIRequest) -> str:
+        return settings.default_locale
+
+    return locale_negociator
 
 
 class AppRegistry:
@@ -22,10 +32,12 @@ class AppRegistry:
     settings: Settings
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
     check_permission: CheckPermission
+    locale_negociator: LocaleNegociator
 
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
         self.check_permission = resolve(settings.check_permission)
+        self.locale_negociator = _default_negociator(self.settings)
         self.renderers = {
             f".{settings.jinjax_file_ext}": resolve(
                 "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"

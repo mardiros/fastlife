@@ -41,7 +41,7 @@ from .settings import Settings
 if TYPE_CHECKING:
     from fastlife.services.templates import AbstractTemplateRendererFactory
 
-    from .registry import AppRegistry  # coverage: ignore
+    from .registry import AppRegistry, LocaleNegociator  # coverage: ignore
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
@@ -189,6 +189,11 @@ class Configurator:
 
             module = importlib.import_module(module, package)
         self.scanner.scan(module, categories=[VENUSIAN_CATEGORY])  # type: ignore
+        return self
+
+    def set_locale_negociator(self, locale_negociator: "LocaleNegociator") -> Self:
+        """Install a locale negociator for the app."""
+        self.registry.locale_negociator = locale_negociator
         return self
 
     def set_api_documentation_info(

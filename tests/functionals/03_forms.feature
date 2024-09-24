@@ -129,7 +129,6 @@ Feature: Pydantic Form Generation
       }
       """
 
-  @wip
   Scenario: Hidden field
     Given anonymous user on "/form/hiddenfield"
     When I fill the field "name" with "Bob"
