@@ -12,6 +12,7 @@ from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 from fastlife.request import Request
 from fastlife.routing.router import Router
+from fastlife.shared_utils.resolver import resolve
 
 
 @pytest.fixture()
@@ -26,7 +27,8 @@ def python_path(root_dir: Path) -> None:
 
 @pytest.fixture()
 def dummy_request_param(
-    dummy_registry: AppRegistry, params: Mapping[str, Any]
+    dummy_registry: AppRegistry,
+    params: Mapping[str, Any],
 ) -> Request:
     scope = {
         "type": "http",
@@ -73,12 +75,15 @@ def settings() -> Settings:
 
 @pytest.fixture()
 def dummy_registry(settings: Settings) -> AppRegistry:
-    return AppRegistry(settings)
+    ret = AppRegistry(settings)
+    ret.renderers[f".{settings.jinjax_file_ext}"] = resolve(  # type: ignore
+        "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"
+    )(settings)
+    return ret
 
 
 class DummySessionSerializer(AbsractSessionSerializer):
-    def __init__(self, secret_key: str, max_age: int) -> None:
-        ...
+    def __init__(self, secret_key: str, max_age: int) -> None: ...
 
     def serialize(self, data: Mapping[str, Any]) -> bytes:
         return json.dumps(data).encode("utf-8")

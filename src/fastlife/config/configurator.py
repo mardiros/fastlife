@@ -113,6 +113,14 @@ class Configurator:
 
         :return: FastAPI application.
         """
+
+        self.add_renderer(
+            self.registry.settings.jinjax_file_ext,
+            resolve("fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer")(
+                self.registry.settings
+            ),
+        )
+
         _app = FastAPI(
             title=self.api_title,
             version=self.api_version,
@@ -477,6 +485,17 @@ class Configurator:
         """
         # we don't want to expose the renderer publicly as mutable
         self.registry.renderers[f".{file_ext.lstrip('.')}"] = renderer  # type: ignore
+        return self
+
+    def add_template_search_path(self, path: str) -> Self:
+        """
+        Add a template search path directly from the code.
+
+        :param path: template path.
+        """
+        self.registry.settings.template_search_path = (
+            f"{self.registry.settings.template_search_path},{path}"
+        )
         return self
 
 

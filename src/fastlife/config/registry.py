@@ -42,11 +42,7 @@ class AppRegistry:
         self.settings = settings
         self.check_permission = resolve(settings.check_permission)
         self.locale_negociator = _default_negociator(self.settings)
-        self.renderers = {
-            f".{settings.jinjax_file_ext}": resolve(
-                "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"
-            )(settings),
-        }
+        self.renderers = {}
         self.localizer = LocalizerFactory()
 
     def get_renderer(self, template: str) -> "AbstractTemplateRendererFactory":
