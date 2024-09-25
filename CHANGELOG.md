@@ -1,3 +1,10 @@
+## 0.13.0  - Released on 2024-09-25
+* Add a way to handle api
+* Add a @view_config decorator to register route
+* Add a @resource decorator to handle CRUD resource in rest format
+* Add @exception_handler decorator
+* Add i18n support
+
 ## 0.12.0  - Released on 2024-09-19
 * Add a way to register API routes and expose api doc
 
