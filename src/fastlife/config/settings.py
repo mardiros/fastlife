@@ -47,6 +47,11 @@ class Settings(BaseSettings):
     Name of the html input field and for the http cookie for csrf token.
     """
 
+    default_locale: str = Field(default="en")
+    """
+    The default locale
+    """
+
     jinjax_file_ext: str = Field(default="jinja")
     """
     JinjaX file extention.

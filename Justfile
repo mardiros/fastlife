@@ -30,6 +30,36 @@ buildicons:
     poetry run scripts/build_heroicon_tags.py
 
 
+compiletestlocales:
+    poetry run pybabel extract \
+        --output tests/fastlife_app/locales/fastlife_test.pot \
+        --mapping=tests/fastlife_app/locales/extraction.ini \
+        .
+
+    poetry run pybabel update \
+        --domain fastlife_test \
+        --input-file tests/fastlife_app/locales/fastlife_test.pot \
+        --output-dir tests/fastlife_app/locales \
+        --previous \
+        tests/fastlife_app
+
+    poetry run pybabel compile \
+        --domain fastlife_test \
+        --directory tests/fastlife_app/locales
+
+
+    poetry run pybabel update \
+        --domain form_error \
+        --input-file tests/fastlife_app/locales/form_error.pot \
+        --output-dir tests/fastlife_app/locales \
+        --previous \
+        tests/fastlife_app
+
+    poetry run pybabel compile \
+        --domain form_error \
+        --directory tests/fastlife_app/locales
+
+
 unittest test_suite=default_unittest_suite:
     poetry run pytest -sxv {{test_suite}}
 

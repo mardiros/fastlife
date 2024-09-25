@@ -31,6 +31,7 @@ from pydantic.fields import FieldInfo
 from fastlife import Request
 from fastlife.adapters.jinjax.widgets.factory import WidgetFactory
 from fastlife.request.form import FormModel
+from fastlife.request.localizer import get_localizer
 
 if TYPE_CHECKING:
     from fastlife.config.settings import Settings  # coverage: ignore
@@ -82,7 +83,7 @@ def generate_docstring(
             # For Annotated types, we expect the first argument to be the type and
             # the second to be the description
             type_annotation = arg.annotation.slice.elts[0]  # type: ignore
-            param_type = ast.unparse(type_annotation)
+            param_type = ast.unparse(type_annotation)  # type: ignore
 
             if len(arg.annotation.slice.elts) > 1 and isinstance(  # type: ignore
                 arg.annotation.slice.elts[1],  # type: ignore
@@ -180,14 +181,14 @@ class InspectableComponent(Component):
             while header:
                 item = header.pop(0).strip(" -\n")
 
-                expr = self.read_metadata_item(item, RX_ARGS_START)
+                expr = self.read_metadata_item(item, RX_ARGS_START)  # type: ignore
                 if expr:
                     if def_found:
                         raise DuplicateDefDeclaration(self.name)
                     def_found = True
                     continue
 
-                doc = self.read_metadata_item(item, RX_DOC_START)
+                doc = self.read_metadata_item(item, RX_DOC_START)  # type: ignore
                 if doc:
                     docstring += f"    {doc.strip()}\n"
                     continue
@@ -315,6 +316,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self.catalog = catalog
         self.settings = request.registry.settings
         self.globals: MutableMapping[str, Any] = {}
+        self.translations = get_localizer(request)
 
     def build_globals(self) -> Mapping[str, Any]:
         """
@@ -331,6 +333,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
                 "value": self.request.scope.get(settings.csrf_token_name, ""),
             },
             "pydantic_form": self.pydantic_form,
+            "localizer": self.translations,
             **self.globals,
         }
         return ret
@@ -347,6 +350,11 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         template = template[: -len(self.settings.jinjax_file_ext) - 1]
         if globals:
             self.globals.update(globals)
+
+        self.catalog.jinja_env.install_gettext_translations(  # type: ignore
+            self.translations, newstyle=True
+        )
+
         return self.catalog.render(  # type: ignore
             template, __globals=self.build_globals(), **params
         )
@@ -395,6 +403,7 @@ class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
             auto_reload=settings.jinjax_auto_reload,
             globals=globals,
         )
+        self.catalog.jinja_env.add_extension("jinja2.ext.i18n")
         for path in build_searchpath(settings.template_search_path):
             self.catalog.add_folder(path)
 
