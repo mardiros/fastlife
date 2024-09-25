@@ -1,4 +1,4 @@
-{# def #}
+{# def yolo: str, apple_count: int, orange_count: int, banana_count: int #}
 <Layout>
   <H1>
       {{ _("Hello, World!") }}
@@ -8,4 +8,8 @@
       How are you today ?
     {% endtrans %}
   </p>
+  <p> {{ yolo }} </p>
+  <p> {{ ngettext("{num} apple", "{num} apples", apple_count) }}</p>
+  <p> {{ ngettext("%(num)s orange", "%(num)s oranges", orange_count) }}</p>
+  <p> {{ ngettext("banana!", "bananas!", banana_count) }}</p>
 </Layout>

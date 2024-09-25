@@ -6,10 +6,13 @@ from fastapi import Request as FastAPIRequest
 
 from fastlife.request.request import Request
 from fastlife.security.policy import CheckPermission
+from fastlife.services.translations import LocalizerFactory
 from fastlife.shared_utils.resolver import resolve
 
 if TYPE_CHECKING:
-    from fastlife.services.templates import AbstractTemplateRendererFactory
+    from fastlife.services.templates import (  # coverage: ignore
+        AbstractTemplateRendererFactory,  # coverage: ignore
+    )  # coverage: ignore
 
 from .settings import Settings
 
@@ -33,6 +36,7 @@ class AppRegistry:
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
     check_permission: CheckPermission
     locale_negociator: LocaleNegociator
+    localizer: LocalizerFactory
 
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
@@ -43,6 +47,7 @@ class AppRegistry:
                 "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"
             )(settings),
         }
+        self.localizer = LocalizerFactory()
 
     def get_renderer(self, template: str) -> "AbstractTemplateRendererFactory":
         for key, val in self.renderers.items():

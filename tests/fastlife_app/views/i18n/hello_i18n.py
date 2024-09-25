@@ -1,24 +1,22 @@
-"""A dummy view to test the add_renderer"""
+"""A dummy view to test the i18n translations."""
 
 from typing import Annotated, Any, Mapping
 
 from fastapi import Path
 
-from fastlife import Request, view_config
-from fastlife.config.configurator import Configurator, configure
+from fastlife import view_config
+from fastlife.request.localizer import Localizer
 
 
 @view_config(
     "hello-i18n", "/{locale}/hello", template="i18n.Hello.jinja", methods=["GET"]
 )
-async def hello_i18n(locale: Annotated[str, Path(...)]) -> Mapping[str, Any]:
-    return {}
-
-
-def locale_negociator(request: Request) -> str:
-    return request.path_params.get("locale") or request.registry.settings.default_locale
-
-
-@configure
-def includeme(config: Configurator):
-    config.set_locale_negociator(locale_negociator)
+async def hello_i18n(
+    locale: Annotated[str, Path(...)], lczr: Localizer
+) -> Mapping[str, Any]:
+    return {
+        "yolo": lczr.pgettext("Yolo", "you only live once"),
+        "apple_count": 1,
+        "orange_count": 2,
+        "banana_count": 0,
+    }

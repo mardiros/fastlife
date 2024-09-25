@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-24 07:52+0200\n"
+"POT-Creation-Date: 2024-09-25 08:36+0200\n"
 "PO-Revision-Date: 2024-09-23 22:08+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -28,4 +28,51 @@ msgid ""
 "      How are you today ?\n"
 "    "
 msgstr ""
+
+#: tests/fastlife_app/templates/i18n/Hello.jinja:12
+msgid "{num} apple"
+msgid_plural "{num} apples"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tests/fastlife_app/templates/i18n/Hello.jinja:13
+msgid "{num} orange"
+msgid_plural "{num} oranges"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tests/fastlife_app/templates/i18n/Hello.jinja:14
+msgid "{num} banana"
+msgid_plural "{num} bananas"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tests/fastlife_app/views/i18n/dummy_messages.py:15
+msgid "The {jumper} jumps over a {jumpee}"
+msgstr ""
+
+#: tests/fastlife_app/views/i18n/dummy_messages.py:18
+#: tests/fastlife_app/views/i18n/dummy_messages.py:27
+msgid "quick brown fox"
+msgstr ""
+
+#: tests/fastlife_app/views/i18n/dummy_messages.py:19
+#: tests/fastlife_app/views/i18n/dummy_messages.py:28
+msgid "lazy dog"
+msgstr ""
+
+#: tests/fastlife_app/views/i18n/dummy_messages.py:22
+msgid "The quick brown fox jumps over a lazy dog"
+msgid_plural "The {jumper} jumps over a {jumpee}"
+msgstr[0] ""
+msgstr[1] ""
+
+#: tests/fastlife_app/views/i18n/hello_i18n.py:18
+msgctxt "Yolo"
+msgid "you only live once"
+msgstr ""
+
+#~ msgctxt "you only live once"
+#~ msgid "Yolo"
+#~ msgstr ""
 

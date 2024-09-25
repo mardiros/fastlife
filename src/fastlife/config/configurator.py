@@ -39,7 +39,9 @@ from fastlife.shared_utils.resolver import resolve
 from .settings import Settings
 
 if TYPE_CHECKING:
-    from fastlife.services.templates import AbstractTemplateRendererFactory
+    from fastlife.services.templates import (
+        AbstractTemplateRendererFactory,  # coverage: ignore; coverage: ignore
+    )
 
     from .registry import AppRegistry, LocaleNegociator  # coverage: ignore
 
@@ -194,6 +196,18 @@ class Configurator:
     def set_locale_negociator(self, locale_negociator: "LocaleNegociator") -> Self:
         """Install a locale negociator for the app."""
         self.registry.locale_negociator = locale_negociator
+        return self
+
+    def add_translation_dirs(self, locales_dir: str) -> Self:
+        """
+        Add a translation directory for localization.
+
+        Usually, the locales is a directory from a package and has to be
+        passed with a `:` separator: {package_name}:locales.
+
+        :param locales_dir: the directory contains local inside a python package.
+        """
+        self.registry.localizer.load(locales_dir)
         return self
 
     def set_api_documentation_info(

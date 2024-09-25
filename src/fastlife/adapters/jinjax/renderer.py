@@ -32,6 +32,7 @@ from pydantic.fields import FieldInfo
 from fastlife import Request
 from fastlife.adapters.jinjax.widgets.factory import WidgetFactory
 from fastlife.request.form import FormModel
+from fastlife.request.localizer import get_localizer
 
 if TYPE_CHECKING:
     from fastlife.config.settings import Settings  # coverage: ignore
@@ -47,19 +48,6 @@ log = logging.getLogger(__name__)
 RX_DOC_START = re.compile(r"{#-?\s*doc\s+")
 RX_CONTENT = re.compile(r"\{\{-?\s*content\s*-?\}\}", re.DOTALL)
 RX_COMMENT_REPLACE = re.compile(r"{#[^#]+#}")
-
-
-def load_translations(locale: str, domain: str) -> Translations:
-    """Load translations for the given locale."""
-    root_path = resolve_path("tests.fastlife_app:locales")
-    try:
-        with open(f"{root_path}/{locale}/LC_MESSAGES/{domain}.mo", "rb") as f:
-            return Translations(f, domain)
-    except FileNotFoundError:
-        # Fall back to a default locale if the requested one is not found
-        # (e.g., English)
-        with open("{root_path}/en/LC_MESSAGES/{domain}.mo", "rb") as f:
-            return Translations(f, domain)
 
 
 def has_content(source: str) -> bool:
@@ -329,6 +317,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self.catalog = catalog
         self.settings = request.registry.settings
         self.globals: MutableMapping[str, Any] = {}
+        self.translations = get_localizer(request)
 
     def build_globals(self) -> Mapping[str, Any]:
         """
@@ -345,6 +334,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
                 "value": self.request.scope.get(settings.csrf_token_name, ""),
             },
             "pydantic_form": self.pydantic_form,
+            "localizer": self.translations,
             **self.globals,
         }
         return ret
@@ -362,9 +352,8 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         if globals:
             self.globals.update(globals)
 
-        translations = load_translations(self.request.locale_name, "fastlife_test")
         self.catalog.jinja_env.install_gettext_translations(  # type: ignore
-            translations, newstyle=True
+            self.translations, newstyle=True
         )
 
         return self.catalog.render(  # type: ignore
