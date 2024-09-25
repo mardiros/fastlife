@@ -19,7 +19,6 @@ from typing import (
     cast,
 )
 
-from babel.support import Translations
 from jinja2 import Template
 from jinja2.exceptions import TemplateSyntaxError
 from jinjax import InvalidArgument
@@ -84,7 +83,7 @@ def generate_docstring(
             # For Annotated types, we expect the first argument to be the type and
             # the second to be the description
             type_annotation = arg.annotation.slice.elts[0]  # type: ignore
-            param_type = ast.unparse(type_annotation)
+            param_type = ast.unparse(type_annotation)  # type: ignore
 
             if len(arg.annotation.slice.elts) > 1 and isinstance(  # type: ignore
                 arg.annotation.slice.elts[1],  # type: ignore
@@ -182,14 +181,14 @@ class InspectableComponent(Component):
             while header:
                 item = header.pop(0).strip(" -\n")
 
-                expr = self.read_metadata_item(item, RX_ARGS_START)
+                expr = self.read_metadata_item(item, RX_ARGS_START)  # type: ignore
                 if expr:
                     if def_found:
                         raise DuplicateDefDeclaration(self.name)
                     def_found = True
                     continue
 
-                doc = self.read_metadata_item(item, RX_DOC_START)
+                doc = self.read_metadata_item(item, RX_DOC_START)  # type: ignore
                 if doc:
                     docstring += f"    {doc.strip()}\n"
                     continue

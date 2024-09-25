@@ -43,22 +43,58 @@ class Localizer:
         mapping_num = {"num": n, **(mapping or {})}
         return ret.format(**mapping_num)
 
-    def dgettext(self, domain: str, message: str) -> str:
-        return self.translations.dgettext(domain, message)
+    def dgettext(
+        self, domain: str, message: str, mapping: dict[str, str] | None = None
+    ) -> str:
+        ret = self.translations.dgettext(domain, message)
+        if mapping:
+            ret = ret.format(**mapping)
+        return ret
 
-    def dngettext(self, domain: str, singular: str, plural: str, n: int) -> str:
-        return self.translations.dngettext(domain, singular, plural, n)
+    def dngettext(
+        self,
+        domain: str,
+        singular: str,
+        plural: str,
+        n: int,
+        mapping: dict[str, str] | None = None,
+    ) -> str:
+        ret = self.translations.dngettext(domain, singular, plural, n)
+        mapping_num = {"num": n, **(mapping or {})}
+        return ret.format(**mapping_num)
 
-    def pgettext(self, context: str, message: str) -> str:
-        return self.translations.pgettext(context, message)  # type: ignore
+    def pgettext(
+        self, context: str, message: str, mapping: dict[str, str] | None = None
+    ) -> str:
+        ret = str(self.translations.pgettext(context, message))
+        if mapping:
+            ret = ret.format(**mapping)
+        return ret
 
-    def dpgettext(self, domain: str, context: str, message: str) -> str:
-        return self.translations.dpgettext(domain, context, message)  # type: ignore
+    def dpgettext(
+        self,
+        domain: str,
+        context: str,
+        message: str,
+        mapping: dict[str, str] | None = None,
+    ) -> str:
+        ret = str(self.translations.dpgettext(domain, context, message))
+        if mapping:
+            ret = ret.format(**mapping)
+        return ret
 
     def dnpgettext(
-        self, domain: str, context: str, singular: str, plural: str, n: int
+        self,
+        domain: str,
+        context: str,
+        singular: str,
+        plural: str,
+        n: int,
+        mapping: dict[str, str] | None = None,
     ) -> str:
-        return self.translations.dnpgettext(domain, context, singular, plural, n)
+        ret = self.translations.dnpgettext(domain, context, singular, plural, n)
+        mapping_num = {"num": n, **(mapping or {})}
+        return ret.format(**mapping_num)
 
 
 class LocalizerFactory:
