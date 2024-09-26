@@ -114,10 +114,10 @@ class LocalizerFactory:
         for locale_name, domain, file_ in find_mo_files(root_path):
             with file_.open("rb") as f:
                 t = Translations(f, domain)
-                if locale_name in self._translations:
-                    self._translations[locale_name].merge(t)
-                else:
-                    self._translations[locale_name] = t
+                if locale_name not in self._translations:
+                    self._translations[locale_name] = Translations()
+                self._translations[locale_name].add(t)
+                self._translations[locale_name].merge(t)
 
     def __call__(self, request: "Request") -> Localizer:
         """Create the translation context for the given request."""
