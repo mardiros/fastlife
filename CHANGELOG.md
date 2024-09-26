@@ -1,3 +1,7 @@
+## 0.14.0  - Released on 2024-09-26
+* Implemement method add_template_search_path in the configurator
+* Add a route_prefix in the configurator for configurator.include
+
 ## 0.13.0  - Released on 2024-09-25
 * Add a way to handle api
 * Add a @view_config decorator to register route
