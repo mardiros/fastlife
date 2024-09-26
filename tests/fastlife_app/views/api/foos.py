@@ -25,8 +25,8 @@ instances: dict[str, Foo] = {}
 
 @resource(
     "foos",
-    collection_path="/api/foos",
-    path="/api/foos/{name}",
+    collection_path="/foos",
+    path="/foos/{name}",
     description="Manage foos, not bars.",
     external_docs=ExternalDocs(
         description="Discover what foos are at http://localhost/",

@@ -19,7 +19,8 @@ def build_app():
     )
     conf.add_template_search_path("tests.fastlife_app:templates")
     conf.include("tests.fastlife_app.adapters")
-    conf.include("tests.fastlife_app.views")
+    conf.include("tests.fastlife_app.views", ignore=".api")
+    conf.include("tests.fastlife_app.views.api", route_prefix="/api")
     conf.include("tests.fastlife_app.static")
     return conf.build_asgi_app()
 

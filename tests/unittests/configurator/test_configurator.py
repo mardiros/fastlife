@@ -20,7 +20,7 @@ async def test_app():
 
 async def test_include():
     conf = Configurator(Settings(template_search_path="tests.fastlife_app:components"))
-    conf.include("tests.fastlife_app")
+    conf.include("tests.fastlife_app", ignore=".views.api")
     assert len(conf.build_asgi_app().routes) != 0
 
 
@@ -37,7 +37,7 @@ def test_add_open_tag():
 def test_add_renderer(settings: Settings):
     conf = Configurator(settings=settings)
     conf.include("tests.fastlife_app.adapters")
-    conf.include("tests.fastlife_app.views")
+    conf.include("tests.fastlife_app.views", ignore=".api")
     app = conf.build_asgi_app()
     client = WebTestClient(app, settings=settings)
     resp = client.get("/f-string")
