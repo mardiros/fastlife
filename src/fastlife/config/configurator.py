@@ -14,11 +14,12 @@ phase.
 import importlib
 import inspect
 import logging
-from collections.abc import Mapping
+from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Annotated, Any, Callable, Self, Tuple, Type, cast
+from typing import TYPE_CHECKING, Annotated, Any, Callable, Self, Tuple, Type
 
 import venusian
 from fastapi import Depends, FastAPI
@@ -47,6 +48,8 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
+
+venusian_ignored_item = str | Callable[[str], bool]
 
 
 class ConfigurationError(Exception):
@@ -102,10 +105,16 @@ class Configurator:
         self.api_description: str = ""
         self.api_summary: str | None = None
 
-        self.router = Router()
+        self._route_prefix: str = ""
+        self._routers: dict[str, Router] = defaultdict(Router)
+
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
+
+    @property
+    def _current_router(self) -> Router:
+        return self._routers[self._route_prefix]
 
     def build_asgi_app(self) -> FastAPI:
         """
@@ -114,6 +123,8 @@ class Configurator:
         :return: FastAPI application.
         """
 
+        # register our main template renderer at then end, to ensure that
+        # if settings have been manipulated, everythins is taken into account.
         self.add_renderer(
             self.registry.settings.jinjax_file_ext,
             resolve("fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer")(
@@ -121,7 +132,7 @@ class Configurator:
             ),
         )
 
-        _app = FastAPI(
+        app = FastAPI(
             title=self.api_title,
             version=self.api_version,
             description=self.api_description,
@@ -133,48 +144,34 @@ class Configurator:
             if self.tags
             else None,
         )
-        _app.router.route_class = Route
-        for _route in self.router.routes:
-            route = cast(Route, _route)
-            _app.router.add_api_route(
-                path=route.path,
-                endpoint=route.endpoint,
-                response_model=route.response_model,
-                status_code=route.status_code,
-                tags=route.tags,
-                dependencies=route.dependencies,
-                summary=route.summary,
-                description=route.description,
-                response_description=route.response_description,
-                deprecated=route.deprecated,
-                methods=route.methods,
-                operation_id=route.operation_id,
-                response_model_include=route.response_model_include,
-                response_model_exclude=route.response_model_exclude,
-                response_model_by_alias=route.response_model_by_alias,
-                response_model_exclude_unset=route.response_model_exclude_unset,
-                response_model_exclude_defaults=route.response_model_exclude_defaults,
-                response_model_exclude_none=route.response_model_exclude_none,
-                include_in_schema=route.include_in_schema,
-                name=route.name,
-                openapi_extra=route.openapi_extra,
-            )
+        app.router.route_class = Route
+        for prefix, router in self._routers.items():
+            app.include_router(router, prefix=prefix)
 
         for middleware_class, options in self.middlewares:
-            _app.add_middleware(middleware_class, **options)  # type: ignore
+            app.add_middleware(middleware_class, **options)  # type: ignore
 
         for status_code_or_exc, exception_handler in self.exception_handlers:
-            _app.add_exception_handler(status_code_or_exc, exception_handler)
+            app.add_exception_handler(status_code_or_exc, exception_handler)
 
         for route_path, directory, name in self.mounts:
-            _app.mount(route_path, StaticFiles(directory=directory), name=name)
-        return _app
+            app.mount(route_path, StaticFiles(directory=directory), name=name)
+        return app
 
-    def include(self, module: str | ModuleType) -> Self:
+    def include(
+        self,
+        module: str | ModuleType,
+        route_prefix: str = "",
+        ignore: venusian_ignored_item | Sequence[venusian_ignored_item] | None = None,
+    ) -> Self:
         """
         Include a module in order to load its configuration.
 
-        It will load and include all the submodule as well.
+        It will scan and load all the submodule until you add an ignore rule.
+
+        The `ignore` argument allows you to ignore certain modules.
+        If it is a scrint, it can be an absolute module name or a relative
+        one, if starts with a dot.
 
         Here is an example.
 
@@ -190,6 +187,8 @@ class Configurator:
         ```
 
         :param module: a module to include.
+        :param route_prefix: prepend all included route with a prefix
+        :param ignore: ignore submodules
         """
         if isinstance(module, str):
             package = None
@@ -198,7 +197,15 @@ class Configurator:
                 package = caller_module.__name__ if caller_module else "__main__"
 
             module = importlib.import_module(module, package)
-        self.scanner.scan(module, categories=[VENUSIAN_CATEGORY])  # type: ignore
+        old, self._route_prefix = self._route_prefix, route_prefix
+        try:
+            self.scanner.scan(  # type: ignore
+                module,
+                categories=[VENUSIAN_CATEGORY],
+                ignore=ignore,
+            )
+        finally:
+            self._route_prefix = old
         return self
 
     def set_locale_negociator(self, locale_negociator: "LocaleNegociator") -> Self:
@@ -334,7 +341,7 @@ class Configurator:
         if permission:
             dependencies.append(Depends(self.registry.check_permission(permission)))
 
-        self.router.add_api_route(
+        self._current_router.add_api_route(
             path,
             endpoint,
             # response_model=response_model,
@@ -412,7 +419,7 @@ class Configurator:
 
             endpoint = render
 
-        self.router.add_api_route(
+        self._current_router.add_api_route(
             path,
             endpoint,
             status_code=status_code,

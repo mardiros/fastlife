@@ -41,7 +41,7 @@ def includeme(config: Configurator):
     )
     config.add_api_route(
         "home",
-        "/api",
+        "",
         info,
         methods=["GET"],
         summary="Retrieve Build Information",

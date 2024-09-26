@@ -83,7 +83,8 @@ def dummy_registry(settings: Settings) -> AppRegistry:
 
 
 class DummySessionSerializer(AbsractSessionSerializer):
-    def __init__(self, secret_key: str, max_age: int) -> None: ...
+    def __init__(self, secret_key: str, max_age: int) -> None:
+        ...
 
     def serialize(self, data: Mapping[str, Any]) -> bytes:
         return json.dumps(data).encode("utf-8")
