@@ -28,9 +28,11 @@ def test_i18n_helpers(apiclient: TestClient):
         "dpgettext_1": "addresse email (*)",
         "dpgettext_2": "addresse email est requis",
         "gettext": "Le renard marron rapide saute par dessus chient flemmard",
-        "ngettext_0": "Le renard marron rapide saute par dessus le chient flemmard",
+        "ngettext_0": "Les 0 renards marron rapides sautent par dessus "
+        "le chient flemmard",
         "ngettext_1": "Le renard marron rapide saute par dessus le chient flemmard",
-        "ngettext_2": "Les 2 renards marron rapides sautent par dessus le ",
+        "ngettext_2": "Les 2 renards marron rapides sautent par dessus "
+        "le chient flemmard",
         "pgettext_0": "pêcher",
         "pgettext_1": "poisson",
     }

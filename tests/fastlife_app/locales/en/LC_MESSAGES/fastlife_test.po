@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-25 22:16+0200\n"
+"POT-Creation-Date: 2024-09-26 20:57+0200\n"
 "PO-Revision-Date: 2024-09-23 22:08+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -111,78 +111,4 @@ msgstr ""
 msgctxt "Yolo"
 msgid "you only live once"
 msgstr ""
-
-#~ msgctxt "you only live once"
-#~ msgid "Yolo"
-#~ msgstr ""
-
-#~ msgid "Hello, World!"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "\n"
-#~ "      How are you today ?\n"
-#~ "    "
-#~ msgstr ""
-
-#~ msgid "{num} apple"
-#~ msgid_plural "{num} apples"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-# | msgid "{num} orange"
-# | msgid_plural "{num} oranges"
-#~ msgid "%(num)s orange"
-#~ msgid_plural "%(num)s oranges"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-# | msgid "{num} banana"
-# | msgid_plural "{num} bananas"
-#~ msgid "banana!"
-#~ msgid_plural "bananas!"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-#~ msgid "The {jumper} jumps over a {jumpee}"
-#~ msgstr ""
-
-#~ msgid "quick brown fox"
-#~ msgstr ""
-
-#~ msgid "lazy dog"
-#~ msgstr ""
-
-# | msgid "The quick brown fox jumps over a lazy dog"
-# | msgid_plural "The {jumper} jumps over a {jumpee}"
-#~ msgid "The quick brown fox jumps over a {jumpee}"
-#~ msgid_plural "{num} quick brown foxes jumps over a {jumpee}"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
-
-#~ msgid "email address"
-#~ msgstr ""
-
-#~ msgctxt "Yolo"
-#~ msgid "you only live once"
-#~ msgstr ""
-
-#~ msgctxt "hint"
-#~ msgid "{field} required"
-#~ msgstr ""
-
-#~ msgctxt "form_error"
-#~ msgid "label"
-#~ msgstr ""
-
-#~ msgctxt "form_error"
-#~ msgid "hint"
-#~ msgstr ""
-
-# | msgid "{num} entry in {field}"
-# | msgid_plural "{num} entries in {field}"
-#~ msgid "{num} ball in {field}"
-#~ msgid_plural "{num} balls in {field}"
-#~ msgstr[0] ""
-#~ msgstr[1] ""
 
