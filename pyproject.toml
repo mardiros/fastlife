@@ -20,7 +20,7 @@ version = "0.15.0"
 [tool.poetry.dependencies]
 python = "^3.11"
 babel = "^2.16.0"
-beautifulsoup4 = {version = "^4.12.2", extras = ["testing"]}
+beautifulsoup4 = {version = "^4.12.2", optional = true}
 fastapi = { version = "^0.115.0", extras = ["standard"]}
 itsdangerous = "^2.1.2"
 jinjax = "^0.44"
@@ -33,6 +33,9 @@ venusian = "^3.0.0"
 
 [tool.poetry.group.dev]
 optional = true
+
+[tool.poetry.extras]
+testing = ["beautifulsoup4"]
 
 [tool.poetry.group.dev.dependencies]
 beautifulsoup4 = "^4.12.2"

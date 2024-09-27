@@ -8,6 +8,15 @@
 :allowtitles:
 ```
 
+## Subpackages
+
+```{toctree}
+:titlesonly:
+:maxdepth: 3
+
+fastlife.adapters.jinjax.widgets
+```
+
 ## Submodules
 
 ```{toctree}

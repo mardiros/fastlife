@@ -101,6 +101,18 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
 
 ````
 
+````{py:attribute} default_locale
+:canonical: fastlife.config.settings.Settings.default_locale
+:type: str
+:value: >
+   'Field(...)'
+
+```{autodoc2-docstring} fastlife.config.settings.Settings.default_locale
+:parser: myst
+```
+
+````
+
 ````{py:attribute} domain_name
 :canonical: fastlife.config.settings.Settings.domain_name
 :type: str

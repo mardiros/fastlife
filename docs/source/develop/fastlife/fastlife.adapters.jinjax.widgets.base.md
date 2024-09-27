@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.adapters.jinjax.widgets.base`
 
 ```{py:module} fastlife.adapters.jinjax.widgets.base

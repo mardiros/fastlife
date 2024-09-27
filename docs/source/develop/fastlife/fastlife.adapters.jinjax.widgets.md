@@ -1,7 +1,3 @@
----
-orphan: true
----
-
 # {py:mod}`fastlife.adapters.jinjax.widgets`
 
 ```{py:module} fastlife.adapters.jinjax.widgets
@@ -18,6 +14,7 @@ orphan: true
 :titlesonly:
 :maxdepth: 1
 
+fastlife.adapters.jinjax.widgets.base
 fastlife.adapters.jinjax.widgets.boolean
 fastlife.adapters.jinjax.widgets.checklist
 fastlife.adapters.jinjax.widgets.dropdown

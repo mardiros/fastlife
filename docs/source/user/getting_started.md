@@ -1,8 +1,13 @@
 # Getting Started
 
+Today, there is a myriad of tools to start a Python project.
+
+The `fastlifeweb` package can be installed from PyPI with your preferred virtualenv
+manager.
+
 ## First Steps
 
-We can start with a simple hello world app, the fast api first step,
+We can start with a simple hello world app, the {term}`FastAPI` first step,
 revisited.
 
 ## hello world app
@@ -11,10 +16,16 @@ revisited.
 
 ```
 
-In the example above, we can see that the FastAPI app has been encapsulated
-inside a {class}`Configurator <fastlife.config.configurator.Configurator>` object.
-The Configurator is responsible of the ASGI app construction, a FastAPI
-app behind the scene.
+In the example above, we can see that Fastlife build a FastAPI application.
+
+In a classical {term}`FastAPI` application, the application is created an route, routers,
+are added to it.
+Using fastlife, the process has been reversed in a dependency injection process,
+a {class}`Configurator <fastlife.config.configurator.Configurator>` object collect
+all the routes, or any configuration like locale manager for i18n, and create
+an app after everything has been collected.
+
+The app build is a {term}`FastAPI` instance.
 
 ```{note}
 
@@ -24,31 +35,36 @@ app behind the scene.
 
 ```
 
-You can start the app using fastapi dev command.
+The app can be started with the `fastapi dev` command or run with uvicorn asgi server.
 
 ```{code-block} bash
 fastapi dev hello_world.py
 ```
 
-The Configurator role, a builder pattern, is about reading settings, loading
-routes, and configure a {class}`Registry <fastlife.config.registry.Registry>`.
+## hello world app with a template
 
-If you have already built a FastAPI application or a framework using route decorators,
-splitting the routes into submodules requires careful handling to avoid issues.
+```{literalinclude} examples/hello_world_with_template.py
 
-Have you ever encountered circular import errors?
+```
 
-The configurator helps solve these issues.
+```{literalinclude} examples/templates/HelloWorld.jinja
+:language: html
+```
 
-With Fastlife, you never use a global app object, which helps prevent circular dependencies.
+To use {term}`JinjaX` templates, templates path has to be registered using the
+{meth}`Configurator.add_template_search_path <fastlife.config.configurator.Configurator.add_template_search_path>` or using
+the settings {attr}`template_search_path <fastlife.config.settings.Settings.template_search_path>`.
 
-Instead, the application is build using the
-{meth}`Configurator.build_asgi_app() <fastlife.config.configurator.Configurator.build_asgi_app>`.
-after grabbing all its needs using decorated methods and package import scanning.
+Settings are {term}`pydantic settings`, it can be set from a environment variable prefixed by `fastlife_`.
+You may also override the settings class to inject your own setting and override the prefix.
 
-The configurator object enables the dependency injection while building the app,
-that we will be discussed below.
+On the other hand, adding template search path during the configuration phase makes the app
+more modular, and kept the module responsible of templates add its own template to the path.
 
+```{note}
+The most concerning can develop and register their own template engine using the
+{meth}`fastlife.config.configurator.Configurator.add_renderer`.
+```
 
 ## modular approach
 
@@ -59,57 +75,53 @@ The http views is one of them and now we are going split those views in a submod
 
 Let's write a simple `views` module, with our previous view, and nothing more.
 
-```{literalinclude} examples/modular/views.sh
+```{literalinclude} examples/modular/views.py
   :language: python
-  :emphasize-lines: 9
 ```
 
 Now, we can use the {meth}`config.include() <fastlife.config.configurator.Configurator.include>`
 method to inject routes in the final application.
 
-```{literalinclude} examples/modular/entrypoint.sh
+```{literalinclude} examples/modular/entrypoint.py
   :language: python
-  :emphasize-lines: 6
 ```
 
 The {meth}`config.include() <fastlife.config.configurator.Configurator.include>` call will
 import the module **and all its submodules** and grab all decorated method with a
 {func}`@configure <fastlife.config.configurator.configure>` afterwhat, the decorated method
-will be called with the configurator as an argument in order to configure the module.
+will be called with the configurator as first argument in order to configure the module.
 
 ```{note}
 
   If you have used the Pyramid framework, the config.include does not works exactly the same.
-  In pyramid, there is no decorator on `includeme` function, and the include does not
+  In Pyramid, there is no decorator on `includeme` function, and the include does not
   include submodule.
   In fastlife, `config.include()` works like if `config.scan()` will also call the includeme
   scanned.
+  In Pyramid, the view and the route are not registered together, views are registered by
+  a scan to set a view_name the the include attach the view name to routes in order to
+  ensure that the routes are always registered in the same order.
+  fastlife use a more traditional approach, and does not respect this strict approach,
+  this is why the @view_config also register the path of the view.
+
 ```
 
-You can start the app using fastapi dev command.
+## Writing tests
 
-```{code-block} bash
-fastapi dev entrypoint.py
+The {mod}`fastlife.testing.testclient` module define a set of class to help
+writing test for web pages.
+
+```{note}
+
+  This module required the extra `testing` installable via the command
+
+  ```bash
+  pip install fastlifeweb[testing]
+
 ```
 
-## HTML Response with templates.
 
-We can rewrite our `views` module now and use an html template tor the response.
 
-```{literalinclude} examples/modular/views_with_template.sh
+```{literalinclude} examples/modular/test_views.py
   :language: python
-  :emphasize-lines: 8,10
-```
-
-Fastlife use [JinjaX](https://jinjax.scaletti.dev/) template engine, a modern and
-modular template engine. lets write a simple template.
-
-```{literalinclude} examples/modular/HelloWorld.jinja.sh
-  :language: bash
-```
-
-Now to run our app, we need to add a settings to find the templates.
-
-```{code-block} bash
-FASTLIFE_TEMPLATE_SEARCH_PATH=. poetry run fastapi dev entrypoint.py
 ```

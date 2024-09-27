@@ -1,8 +1,10 @@
-from fastlife import Configurator, Settings
+# file hello_world.py
+
+from fastlife import Configurator, Response, Settings
 
 
-async def hello_world():
-    return {"message": "Hello World"}
+async def hello_world() -> Response:
+    return Response("Hello World")
 
 
 def build_app():

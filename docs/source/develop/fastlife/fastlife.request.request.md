@@ -41,6 +41,18 @@ Bases: {py:obj}`fastapi.Request`
 :parser: myst
 ```
 
+````{py:attribute} locale_name
+:canonical: fastlife.request.request.Request.locale_name
+:type: str
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.request.request.Request.locale_name
+:parser: myst
+```
+
+````
+
 ````{py:attribute} registry
 :canonical: fastlife.request.request.Request.registry
 :type: fastlife.config.registry.AppRegistry

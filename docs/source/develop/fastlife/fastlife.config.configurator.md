@@ -89,7 +89,7 @@ Bases: {py:obj}`Exception`
 
 ````
 
-````{py:method} add_exception_handler(status_code_or_exc: int | typing.Type[Exception], handler: typing.Any) -> typing.Self
+````{py:method} add_exception_handler(status_code_or_exc: int | typing.Type[Exception], handler: typing.Any, *, template: str | None = None, status_code: int = 500) -> typing.Self
 :canonical: fastlife.config.configurator.Configurator.add_exception_handler
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_exception_handler
@@ -143,6 +143,24 @@ Bases: {py:obj}`Exception`
 
 ````
 
+````{py:method} add_template_search_path(path: str | pathlib.Path) -> typing.Self
+:canonical: fastlife.config.configurator.Configurator.add_template_search_path
+
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_template_search_path
+:parser: myst
+```
+
+````
+
+````{py:method} add_translation_dirs(locales_dir: str) -> typing.Self
+:canonical: fastlife.config.configurator.Configurator.add_translation_dirs
+
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_translation_dirs
+:parser: myst
+```
+
+````
+
 ````{py:method} build_asgi_app() -> fastapi.FastAPI
 :canonical: fastlife.config.configurator.Configurator.build_asgi_app
 
@@ -165,6 +183,15 @@ Bases: {py:obj}`Exception`
 :canonical: fastlife.config.configurator.Configurator.set_api_documentation_info
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.set_api_documentation_info
+:parser: myst
+```
+
+````
+
+````{py:method} set_locale_negociator(locale_negociator: fastlife.config.registry.LocaleNegociator) -> typing.Self
+:canonical: fastlife.config.configurator.Configurator.set_locale_negociator
+
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.set_locale_negociator
 :parser: myst
 ```
 
