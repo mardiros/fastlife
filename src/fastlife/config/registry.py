@@ -5,7 +5,6 @@ from fastapi import Depends
 from fastapi import Request as FastAPIRequest
 
 from fastlife.request.request import Request
-from fastlife.security.policy import CheckPermission
 from fastlife.services.translations import LocalizerFactory
 from fastlife.shared_utils.resolver import resolve
 
@@ -13,6 +12,7 @@ if TYPE_CHECKING:
     from fastlife.services.templates import (  # coverage: ignore
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
+    from fastlife.security.policy import CheckPermission
 
 from .settings import Settings
 
@@ -34,7 +34,7 @@ class AppRegistry:
 
     settings: Settings
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
-    check_permission: CheckPermission
+    check_permission: "CheckPermission"
     locale_negociator: LocaleNegociator
     localizer: LocalizerFactory
 

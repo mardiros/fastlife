@@ -9,6 +9,7 @@ from fastlife.testing import WebTestClient
 @pytest.fixture
 async def app(settings: Settings):
     conf = Configurator(settings=settings)
+    conf.include("tests.fastlife_app.security")
     conf.include("tests.fastlife_app.views", ignore=".api")
     conf.include("tests.fastlife_app.views.api", route_prefix="/api")
     yield conf.build_asgi_app()

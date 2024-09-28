@@ -89,6 +89,9 @@ funcdevtest:
 showicons:
     poetry run behave --tags=icons --no-capture tests/functionals/
 
+showopenapi:
+    poetry run behave --tags=openapi --no-capture tests/functionals/
+
 mypy:
     poetry run mypy src/ tests/
 

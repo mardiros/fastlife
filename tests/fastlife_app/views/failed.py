@@ -1,11 +1,8 @@
-from typing import Annotated
-
-from fastapi import Depends, Request, Response
+from fastapi import Request, Response
 
 from fastlife.config.exceptions import exception_handler
 from fastlife.config.views import view_config
 from fastlife.services.templates import TemplateParams
-from tests.fastlife_app.security import AuthenticatedUser, authenticated_user
 
 
 class MyGoodException(Exception):
@@ -50,28 +47,20 @@ def your_fault_handler(request: Request, exc: YourFault) -> TemplateParams:
 
 
 @view_config("failed", "/failed-good")
-async def failed(
-    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
-) -> Response:
+async def failed() -> Response:
     raise MyGoodException
 
 
 @view_config("failed", "/failed-bad")
-async def failed_bad(
-    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
-) -> Response:
+async def failed_bad() -> Response:
     raise MyBadException
 
 
 @view_config("failed", "/failed-ugly")
-async def failed_ugly(
-    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
-) -> Response:
+async def failed_ugly() -> Response:
     raise MyUglyException
 
 
 @view_config("failed", "/your-fault")
-async def your_fault(
-    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
-) -> Response:
+async def your_fault() -> Response:
     raise YourFault("Invalid Parameter")

@@ -1,15 +1,33 @@
 from typing import Annotated
 
-from fastapi import Depends, Response
+from fastapi import Depends
 
-from fastlife import Template, template
+from fastlife import Request
 from fastlife.config.views import view_config
-from tests.fastlife_app.security import AuthenticatedUser, authenticated_user
+from fastlife.security.policy import Forbidden
+from fastlife.services.templates import TemplateParams
+from tests.fastlife_app.services.uow import AuthenticatedUser
 
 
-@view_config("secured_page", "/secured", permission="admin", methods=["GET"])
+async def authenticated_user(request: Request) -> AuthenticatedUser:
+    assert request.security_policy
+    ret = await request.security_policy.identity()
+    if not ret:
+        raise Forbidden()  # the route is protected by a permission, unreachable code
+    return ret
+
+
+User = Annotated[AuthenticatedUser, Depends(authenticated_user)]
+
+
+@view_config(
+    "secured_page",
+    "/secured",
+    permission="admin",
+    template="Secured.jinja",
+    methods=["GET"],
+)
 async def secured(
-    template: Annotated[Template, template("Secured.jinja")],
-    user: Annotated[AuthenticatedUser, Depends(authenticated_user)],
-) -> Response:
-    return template(user=user)
+    user: User,
+) -> TemplateParams:
+    return {"user": user}

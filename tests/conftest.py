@@ -67,7 +67,6 @@ def settings() -> Settings:
     return Settings(
         template_search_path="fastlife:components,tests.fastlife_app:templates",
         session_secret_key="labamba",
-        check_permission="tests.fastlife_app.security:check_permission",
         domain_name="testserver.local",
         session_cookie_domain="testserver.local",
     )

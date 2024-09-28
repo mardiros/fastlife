@@ -1,89 +1,74 @@
-from typing import Annotated, Mapping, Optional
+from typing import Annotated
 
-from fastapi import Depends, HTTPException, Request
-from pydantic import BaseModel
+from fastapi import Depends, Response
+from starlette.status import HTTP_303_SEE_OTHER
 
-from fastlife.security.policy import CheckPermissionHook
+from fastlife import Configurator, Request, configure
+from fastlife.config.exceptions import exception_handler
+from fastlife.security.policy import AbstractSecurityPolicy, Unauthorized
+from tests.fastlife_app.views.api.security import (
+    Allowed,
+    Denied,
+    HasPermission,
+    Unauthenticated,
+)
 
-
-class AuthenticatedUser(BaseModel):
-    user_id: str
-    username: str
-    permissions: set[str]
-
-    def has_permission(self, permission_name: str) -> bool:
-        return permission_name in self.permissions
-
-
-USERS: Mapping[str, AuthenticatedUser] = {
-    "1": AuthenticatedUser(username="Bob", user_id="1", permissions={"admin"}),
-    "2": AuthenticatedUser(username="Alice", user_id="2", permissions={"admin"}),
-    "3": AuthenticatedUser(username="Roger", user_id="3", permissions=set()),
-}
+from .services.uow import AuthenticatedUser, UnitOfWork, uow
 
 
-class UnitOfWork:
-    async def get_user_by_credencials(
-        self, username: str, password: str
-    ) -> AuthenticatedUser | None:
-        for user in USERS.values():
-            if user.username == username and password == "secret":
-                return user
-        return None
-
-    async def get_user_by_id(self, username: str) -> AuthenticatedUser | None:
-        return USERS.get(username.lower())
+class RedirectLogin(Unauthorized): ...
 
 
-def uow() -> UnitOfWork:
-    return UnitOfWork()
+@exception_handler(RedirectLogin)
+def redict_login(request: Request, exception: RedirectLogin):
+    return Response(
+        "See Other",
+        status_code=HTTP_303_SEE_OTHER,
+        headers={"Location": str(request.url_for("login"))},
+    )
 
 
-class AuthenticationPolicy:
+class SecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser]):
+    Unauthorized = RedirectLogin
+
     def __init__(self, request: Request, uow: Annotated[UnitOfWork, Depends(uow)]):
-        self.request = request
+        super().__init__(request)
         self.uow = uow
 
-    async def authenticate(
-        self, username: str, password: str
-    ) -> Optional[AuthenticatedUser]:
-        return await self.uow.get_user_by_credencials(username, password)
-
-    async def authenticated_user(self) -> Optional[AuthenticatedUser]:
+    async def identity(self) -> AuthenticatedUser | None:
         if "user_id" not in self.request.session:
             return None
         user_id = self.request.session["user_id"]
-        return await self.uow.get_user_by_id(user_id)
+        return await self.uow.users.get_user_by_id(user_id)
 
-    def remember(self, user: AuthenticatedUser) -> None:
+    async def authenticated_userid(self) -> str | None:
+        """
+        Return app-specific user object or raise an HTTPException.
+        """
+        ident = await self.identity()
+        return ident.username if ident else None
+
+    async def has_permission(
+        self, permission: str
+    ) -> type[HasPermission] | HasPermission:
+        """Allow access to everything if signed in."""
+
+        user = await self.identity()
+        if not user:
+            return Unauthenticated
+
+        if user.has_permission(permission):
+            return Allowed
+
+        return Denied(f"User not granted to perform {permission}")
+
+    async def remember(self, user: AuthenticatedUser) -> None:
         self.request.session["user_id"] = user.user_id
 
-    def forget(self) -> None:
+    async def forget(self) -> None:
         self.request.session.clear()
 
 
-async def authenticated_user(
-    policy: Annotated[AuthenticationPolicy, Depends(AuthenticationPolicy)]
-) -> Optional[AuthenticatedUser]:
-    return await policy.authenticated_user()
-
-
-def check_permission(permission_name: str) -> CheckPermissionHook:
-    """Check if the user has the given permission."""
-
-    async def check_perm(
-        request: Request,
-        user: Annotated[AuthenticatedUser | None, Depends(authenticated_user)],
-    ) -> None:
-        if request.url.path.startswith("/api/"):
-            # we are not testing creds for api here
-            return
-
-        if not user:
-            raise HTTPException(
-                303, "See Other", {"Location": str(request.url_for("login"))}
-            )
-        if not user.has_permission(permission_name):
-            raise HTTPException(403, "Forbidden")
-
-    return check_perm
+@configure
+def includeme(config: Configurator):
+    config.set_security_policy(SecurityPolicy)

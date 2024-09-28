@@ -10,7 +10,7 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
-@view_config("login", "/icons", methods=["GET"])
+@view_config("icons", "/icons", methods=["GET"])
 async def icons(
     request: Request,
     template: Annotated[Template, template("IconsWall.jinja")],

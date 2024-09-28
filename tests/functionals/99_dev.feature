@@ -9,3 +9,8 @@ Feature: Basic form
     Given anonymous user on "/icons"
     And I wait
 
+  @dev
+  @openapi
+  Scenario: show openapi docs
+    Given anonymous user on "/api/doc"
+    And I wait

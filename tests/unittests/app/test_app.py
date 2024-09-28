@@ -65,7 +65,6 @@ def test_forbidden(client: WebTestClient):
 
 def test_redirect_on_login(client: WebTestClient):
     resp = client.get("/secured", follow_redirects=False)
-    assert resp.is_redirect
     assert resp.status_code == 303
     assert resp.headers["Location"] == "http://testserver.local/login"
 
@@ -88,9 +87,9 @@ def test_redirect_on_logout(client: WebTestClient):
 
 def test_exception_handler_with_template(client: WebTestClient):
     resp = client.get("/failed-good")
+    assert resp.status_code == 500
     assert resp.html.h2[0].text == "Internal Server Error"
     assert resp.content_type == "text/html"
-    assert resp.status_code == 500
 
 
 def test_exception_handler_runtime_error(client: WebTestClient):

@@ -40,6 +40,7 @@ from fastlife.shared_utils.resolver import resolve
 from .settings import Settings
 
 if TYPE_CHECKING:
+    from fastlife.security.policy import AbstractSecurityPolicy
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore; coverage: ignore
     )
@@ -78,6 +79,55 @@ class OpenApiTag(BaseModel):
     """external link to the doc."""
 
 
+def rebuild_router(router: Router) -> Router:
+    """
+    Fix the router.
+
+    FastAPI routers has dependencies that are injected to routes where they are added.
+
+    It means that if you add a dependencies in the router after the route has
+    been added, then the dependencies is missing in the route added before.
+
+    To prenvents issues, we rebuild the router route with the dependency.
+
+    :param router: the router to rebuild
+    :return: a new router with fixed routes.
+    """
+    if not router.dependencies:
+        return router
+    _router = Router(prefix=router.prefix)
+    _router.dependencies = router.dependencies
+    route: Route
+    for route in router.routes:  # type: ignore
+        dependencies = [
+            dep for dep in route.dependencies if dep not in _router.dependencies
+        ]
+        _router.add_api_route(
+            path=route.path,
+            endpoint=route.endpoint,
+            response_model=route.response_model,
+            status_code=route.status_code,
+            tags=route.tags,
+            dependencies=dependencies,
+            summary=route.summary,
+            description=route.description,
+            response_description=route.response_description,
+            deprecated=route.deprecated,
+            methods=route.methods,
+            operation_id=route.operation_id,
+            response_model_include=route.response_model_include,
+            response_model_exclude=route.response_model_exclude,
+            response_model_by_alias=route.response_model_by_alias,
+            response_model_exclude_unset=route.response_model_exclude_unset,
+            response_model_exclude_defaults=route.response_model_exclude_defaults,
+            response_model_exclude_none=route.response_model_exclude_none,
+            include_in_schema=route.include_in_schema,
+            name=route.name,
+            openapi_extra=route.openapi_extra,
+        )
+    return _router
+
+
 class Configurator:
     """
     Configure and build an application.
@@ -107,6 +157,7 @@ class Configurator:
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
+        self._security_policies: dict[str, type["AbstractSecurityPolicy[Any]"]] = {}
 
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
@@ -145,14 +196,15 @@ class Configurator:
             else None,
         )
         app.router.route_class = Route
-        for prefix, router in self._routers.items():
-            app.include_router(router, prefix=prefix)
 
         for middleware_class, options in self.middlewares:
             app.add_middleware(middleware_class, **options)  # type: ignore
 
         for status_code_or_exc, exception_handler in self.exception_handlers:
             app.add_exception_handler(status_code_or_exc, exception_handler)
+
+        for prefix, router in self._routers.items():
+            app.include_router(rebuild_router(router), prefix=prefix)
 
         for route_path, directory, name in self.mounts:
             app.mount(route_path, StaticFiles(directory=directory), name=name)
@@ -260,6 +312,13 @@ class Configurator:
         Add a starlette middleware to the FastAPI app.
         """
         self.middlewares.append((middleware_class, options))
+        return self
+
+    def set_security_policy(
+        self, security_policy: Type["AbstractSecurityPolicy[Any]"]
+    ) -> Self:
+        self._security_policies[self._route_prefix] = security_policy
+        self._current_router.dependencies.append(Depends(security_policy))
         return self
 
     def add_api_route(
@@ -459,6 +518,11 @@ class Configurator:
         """
 
         def exception_handler(request: BaseRequest, exc: Exception) -> Any:
+            # FastAPI exception handler does not provide our request object
+            # it seems like it is rebuild from the asgi scope. Even the router
+            # class is wrong.
+            # Until we store a security policy per rooter, we rebuild an
+            # incomplete request here.
             request = Request(self.registry, request)
             resp = handler(request, exc)
             if isinstance(resp, Response):
