@@ -12,14 +12,13 @@ from .config import (
 from .request import Request
 
 # from .request.form_data import model
-from .templates import Template, template
+from .services.templates import TemplateParams
 
 __all__ = [
     # Config
     "configure",
     "Configurator",
-    "template",
-    "Template",
+    "TemplateParams",
     "Registry",
     "Settings",
     "view_config",

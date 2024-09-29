@@ -367,7 +367,7 @@ class Configurator:
         :param endpoint: the function that will reveive the request.
         :param permission: a permission to validate by the security policy.
         :param methods: restrict route to a list of http methods.
-        :param description:OpenAPI description for the route.
+        :param description:{term}`OpenAPI` description for the route.
         :param summary: OpenAPI summary for the route.
         :param response_description: OpenAPI description for the response.
         :param operation_id: OpenAPI optional unique string used to identify an
@@ -385,7 +385,7 @@ class Configurator:
         :param response_model_exclude_none: exclude fields instead of serialize to
             null value.
         :param include_in_schema: expose or not the route in the doc.
-        :param openapi_extra: open api documentation extra fields.
+        :param openapi_extra: OpenAPI documentation extra fields.
 
         :return: the configurator.
         """
@@ -549,7 +549,7 @@ class Configurator:
         self.registry.renderers[f".{file_ext.lstrip('.')}"] = renderer  # type: ignore
         return self
 
-    def add_template_search_path(self, path: str) -> Self:
+    def add_template_search_path(self, path: str | Path) -> Self:
         """
         Add a template search path directly from the code.
 

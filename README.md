@@ -9,12 +9,12 @@
 > Please note that this project is still in active development. Features and APIs may change frequently.
 > Even the name is not definitive.
 
-An opinionated framework Python web framework (based on FastAPI).
+An opinionated Python web framework (based on FastAPI).
 
 ## Purpose
 
-Fastlife helps at building Web Application with html form generated from pydantic schema
-using customizable widget.
+Fastlife helps at building Web Application with session, security, html test client,
+and html form generated from pydantic schema using customizable widget.
 
 Templates are made using [JinjaX](https://jinjax.scaletti.dev/) and an extensible [set of
 component](https://mardiros.github.io/fastlife/components/index.html) is available

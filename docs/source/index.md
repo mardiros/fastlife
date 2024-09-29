@@ -8,7 +8,9 @@
 
 user/introduction
 user/getting_started
+user/cookbook/index
 user/changelog
+user/glossary
 ```
 
 ```{toctree}

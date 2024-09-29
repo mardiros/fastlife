@@ -3,8 +3,9 @@ from typing import Annotated
 from fastapi import Response
 from pydantic import BaseModel
 
-from fastlife import Configurator, Template, configure, template
+from fastlife import Configurator, configure
 from fastlife.request.form import FormModel, form_model
+from fastlife.templates import Template, template
 from tests.fastlife_app.models import Account, Group
 
 

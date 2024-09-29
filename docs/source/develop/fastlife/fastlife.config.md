@@ -15,6 +15,7 @@
 :maxdepth: 1
 
 fastlife.config.configurator
+fastlife.config.openapiextra
 fastlife.config.resources
 fastlife.config.settings
 fastlife.config.views

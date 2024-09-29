@@ -46,7 +46,7 @@ Bases: {py:obj}`abc.ABC`
 :parser: myst
 ```
 
-````{py:method} render(template: str, *, content_type: str = 'text/html', globals: typing.Mapping[str, typing.Any] | None = None, params: fastlife.services.templates.TemplateParams, _create_csrf_token: typing.Callable[..., str] = create_csrf_token) -> fastlife.Response
+````{py:method} render(template: str, *, status_code: int = 200, content_type: str = 'text/html', globals: typing.Mapping[str, typing.Any] | None = None, params: fastlife.services.templates.TemplateParams, _create_csrf_token: typing.Callable[..., str] = create_csrf_token) -> fastlife.Response
 :canonical: fastlife.services.templates.AbstractTemplateRenderer.render
 
 ```{autodoc2-docstring} fastlife.services.templates.AbstractTemplateRenderer.render

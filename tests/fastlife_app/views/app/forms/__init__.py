@@ -3,19 +3,19 @@ from typing import Annotated, Any
 from fastapi import Path, Response
 from pydantic import BaseModel
 
-from fastlife import Configurator, Template, configure, template
+from fastlife import TemplateParams, view_config
 from fastlife.request.form import FormModel
 from fastlife.request.form_data import MappingFormData
 from fastlife.request.request import Request
 from fastlife.shared_utils.resolver import resolve
 
 
+@view_config("form", "/form/{type}", template="TestForm.jinja", methods=["GET", "POST"])
 async def testform(
     request: Request,
     type: Annotated[str, Path],
     data: MappingFormData,
-    template: Annotated[Template, template("TestForm.jinja")],
-) -> Response:
+) -> TemplateParams | Response:
     cls = resolve(f"tests.fastlife_app.views.app.forms.{type}:Form")
     if request.method == "POST":
         model = FormModel[BaseModel].from_payload(
@@ -27,9 +27,4 @@ async def testform(
     model = FormModel[Any].default(
         request.registry.settings.form_data_model_prefix, cls
     )
-    return template(model=model)
-
-
-@configure
-def includeme(config: Configurator):
-    config.add_route("form", "/form/{type}", testform, methods=["GET", "POST"])
+    return {"model": model}

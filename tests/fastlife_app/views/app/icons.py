@@ -1,18 +1,6 @@
-from typing import Annotated
-
-from pydantic import BaseModel, SecretStr
-
-from fastlife import Request, Response, Template, template, view_config
+from fastlife import Request, TemplateParams, view_config
 
 
-class LoginForm(BaseModel):
-    username: str
-    password: SecretStr
-
-
-@view_config("icons", "/icons", methods=["GET"])
-async def icons(
-    request: Request,
-    template: Annotated[Template, template("IconsWall.jinja")],
-) -> Response:
-    return template()
+@view_config("icons", "/icons", template="IconsWall.jinja", methods=["GET"])
+async def icons(request: Request) -> TemplateParams:
+    return {}
