@@ -21,16 +21,6 @@
     :parser: myst
     :summary:
     ```
-* - {py:obj}`ExternalDocs <fastlife.config.configurator.ExternalDocs>`
-  - ```{autodoc2-docstring} fastlife.config.configurator.ExternalDocs
-    :parser: myst
-    :summary:
-    ```
-* - {py:obj}`OpenApiTag <fastlife.config.configurator.OpenApiTag>`
-  - ```{autodoc2-docstring} fastlife.config.configurator.OpenApiTag
-    :parser: myst
-    :summary:
-    ```
 ````
 
 ### Functions
@@ -41,6 +31,11 @@
 
 * - {py:obj}`configure <fastlife.config.configurator.configure>`
   - ```{autodoc2-docstring} fastlife.config.configurator.configure
+    :parser: myst
+    :summary:
+    ```
+* - {py:obj}`rebuild_router <fastlife.config.configurator.rebuild_router>`
+  - ```{autodoc2-docstring} fastlife.config.configurator.rebuild_router
     :parser: myst
     :summary:
     ```
@@ -107,7 +102,7 @@ Bases: {py:obj}`Exception`
 
 ````
 
-````{py:method} add_open_tag(tag: fastlife.config.configurator.OpenApiTag) -> typing.Self
+````{py:method} add_open_tag(tag: fastlife.config.openapiextra.OpenApiTag) -> typing.Self
 :canonical: fastlife.config.configurator.Configurator.add_open_tag
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.add_open_tag
@@ -170,7 +165,7 @@ Bases: {py:obj}`Exception`
 
 ````
 
-````{py:method} include(module: str | types.ModuleType) -> typing.Self
+````{py:method} include(module: str | types.ModuleType, route_prefix: str = '', ignore: fastlife.config.configurator.venusian_ignored_item | collections.abc.Sequence[fastlife.config.configurator.venusian_ignored_item] | None = None) -> typing.Self
 :canonical: fastlife.config.configurator.Configurator.include
 
 ```{autodoc2-docstring} fastlife.config.configurator.Configurator.include
@@ -197,97 +192,10 @@ Bases: {py:obj}`Exception`
 
 ````
 
-`````
+````{py:method} set_security_policy(security_policy: type[AbstractSecurityPolicy[Any]]) -> typing.Self
+:canonical: fastlife.config.configurator.Configurator.set_security_policy
 
-`````{py:class} ExternalDocs(/, **data: typing.Any)
-:canonical: fastlife.config.configurator.ExternalDocs
-
-Bases: {py:obj}`pydantic.BaseModel`
-
-```{autodoc2-docstring} fastlife.config.configurator.ExternalDocs
-:parser: myst
-```
-
-```{rubric} Initialization
-```
-
-```{autodoc2-docstring} fastlife.config.configurator.ExternalDocs.__init__
-:parser: myst
-```
-
-````{py:attribute} description
-:canonical: fastlife.config.configurator.ExternalDocs.description
-:type: str
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.configurator.ExternalDocs.description
-:parser: myst
-```
-
-````
-
-````{py:attribute} url
-:canonical: fastlife.config.configurator.ExternalDocs.url
-:type: str
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.configurator.ExternalDocs.url
-:parser: myst
-```
-
-````
-
-`````
-
-`````{py:class} OpenApiTag(/, **data: typing.Any)
-:canonical: fastlife.config.configurator.OpenApiTag
-
-Bases: {py:obj}`pydantic.BaseModel`
-
-```{autodoc2-docstring} fastlife.config.configurator.OpenApiTag
-:parser: myst
-```
-
-```{rubric} Initialization
-```
-
-```{autodoc2-docstring} fastlife.config.configurator.OpenApiTag.__init__
-:parser: myst
-```
-
-````{py:attribute} description
-:canonical: fastlife.config.configurator.OpenApiTag.description
-:type: str
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.configurator.OpenApiTag.description
-:parser: myst
-```
-
-````
-
-````{py:attribute} external_docs
-:canonical: fastlife.config.configurator.OpenApiTag.external_docs
-:type: fastlife.config.configurator.ExternalDocs | None
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.configurator.OpenApiTag.external_docs
-:parser: myst
-```
-
-````
-
-````{py:attribute} name
-:canonical: fastlife.config.configurator.OpenApiTag.name
-:type: str
-:value: >
-   None
-
-```{autodoc2-docstring} fastlife.config.configurator.OpenApiTag.name
+```{autodoc2-docstring} fastlife.config.configurator.Configurator.set_security_policy
 :parser: myst
 ```
 
@@ -299,6 +207,14 @@ Bases: {py:obj}`pydantic.BaseModel`
 :canonical: fastlife.config.configurator.configure
 
 ```{autodoc2-docstring} fastlife.config.configurator.configure
+:parser: myst
+```
+````
+
+````{py:function} rebuild_router(router: fastlife.routing.router.Router) -> fastlife.routing.router.Router
+:canonical: fastlife.config.configurator.rebuild_router
+
+```{autodoc2-docstring} fastlife.config.configurator.rebuild_router
 :parser: myst
 ```
 ````

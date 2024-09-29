@@ -18,5 +18,6 @@ orphan: true
 :titlesonly:
 :maxdepth: 1
 
+fastlife.services.policy
 fastlife.services.templates
 ```

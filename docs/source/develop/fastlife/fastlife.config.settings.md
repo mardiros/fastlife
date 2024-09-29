@@ -65,18 +65,6 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
 
 ````
 
-````{py:attribute} check_permission
-:canonical: fastlife.config.settings.Settings.check_permission
-:type: str
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.check_permission
-:parser: myst
-```
-
-````
-
 ````{py:attribute} csrf_token_name
 :canonical: fastlife.config.settings.Settings.csrf_token_name
 :type: str

@@ -41,6 +41,16 @@ Bases: {py:obj}`fastapi.Request`
 :parser: myst
 ```
 
+````{py:method} has_permission(permission: str) -> HasPermission | type[HasPermission]
+:canonical: fastlife.request.request.Request.has_permission
+:async:
+
+```{autodoc2-docstring} fastlife.request.request.Request.has_permission
+:parser: myst
+```
+
+````
+
 ````{py:attribute} locale_name
 :canonical: fastlife.request.request.Request.locale_name
 :type: str
@@ -60,6 +70,18 @@ Bases: {py:obj}`fastapi.Request`
    None
 
 ```{autodoc2-docstring} fastlife.request.request.Request.registry
+:parser: myst
+```
+
+````
+
+````{py:attribute} security_policy
+:canonical: fastlife.request.request.Request.security_policy
+:type: AbstractSecurityPolicy[Any] | None
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.request.request.Request.security_policy
 :parser: myst
 ```
 
