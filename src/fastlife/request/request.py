@@ -29,6 +29,18 @@ class Request(FastAPIRequest):
     async def has_permission(
         self, permission: str
     ) -> "HasPermission | type[HasPermission]":
-        if self.security_policy:
-            return await self.security_policy.has_permission(permission)
-        return Allowed
+        """
+        A helper to check that a user has the given permission.
+
+        Not that this method does not raised, it return a boolean like object.
+        It allows batch permission checks.
+        You might need to check multiple permissions in different contexts or
+        for different resources before raising an http error.
+        """
+        if self.security_policy is None:
+            raise RuntimeError(
+                f"Request {self.url} require a security policy, "
+                "explicit fastlife.security.policy.InsecurePolicy is required."
+            )
+
+        return await self.security_policy.has_permission(permission)

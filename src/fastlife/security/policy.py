@@ -10,7 +10,7 @@ from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from typing_extensions import Generic
 
 if TYPE_CHECKING:
-    from fastlife import Request
+    from fastlife import Request  # coverage: ignore
 
 
 CheckPermissionHook = Callable[..., Coroutine[Any, Any, None]] | Callable[..., None]
@@ -65,27 +65,53 @@ class HasPermission(int, metaclass=BoolMeta):
     def __repr__(self) -> str:
         return self.reason
 
+    def __bool__(self) -> bool:
+        return self.kind == "allowed"
+
 
 class Allowed(HasPermission):
+    """Represent a permission check result that is allowed."""
+
     kind = "allowed"
     reason = "Allowed"
 
 
 class Unauthenticated(HasPermission):
+    """
+    Represent a permission check result that is not allowed due to
+    missing authentication mechanism.
+    """
+
     kind = "unauthenticated"
     reason = "Authentication required"
 
 
 class Denied(HasPermission):
+    """
+    Represent a permission check result that is not allowed due to lack of permission.
+    """
+
     kind = "denied"
-    reason = "Access denied to resource"
+    reason = "Access denied to this resource"
 
 
 class AbstractSecurityPolicy(abc.ABC, Generic[TUser]):
+    """Security policy base classe."""
     Forbidden = Forbidden
+    """The exception raised if the user identified is not granted."""
     Unauthorized = Unauthorized
+    """The exception raised if no user has been identified."""
 
     def __init__(self, request: "Request"):
+        """
+        Build the security policy.
+
+        When implementing a security policy, multiple parameters can be added
+        to the constructor as FastAPI dependencies, using the `Depends` FastAPI
+        annotation.
+        The security policy is installed has a depenency of the router that hold
+        a route prefix of the application.
+        """
         self.request = request
         self.request.security_policy = self  # we do backref to implement has_permission
 

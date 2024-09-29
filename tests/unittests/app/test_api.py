@@ -53,7 +53,7 @@ def test_403(app: FastAPI):
     apiclient = TestClient(app, headers={"Authorization": "Bearer foobar"})
     resp = apiclient.get("/api/foos")
     assert resp.status_code == 403
-    assert resp.json() == {"detail": "Access denied to resource"}
+    assert resp.json() == {"detail": "Access denied to this resource"}
 
 
 def test_openapi(apiclient: TestClient):
