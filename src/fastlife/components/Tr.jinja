@@ -8,6 +8,6 @@
 #}
 <tr
   {%- if id %} id="{{id}}" {%- endif %}
-  {%- if class %} class="{{attrs.class}}" {%- endif %}>
+  {%- if attrs.class %} class="{{attrs.class}}" {%- endif %}>
   {{- content -}}
 </tr>
