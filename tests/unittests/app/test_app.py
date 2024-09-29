@@ -29,7 +29,7 @@ def test_http_call_optional_form(client: WebTestClient):
 
 
 def test_session(client: WebTestClient):
-    resp = client.get("/login")
+    resp = client.get("/admin/login")
     assert len(resp.html.h2) == 1
     assert resp.html.h2[0].text == "Let's authenticate"
     assert resp.html.hx_target is None
@@ -50,7 +50,7 @@ def test_session(client: WebTestClient):
 
 
 def test_forbidden(client: WebTestClient):
-    resp = client.get("/login")
+    resp = client.get("/admin/login")
     input_ = resp.by_label_text("username")
     assert input_ is not None
     assert input_.attrs["name"] == "payload.username"
@@ -64,14 +64,14 @@ def test_forbidden(client: WebTestClient):
 
 
 def test_redirect_on_login(client: WebTestClient):
-    resp = client.get("/secured", follow_redirects=False)
+    resp = client.get("/admin/secured", follow_redirects=False)
     assert resp.status_code == 303
-    assert resp.headers["Location"] == "http://testserver.local/login"
+    assert resp.headers["Location"] == "http://testserver.local/admin/login"
 
 
 def test_redirect_on_logout(client: WebTestClient):
     client.session["user_id"] = "2"
-    resp = client.get("/secured", follow_redirects=False)
+    resp = client.get("/admin/secured", follow_redirects=False)
     assert resp.status_code == 200
     logout = resp.by_text("logout")
     assert logout is not None, resp.html
@@ -97,8 +97,8 @@ def test_exception_handler_runtime_error(client: WebTestClient):
         client.get("/failed-bad")
     assert str(exc.value) == (
         "No template set for "
-        "tests.fastlife_app.views.failed:MyBadException but "
-        "tests.fastlife_app.views.failed:my_bad_handler did not return a Response"
+        "tests.fastlife_app.views.app.failed:MyBadException but "
+        "tests.fastlife_app.views.app.failed:my_bad_handler did not return a Response"
     )
 
 

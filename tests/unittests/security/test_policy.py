@@ -1,7 +1,7 @@
 import pytest
 
 from fastlife.security.policy import HasPermission
-from tests.fastlife_app.security import Allowed, Unauthenticated, Denied
+from tests.fastlife_app.views.app.admin.security import Allowed, Unauthenticated, Denied
 
 
 @pytest.mark.parametrize(

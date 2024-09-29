@@ -13,11 +13,11 @@ from tests.fastlife_app.views.api.security import (
     Unauthenticated,
 )
 
-from .services.uow import AuthenticatedUser, UnitOfWork, uow
+from tests.fastlife_app.services.uow import AuthenticatedUser, UnitOfWork, uow
 
 
 class RedirectLogin(Unauthorized):
-    ...
+    """Own exception to attach the proper exception handler."""
 
 
 @exception_handler(RedirectLogin)
