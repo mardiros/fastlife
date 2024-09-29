@@ -1,3 +1,9 @@
+## 0.15.0  - Released on 2024-09-29
+* Add an {class}`fastlife.security.policy.AbstractSecurityPolicy` class
+* New method {meth}`fastlife.config.configurator.Configurator.set_security_policy`
+* Breaking change, the check_permission has been removed from the settings.
+  to configure the permission policy, a security policy has to be implemented.
+
 ## 0.14.0  - Released on 2024-09-26
 * Implemement method add_template_search_path in the configurator
 * Add a route_prefix in the configurator for configurator.include
