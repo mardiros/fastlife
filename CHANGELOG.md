@@ -1,3 +1,6 @@
+## 0.15.1  - Released on 2024-09-29
+* Hotfix components to create tables
+
 ## 0.15.0  - Released on 2024-09-29
 * Add an {class}`fastlife.security.policy.AbstractSecurityPolicy` class
 * New method {meth}`fastlife.config.configurator.Configurator.set_security_policy`
