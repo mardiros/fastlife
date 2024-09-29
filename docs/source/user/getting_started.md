@@ -1,9 +1,20 @@
 # Getting Started
 
+
+## Installation
+
 Today, there is a myriad of tools to start a Python project.
 
 The `fastlifeweb` package can be installed from PyPI with your preferred virtualenv
 manager.
+
+```{note}
+This section does not explain how to package an application, it explain the philosophy
+of the framewoks compare to other frameworks such has {term}`Pyramid` and
+{term}`FastAPI` to get started fast.
+
+The cookook has recipes to build properly packaged application using poetry.
+```
 
 ## First Steps
 
