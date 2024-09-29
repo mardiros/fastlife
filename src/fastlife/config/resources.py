@@ -143,6 +143,7 @@ def resource(
 
 
 def resource_view(
+    *,
     permission: str | None = None,
     status_code: int | None = None,
     summary: str | None = None,

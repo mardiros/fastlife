@@ -29,7 +29,7 @@ def test_http_call_optional_form(client: WebTestClient):
 
 
 def test_session(client: WebTestClient):
-    resp = client.get("/login")
+    resp = client.get("/admin/login")
     assert len(resp.html.h2) == 1
     assert resp.html.h2[0].text == "Let's authenticate"
     assert resp.html.hx_target is None
@@ -50,7 +50,7 @@ def test_session(client: WebTestClient):
 
 
 def test_forbidden(client: WebTestClient):
-    resp = client.get("/login")
+    resp = client.get("/admin/login")
     input_ = resp.by_label_text("username")
     assert input_ is not None
     assert input_.attrs["name"] == "payload.username"
@@ -64,15 +64,14 @@ def test_forbidden(client: WebTestClient):
 
 
 def test_redirect_on_login(client: WebTestClient):
-    resp = client.get("/secured", follow_redirects=False)
-    assert resp.is_redirect
+    resp = client.get("/admin/secured", follow_redirects=False)
     assert resp.status_code == 303
-    assert resp.headers["Location"] == "http://testserver.local/login"
+    assert resp.headers["Location"] == "http://testserver.local/admin/login"
 
 
 def test_redirect_on_logout(client: WebTestClient):
     client.session["user_id"] = "2"
-    resp = client.get("/secured", follow_redirects=False)
+    resp = client.get("/admin/secured", follow_redirects=False)
     assert resp.status_code == 200
     logout = resp.by_text("logout")
     assert logout is not None, resp.html
@@ -88,9 +87,9 @@ def test_redirect_on_logout(client: WebTestClient):
 
 def test_exception_handler_with_template(client: WebTestClient):
     resp = client.get("/failed-good")
+    assert resp.status_code == 500
     assert resp.html.h2[0].text == "Internal Server Error"
     assert resp.content_type == "text/html"
-    assert resp.status_code == 500
 
 
 def test_exception_handler_runtime_error(client: WebTestClient):
@@ -98,8 +97,8 @@ def test_exception_handler_runtime_error(client: WebTestClient):
         client.get("/failed-bad")
     assert str(exc.value) == (
         "No template set for "
-        "tests.fastlife_app.views.failed:MyBadException but "
-        "tests.fastlife_app.views.failed:my_bad_handler did not return a Response"
+        "tests.fastlife_app.views.app.failed:MyBadException but "
+        "tests.fastlife_app.views.app.failed:my_bad_handler did not return a Response"
     )
 
 
@@ -115,3 +114,31 @@ def test_exception_handler_custom_status_code(client: WebTestClient):
     assert resp.html.h2[0].text == "Invalid Parameter"
     assert resp.content_type == "text/html"
     assert resp.status_code == 422
+
+
+def test_permission_on_view_without_a_security_policy(client: WebTestClient):
+    with pytest.raises(RuntimeError) as ctx:
+        client.get("/permission-on-view")
+    assert str(ctx.value) == (
+        "Request /permission-on-view require a security policy, "
+        "explicit fastlife.security.policy.InsecurePolicy is required"
+    )
+
+
+def test_request_has_permission_without_a_security_policy(client: WebTestClient):
+    with pytest.raises(RuntimeError) as ctx:
+        client.get("/request-has-permission")
+    assert str(ctx.value) == (
+        "Request /request-has-permission require a security policy, "
+        "explicit fastlife.security.policy.InsecurePolicy is required."
+    )
+
+
+def test_permission_on_view_wit_insecurity_policy(client: WebTestClient):
+    resp = client.get("/insecure/permission-on-view")
+    assert resp.html.h1.text == "Hello World!"
+
+
+def test_request_has_permission_wit_insecurity_policy(client: WebTestClient):
+    resp = client.get("/insecure/request-has-permission")
+    assert resp.html.h1.text == "Hello None!"

@@ -11,7 +11,6 @@ def build_app():
     conf = Configurator(
         Settings(
             session_secret_key="supasickret",
-            check_permission="tests.fastlife_app.security:check_permission",
             jinjax_auto_reload=True,
             api_swagger_ui_url="/api/doc",
             api_redocs_url="/api/redoc",
@@ -19,8 +18,9 @@ def build_app():
     )
     conf.add_template_search_path("tests.fastlife_app:templates")
     conf.include("tests.fastlife_app.adapters")
-    conf.include("tests.fastlife_app.views", ignore=".api")
+    conf.include("tests.fastlife_app.views", ignore=[".api", ".app.admin"])
     conf.include("tests.fastlife_app.views.api", route_prefix="/api")
+    conf.include("tests.fastlife_app.views.app.admin", route_prefix="/admin")
     conf.include("tests.fastlife_app.static")
     return conf.build_asgi_app()
 
