@@ -16,7 +16,7 @@ async def testform(
     data: MappingFormData,
     template: Annotated[Template, template("TestForm.jinja")],
 ) -> Response:
-    cls = resolve(f"tests.fastlife_app.views.forms.{type}:Form")
+    cls = resolve(f"tests.fastlife_app.views.app.forms.{type}:Form")
     if request.method == "POST":
         model = FormModel[BaseModel].from_payload(
             request.registry.settings.form_data_model_prefix, cls, data
