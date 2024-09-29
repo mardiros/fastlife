@@ -28,23 +28,23 @@ from fastapi import Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
-from pydantic import BaseModel, Field
 
+from fastlife.config.openapiextra import OpenApiTag
 from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.request.request import Request
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
-from fastlife.shared_utils.resolver import resolve
 from fastlife.services.policy import check_permission
+from fastlife.shared_utils.resolver import resolve
 
 from .settings import Settings
 
 if TYPE_CHECKING:
+    from fastlife.security.policy import AbstractSecurityPolicy  # coverage: ignore
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
-    from fastlife.security.policy import AbstractSecurityPolicy  # coverage: ignore
 
     from .registry import AppRegistry, LocaleNegociator  # coverage: ignore
 
@@ -58,26 +58,6 @@ class ConfigurationError(Exception):
     """
     Error raised during configuration, to avoid errors at runtime.
     """
-
-
-class ExternalDocs(BaseModel):
-    """OpenAPI externalDocs object."""
-
-    description: str
-    """link's description."""
-    url: str
-    """link's URL."""
-
-
-class OpenApiTag(BaseModel):
-    """OpenAPI tag object."""
-
-    name: str
-    """name of the tag."""
-    description: str
-    """explanation of the tag."""
-    external_docs: ExternalDocs | None = Field(alias="externalDocs", default=None)
-    """external link to the doc."""
 
 
 def rebuild_router(router: Router) -> Router:

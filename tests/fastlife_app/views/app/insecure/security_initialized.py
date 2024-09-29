@@ -1,5 +1,6 @@
 from uuid import UUID
-from fastlife import view_config, Request
+
+from fastlife import Request, view_config
 from fastlife.services.templates import TemplateParams
 from tests.fastlife_app.models import BaseModel
 

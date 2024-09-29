@@ -1,4 +1,4 @@
-from fastlife import view_config, Request
+from fastlife import Request, view_config
 from fastlife.services.templates import TemplateParams
 
 

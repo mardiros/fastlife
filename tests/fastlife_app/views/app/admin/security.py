@@ -6,14 +6,13 @@ from starlette.status import HTTP_303_SEE_OTHER
 from fastlife import Configurator, Request, configure
 from fastlife.config.exceptions import exception_handler
 from fastlife.security.policy import AbstractSecurityPolicy, Unauthorized
+from tests.fastlife_app.services.uow import AuthenticatedUser, UnitOfWork, uow
 from tests.fastlife_app.views.api.security import (
     Allowed,
     Denied,
     HasPermission,
     Unauthenticated,
 )
-
-from tests.fastlife_app.services.uow import AuthenticatedUser, UnitOfWork, uow
 
 
 class RedirectLogin(Unauthorized):

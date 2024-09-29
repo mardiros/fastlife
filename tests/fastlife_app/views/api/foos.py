@@ -4,7 +4,7 @@ from fastapi import Body, Path, Response
 from pydantic import BaseModel
 
 from fastlife import resource, resource_view
-from fastlife.config.configurator import ExternalDocs
+from fastlife.config.openapiextra import ExternalDocs
 
 
 class Ok(BaseModel):

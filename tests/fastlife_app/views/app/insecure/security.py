@@ -1,4 +1,4 @@
-from fastlife import configure, Configurator
+from fastlife import Configurator, configure
 from fastlife.security.policy import InsecurePolicy
 
 

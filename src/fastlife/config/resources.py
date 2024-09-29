@@ -13,11 +13,12 @@ from typing import Any, Callable
 import venusian
 from fastapi.types import IncEx
 
+from fastlife.config.openapiextra import ExternalDocs
+
 from .configurator import (
     VENUSIAN_CATEGORY,
     ConfigurationError,
     Configurator,
-    ExternalDocs,
     OpenApiTag,
 )
 
