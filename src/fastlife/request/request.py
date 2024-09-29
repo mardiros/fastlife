@@ -6,7 +6,10 @@ from fastapi import Request as FastAPIRequest
 
 if TYPE_CHECKING:
     from fastlife.config.registry import AppRegistry  # coverage: ignore
-    from fastlife.security.policy import AbstractSecurityPolicy, Allowed, HasPermission
+    from fastlife.security.policy import (  # coverage: ignore
+        AbstractSecurityPolicy,
+        HasPermission,
+    )
 
 
 class Request(FastAPIRequest):
@@ -39,7 +42,7 @@ class Request(FastAPIRequest):
         """
         if self.security_policy is None:
             raise RuntimeError(
-                f"Request {self.url} require a security policy, "
+                f"Request {self.url.path} require a security policy, "
                 "explicit fastlife.security.policy.InsecurePolicy is required."
             )
 

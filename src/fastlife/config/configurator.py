@@ -35,15 +35,16 @@ from fastlife.request.request import Request
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
-from fastlife.security.policy import AbstractSecurityPolicy, check_permission
 from fastlife.shared_utils.resolver import resolve
+from fastlife.services.policy import check_permission
 
 from .settings import Settings
 
 if TYPE_CHECKING:
     from fastlife.services.templates import (
-        AbstractTemplateRendererFactory,  # coverage: ignore; coverage: ignore
+        AbstractTemplateRendererFactory,  # coverage: ignore
     )
+    from fastlife.security.policy import AbstractSecurityPolicy  # coverage: ignore
 
     from .registry import AppRegistry, LocaleNegociator  # coverage: ignore
 
@@ -157,7 +158,7 @@ class Configurator:
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
-        self._security_policies: dict[str, type[AbstractSecurityPolicy[Any]]] = {}
+        self._security_policies: dict[str, "type[AbstractSecurityPolicy[Any]]"] = {}
 
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
@@ -315,7 +316,7 @@ class Configurator:
         return self
 
     def set_security_policy(
-        self, security_policy: Type[AbstractSecurityPolicy[Any]]
+        self, security_policy: "type[AbstractSecurityPolicy[Any]]"
     ) -> Self:
         """
         Set a security policy for the application.

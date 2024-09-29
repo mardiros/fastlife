@@ -114,3 +114,31 @@ def test_exception_handler_custom_status_code(client: WebTestClient):
     assert resp.html.h2[0].text == "Invalid Parameter"
     assert resp.content_type == "text/html"
     assert resp.status_code == 422
+
+
+def test_permission_on_view_without_a_security_policy(client: WebTestClient):
+    with pytest.raises(RuntimeError) as ctx:
+        client.get("/permission-on-view")
+    assert str(ctx.value) == (
+        "Request /permission-on-view require a security policy, "
+        "explicit fastlife.security.policy.InsecurePolicy is required"
+    )
+
+
+def test_request_has_permission_without_a_security_policy(client: WebTestClient):
+    with pytest.raises(RuntimeError) as ctx:
+        client.get("/request-has-permission")
+    assert str(ctx.value) == (
+        "Request /request-has-permission require a security policy, "
+        "explicit fastlife.security.policy.InsecurePolicy is required."
+    )
+
+
+def test_permission_on_view_wit_insecurity_policy(client: WebTestClient):
+    resp = client.get("/insecure/permission-on-view")
+    assert resp.html.h1.text == "Hello World!"
+
+
+def test_request_has_permission_wit_insecurity_policy(client: WebTestClient):
+    resp = client.get("/insecure/request-has-permission")
+    assert resp.html.h1.text == "Hello None!"
