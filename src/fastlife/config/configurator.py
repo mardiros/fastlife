@@ -35,12 +35,12 @@ from fastlife.request.request import Request
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
+from fastlife.security.policy import AbstractSecurityPolicy, check_permission
 from fastlife.shared_utils.resolver import resolve
 
 from .settings import Settings
 
 if TYPE_CHECKING:
-    from fastlife.security.policy import AbstractSecurityPolicy
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore; coverage: ignore
     )
@@ -157,7 +157,7 @@ class Configurator:
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
-        self._security_policies: dict[str, type["AbstractSecurityPolicy[Any]"]] = {}
+        self._security_policies: dict[str, type[AbstractSecurityPolicy[Any]]] = {}
 
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
@@ -315,8 +315,22 @@ class Configurator:
         return self
 
     def set_security_policy(
-        self, security_policy: Type["AbstractSecurityPolicy[Any]"]
+        self, security_policy: Type[AbstractSecurityPolicy[Any]]
     ) -> Self:
+        """
+        Set a security policy for the application.
+
+        ```{important}
+        The security policy is **per route_prefix**.
+        It means that if the application is splitted via multiple
+        route_prefix using the {meth}`Configurator.include`, they
+        all have a distinct security policy. A secutity policy has
+        to be install by all of those include call.
+
+        :param security_policy: The security policy that will applied for the app
+            portion behind the route prefix.
+        ```
+        """
         self._security_policies[self._route_prefix] = security_policy
         self._current_router.dependencies.append(Depends(security_policy))
         return self
@@ -370,9 +384,7 @@ class Configurator:
         :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
             parameters.
         :param endpoint: the function that will reveive the request.
-        :param permission: a permission to validate by the
-            :attr:`fastlife.config.settings.Settings.check_permission` function.
-
+        :param permission: a permission to validate by the security policy.
         :param methods: restrict route to a list of http methods.
         :param description:OpenAPI description for the route.
         :param summary: OpenAPI summary for the route.
@@ -398,7 +410,7 @@ class Configurator:
         """
         dependencies: list[DependsType] = []
         if permission:
-            dependencies.append(Depends(self.registry.check_permission(permission)))
+            dependencies.append(Depends(check_permission(permission)))
 
         self._current_router.add_api_route(
             path,
@@ -453,15 +465,13 @@ class Configurator:
         :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
             parameters.
         :param endpoint: the function that will reveive the request.
-        :param permission: a permission to validate by the
-            :attr:`fastlife.config.settings.Settings.check_permission` function.
-
+        :param permission: a permission to validate by the security policy.
         :param methods: restrict route to a list of http methods.
         :return: the configurator.
         """
         dependencies: list[DependsType] = []
         if permission:
-            dependencies.append(Depends(self.registry.check_permission(permission)))
+            dependencies.append(Depends(check_permission(permission)))
 
         if template:
 

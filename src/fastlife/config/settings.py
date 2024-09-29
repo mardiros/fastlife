@@ -106,9 +106,6 @@ class Settings(BaseSettings):
     domain_name: str = Field(default="", title="domain name where the app is served")
     """Domain name whre the app is served."""
 
-    check_permission: str = Field(default="fastlife.security.policy:check_permission")
-    """Handler for checking permission set on any views using the configurator."""
-
     decode_reverse_proxy_headers: bool = Field(default=True)
     """Ensure that the request object has information based on http proxy headers."""
 

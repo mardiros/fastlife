@@ -16,7 +16,8 @@ from tests.fastlife_app.views.api.security import (
 from .services.uow import AuthenticatedUser, UnitOfWork, uow
 
 
-class RedirectLogin(Unauthorized): ...
+class RedirectLogin(Unauthorized):
+    ...
 
 
 @exception_handler(RedirectLogin)
