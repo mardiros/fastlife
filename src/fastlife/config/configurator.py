@@ -47,8 +47,7 @@ if TYPE_CHECKING:
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
 
-LocaleNegociator = Callable[[Request], str]
-
+from fastlife.services.locale_negociator import LocaleNegociator
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
