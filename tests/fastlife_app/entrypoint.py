@@ -3,15 +3,15 @@ import asyncio
 from hypercorn.asyncio import serve
 from hypercorn.config import Config
 
-from fastlife import Configurator
-from fastlife.config.configurator import Settings
+from tests.fastlife_app.config import MyConfigurator, MySettings
 
 
 def build_app():
-    conf = Configurator(
-        Settings(
+    conf = MyConfigurator(
+        MySettings(
             session_secret_key="supasickret",
             jinjax_auto_reload=True,
+            foobar="foo",
         )
     )
     conf.add_template_search_path("tests.fastlife_app:templates")

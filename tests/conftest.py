@@ -7,12 +7,11 @@ from urllib.parse import urlencode
 import pytest
 from fastapi.requests import Request as FastApiRequest
 
-from fastlife.config.registry import AppRegistry
-from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
-from fastlife.request import Request
+from fastlife.request import GenericRequest
 from fastlife.routing.router import Router
 from fastlife.shared_utils.resolver import resolve
+from tests.fastlife_app.config import MyRegistry, MySettings
 
 
 @pytest.fixture()
@@ -27,9 +26,9 @@ def python_path(root_dir: Path) -> None:
 
 @pytest.fixture()
 def dummy_request_param(
-    dummy_registry: AppRegistry,
+    dummy_registry: MyRegistry,
     params: Mapping[str, Any],
-) -> Request:
+) -> GenericRequest[MyRegistry]:
     scope = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
@@ -56,25 +55,26 @@ def dummy_request_param(
         )
     body = req_params.pop("body", None)
     scope.update(req_params)
-    req = Request(dummy_registry, FastApiRequest(scope))
+    req = GenericRequest[MyRegistry](dummy_registry, FastApiRequest(scope))
     if body:
         req._body = body.encode("utf-8")  # type: ignore
     return req
 
 
 @pytest.fixture()
-def settings() -> Settings:
-    return Settings(
+def settings() -> MySettings:
+    return MySettings(
         template_search_path="fastlife:components,tests.fastlife_app:templates",
         session_secret_key="labamba",
         domain_name="testserver.local",
         session_cookie_domain="testserver.local",
+        foobar="foo",
     )
 
 
 @pytest.fixture()
-def dummy_registry(settings: Settings) -> AppRegistry:
-    ret = AppRegistry(settings)
+def dummy_registry(settings: MySettings) -> MyRegistry:
+    ret = MyRegistry(settings)
     ret.renderers[f".{settings.jinjax_file_ext}"] = resolve(  # type: ignore
         "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"
     )(settings)
@@ -82,8 +82,7 @@ def dummy_registry(settings: Settings) -> AppRegistry:
 
 
 class DummySessionSerializer(AbsractSessionSerializer):
-    def __init__(self, secret_key: str, max_age: int) -> None:
-        ...
+    def __init__(self, secret_key: str, max_age: int) -> None: ...
 
     def serialize(self, data: Mapping[str, Any]) -> bytes:
         return json.dumps(data).encode("utf-8")

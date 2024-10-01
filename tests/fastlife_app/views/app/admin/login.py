@@ -1,14 +1,11 @@
 from typing import Annotated, Any, Mapping
 
-from fastapi import Depends
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
 from fastlife import Request, Response, view_config
 from fastlife.request.form import FormModel, form_model
-from tests.fastlife_app.services.uow import UnitOfWork, uow
-
-UOW = Annotated[UnitOfWork, Depends(uow)]
+from tests.fastlife_app.config import MyRequest
 
 
 class LoginForm(BaseModel):
@@ -18,13 +15,12 @@ class LoginForm(BaseModel):
 
 @view_config("login", "/login", template="Login.jinja", methods=["GET", "POST"])
 async def login(
-    request: Request,
+    request: MyRequest,
     loginform: Annotated[FormModel[LoginForm], form_model(LoginForm)],
-    uow: UOW,
 ) -> Response | Mapping[str, Any]:
     assert request.security_policy
     if loginform.is_valid:
-        if user := await uow.users.get_user_by_credencials(
+        if user := await request.registry.uow.users.get_user_by_credencials(
             loginform.model.username, loginform.model.password.get_secret_value()
         ):
             await request.security_policy.remember(user)

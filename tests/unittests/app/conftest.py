@@ -1,14 +1,13 @@
 import pytest
 from fastapi import FastAPI
 
-from fastlife import Configurator
-from fastlife.config.configurator import Settings
 from fastlife.testing import WebTestClient
+from tests.fastlife_app.entrypoint import MyConfigurator, MySettings
 
 
 @pytest.fixture
-async def app(settings: Settings):
-    conf = Configurator(settings=settings)
+async def app(settings: MySettings):
+    conf = MyConfigurator(settings=settings)
     conf.include(
         "tests.fastlife_app.views", ignore=[".api", ".app.admin", ".app.insecure"]
     )
@@ -19,5 +18,5 @@ async def app(settings: Settings):
 
 
 @pytest.fixture
-def client(app: FastAPI, settings: Settings):
+def client(app: FastAPI, settings: MySettings):
     return WebTestClient(app, settings=settings)
