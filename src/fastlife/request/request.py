@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class FastLifeRequest(FastAPIRequest, Generic[TRegistry]):
+class GenericRequest(FastAPIRequest, Generic[TRegistry]):
     """HTTP Request representation."""
 
     registry: TRegistry
@@ -52,24 +52,18 @@ class FastLifeRequest(FastAPIRequest, Generic[TRegistry]):
         return await self.security_policy.has_permission(permission)
 
 
-def get_request(request: FastAPIRequest) -> FastLifeRequest[Any]:
+def get_request(request: FastAPIRequest) -> GenericRequest[Any]:
     return request  # type: ignore
 
 
-GenericRequest = Annotated[FastLifeRequest[TRegistry], Depends(get_request)]
-"""
-FastAPI handle its Request objects using a lenient_issubclass,
-basically a issubclass(Request), doe to the Generic[T], it does not work.
-"""
-
-Request = Annotated[FastLifeRequest[AppRegistry], Depends(get_request)]
+Request = Annotated[GenericRequest[AppRegistry], Depends(get_request)]
 """
 FastAPI handle its Request objects using a lenient_issubclass,
 basically a issubclass(Request), doe to the Generic[T], it does not work.
 """
 
 
-def get_registry(request: GenericRequest[AppRegistry]) -> AppRegistry:
+def get_registry(request: Request) -> AppRegistry:
     return request.registry
 
 
