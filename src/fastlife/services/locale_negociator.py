@@ -8,10 +8,10 @@ LocaleName = str
 """The LocaleName is a locale such as en, fr that will be consume for translations."""
 
 if TYPE_CHECKING:
-    from fastlife.request.request import GenericRequest
+    from fastlife.request.request import GenericRequest  # coverage: ignore
 
-    LocaleNegociator = Callable[[GenericRequest[Any]], LocaleName]
-    """Interface to implement to negociate a locale"""
+    LocaleNegociator = Callable[[GenericRequest[Any]], LocaleName]  # coverage: ignore
+    """Interface to implement to negociate a locale"""  # coverage: ignore
 else:
     LocaleNegociator = Any
 
