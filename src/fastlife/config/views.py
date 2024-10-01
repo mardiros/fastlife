@@ -56,7 +56,7 @@ def view_config(
         ) -> None:
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore
-            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
+            config: Configurator[Any] = getattr(scanner, VENUSIAN_CATEGORY)
             config.add_route(
                 name=view_name,
                 path=path,

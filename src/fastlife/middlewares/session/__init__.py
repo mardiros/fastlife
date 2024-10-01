@@ -11,6 +11,8 @@ does not cipher session content, it just sign. No secret should be placed in the
 session.
 """
 
+from typing import Any
+
 from fastlife import Configurator, configure
 from fastlife.shared_utils.resolver import resolve
 
@@ -21,7 +23,7 @@ __all__ = ["SessionMiddleware", "AbsractSessionSerializer", "SignedSessionSerial
 
 
 @configure
-def includeme(config: Configurator) -> None:
+def includeme(config: Configurator[Any]) -> None:
     settings = config.registry.settings
     session_serializer = resolve(settings.session_serializer)
     if settings.session_secret_key:

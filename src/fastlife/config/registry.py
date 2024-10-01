@@ -1,23 +1,20 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Annotated, Callable
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
-from fastapi import Depends
 from fastapi import Request as FastAPIRequest
 
-from fastlife.request.request import Request
 from fastlife.services.translations import LocalizerFactory
 
 if TYPE_CHECKING:
+    from fastlife.request.request import GenericRequest
     from fastlife.services.templates import (  # coverage: ignore
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
 
 from .settings import Settings
 
-LocaleNegociator = Callable[[Request], str]
 
-
-def _default_negociator(settings: Settings) -> LocaleNegociator:
+def _default_negociator(settings: Settings) -> "Callable[[GenericRequest[Any]], str]":
     def locale_negociator(request: FastAPIRequest) -> str:
         return settings.default_locale
 
@@ -32,7 +29,7 @@ class AppRegistry:
 
     settings: Settings
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
-    locale_negociator: LocaleNegociator
+    locale_negociator: "Callable[[GenericRequest[Any]], str]"
     localizer: LocalizerFactory
 
     def __init__(self, settings: Settings) -> None:
@@ -48,9 +45,4 @@ class AppRegistry:
         raise RuntimeError(f"No renderer registered for template {template}")
 
 
-def get_registry(request: Request) -> AppRegistry:
-    return request.registry
-
-
-Registry = Annotated[AppRegistry, Depends(get_registry)]
-"""FastAPI dependency to access to the registry."""
+TRegistry = TypeVar("TRegistry", bound=AppRegistry)

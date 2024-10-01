@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 from fastapi import FastAPI
 
@@ -8,7 +10,7 @@ from fastlife.testing import WebTestClient
 
 @pytest.fixture
 async def app(settings: Settings):
-    conf = Configurator(settings=settings)
+    conf = Configurator[Any](settings=settings)
     conf.include(
         "tests.fastlife_app.views", ignore=[".api", ".app.admin", ".app.insecure"]
     )

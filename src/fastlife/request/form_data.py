@@ -12,9 +12,9 @@ from typing import (
     Sequence,
 )
 
-from fastapi import Depends, Request
+from fastapi import Depends
 
-from fastlife.config.registry import Registry
+from fastlife import Request
 
 
 def unflatten_struct(
@@ -80,13 +80,11 @@ def unflatten_struct(
     return unflattened_output
 
 
-async def unflatten_mapping_form_data(
-    request: Request, registry: Registry
-) -> Mapping[str, Any]:
+async def unflatten_mapping_form_data(request: Request) -> Mapping[str, Any]:
     """
     Parse the {meth}`fastlife.request.request.form` and build a nested structure.
     """
-
+    registry = request.registry
     form_data = await request.form()
     form_data_decode_list: MutableMapping[str, Any] = {}
     for key, val in form_data.multi_items():
@@ -109,17 +107,16 @@ async def unflatten_mapping_form_data(
     return ret  # type: ignore
 
 
-async def unflatten_sequence_form_data(
-    request: Request, reg: Registry
-) -> Sequence[str]:
+async def unflatten_sequence_form_data(request: Request) -> Sequence[str]:
     """
     Parse the {meth}`fastlife.request.request.form` and build a list of structure.
     """
+    registry = request.registry
     form_data = await request.form()
     # Could raise a value error !
-    return unflatten_struct(
-        form_data, [], csrf_token_name=reg.settings.csrf_token_name
-    )  # type: ignore
+    return unflatten_struct(  # type: ignore
+        form_data, [], csrf_token_name=registry.settings.csrf_token_name
+    )
 
 
 MappingFormData = Annotated[Mapping[str, Any], Depends(unflatten_mapping_form_data)]
