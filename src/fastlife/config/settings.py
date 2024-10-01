@@ -108,9 +108,3 @@ class Settings(BaseSettings):
 
     decode_reverse_proxy_headers: bool = Field(default=True)
     """Ensure that the request object has information based on http proxy headers."""
-
-    api_swagger_ui_url: str | None = Field(default=None)
-    """Path to the automatic API documentation using Swagger UI."""
-
-    api_redocs_url: str | None = Field(default=None)
-    """Path to the automatic API documentation using ReDoc."""

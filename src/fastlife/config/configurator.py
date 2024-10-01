@@ -136,6 +136,8 @@ class GenericConfigurator(Generic[TRegistry]):
         self.api_version = "v1"
         self.api_description: str = ""
         self.api_summary: str | None = None
+        self.api_swagger_ui_url: str | None = None
+        self.api_redoc_url: str | None = None
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
@@ -171,8 +173,8 @@ class GenericConfigurator(Generic[TRegistry]):
             description=self.api_description,
             summary=self.api_summary,
             dependencies=[Depends(check_csrf())],
-            docs_url=self.registry.settings.api_swagger_ui_url,
-            redoc_url=self.registry.settings.api_redocs_url,
+            docs_url=self.api_swagger_ui_url,
+            redoc_url=self.api_redoc_url,
             openapi_tags=[tag.model_dump(by_alias=True) for tag in self.tags.values()]
             if self.tags
             else None,
@@ -264,20 +266,28 @@ class GenericConfigurator(Generic[TRegistry]):
         title: str,
         version: str,
         description: str,
+        *,
         summary: str | None = None,
+        swagger_ui_url: str | None = None,
+        redoc_url: str | None = None,
     ) -> Self:
         """
         Set your api documentation title for application that expose an API.
 
         :param title: OpenAPI documentation title
         :param version: OpenAPI api version
-        :param description: OpenAPI documentation description
-        :param summary: OpenAPI documentation summary
+        :param description: OpenAPI documentation description. Use markdown here.
+        :param summary: OpenAPI documentation summary.
+            A short description: text only.
+        :param swagger_ui_url: Endpoint for {term}`Swagger UI` served by FastAPI
+        :param redoc_url: Endpoint for {term}`Redoc` served by FastAPI
         """
         self.api_title = title
         self.api_version = version
         self.api_description = description
         self.api_summary = summary
+        self.api_swagger_ui_url = swagger_ui_url
+        self.api_redoc_url = redoc_url
         return self
 
     def add_open_tag(self, tag: OpenApiTag) -> Self:
