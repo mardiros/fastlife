@@ -12,7 +12,6 @@ Note that uvicorn or hypercorn offer the same kind middleware.
 
 Norw, every website is in https, so, this middleware is active by default.
 """
-from typing import Any
 
 from fastlife import Configurator, configure
 
@@ -22,7 +21,7 @@ __all__ = ["XForwardedStar"]
 
 
 @configure
-def includeme(config: Configurator[Any]) -> None:
+def includeme(config: Configurator) -> None:
     settings = config.registry.settings
     if settings.decode_reverse_proxy_headers:
         config.add_middleware(XForwardedStar)

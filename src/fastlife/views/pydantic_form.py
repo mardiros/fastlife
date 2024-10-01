@@ -1,4 +1,4 @@
-from typing import Any, Optional, cast
+from typing import Optional, cast
 
 from fastapi import Query
 from pydantic.fields import FieldInfo
@@ -36,7 +36,7 @@ async def show_widget(
 
 
 @configure
-def includeme(config: Configurator[Any]) -> None:
+def includeme(config: Configurator) -> None:
     route_prefix = config.registry.settings.fastlife_route_prefix
     config.add_route(
         "fl-pydantic-form-widget",

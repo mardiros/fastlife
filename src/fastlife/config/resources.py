@@ -65,7 +65,7 @@ def resource(
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore
 
-            config: Configurator[Any] = getattr(scanner, VENUSIAN_CATEGORY)
+            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
             if description:
                 config.add_open_tag(
                     OpenApiTag(
@@ -76,7 +76,7 @@ def resource(
             api = ob()
 
             def bind_config(
-                bind_config: Configurator[Any],
+                bind_config: Configurator,
                 method: str,
                 bind_path: str | None,
                 endpoint: Any,

@@ -38,7 +38,7 @@ from fastlife.security.csrf import check_csrf
 from fastlife.services.policy import check_permission
 from fastlife.shared_utils.resolver import resolve
 
-from .registry import TRegistry
+from .registry import AppRegistry, TRegistry
 from .settings import Settings
 
 if TYPE_CHECKING:
@@ -110,7 +110,7 @@ def rebuild_router(router: Router) -> Router:
     return _router
 
 
-class Configurator(Generic[TRegistry]):
+class GenericConfigurator(Generic[TRegistry]):
     """
     Configure and build an application.
 
@@ -562,8 +562,16 @@ class Configurator(Generic[TRegistry]):
         return self
 
 
+class Configurator(GenericConfigurator[AppRegistry]):
+    """
+    Configure and build an application.
+
+    Initialize the app from the settings.
+    """
+
+
 def configure(
-    wrapped: Callable[[Configurator[Any]], None],
+    wrapped: Callable[[Configurator], None],
 ) -> Callable[[Any], None]:
     """
     Decorator used to attach route in a submodule while using the configurator.include.

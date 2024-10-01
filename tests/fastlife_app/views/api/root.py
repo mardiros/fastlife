@@ -3,7 +3,6 @@ import textwrap
 from pydantic import BaseModel
 
 from fastlife import Configurator, configure
-from fastlife.config.registry import AppRegistry
 
 
 class Info(BaseModel):
@@ -16,7 +15,7 @@ async def info() -> Info:
 
 
 @configure
-def includeme(config: Configurator[AppRegistry]):
+def includeme(config: Configurator):
     config.set_api_documentation_info(
         "Dummy API",
         "4.2",

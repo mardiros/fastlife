@@ -27,7 +27,7 @@ def exception_handler(
         ) -> None:
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore
-            config: Configurator[Any] = getattr(scanner, VENUSIAN_CATEGORY)
+            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
             config.add_exception_handler(
                 exception,
                 wrapped,
