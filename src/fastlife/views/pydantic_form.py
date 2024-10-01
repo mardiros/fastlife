@@ -5,13 +5,11 @@ from pydantic.fields import FieldInfo
 
 from fastlife import Configurator, Request, Response, configure
 from fastlife.adapters.jinjax.renderer import JinjaxRenderer
-from fastlife.config.registry import Registry
 from fastlife.shared_utils.resolver import resolve_extended
 
 
 async def show_widget(
     typ: str,
-    reg: Registry,
     request: Request,
     title: Optional[str] = Query(None),
     name: Optional[str] = Query(None),
@@ -26,7 +24,7 @@ async def show_widget(
     if title:
         field = FieldInfo(title=title)
     # FIXME: .jinja should not be hardcoded
-    renderer = cast(JinjaxRenderer, reg.get_renderer(".jinja")(request))
+    renderer = cast(JinjaxRenderer, request.registry.get_renderer(".jinja")(request))
     data = renderer.pydantic_form_field(
         model=model_cls,  # type: ignore
         name=name,

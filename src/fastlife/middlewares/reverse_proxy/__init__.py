@@ -12,6 +12,7 @@ Note that uvicorn or hypercorn offer the same kind middleware.
 
 Norw, every website is in https, so, this middleware is active by default.
 """
+
 from fastlife import Configurator, configure
 
 from .x_forwarded import XForwardedStar

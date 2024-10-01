@@ -1,10 +1,7 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Annotated, Callable
+from typing import TYPE_CHECKING, TypeVar
 
-from fastapi import Depends
-from fastapi import Request as FastAPIRequest
-
-from fastlife.request.request import Request
+from fastlife.services.locale_negociator import LocaleNegociator, default_negociator
 from fastlife.services.translations import LocalizerFactory
 
 if TYPE_CHECKING:
@@ -13,15 +10,6 @@ if TYPE_CHECKING:
     )  # coverage: ignore
 
 from .settings import Settings
-
-LocaleNegociator = Callable[[Request], str]
-
-
-def _default_negociator(settings: Settings) -> LocaleNegociator:
-    def locale_negociator(request: FastAPIRequest) -> str:
-        return settings.default_locale
-
-    return locale_negociator
 
 
 class AppRegistry:
@@ -37,7 +25,7 @@ class AppRegistry:
 
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
-        self.locale_negociator = _default_negociator(self.settings)
+        self.locale_negociator = default_negociator(self.settings)
         self.renderers = {}
         self.localizer = LocalizerFactory()
 
@@ -48,9 +36,4 @@ class AppRegistry:
         raise RuntimeError(f"No renderer registered for template {template}")
 
 
-def get_registry(request: Request) -> AppRegistry:
-    return request.registry
-
-
-Registry = Annotated[AppRegistry, Depends(get_registry)]
-"""FastAPI dependency to access to the registry."""
+TRegistry = TypeVar("TRegistry", bound=AppRegistry)

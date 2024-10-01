@@ -19,7 +19,7 @@ from collections.abc import Mapping, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Annotated, Any, Callable, Self, Tuple, Type
+from typing import TYPE_CHECKING, Annotated, Any, Callable, Generic, Self, Tuple, Type
 
 import venusian
 from fastapi import Depends, FastAPI
@@ -38,6 +38,7 @@ from fastlife.security.csrf import check_csrf
 from fastlife.services.policy import check_permission
 from fastlife.shared_utils.resolver import resolve
 
+from .registry import AppRegistry, TRegistry
 from .settings import Settings
 
 if TYPE_CHECKING:
@@ -46,7 +47,7 @@ if TYPE_CHECKING:
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
 
-    from .registry import AppRegistry, LocaleNegociator  # coverage: ignore
+from fastlife.services.locale_negociator import LocaleNegociator
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
@@ -109,14 +110,14 @@ def rebuild_router(router: Router) -> Router:
     return _router
 
 
-class Configurator:
+class GenericConfigurator(Generic[TRegistry]):
     """
     Configure and build an application.
 
     Initialize the app from the settings.
     """
 
-    registry: "AppRegistry"
+    registry: TRegistry
 
     def __init__(self, settings: Settings) -> None:
         """
@@ -241,7 +242,7 @@ class Configurator:
             self._route_prefix = old
         return self
 
-    def set_locale_negociator(self, locale_negociator: "LocaleNegociator") -> Self:
+    def set_locale_negociator(self, locale_negociator: LocaleNegociator) -> Self:
         """Install a locale negociator for the app."""
         self.registry.locale_negociator = locale_negociator
         return self
@@ -561,9 +562,17 @@ class Configurator:
         return self
 
 
+class Configurator(GenericConfigurator[AppRegistry]):
+    """
+    Configure and build an application.
+
+    Initialize the app from the settings.
+    """
+
+
 def configure(
     wrapped: Callable[[Configurator], None],
-) -> Callable[[Configurator], None]:
+) -> Callable[[Any], None]:
     """
     Decorator used to attach route in a submodule while using the configurator.include.
     """

@@ -3,19 +3,22 @@
 from typing import TYPE_CHECKING, Any
 
 from fastapi import Request as FastAPIRequest
+from fastapi.params import Depends
+from typing_extensions import Annotated, Generic
+
+from fastlife.config.registry import AppRegistry, TRegistry
 
 if TYPE_CHECKING:
-    from fastlife.config.registry import AppRegistry  # coverage: ignore
     from fastlife.security.policy import (  # coverage: ignore
         AbstractSecurityPolicy,
         HasPermission,
     )
 
 
-class Request(FastAPIRequest):
+class FastLifeRequest(FastAPIRequest, Generic[TRegistry]):
     """HTTP Request representation."""
 
-    registry: "AppRegistry"
+    registry: TRegistry
     """Direct access to the application registry."""
     locale_name: str
     """Request locale used for the i18n of the response."""
@@ -23,7 +26,7 @@ class Request(FastAPIRequest):
     security_policy: "AbstractSecurityPolicy[Any] | None"
     """Request locale used for the i18n of the response."""
 
-    def __init__(self, registry: "AppRegistry", request: FastAPIRequest) -> None:
+    def __init__(self, registry: TRegistry, request: FastAPIRequest) -> None:
         super().__init__(request.scope, request.receive)
         self.registry = registry
         self.locale_name = registry.locale_negociator(self)
@@ -47,3 +50,28 @@ class Request(FastAPIRequest):
             )
 
         return await self.security_policy.has_permission(permission)
+
+
+def get_request(request: FastAPIRequest) -> FastLifeRequest[Any]:
+    return request  # type: ignore
+
+
+GenericRequest = Annotated[FastLifeRequest[TRegistry], Depends(get_request)]
+"""
+FastAPI handle its Request objects using a lenient_issubclass,
+basically a issubclass(Request), doe to the Generic[T], it does not work.
+"""
+
+Request = Annotated[FastLifeRequest[AppRegistry], Depends(get_request)]
+"""
+FastAPI handle its Request objects using a lenient_issubclass,
+basically a issubclass(Request), doe to the Generic[T], it does not work.
+"""
+
+
+def get_registry(request: GenericRequest[AppRegistry]) -> AppRegistry:
+    return request.registry
+
+
+Registry = Annotated[AppRegistry, Depends(get_registry)]
+"""FastAPI dependency to access to the registry."""

@@ -1,9 +1,8 @@
 from typing import Any, Mapping, MutableMapping, MutableSequence
 
 import pytest
-from fastapi import Request
 
-from fastlife.config.registry import Registry
+from fastlife import Request
 from fastlife.request.form_data import (
     unflatten_mapping_form_data,
     unflatten_sequence_form_data,
@@ -202,12 +201,9 @@ def test_unflatten_struct_error(params: Mapping[str, Any]):
     ],
 )
 async def test_unflatten_mapping_form_data(
-    params: Mapping[str, Any], dummy_request_param: Request, dummy_registry: Registry
+    params: Mapping[str, Any], dummy_request_param: Request
 ):
-    assert (
-        await unflatten_mapping_form_data(dummy_request_param, dummy_registry)
-        == params["expected"]
-    )
+    assert await unflatten_mapping_form_data(dummy_request_param) == params["expected"]
 
 
 @pytest.mark.parametrize(
@@ -224,9 +220,6 @@ async def test_unflatten_mapping_form_data(
     ],
 )
 async def test_unflatten_sequence_form_data(
-    params: Mapping[str, Any], dummy_request_param: Request, dummy_registry: Registry
+    params: Mapping[str, Any], dummy_request_param: Request
 ):
-    assert (
-        await unflatten_sequence_form_data(dummy_request_param, dummy_registry)
-        == params["expected"]
-    )
+    assert await unflatten_sequence_form_data(dummy_request_param) == params["expected"]
