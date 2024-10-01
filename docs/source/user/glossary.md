@@ -15,6 +15,13 @@ It is an extension of the Jinja2 template engine.
 the structure and capabilities of RESTful APIs in a machine-readable format.
 FastAPI generates the OpenAPI spec file directly from its API.
 
+[Redoc]https://redocly.com/docs/redoc
+: An alternative to Swagger UI. An interactive documentation from Open API Format.
+
+[Swagger UI](https://swagger.io/tools/swagger-ui/)
+: Swagger UI is a web interface that create a documentation and a playground to test
+API based on the Open API format.
+
 [Pyramid](https://trypyramid.com/)
 : Pyramid is Python Web Framework based on WSGI.
 fastlife take a lots of inspiration from Pyramid.

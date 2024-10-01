@@ -37,7 +37,10 @@ def includeme(config: Configurator):
             or interactions** it's just there to fulfill the method's signature.
             """
         ),
-        "API for dummies",
+        summary="API for dummies",
+        swagger_ui_url="/api/doc",
+        redoc_url="/api/redoc",
+
     )
     config.add_api_route(
         "home",

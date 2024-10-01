@@ -12,8 +12,6 @@ def build_app():
         Settings(
             session_secret_key="supasickret",
             jinjax_auto_reload=True,
-            api_swagger_ui_url="/api/doc",
-            api_redocs_url="/api/redoc",
         )
     )
     conf.add_template_search_path("tests.fastlife_app:templates")
