@@ -40,7 +40,6 @@ def includeme(config: Configurator):
         summary="API for dummies",
         swagger_ui_url="/api/doc",
         redoc_url="/api/redoc",
-
     )
     config.add_api_route(
         "home",

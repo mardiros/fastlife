@@ -9,7 +9,7 @@ from fastapi import HTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from typing_extensions import Generic
 
-from fastlife import Request
+from fastlife.request.request import AnyRequest
 
 CheckPermissionHook = Callable[..., Coroutine[Any, Any, None]] | Callable[..., None]
 CheckPermission = Callable[[str], CheckPermissionHook]
@@ -101,7 +101,7 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TUser]):
     Unauthorized = Unauthorized
     """The exception raised if no user has been identified."""
 
-    def __init__(self, request: Request):
+    def __init__(self, request: AnyRequest):
         """
         Build the security policy.
 

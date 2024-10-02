@@ -8,7 +8,7 @@ from starlette.responses import Response
 from fastlife.request.request import Request
 
 if TYPE_CHECKING:
-    from fastlife.config.registry import AppRegistry  # coverage: ignore
+    from fastlife.config.registry import DefaultRegistry  # coverage: ignore
 
 
 class Route(APIRoute):
@@ -19,7 +19,7 @@ class Route(APIRoute):
     have the registry property available in every received request.
     """
 
-    _registry: "AppRegistry"
+    _registry: "DefaultRegistry"
     """
     The application registry.
 

@@ -29,7 +29,7 @@ orphan: true
 
 ### API
 
-````{py:function} show_widget(typ: str, reg: fastlife.config.registry.Registry, request: fastlife.Request, title: typing.Optional[str] = Query(None), name: typing.Optional[str] = Query(None), token: typing.Optional[str] = Query(None), removable: bool = Query(False)) -> fastlife.Response
+````{py:function} show_widget(typ: str, request: fastlife.Request, title: typing.Optional[str] = Query(None), name: typing.Optional[str] = Query(None), token: typing.Optional[str] = Query(None), removable: bool = Query(False)) -> fastlife.Response
 :canonical: fastlife.views.pydantic_form.show_widget
 :async:
 

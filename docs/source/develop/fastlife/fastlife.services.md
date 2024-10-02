@@ -18,6 +18,7 @@ orphan: true
 :titlesonly:
 :maxdepth: 1
 
+fastlife.services.locale_negociator
 fastlife.services.policy
 fastlife.services.templates
 ```

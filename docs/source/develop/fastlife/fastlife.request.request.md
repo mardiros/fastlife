@@ -16,6 +16,29 @@
 :class: autosummary longtable
 :align: left
 
+* - {py:obj}`GenericRequest <fastlife.request.request.GenericRequest>`
+  - ```{autodoc2-docstring} fastlife.request.request.GenericRequest
+    :parser: myst
+    :summary:
+    ```
+````
+
+### Data
+
+````{list-table}
+:class: autosummary longtable
+:align: left
+
+* - {py:obj}`AnyRequest <fastlife.request.request.AnyRequest>`
+  - ```{autodoc2-docstring} fastlife.request.request.AnyRequest
+    :parser: myst
+    :summary:
+    ```
+* - {py:obj}`Registry <fastlife.request.request.Registry>`
+  - ```{autodoc2-docstring} fastlife.request.request.Registry
+    :parser: myst
+    :summary:
+    ```
 * - {py:obj}`Request <fastlife.request.request.Request>`
   - ```{autodoc2-docstring} fastlife.request.request.Request
     :parser: myst
@@ -25,66 +48,99 @@
 
 ### API
 
-`````{py:class} Request(registry: fastlife.config.registry.AppRegistry, request: fastapi.Request)
-:canonical: fastlife.request.request.Request
+````{py:data} AnyRequest
+:canonical: fastlife.request.request.AnyRequest
+:value: >
+   None
 
-Bases: {py:obj}`fastapi.Request`
+```{autodoc2-docstring} fastlife.request.request.AnyRequest
+:parser: myst
+```
 
-```{autodoc2-docstring} fastlife.request.request.Request
+````
+
+`````{py:class} GenericRequest(registry: fastlife.config.registry.TRegistry, request: fastapi.Request)
+:canonical: fastlife.request.request.GenericRequest
+
+Bases: {py:obj}`fastapi.Request`, {py:obj}`typing_extensions.Generic`\[{py:obj}`fastlife.config.registry.TRegistry`\]
+
+```{autodoc2-docstring} fastlife.request.request.GenericRequest
 :parser: myst
 ```
 
 ```{rubric} Initialization
 ```
 
-```{autodoc2-docstring} fastlife.request.request.Request.__init__
+```{autodoc2-docstring} fastlife.request.request.GenericRequest.__init__
 :parser: myst
 ```
 
 ````{py:method} has_permission(permission: str) -> HasPermission | type[HasPermission]
-:canonical: fastlife.request.request.Request.has_permission
+:canonical: fastlife.request.request.GenericRequest.has_permission
 :async:
 
-```{autodoc2-docstring} fastlife.request.request.Request.has_permission
+```{autodoc2-docstring} fastlife.request.request.GenericRequest.has_permission
 :parser: myst
 ```
 
 ````
 
 ````{py:attribute} locale_name
-:canonical: fastlife.request.request.Request.locale_name
+:canonical: fastlife.request.request.GenericRequest.locale_name
 :type: str
 :value: >
    None
 
-```{autodoc2-docstring} fastlife.request.request.Request.locale_name
+```{autodoc2-docstring} fastlife.request.request.GenericRequest.locale_name
 :parser: myst
 ```
 
 ````
 
 ````{py:attribute} registry
-:canonical: fastlife.request.request.Request.registry
-:type: fastlife.config.registry.AppRegistry
+:canonical: fastlife.request.request.GenericRequest.registry
+:type: fastlife.config.registry.TRegistry
 :value: >
    None
 
-```{autodoc2-docstring} fastlife.request.request.Request.registry
+```{autodoc2-docstring} fastlife.request.request.GenericRequest.registry
 :parser: myst
 ```
 
 ````
 
 ````{py:attribute} security_policy
-:canonical: fastlife.request.request.Request.security_policy
+:canonical: fastlife.request.request.GenericRequest.security_policy
 :type: AbstractSecurityPolicy[Any] | None
 :value: >
    None
 
-```{autodoc2-docstring} fastlife.request.request.Request.security_policy
+```{autodoc2-docstring} fastlife.request.request.GenericRequest.security_policy
 :parser: myst
 ```
 
 ````
 
 `````
+
+````{py:data} Registry
+:canonical: fastlife.request.request.Registry
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.request.request.Registry
+:parser: myst
+```
+
+````
+
+````{py:data} Request
+:canonical: fastlife.request.request.Request
+:value: >
+   None
+
+```{autodoc2-docstring} fastlife.request.request.Request
+:parser: myst
+```
+
+````

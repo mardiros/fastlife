@@ -47,7 +47,7 @@
 
 ### API
 
-`````{py:class} AbstractSecurityPolicy(request: fastlife.Request)
+`````{py:class} AbstractSecurityPolicy(request: fastlife.request.request.AnyRequest)
 :canonical: fastlife.security.policy.AbstractSecurityPolicy
 
 Bases: {py:obj}`abc.ABC`, {py:obj}`typing_extensions.Generic`\[{py:obj}`fastlife.security.policy.TUser`\]
@@ -218,7 +218,7 @@ Bases: {py:obj}`int`
 
 `````
 
-`````{py:class} InsecurePolicy(request: fastlife.Request)
+`````{py:class} InsecurePolicy(request: fastlife.request.request.AnyRequest)
 :canonical: fastlife.security.policy.InsecurePolicy
 
 Bases: {py:obj}`fastlife.security.policy.AbstractSecurityPolicy`\[{py:obj}`None`\]

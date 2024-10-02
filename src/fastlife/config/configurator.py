@@ -38,7 +38,7 @@ from fastlife.security.csrf import check_csrf
 from fastlife.services.policy import check_permission
 from fastlife.shared_utils.resolver import resolve
 
-from .registry import AppRegistry, TRegistry
+from .registry import DefaultRegistry, TRegistry
 from .settings import Settings
 
 if TYPE_CHECKING:
@@ -572,7 +572,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
 
-class Configurator(GenericConfigurator[AppRegistry]):
+class Configurator(GenericConfigurator[DefaultRegistry]):
     """
     Configure and build an application.
 

@@ -1,22 +1,29 @@
 from typing import Annotated
+
 from fastapi import Depends
-from fastlife.config.configurator import GenericConfigurator, Settings
-from fastlife.config.registry import AppRegistry
-from fastlife.request import GenericRequest, get_request
-from tests.fastlife_app.services.uow import UnitOfWork
+
+from fastlife import (
+    DefaultRegistry,
+    GenericConfigurator,
+    GenericRequest,
+    Settings,
+    get_request,
+)
+from fastlife.shared_utils.resolver import resolve
+from tests.fastlife_app.service.uow import AbstractUnitOfWork
 
 
 class MySettings(Settings):
-    foobar: str
     registry_class: str = "tests.fastlife_app.config:MyRegistry"
+    uow: str = "tests.fastlife_app.adapters.inmemory_uow:UnitOfWork"
 
 
-class MyRegistry(AppRegistry):
-    uow: UnitOfWork
+class MyRegistry(DefaultRegistry):
+    uow: AbstractUnitOfWork
 
     def __init__(self, settings: MySettings) -> None:
         super().__init__(settings)
-        self.uow = UnitOfWork()
+        self.uow = resolve(settings.uow)(settings)
 
 
 MyConfigurator = GenericConfigurator[MyRegistry]

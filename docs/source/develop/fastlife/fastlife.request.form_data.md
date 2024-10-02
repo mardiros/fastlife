@@ -75,7 +75,7 @@
 
 ````
 
-````{py:function} unflatten_mapping_form_data(request: fastapi.Request, registry: fastlife.config.registry.Registry) -> typing.Mapping[str, typing.Any]
+````{py:function} unflatten_mapping_form_data(request: fastlife.Request) -> typing.Mapping[str, typing.Any]
 :canonical: fastlife.request.form_data.unflatten_mapping_form_data
 :async:
 
@@ -84,7 +84,7 @@
 ```
 ````
 
-````{py:function} unflatten_sequence_form_data(request: fastapi.Request, reg: fastlife.config.registry.Registry) -> typing.Sequence[str]
+````{py:function} unflatten_sequence_form_data(request: fastlife.Request) -> typing.Sequence[str]
 :canonical: fastlife.request.form_data.unflatten_sequence_form_data
 :async:
 

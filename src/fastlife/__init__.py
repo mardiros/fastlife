@@ -2,13 +2,15 @@ from fastapi import Response
 
 from .config import (
     Configurator,
+    DefaultRegistry,
+    GenericConfigurator,
     Settings,
     configure,
     resource,
     resource_view,
     view_config,
 )
-from .request import Registry, Request
+from .request import GenericRequest, Registry, Request, get_request
 
 # from .request.form_data import model
 from .services.templates import TemplateParams
@@ -16,7 +18,9 @@ from .services.templates import TemplateParams
 __all__ = [
     # Config
     "configure",
+    "GenericConfigurator",
     "Configurator",
+    "DefaultRegistry",
     "TemplateParams",
     "Settings",
     "view_config",
@@ -24,8 +28,9 @@ __all__ = [
     "resource_view",
     # Model
     # "model",
-    # Fast API reexport
     "Request",
+    "GenericRequest",
+    "get_request",
     "Registry",
     "Response",
 ]

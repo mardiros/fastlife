@@ -11,7 +11,6 @@ def build_app():
         MySettings(
             session_secret_key="supasickret",
             jinjax_auto_reload=True,
-            foobar="foo",
         )
     )
     conf.add_template_search_path("tests.fastlife_app:templates")

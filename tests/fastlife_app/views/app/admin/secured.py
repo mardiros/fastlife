@@ -6,7 +6,7 @@ from fastlife import Request
 from fastlife.config.views import view_config
 from fastlife.security.policy import Forbidden
 from fastlife.services.templates import TemplateParams
-from tests.fastlife_app.services.uow import AuthenticatedUser
+from tests.fastlife_app.service.uow import AuthenticatedUser
 
 
 async def authenticated_user(request: Request) -> AuthenticatedUser:
