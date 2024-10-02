@@ -1,3 +1,12 @@
+## 0.16.0  - Released on 2024-10-02
+* Make the Configurator, Request and Registry Generic.
+* Breaking change, remove settings `api_swagger_ui_url` and `api_redoc_url`
+  now to register those url, use
+  {meth}`fastlife.config.configurator.Configurator.set_api_documentation_info`
+* Breaking change, in the method
+  {meth}`fastlife.config.configurator.Configurator.set_api_documentation_info`
+  summary is now kwargs only.
+
 ## 0.15.1  - Released on 2024-09-29
 * Hotfix components to create tables
 
