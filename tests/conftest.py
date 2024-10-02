@@ -68,7 +68,6 @@ def settings() -> MySettings:
         session_secret_key="labamba",
         domain_name="testserver.local",
         session_cookie_domain="testserver.local",
-        foobar="foo",
     )
 
 
@@ -82,7 +81,8 @@ def dummy_registry(settings: MySettings) -> MyRegistry:
 
 
 class DummySessionSerializer(AbsractSessionSerializer):
-    def __init__(self, secret_key: str, max_age: int) -> None: ...
+    def __init__(self, secret_key: str, max_age: int) -> None:
+        ...
 
     def serialize(self, data: Mapping[str, Any]) -> bytes:
         return json.dumps(data).encode("utf-8")

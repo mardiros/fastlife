@@ -3,4 +3,5 @@
 :caption: Cookbook:
 
 bootstrap_with_poetry
+configuration_overrides
 ```

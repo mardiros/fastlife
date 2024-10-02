@@ -1,16 +1,15 @@
-from typing import Annotated
-
-from fastapi import Depends, Response
 from starlette.status import HTTP_303_SEE_OTHER
 
-from fastlife import Configurator, Request, configure
+from fastlife import Configurator, Request, Response, configure
 from fastlife.config.exceptions import exception_handler
 from fastlife.security.policy import AbstractSecurityPolicy, Unauthorized
-from tests.fastlife_app.services.uow import AuthenticatedUser, UnitOfWork, uow
+from tests.fastlife_app.config import MyRequest
+from tests.fastlife_app.service.uow import AuthenticatedUser
 from tests.fastlife_app.views.api.security import (
     Allowed,
     Denied,
     HasPermission,
+    MyRegistry,
     Unauthenticated,
 )
 
@@ -28,12 +27,12 @@ def redict_login(request: Request, exception: RedirectLogin):
     )
 
 
-class SecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser]):
+class SecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser, MyRegistry]):
     Unauthorized = RedirectLogin
 
-    def __init__(self, request: Request, uow: Annotated[UnitOfWork, Depends(uow)]):
+    def __init__(self, request: MyRequest):
         super().__init__(request)
-        self.uow = uow
+        self.uow = request.registry.uow
 
     async def identity(self) -> AuthenticatedUser | None:
         if "user_id" not in self.request.session:

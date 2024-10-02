@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     a python module name. for instance `fastlife:components` is the directory components
     found in the fastlife package.
     """
-    registry_class: str = Field(default="fastlife.config.registry:AppRegistry")
+    registry_class: str = Field(default="fastlife.config.registry:DefaultRegistry")
     """Implementation class for the application regitry."""
     template_renderer_class: str = Field(
         default="fastlife.templates.renderer:JinjaxTemplateRenderer"

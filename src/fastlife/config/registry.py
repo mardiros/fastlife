@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 from .settings import Settings
 
 
-class AppRegistry:
+class DefaultRegistry:
     """
     The application registry got fastlife dependency injection.
     It is initialized by the configurator and accessed by the `fastlife.Registry`.
@@ -36,4 +36,4 @@ class AppRegistry:
         raise RuntimeError(f"No renderer registered for template {template}")
 
 
-TRegistry = TypeVar("TRegistry", bound=AppRegistry)
+TRegistry = TypeVar("TRegistry", bound=DefaultRegistry, covariant=True)

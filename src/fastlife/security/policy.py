@@ -2,14 +2,16 @@
 
 import abc
 import logging
-from typing import Any, Callable, Coroutine, Literal, TypeVar
+from typing import Annotated, Any, Callable, Coroutine, Literal, TypeVar
 from uuid import UUID
 
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 from typing_extensions import Generic
 
-from fastlife import Request
+from fastlife import get_request
+from fastlife.config.registry import TRegistry
+from tests.fastlife_app.config import GenericRequest
 
 CheckPermissionHook = Callable[..., Coroutine[Any, Any, None]] | Callable[..., None]
 CheckPermission = Callable[[str], CheckPermissionHook]
@@ -93,7 +95,7 @@ class Denied(HasPermission):
     reason = "Access denied to this resource"
 
 
-class AbstractSecurityPolicy(abc.ABC, Generic[TUser]):
+class AbstractSecurityPolicy(abc.ABC, Generic[TUser, TRegistry]):
     """Security policy base classe."""
 
     Forbidden = Forbidden
@@ -101,7 +103,12 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TUser]):
     Unauthorized = Unauthorized
     """The exception raised if no user has been identified."""
 
-    def __init__(self, request: Request):
+    request: GenericRequest[TRegistry]
+    """Request where the security policy is applied."""
+
+    def __init__(
+        self, request: Annotated[GenericRequest[TRegistry], Depends(get_request)]
+    ):
         """
         Build the security policy.
 
@@ -141,7 +148,7 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TUser]):
         """Destroy the request session."""
 
 
-class InsecurePolicy(AbstractSecurityPolicy[None]):
+class InsecurePolicy(AbstractSecurityPolicy[None, Any]):
     """
     An implementation of the security policy made for explicit unsecured access.
 

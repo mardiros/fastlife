@@ -41,30 +41,6 @@ Bases: {py:obj}`pydantic_settings.BaseSettings`
 :parser: myst
 ```
 
-````{py:attribute} api_redocs_url
-:canonical: fastlife.config.settings.Settings.api_redocs_url
-:type: str | None
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.api_redocs_url
-:parser: myst
-```
-
-````
-
-````{py:attribute} api_swagger_ui_url
-:canonical: fastlife.config.settings.Settings.api_swagger_ui_url
-:type: str | None
-:value: >
-   'Field(...)'
-
-```{autodoc2-docstring} fastlife.config.settings.Settings.api_swagger_ui_url
-:parser: myst
-```
-
-````
-
 ````{py:attribute} csrf_token_name
 :canonical: fastlife.config.settings.Settings.csrf_token_name
 :type: str

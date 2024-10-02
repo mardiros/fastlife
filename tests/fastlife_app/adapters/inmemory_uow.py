@@ -1,16 +1,12 @@
 from typing import Mapping
 
-from pydantic import BaseModel
-
-
-class AuthenticatedUser(BaseModel):
-    user_id: str
-    username: str
-    permissions: set[str]
-
-    def has_permission(self, permission_name: str) -> bool:
-        return permission_name in self.permissions
-
+from tests.fastlife_app.config import MySettings
+from tests.fastlife_app.domain.model import AuthenticatedUser, TokenInfo
+from tests.fastlife_app.service.uow import (
+    AbstractTokensRepository,
+    AbstractUnitOfWork,
+    AbstractUserRepository,
+)
 
 USERS: Mapping[str, AuthenticatedUser] = {
     "1": AuthenticatedUser(username="Bob", user_id="1", permissions={"admin"}),
@@ -18,8 +14,10 @@ USERS: Mapping[str, AuthenticatedUser] = {
     "3": AuthenticatedUser(username="Roger", user_id="3", permissions=set()),
 }
 
+TOKENS: Mapping[str, TokenInfo] = {}
 
-class UserRepository:
+
+class UserRepository(AbstractUserRepository):
     async def get_user_by_credencials(
         self, username: str, password: str
     ) -> AuthenticatedUser | None:
@@ -32,10 +30,12 @@ class UserRepository:
         return USERS.get(username.lower())
 
 
-class UnitOfWork:
-    def __init__(self) -> None:
+class TokensRepository(AbstractTokensRepository):
+    async def get_by_token(self, token: str) -> TokenInfo | None:
+        return TOKENS.get(token)
+
+
+class UnitOfWork(AbstractUnitOfWork):
+    def __init__(self, settings: MySettings) -> None:
         self.users = UserRepository()
-
-
-def uow() -> UnitOfWork:
-    return UnitOfWork()
+        self.users = UserRepository()
