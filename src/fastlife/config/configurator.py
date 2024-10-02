@@ -141,7 +141,9 @@ class GenericConfigurator(Generic[TRegistry]):
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
-        self._security_policies: dict[str, "type[AbstractSecurityPolicy[Any]]"] = {}
+        self._security_policies: dict[
+            str, "type[AbstractSecurityPolicy[Any, TRegistry]]"
+        ] = {}
 
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
@@ -307,7 +309,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
     def set_security_policy(
-        self, security_policy: "type[AbstractSecurityPolicy[Any]]"
+        self, security_policy: "type[AbstractSecurityPolicy[Any, TRegistry]]"
     ) -> Self:
         """
         Set a security policy for the application.

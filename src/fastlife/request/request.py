@@ -23,7 +23,7 @@ class GenericRequest(FastAPIRequest, Generic[TRegistry]):
     locale_name: str
     """Request locale used for the i18n of the response."""
 
-    security_policy: "AbstractSecurityPolicy[Any] | None"
+    security_policy: "AbstractSecurityPolicy[Any, TRegistry] | None"
     """Request locale used for the i18n of the response."""
 
     def __init__(self, registry: TRegistry, request: FastAPIRequest) -> None:

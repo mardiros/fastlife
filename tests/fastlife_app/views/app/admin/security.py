@@ -1,9 +1,6 @@
-from typing import Annotated
-
-from fastapi import Depends, Response
 from starlette.status import HTTP_303_SEE_OTHER
 
-from fastlife import Configurator, Request, configure
+from fastlife import Configurator, Request, Response, configure
 from fastlife.config.exceptions import exception_handler
 from fastlife.security.policy import AbstractSecurityPolicy, Unauthorized
 from tests.fastlife_app.config import MyRequest
