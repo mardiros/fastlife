@@ -8,3 +8,8 @@ class AuthenticatedUser(BaseModel):
 
     def has_permission(self, permission_name: str) -> bool:
         return permission_name in self.permissions
+
+
+class TokenInfo(BaseModel):
+    username: str
+    token: str

@@ -2,7 +2,6 @@ from typing import Annotated
 
 from fastapi import Depends
 from fastapi.security.oauth2 import OAuth2PasswordBearer
-from pydantic import BaseModel
 from starlette.exceptions import HTTPException
 
 from fastlife import Configurator, Request, configure
@@ -16,6 +15,8 @@ from fastlife.security.policy import (
     Unauthenticated,
     Unauthorized,
 )
+from tests.fastlife_app.config import MyRegistry, MyRequest
+from tests.fastlife_app.domain.model import TokenInfo
 
 
 @exception_handler(Unauthorized)
@@ -41,31 +42,21 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 
-class TokenInfo(BaseModel):
-    username: str
-    token: str
-
-
-user_db = {
-    "abc": TokenInfo(username="alice", token="abc"),
-    "foobar": TokenInfo(username="foobar", token="foobar"),
-}
-
-
-def load_user(token: Annotated[str, Depends(oauth2_scheme)]) -> TokenInfo:
-    return user_db[token]
-
-
-class OAuth2SecurityPolicy(AbstractSecurityPolicy[TokenInfo]):
+class OAuth2SecurityPolicy(AbstractSecurityPolicy[TokenInfo, MyRegistry]):
     def __init__(
-        self, request: Request, token: Annotated[str | None, Depends(oauth2_scheme)]
+        self, request: MyRequest, token: Annotated[str | None, Depends(oauth2_scheme)]
     ):
         super().__init__(request)
         self.token = token
 
     async def identity(self) -> TokenInfo | None:
         """Return app-specific user object."""
-        return load_user(self.token) if self.token else None
+        tinfo: TokenInfo | None = None
+        if self.token:
+            tinfo = await self.request.registry.uow.tokens.get_by_token(
+                token=self.token
+            )
+        return tinfo
 
     async def authenticated_userid(self) -> str | None:
         """Return a user identifier."""

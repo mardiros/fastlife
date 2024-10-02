@@ -6,6 +6,7 @@ from fastapi import Request as FastApiRequest
 
 from fastlife import Registry, Request, Settings
 from fastlife.adapters.jinjax import JinjaxTemplateRenderer
+from tests.fastlife_app.config import MySettings
 
 
 @pytest.fixture(scope="session")
@@ -14,8 +15,8 @@ def components_dir() -> Path:
 
 
 @pytest.fixture()
-def settings(components_dir: Path) -> Settings:
-    return Settings(template_search_path=f"{str(components_dir)},fastlife:components")
+def settings(components_dir: Path) -> MySettings:
+    return MySettings(template_search_path=f"{str(components_dir)},fastlife:components")
 
 
 @pytest.fixture()

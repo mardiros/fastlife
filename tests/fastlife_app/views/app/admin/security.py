@@ -12,6 +12,7 @@ from tests.fastlife_app.views.api.security import (
     Allowed,
     Denied,
     HasPermission,
+    MyRegistry,
     Unauthenticated,
 )
 
@@ -29,7 +30,7 @@ def redict_login(request: Request, exception: RedirectLogin):
     )
 
 
-class SecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser]):
+class SecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser, MyRegistry]):
     Unauthorized = RedirectLogin
 
     def __init__(self, request: MyRequest):
