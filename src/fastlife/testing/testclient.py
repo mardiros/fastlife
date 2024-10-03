@@ -251,7 +251,7 @@ class WebForm:
             raise ValueError(f'"{fieldname}" does not exists')
         field = self._formfields[fieldname]
         if field.node_name != "select":
-            raise ValueError(f"{fieldname} is a {repr(field)}, " "use set() instead")
+            raise ValueError(f"{fieldname} is a {field!r}, " "use set() instead")
 
         for option in field.by_node_name("option"):
             if option.text == value.strip():
@@ -273,7 +273,7 @@ class WebForm:
 
         if field.node_name != "select":
             raise ValueError(
-                f"{fieldname} is a {repr(self._formfields[fieldname])}, "
+                f"{fieldname} is a {self._formfields[fieldname]!r}, "
                 "use unset() for checkbox instead"
             )
         if "multiple" not in field.attrs:
