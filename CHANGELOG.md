@@ -1,3 +1,6 @@
+## 0.16.1  - Released on 2024-10-03
+* Fix import in the SecurityPolicy that make it unusable.
+
 ## 0.16.0  - Released on 2024-10-02
 * Make the Configurator, Request and Registry Generic.
 * Breaking change, remove settings `api_swagger_ui_url` and `api_redoc_url`
