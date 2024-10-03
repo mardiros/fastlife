@@ -3,6 +3,7 @@ default_unittest_suite := 'tests/unittests'
 default_functest_suite := 'tests/functionals'
 
 export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
+export CLICOLOR_FORCE := "1"
 
 install:
     poetry install --with dev --with doc
@@ -17,7 +18,7 @@ cleandoc:
     rm -rf docs/source/develop
 
 lint:
-    poetry run flake8 && echo "$(tput setaf 10)Success: no lint issue$(tput setaf 7)"
+    FORCE_COLOR=1 poetry run ruff check --fix src tests
 
 test: lint mypy unittest functest
 
@@ -95,9 +96,12 @@ showopenapi:
 mypy:
     poetry run mypy src/ tests/
 
-black:
-    poetry run isort .
-    poetry run black .
+fmt:
+    poetry run ruff check --fix .
+    poetry run ruff format src tests
+
+black: fmt
+    echo "$(tput setaf 3)Warning: Use 'just fmt' instead$(tput setaf 7)"
 
 gh-pages:
     poetry export --with doc -f requirements.txt -o docs/requirements.txt --without-hashes

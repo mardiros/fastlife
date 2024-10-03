@@ -1,4 +1,5 @@
 """Serialize session."""
+
 import abc
 import json
 from base64 import b64decode, b64encode
@@ -11,8 +12,7 @@ class AbsractSessionSerializer(abc.ABC):
     """Session serializer base class"""
 
     @abc.abstractmethod
-    def __init__(self, secret_key: str, max_age: int) -> None:
-        ...
+    def __init__(self, secret_key: str, max_age: int) -> None: ...
 
     @abc.abstractmethod
     def serialize(self, data: Mapping[str, Any]) -> bytes:

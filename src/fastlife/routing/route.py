@@ -1,4 +1,5 @@
 """HTTP Route."""
+
 from typing import TYPE_CHECKING, Any, Callable, Coroutine
 
 from fastapi.routing import APIRoute

@@ -131,7 +131,13 @@ def resource(
                             config, method, collection_path, getattr(api, method)
                         )
                     case (
-                        "get" | "post" | "put" | "patch" | "delete" | "head" | "options"
+                        "get"
+                        | "post"
+                        | "put"
+                        | "patch"
+                        | "delete"
+                        | "head"
+                        | "options"
                     ):
                         bind_config(config, method, path, getattr(api, method))
                     case _:

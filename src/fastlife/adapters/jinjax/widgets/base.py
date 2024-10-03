@@ -1,4 +1,5 @@
 """Widget base class."""
+
 import abc
 import secrets
 from typing import Any, Generic, Mapping, Type, TypeVar

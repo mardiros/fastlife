@@ -17,6 +17,7 @@ async def hello_world(
     return template()
 ```
 """
+
 from typing import Any, Callable
 
 import venusian

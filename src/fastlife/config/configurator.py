@@ -22,9 +22,8 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Annotated, Any, Callable, Generic, Self, Tuple, Type
 
 import venusian
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Response
 from fastapi import Request as BaseRequest
-from fastapi import Response
 from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx

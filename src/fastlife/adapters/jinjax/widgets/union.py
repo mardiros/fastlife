@@ -1,6 +1,7 @@
 """
 Widget for field of type Union.
 """
+
 from typing import Any, Optional, Sequence, Type, Union
 
 from markupsafe import Markup

@@ -18,8 +18,7 @@ from fastlife.adapters.jinjax.widgets.union import UnionWidget
 from fastlife.services.templates import AbstractTemplateRenderer
 
 
-class Foo(BaseModel):
-    ...
+class Foo(BaseModel): ...
 
 
 def test_render_template(renderer: AbstractTemplateRenderer):
