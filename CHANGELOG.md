@@ -1,3 +1,6 @@
+## 0.16.2  - Released on 2024-10-03
+* Add a new property all_registered_permissions on the Configurator class
+
 ## 0.16.1  - Released on 2024-10-03
 * Fix import in the SecurityPolicy that make it unusable.
 
