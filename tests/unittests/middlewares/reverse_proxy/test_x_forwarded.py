@@ -32,6 +32,7 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 "expected": {
                     "type": "http",
                     "headers": [],
+                    "client": (None, None),
                 },
             },
             id="no proxy headers",
@@ -45,11 +46,32 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 },
                 "expected": {
                     "type": "http",
-                    "client": "1.2.3.4",
+                    "client": ("1.2.3.4", None),
                     "headers": [(b"x-real-ip", b"1.2.3.4")],
                 },
             },
             id="x-real-ip",
+        ),
+        pytest.param(
+            {
+                "scope": {
+                    "type": "http",
+                    "client": "127.0.0.1",
+                    "headers": [
+                        (b"x-real-ip", b"1.2.3.4"),
+                        (b"x-forwarded-port", b"80"),
+                    ],
+                },
+                "expected": {
+                    "type": "http",
+                    "client": ("1.2.3.4", 80),
+                    "headers": [
+                        (b"x-real-ip", b"1.2.3.4"),
+                        (b"x-forwarded-port", b"80"),
+                    ],
+                },
+            },
+            id="x-real-ip and port",
         ),
         pytest.param(
             {
@@ -60,6 +82,7 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 "expected": {
                     "type": "http",
                     "host": "ararat",
+                    "client": (None, None),
                     "headers": [(b"x-forwarded-host", b"ararat")],
                 },
             },
@@ -75,6 +98,7 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 "expected": {
                     "type": "http",
                     "scheme": "https",
+                    "client": (None, None),
                     "headers": [(b"x-forwarded-proto", b"https")],
                 },
             },

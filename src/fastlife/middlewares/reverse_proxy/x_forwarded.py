@@ -15,6 +15,17 @@ def get_header(headers: Sequence[Tuple[bytes, bytes]], key: bytes) -> Optional[s
     return None
 
 
+def get_header_int(headers: Sequence[Tuple[bytes, bytes]], key: bytes) -> Optional[int]:
+    for hdr in headers:
+        if hdr[0].lower() == key:
+            ret = hdr[1].decode("latin1")
+            try:
+                return int(ret)
+            except ValueError:
+                pass
+    return None
+
+
 class XForwardedStar(AbstractMiddleware):
     def __init__(
         self,
@@ -26,7 +37,10 @@ class XForwardedStar(AbstractMiddleware):
         if scope["type"] in ("http", "websocket"):
             headers = scope["headers"]
             new_vals = {
-                "client": get_header(headers, b"x-real-ip"),
+                "client": (
+                    get_header(headers, b"x-real-ip"),
+                    get_header_int(headers, b"x-forwarded-port"),
+                ),
                 "host": get_header(headers, b"x-forwarded-host"),
                 "scheme": get_header(headers, b"x-forwarded-proto"),
             }
