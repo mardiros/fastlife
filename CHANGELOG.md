@@ -1,3 +1,6 @@
+## 0.16.3  - Released on 2024-10-03
+* Fix middleware that process the x-forwarded-headers to respect ASGI spec for client
+
 ## 0.16.2  - Released on 2024-10-03
 * Add a new property all_registered_permissions on the Configurator class
 
