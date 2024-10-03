@@ -55,7 +55,7 @@ def resource(
 
     Note that there is no abstract class that declare this method, this is done by
     introspection while returning the configuration method
-    {meth}`fastlife.config.configurator.Configurator.include`
+    {meth}`fastlife.config.configurator.GenericConfigurator.include`
     """
     tag = name
 

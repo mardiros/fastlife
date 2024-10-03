@@ -1,3 +1,4 @@
+(bootstrap-with-poetry)=
 # Bootstrap with poetry
 
 In this section, we build a Python package ready application.
@@ -89,7 +90,7 @@ care where myapp module is installed, so it's better than any absolute path
 in any settings for our use cases.
 
 
-```
+```bash
 cat << 'EOF' > src/myapp/entrypoint.py
 from fastlife import Configurator, Settings
 

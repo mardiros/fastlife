@@ -13,7 +13,7 @@ def check_permission(permission_name: str) -> CheckPermissionHook:
 
     Adding a permission on the route requires that a security policy has been
     added using the method
-    {meth}`fastlife.config.configurator.Configurator.set_security_policy`
+    {meth}`fastlife.config.configurator.GenericConfigurator.set_security_policy`
 
     :param permission_name: a permission name set in a view to check access.
     :return: a function that raise http exceptions or any configured exception here.

@@ -32,7 +32,7 @@ In the example above, we can see that Fastlife build a FastAPI application.
 In a classical {term}`FastAPI` application, the application is created an route, routers,
 are added to it.
 Using fastlife, the process has been reversed in a dependency injection process,
-a {class}`Configurator <fastlife.config.configurator.Configurator>` object collect
+a {class}`Configurator <fastlife.config.configurator.GenericConfigurator>` object collect
 all the routes, or any configuration like locale manager for i18n, and create
 an app after everything has been collected.
 
@@ -63,7 +63,7 @@ fastapi dev hello_world.py
 ```
 
 To use {term}`JinjaX` templates, templates path has to be registered using the
-{meth}`Configurator.add_template_search_path <fastlife.config.configurator.Configurator.add_template_search_path>` or using
+{meth}`Configurator.add_template_search_path <fastlife.config.configurator.GenericConfigurator.add_template_search_path>` or using
 the settings {attr}`template_search_path <fastlife.config.settings.Settings.template_search_path>`.
 
 Settings are {term}`pydantic settings`, it can be set from a environment variable prefixed by `fastlife_`.
@@ -74,7 +74,7 @@ more modular, and kept the module responsible of templates add its own template 
 
 ```{note}
 The most concerning can develop and register their own template engine using the
-{meth}`fastlife.config.configurator.Configurator.add_renderer`.
+{meth}`fastlife.config.configurator.GenericConfigurator.add_renderer`.
 ```
 
 ## modular approach
@@ -90,14 +90,14 @@ Let's write a simple `views` module, with our previous view, and nothing more.
   :language: python
 ```
 
-Now, we can use the {meth}`config.include() <fastlife.config.configurator.Configurator.include>`
+Now, we can use the {meth}`config.include() <fastlife.config.configurator.GenericConfigurator.include>`
 method to inject routes in the final application.
 
 ```{literalinclude} examples/modular/entrypoint.py
   :language: python
 ```
 
-The {meth}`config.include() <fastlife.config.configurator.Configurator.include>` call will
+The {meth}`config.include() <fastlife.config.configurator.GenericConfigurator.include>` call will
 import the module **and all its submodules** and grab all decorated method with a
 {func}`@configure <fastlife.config.configurator.configure>` afterwhat, the decorated method
 will be called with the configurator as first argument in order to configure the module.

@@ -74,6 +74,8 @@ class Settings(BaseSettings):
     )
     """
     Set global constants accessible in every templates.
+    Defaults to `fastlife.templates.constants:Constants`
+    See {class}`fastlife.templates.constants.Constants`
     """
 
     session_secret_key: str = Field(default="")
