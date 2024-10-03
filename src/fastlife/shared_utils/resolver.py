@@ -21,8 +21,10 @@ def resolve(value: str) -> Any:
 
     try:
         attr = getattr(module, attr_name)
-    except AttributeError:
-        raise ValueError(f"Attribute {attr_name} not found in module {module_name}")
+    except AttributeError as exc:
+        raise ValueError(
+            f"Attribute {attr_name} not found in module {module_name}"
+        ) from exc
 
     return attr
 

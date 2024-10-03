@@ -392,7 +392,7 @@ class WebResponse:
     def html_body(self) -> Element:
         """The body element of the html response."""
         body = self.html.by_node_name("body")
-        assert len(body) == 1
+        assert len(body) == 1, "body element not found or multiple body found"
         return body[0]
 
     @property
@@ -400,7 +400,7 @@ class WebResponse:
         """The form element of the html response."""
         if self._form is None:
             form = self.html.form
-            assert form is not None
+            assert form is not None, "form element not found"
             self._form = WebForm(self._client, self._origin, form)
         return self._form
 

@@ -65,7 +65,7 @@ def test_h1(element: Element):
 )
 def test_h1_many_raises(element: Element):
     with pytest.raises(AssertionError) as ctx:
-        element.h1.text
+        element.h1.text  # noqa: B018
     assert (
         str(ctx.value)
         == "Should have 1 <h1>, got 2 in <div><h1>I am the one</h1><h1>Sorry</h1></div>"

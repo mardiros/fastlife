@@ -103,7 +103,7 @@ def generate_docstring(
     kwonlyargs = func_def.args.kwonlyargs
     kw_defaults = func_def.args.kw_defaults
 
-    for arg, default in zip(kwonlyargs, kw_defaults):
+    for arg, default in zip(kwonlyargs, kw_defaults, strict=False):
         process_arg(arg, default)
 
     if add_content:
