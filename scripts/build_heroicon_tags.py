@@ -3,10 +3,10 @@
 import re
 import sys
 from collections import defaultdict
+from collections.abc import Iterator
 from importlib import util
 from pathlib import Path
 from textwrap import dedent
-from typing import Iterator, Tuple
 from zipfile import ZipFile
 
 package_name = "heroicons"
@@ -33,7 +33,7 @@ def add_attrs(content: str) -> str:
     return ret
 
 
-def iter_zip(heroicons_path: Path) -> Iterator[Tuple[str, str]]:
+def iter_zip(heroicons_path: Path) -> Iterator[tuple[str, str]]:
     iconzip = heroicons_path / "heroicons.zip"
     with ZipFile(iconzip, "r") as zip_ref:
         file_list = zip_ref.namelist()
@@ -114,7 +114,7 @@ def main():
         fw.write("<p>Available icons, click to copy</p>\n")
 
         fw.write('<div class="grid grid-cols-5 gap-4 p-6">\n')
-        for name, vals in names.items():
+        for name in names:
             fw.write(
                 '<div class="flex flex-col items-center text-center cursor-pointer" '
                 f"onclick=\"copyText('&lt;icons.{name} /&gt;')\">"

@@ -1,7 +1,7 @@
 import ast
 import re
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, ClassVar, cast
 
 from docutils import nodes
 from jinjax import InvalidArgument
@@ -120,7 +120,7 @@ class JinjaxComponent(ObjectDescription[str]):
         kw_defaults = func_def.args.kw_defaults
 
         has_content = False
-        for arg, default in zip(kwonlyargs, kw_defaults):
+        for arg, default in zip(kwonlyargs, kw_defaults, strict=False):
             if arg.arg == "content":
                 has_content = True
             else:
@@ -171,17 +171,17 @@ class JinjaxDomain(Domain):
 
     name = "jinjax"
     label = "Jinjax"
-    roles = {
+    roles = {  # noqa: RUF012
         "component": XRefRole(),
     }
-    directives = {
+    directives = {  # noqa: RUF012
         "component": JinjaxComponent,
     }
-    object_types = {
+    object_types = {  # noqa: RUF012
         "component": ObjType("component", "component"),
     }
 
-    _components: list[str] = []
+    _components: ClassVar[list[str]] = []
 
     @classmethod
     def register(cls, component: str) -> None:
