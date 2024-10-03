@@ -62,7 +62,7 @@ def generate_docstring(
     docstring = (ast.get_docstring(func_def, clean=True) or "").strip()
     if docstring:
         docstring = textwrap.dedent(docstring)
-        docstring_lines = [l for l in docstring.split("\n")]
+        docstring_lines = [line for line in docstring.split("\n")]
         # Add a newline for separation after the function docstring
         docstring_lines.append("")
     else:
