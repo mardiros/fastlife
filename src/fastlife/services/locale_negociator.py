@@ -1,6 +1,7 @@
 """Find the localization gor the given request."""
 
-from typing import TYPE_CHECKING, Any, Callable
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 from fastlife.config.settings import Settings
 

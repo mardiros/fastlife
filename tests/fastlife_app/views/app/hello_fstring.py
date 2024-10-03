@@ -1,6 +1,7 @@
 """A dummy view to test the add_renderer"""
 
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 from fastlife import view_config
 

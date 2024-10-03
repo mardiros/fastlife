@@ -1,5 +1,4 @@
 import enum
-from typing import Set
 
 from pydantic import BaseModel, Field
 
@@ -11,4 +10,4 @@ class Pet(enum.Enum):
 
 
 class Form(BaseModel):
-    pets: Set[Pet] = Field(title="Pet")
+    pets: set[Pet] = Field(title="Pet")

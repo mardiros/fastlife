@@ -1,5 +1,6 @@
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Mapping, Union, get_origin
+from typing import Any, Union, get_origin
 
 import pytest
 

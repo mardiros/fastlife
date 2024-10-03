@@ -1,6 +1,6 @@
 import textwrap
-from collections.abc import Sequence
-from typing import Any, Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 import bs4
 import pytest

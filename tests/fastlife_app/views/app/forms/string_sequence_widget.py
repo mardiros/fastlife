@@ -1,4 +1,5 @@
-from typing import Annotated, Any, Sequence
+from collections.abc import Sequence
+from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, field_validator
 

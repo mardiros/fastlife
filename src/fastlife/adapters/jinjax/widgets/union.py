@@ -2,7 +2,8 @@
 Widget for field of type Union.
 """
 
-from typing import Any, Optional, Sequence, Type, Union
+from collections.abc import Sequence
+from typing import Any, Union
 
 from markupsafe import Markup
 from pydantic import BaseModel
@@ -32,12 +33,12 @@ class UnionWidget(Widget[Widget[Any]]):
         self,
         name: str,
         *,
-        title: Optional[str],
-        hint: Optional[str] = None,
-        aria_label: Optional[str] = None,
-        value: Optional[Widget[Any]],
+        title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
+        value: Widget[Any] | None,
         error: str | None = None,
-        children_types: Sequence[Type[BaseModel]],
+        children_types: Sequence[type[BaseModel]],
         removable: bool = False,
         token: str,
     ):
@@ -73,7 +74,7 @@ class UnionWidget(Widget[Widget[Any]]):
                 widget=self,
                 types=self.build_types(renderer.route_prefix),
                 parent_type=TypeWrapper(
-                    Union[tuple(self.children_types)],  # type: ignore
+                    Union[tuple(self.children_types)],  # type: ignore # noqa: UP007
                     renderer.route_prefix,
                     self.parent_name,
                     self.token,

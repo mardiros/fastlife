@@ -1,4 +1,5 @@
-from typing import Any, Mapping, Optional, Union
+from collections.abc import Mapping
+from typing import Any, Optional, Union
 
 import pytest
 
@@ -51,7 +52,7 @@ from tests.fastlife_app.models import Account, Email, PhoneNumber
         ),
         pytest.param(
             {
-                "type": Union[PhoneNumber, Email],
+                "type": Union[PhoneNumber, Email],  # noqa: UP007
                 "expected_fullname": "|".join(
                     [
                         "tests.fastlife_app.models:PhoneNumber",
@@ -63,7 +64,7 @@ from tests.fastlife_app.models import Account, Email, PhoneNumber
         ),
         pytest.param(
             {
-                "type": Optional[PhoneNumber],
+                "type": Optional[PhoneNumber], # noqa: UP007
                 "expected_fullname": "|".join(
                     # Not sur that NoneType will be , id="Optional[Dog]"ok
                     ["tests.fastlife_app.models:PhoneNumber", "builtins:NoneType"]

@@ -1,6 +1,7 @@
 """HTTP Form serialization."""
 
-from typing import Any, Callable, Generic, Mapping, Type, TypeVar, get_origin
+from collections.abc import Callable, Mapping
+from typing import Any, Generic, TypeVar, get_origin
 
 from fastapi import Depends
 from pydantic import BaseModel, ValidationError
@@ -28,7 +29,7 @@ class FormModel(Generic[T]):
         self.is_valid = is_valid
 
     @classmethod
-    def default(cls, prefix: str, pydantic_type: Type[T]) -> "FormModel[T]":
+    def default(cls, prefix: str, pydantic_type: type[T]) -> "FormModel[T]":
         return cls(prefix, pydantic_type.model_construct(), {})
 
     def edit(self, pydantic_type: T) -> None:
@@ -47,7 +48,7 @@ class FormModel(Generic[T]):
 
     @classmethod
     def from_payload(
-        cls, prefix: str, pydantic_type: Type[T], data: Mapping[str, Any]
+        cls, prefix: str, pydantic_type: type[T], data: Mapping[str, Any]
     ) -> "FormModel[T]":
         try:
             return cls(prefix, pydantic_type(**data.get(prefix, {})), {}, True)
@@ -88,7 +89,7 @@ class FormModel(Generic[T]):
 
 
 def form_model(
-    cls: Type[T], name: str | None = None
+    cls: type[T], name: str | None = None
 ) -> Callable[[Mapping[str, Any]], FormModel[T]]:
     """
     Build a model, a class of type T based on Pydandic Base Model from a form payload.

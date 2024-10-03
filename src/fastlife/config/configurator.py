@@ -15,11 +15,11 @@ import importlib
 import inspect
 import logging
 from collections import defaultdict
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Annotated, Any, Callable, Generic, Self, Tuple, Type
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Self
 
 import venusian
 from fastapi import Depends, FastAPI, Response
@@ -126,9 +126,9 @@ class GenericConfigurator(Generic[TRegistry]):
         self.registry = registry_cls(settings)
         Route._registry = self.registry  # type: ignore
 
-        self.middlewares: list[Tuple[Type[AbstractMiddleware], Any]] = []
-        self.exception_handlers: list[Tuple[int | Type[Exception], Any]] = []
-        self.mounts: list[Tuple[str, Path, str]] = []
+        self.middlewares: list[tuple[type[AbstractMiddleware], Any]] = []
+        self.exception_handlers: list[tuple[int | type[Exception], Any]] = []
+        self.mounts: list[tuple[str, Path, str]] = []
         self.tags: dict[str, OpenApiTag] = {}
 
         self.api_title = "OpenAPI"
@@ -141,7 +141,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
         self._security_policies: dict[
-            str, "type[AbstractSecurityPolicy[Any, TRegistry]]"
+            str, type[AbstractSecurityPolicy[Any, TRegistry]]
         ] = {}
 
         self._registered_permissions: set[str] = set()
@@ -309,7 +309,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
     def add_middleware(
-        self, middleware_class: Type[AbstractMiddleware], **options: Any
+        self, middleware_class: type[AbstractMiddleware], **options: Any
     ) -> Self:
         """
         Add a starlette middleware to the FastAPI app.
@@ -521,7 +521,7 @@ class GenericConfigurator(Generic[TRegistry]):
 
     def add_exception_handler(
         self,
-        status_code_or_exc: int | Type[Exception],
+        status_code_or_exc: int | type[Exception],
         handler: Any,
         *,
         template: str | None = None,

@@ -2,9 +2,9 @@
 
 import re
 import time
-from collections.abc import MutableMapping
+from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from http.cookiejar import Cookie
-from typing import Any, Iterator, Literal, Mapping, Optional, Sequence
+from typing import Any, Literal
 from urllib.parse import urlencode
 
 import bs4
@@ -76,7 +76,7 @@ class Element:
         return Element(self._client, self._tag.form) if self._tag.form else None
 
     @property
-    def hx_target(self) -> Optional[str]:
+    def hx_target(self) -> str | None:
         """
         Return the hx-target of the element.
 

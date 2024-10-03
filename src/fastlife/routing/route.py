@@ -1,6 +1,7 @@
 """HTTP Route."""
 
-from typing import TYPE_CHECKING, Any, Callable, Coroutine
+from collections.abc import Callable, Coroutine
+from typing import TYPE_CHECKING, Any
 
 from fastapi.routing import APIRoute
 from starlette.requests import Request as StarletteRequest

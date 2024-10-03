@@ -33,7 +33,7 @@ def resolve_extended(value: str) -> UnionType:
     if len(values) == 1:
         return resolve(value)
     types = [resolve(t) for t in values if t != "builtins:NoneType"]
-    return Union[tuple(types)]  # type: ignore
+    return Union[tuple(types)]  # type: ignore # noqa: UP007
 
 
 def resolve_path(value: str) -> str:

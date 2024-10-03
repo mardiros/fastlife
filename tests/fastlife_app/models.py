@@ -1,4 +1,5 @@
-from typing import Annotated, Any, Literal, Sequence, Set
+from collections.abc import Sequence
+from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
@@ -73,7 +74,7 @@ class Account(BaseModel):
     )
 
     aliases: Sequence[str] = Field(default_factory=list)
-    interest: Set[Interest] = Field(default_factory=set)
+    interest: set[Interest] = Field(default_factory=set)
 
     terms_and_conditions: bool = Field(
         # Add models.py in the content section of tailwind.config.js

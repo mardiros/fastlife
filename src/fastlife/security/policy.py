@@ -2,7 +2,8 @@
 
 import abc
 import logging
-from typing import Annotated, Any, Callable, Coroutine, Generic, Literal, TypeVar
+from collections.abc import Callable, Coroutine
+from typing import Annotated, Any, Generic, Literal, TypeVar
 from uuid import UUID
 
 from fastapi import Depends, HTTPException

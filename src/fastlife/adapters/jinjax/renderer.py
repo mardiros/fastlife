@@ -6,16 +6,11 @@ import ast
 import logging
 import re
 import textwrap
+from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Any,
-    Iterator,
-    Mapping,
-    MutableMapping,
-    Optional,
-    Sequence,
-    Type,
     cast,
 )
 
@@ -342,7 +337,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self,
         template: str,
         *,
-        globals: Optional[Mapping[str, Any]] = None,
+        globals: Mapping[str, Any] | None = None,
         **params: Any,
     ) -> str:
         # Jinja template does accept the file extention while rendering the template
@@ -360,13 +355,13 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         )
 
     def pydantic_form(
-        self, model: FormModel[Any], *, token: Optional[str] = None
+        self, model: FormModel[Any], *, token: str | None = None
     ) -> Markup:
         return WidgetFactory(self, token).get_markup(model)
 
     def pydantic_form_field(
         self,
-        model: Type[Any],
+        model: type[Any],
         *,
         name: str | None,
         token: str | None,

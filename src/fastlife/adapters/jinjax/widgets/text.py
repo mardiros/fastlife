@@ -1,5 +1,4 @@
 from collections.abc import Sequence
-from typing import Optional
 
 from .base import Widget
 
@@ -23,10 +22,10 @@ class TextWidget(Widget[str]):
         self,
         name: str,
         *,
-        title: Optional[str],
-        hint: Optional[str] = None,
-        aria_label: Optional[str] = None,
-        placeholder: Optional[str] = None,
+        title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
+        placeholder: str | None = None,
         error: str | None = None,
         value: str = "",
         input_type: str = "text",
@@ -87,12 +86,12 @@ class TextareaWidget(Widget[Sequence[str]]):
         self,
         name: str,
         *,
-        title: Optional[str],
-        hint: Optional[str] = None,
-        aria_label: Optional[str] = None,
-        placeholder: Optional[str] = None,
+        title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
+        placeholder: str | None = None,
         error: str | None = None,
-        value: Optional[Sequence[str]] = None,
+        value: Sequence[str] | None = None,
         removable: bool = False,
         token: str,
     ) -> None:

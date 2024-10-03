@@ -1,5 +1,6 @@
+from collections.abc import Iterator
 from multiprocessing import Process
-from typing import Any, Iterator
+from typing import Any
 
 from behave import fixture  # type: ignore
 

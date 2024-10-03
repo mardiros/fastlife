@@ -10,7 +10,8 @@ In that case, those base classes have to be implemented.
 """
 
 import abc
-from typing import Any, Callable, Mapping
+from collections.abc import Callable, Mapping
+from typing import Any
 
 from fastlife import Request, Response
 from fastlife.security.csrf import create_csrf_token

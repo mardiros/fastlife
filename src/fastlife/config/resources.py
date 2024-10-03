@@ -8,7 +8,8 @@ API Resources declaration using a decorator.
 
 """
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import venusian
 from fastapi.types import IncEx
