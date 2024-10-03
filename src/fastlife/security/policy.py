@@ -2,12 +2,11 @@
 
 import abc
 import logging
-from typing import Annotated, Any, Callable, Coroutine, Literal, TypeVar
+from typing import Annotated, Any, Callable, Coroutine, Generic, Literal, TypeVar
 from uuid import UUID
 
 from fastapi import Depends, HTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
-from typing_extensions import Generic
 
 from fastlife import get_request
 from fastlife.config.registry import TRegistry

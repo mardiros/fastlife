@@ -1,10 +1,9 @@
 """HTTP Request representation in a python object."""
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Annotated, Any, Generic
 
 from fastapi import Request as FastAPIRequest
 from fastapi.params import Depends
-from typing_extensions import Annotated, Generic
 
 from fastlife.config.registry import DefaultRegistry, TRegistry
 
