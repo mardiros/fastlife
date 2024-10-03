@@ -145,6 +145,7 @@ class GenericConfigurator(Generic[TRegistry]):
             str, "type[AbstractSecurityPolicy[Any, TRegistry]]"
         ] = {}
 
+        self._registered_permissions: set[str] = set()
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
@@ -152,6 +153,15 @@ class GenericConfigurator(Generic[TRegistry]):
     @property
     def _current_router(self) -> Router:
         return self._routers[self._route_prefix]
+
+    @property
+    def all_registered_permissions(self) -> Sequence[str]:
+        """
+        Get the list of registered permissions.
+
+        This is usefull for introspection or testing purpose.
+        """
+        return sorted(self._registered_permissions)
 
     def build_asgi_app(self) -> FastAPI:
         """
@@ -404,6 +414,7 @@ class GenericConfigurator(Generic[TRegistry]):
         """
         dependencies: list[DependsType] = []
         if permission:
+            self._registered_permissions.add(permission)
             dependencies.append(Depends(check_permission(permission)))
 
         self._current_router.add_api_route(
@@ -465,6 +476,7 @@ class GenericConfigurator(Generic[TRegistry]):
         """
         dependencies: list[DependsType] = []
         if permission:
+            self._registered_permissions.add(permission)
             dependencies.append(Depends(check_permission(permission)))
 
         if template:
