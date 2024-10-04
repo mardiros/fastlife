@@ -64,7 +64,7 @@ from tests.fastlife_app.models import Account, Email, PhoneNumber
         ),
         pytest.param(
             {
-                "type": Optional[PhoneNumber], # noqa: UP007
+                "type": Optional[PhoneNumber],  # noqa: UP007
                 "expected_fullname": "|".join(
                     # Not sur that NoneType will be , id="Optional[Dog]"ok
                     ["tests.fastlife_app.models:PhoneNumber", "builtins:NoneType"]

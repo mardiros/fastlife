@@ -32,7 +32,6 @@ Feature: Pydantic Form Generation
         "fm": 103.3
       }
       """
-
   # # not implemented yet
   # # Scenario: datetime
   # #   Given anonymous user on "/form/datetimefield"
@@ -104,7 +103,7 @@ Feature: Pydantic Form Generation
       """
       {
         "professor": {
-          "fistname": "John",
+          "firstname": "John",
           "lastname": "Connor",
           "age": 16
         }
@@ -141,5 +140,14 @@ Feature: Pydantic Form Generation
       }
       """
 
-
-
+  Scenario: Union Field
+    Given anonymous user on "/form/unionfield"
+    When I click on the "button" "Dog"
+    And I fill the field "nick" with "Buffy"
+    And I click on the "button" "submit" with response info
+    Then I see the json
+      """
+      {
+        "pet": {"type": "dog", "nick": "Buffy"}
+      }
+      """

@@ -1,6 +1,5 @@
 Feature: Translation
 
-  @wip
   Scenario: French
     Given anonymous user on "/fr/hello"
     Then I see the text "Salut tout le monde !"

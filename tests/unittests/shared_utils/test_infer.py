@@ -14,7 +14,7 @@ from fastlife.shared_utils.infer import is_union
         pytest.param({"type": int | str, "expected": True}, id="int | str"),
         pytest.param(
             {
-                "type": Union[int, str], # noqa: UP007
+                "type": Union[int, str],  # noqa: UP007
                 "expected": True,
             },
             id="Union[int, str]",

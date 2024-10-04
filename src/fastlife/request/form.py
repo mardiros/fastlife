@@ -69,12 +69,12 @@ class FormModel(Generic[T]):
                                         continue
 
                             else:
-                                raise NotImplementedError from exc
+                                raise NotImplementedError from exc  # coverage: ignore
                         elif issubclass(typ, BaseModel):
                             typ = typ.model_fields[part].annotation
                             loc = f"{loc}.{part}"
                         else:
-                            raise NotImplementedError from exc
+                            raise NotImplementedError from exc  # coverage: ignore
 
                     else:
                         # it is an integer and it part of the list
