@@ -1,4 +1,4 @@
-from typing import Optional, cast
+from typing import cast
 
 from fastapi import Query
 from pydantic.fields import FieldInfo
@@ -11,9 +11,9 @@ from fastlife.shared_utils.resolver import resolve_extended
 async def show_widget(
     typ: str,
     request: Request,
-    title: Optional[str] = Query(None),
-    name: Optional[str] = Query(None),
-    token: Optional[str] = Query(None),
+    title: str | None = Query(None),
+    name: str | None = Query(None),
+    token: str | None = Query(None),
     removable: bool = Query(False),
 ) -> Response:
     """

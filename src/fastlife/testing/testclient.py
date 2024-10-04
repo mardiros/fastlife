@@ -2,9 +2,9 @@
 
 import re
 import time
-from collections.abc import MutableMapping
+from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from http.cookiejar import Cookie
-from typing import Any, Iterator, Literal, Mapping, Optional, Sequence
+from typing import Any, Literal
 from urllib.parse import urlencode
 
 import bs4
@@ -76,7 +76,7 @@ class Element:
         return Element(self._client, self._tag.form) if self._tag.form else None
 
     @property
-    def hx_target(self) -> Optional[str]:
+    def hx_target(self) -> str | None:
         """
         Return the hx-target of the element.
 
@@ -251,7 +251,7 @@ class WebForm:
             raise ValueError(f'"{fieldname}" does not exists')
         field = self._formfields[fieldname]
         if field.node_name != "select":
-            raise ValueError(f"{fieldname} is a {repr(field)}, " "use set() instead")
+            raise ValueError(f"{fieldname} is a {field!r}, " "use set() instead")
 
         for option in field.by_node_name("option"):
             if option.text == value.strip():
@@ -273,7 +273,7 @@ class WebForm:
 
         if field.node_name != "select":
             raise ValueError(
-                f"{fieldname} is a {repr(self._formfields[fieldname])}, "
+                f"{fieldname} is a {self._formfields[fieldname]!r}, "
                 "use unset() for checkbox instead"
             )
         if "multiple" not in field.attrs:
@@ -392,7 +392,7 @@ class WebResponse:
     def html_body(self) -> Element:
         """The body element of the html response."""
         body = self.html.by_node_name("body")
-        assert len(body) == 1
+        assert len(body) == 1, "body element not found or multiple body found"
         return body[0]
 
     @property
@@ -400,7 +400,7 @@ class WebResponse:
         """The form element of the html response."""
         if self._form is None:
             form = self.html.form
-            assert form is not None
+            assert form is not None, "form element not found"
             self._form = WebForm(self._client, self._origin, form)
         return self._form
 

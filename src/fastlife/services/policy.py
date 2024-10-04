@@ -1,6 +1,7 @@
 """Security policy."""
 
-from typing import Any, Callable, Coroutine
+from collections.abc import Callable, Coroutine
+from typing import Any
 
 CheckPermissionHook = Callable[..., Coroutine[Any, Any, None]] | Callable[..., None]
 CheckPermission = Callable[[str], CheckPermissionHook]

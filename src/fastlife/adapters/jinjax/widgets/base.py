@@ -1,7 +1,9 @@
 """Widget base class."""
+
 import abc
 import secrets
-from typing import Any, Generic, Mapping, Type, TypeVar
+from collections.abc import Mapping
+from typing import Any, Generic, TypeVar
 
 from markupsafe import Markup
 
@@ -11,7 +13,7 @@ from fastlife.shared_utils.infer import is_union
 T = TypeVar("T")
 
 
-def get_title(typ: Type[Any]) -> str:
+def get_title(typ: type[Any]) -> str:
     return getattr(
         getattr(typ, "__meta__", None),
         "title",
@@ -81,7 +83,7 @@ class Widget(abc.ABC, Generic[T]):
         return Markup(renderer.render_template(self.get_template(), widget=self))
 
 
-def _get_fullname(typ: Type[Any]) -> str:
+def _get_fullname(typ: type[Any]) -> str:
     if is_union(typ):
         typs = [_get_fullname(t) for t in typ.__args__]  # type: ignore
         return "|".join(typs)  # type: ignore
@@ -102,7 +104,7 @@ class TypeWrapper:
 
     def __init__(
         self,
-        typ: Type[Any],
+        typ: type[Any],
         route_prefix: str,
         name: str,
         token: str,

@@ -8,7 +8,8 @@ API Resources declaration using a decorator.
 
 """
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import venusian
 from fastapi.types import IncEx
@@ -91,29 +92,21 @@ def resource(
                     endpoint=endpoint,
                     tags=[tag],
                     methods=[method.split("_").pop()],
-                    permission=getattr(endpoint, "permission"),
-                    status_code=getattr(endpoint, "status_code"),
-                    summary=getattr(endpoint, "summary"),
-                    description=getattr(endpoint, "description"),
-                    response_description=getattr(endpoint, "response_description"),
-                    deprecated=getattr(endpoint, "deprecated"),
-                    operation_id=getattr(endpoint, "operation_id"),
-                    response_model_include=getattr(endpoint, "response_model_include"),
-                    response_model_exclude=getattr(endpoint, "response_model_exclude"),
-                    response_model_by_alias=getattr(
-                        endpoint, "response_model_by_alias"
-                    ),
-                    response_model_exclude_unset=getattr(
-                        endpoint, "response_model_exclude_unset"
-                    ),
-                    response_model_exclude_defaults=getattr(
-                        endpoint, "response_model_exclude_defaults"
-                    ),
-                    response_model_exclude_none=getattr(
-                        endpoint, "response_model_exclude_none"
-                    ),
-                    include_in_schema=getattr(endpoint, "include_in_schema"),
-                    openapi_extra=getattr(endpoint, "openapi_extra"),
+                    permission=endpoint.permission,
+                    status_code=endpoint.status_code,
+                    summary=endpoint.summary,
+                    description=endpoint.description,
+                    response_description=endpoint.response_description,
+                    deprecated=endpoint.deprecated,
+                    operation_id=endpoint.operation_id,
+                    response_model_include=endpoint.response_model_include,
+                    response_model_exclude=endpoint.response_model_exclude,
+                    response_model_by_alias=endpoint.response_model_by_alias,
+                    response_model_exclude_unset=endpoint.response_model_exclude_unset,
+                    response_model_exclude_defaults=endpoint.response_model_exclude_defaults,
+                    response_model_exclude_none=endpoint.response_model_exclude_none,
+                    include_in_schema=endpoint.include_in_schema,
+                    openapi_extra=endpoint.openapi_extra,
                 )
 
             for method in dir(ob):
@@ -131,7 +124,13 @@ def resource(
                             config, method, collection_path, getattr(api, method)
                         )
                     case (
-                        "get" | "post" | "put" | "patch" | "delete" | "head" | "options"
+                        "get"
+                        | "post"
+                        | "put"
+                        | "patch"
+                        | "delete"
+                        | "head"
+                        | "options"
                     ):
                         bind_config(config, method, path, getattr(api, method))
                     case _:

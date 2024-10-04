@@ -3,12 +3,12 @@ Transform.
 """
 
 import secrets
-from collections.abc import MutableSequence, Sequence
+from collections.abc import Mapping, MutableSequence, Sequence
 from decimal import Decimal
 from enum import Enum
 from inspect import isclass
 from types import NoneType
-from typing import Any, Literal, Mapping, Type, cast, get_origin
+from typing import Any, Literal, cast, get_origin
 from uuid import UUID
 
 from markupsafe import Markup
@@ -59,7 +59,7 @@ class WidgetFactory:
 
     def get_widget(
         self,
-        base: Type[Any],
+        base: type[Any],
         form_data: Mapping[str, Any],
         form_errors: Mapping[str, Any],
         *,
@@ -78,7 +78,7 @@ class WidgetFactory:
 
     def build(
         self,
-        typ: Type[Any],
+        typ: type[Any],
         *,
         name: str = "",
         value: Any,
@@ -152,7 +152,7 @@ class WidgetFactory:
                 name, typ, field, value or "", form_errors, removable
             )
 
-        if issubclass(typ, (int, str, float, Decimal, UUID)):
+        if issubclass(typ, int | str | float | Decimal | UUID):
             return self.build_simpletype(
                 name, typ, field, value or "", form_errors, removable
             )
@@ -162,7 +162,7 @@ class WidgetFactory:
     def build_model(
         self,
         field_name: str,
-        typ: Type[BaseModel],
+        typ: type[BaseModel],
         field: FieldInfo | None,
         value: Mapping[str, Any],
         form_errors: Mapping[str, Any],
@@ -204,13 +204,13 @@ class WidgetFactory:
     def build_union(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: Any,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
-        types: list[Type[Any]] = []
+        types: list[type[Any]] = []
         # required = True
         for typ in field_type.__args__:  # type: ignore
             if typ is NoneType:
@@ -271,7 +271,7 @@ class WidgetFactory:
     def build_sequence(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: Sequence[Any] | None,
         form_errors: Mapping[str, Any],
@@ -309,7 +309,7 @@ class WidgetFactory:
     def build_set(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: Sequence[Any] | None,
         form_errors: Mapping[str, Any],
@@ -368,7 +368,7 @@ class WidgetFactory:
     def build_boolean(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: bool,
         form_errors: Mapping[str, Any],
@@ -392,7 +392,7 @@ class WidgetFactory:
     def build_emailtype(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: str | int | float,
         form_errors: Mapping[str, Any],
@@ -418,7 +418,7 @@ class WidgetFactory:
     def build_secretstr(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: SecretStr | str,
         form_errors: Mapping[str, Any],
@@ -444,7 +444,7 @@ class WidgetFactory:
     def build_literal(
         self,
         field_name: str,
-        field_type: Type[Any],  # a literal actually
+        field_type: type[Any],  # a literal actually
         field: FieldInfo | None,
         value: str | int | float,
         form_errors: Mapping[str, Any],
@@ -476,7 +476,7 @@ class WidgetFactory:
     def build_enum(
         self,
         field_name: str,
-        field_type: Type[Any],  # an enum subclass
+        field_type: type[Any],  # an enum subclass
         field: FieldInfo | None,
         value: str | int | float,
         form_errors: Mapping[str, Any],
@@ -502,7 +502,7 @@ class WidgetFactory:
     def build_simpletype(
         self,
         field_name: str,
-        field_type: Type[Any],
+        field_type: type[Any],
         field: FieldInfo | None,
         value: str | int | float,
         form_errors: Mapping[str, Any],

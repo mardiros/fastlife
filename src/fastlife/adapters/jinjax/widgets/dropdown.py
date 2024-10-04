@@ -2,7 +2,7 @@
 Widget for field of type Enum or Literal.
 """
 
-from typing import Optional, Sequence, Tuple
+from collections.abc import Sequence
 
 from .base import Widget
 
@@ -26,14 +26,14 @@ class DropDownWidget(Widget[str]):
         self,
         name: str,
         *,
-        title: Optional[str],
-        hint: Optional[str] = None,
-        aria_label: Optional[str] = None,
-        value: Optional[str] = None,
+        title: str | None,
+        hint: str | None = None,
+        aria_label: str | None = None,
+        value: str | None = None,
         error: str | None = None,
-        options: Sequence[Tuple[str, str]] | Sequence[str],
+        options: Sequence[tuple[str, str]] | Sequence[str],
         removable: bool = False,
-        token: Optional[str] = None,
+        token: str | None = None,
     ) -> None:
         super().__init__(
             name,

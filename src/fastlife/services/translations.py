@@ -1,5 +1,6 @@
 import pathlib
-from typing import TYPE_CHECKING, Iterator, Tuple
+from collections.abc import Iterator
+from typing import TYPE_CHECKING
 
 from babel.support import NullTranslations, Translations
 
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 locale_name = str
 
 
-def find_mo_files(root_path: str) -> Iterator[Tuple[str, str, pathlib.Path]]:
+def find_mo_files(root_path: str) -> Iterator[tuple[str, str, pathlib.Path]]:
     root = pathlib.Path(root_path)
 
     # Walk through the directory structure and match the pattern

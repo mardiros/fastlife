@@ -19,7 +19,8 @@ no way to prevent to set the cookie in the request.
 """
 
 import secrets
-from typing import Any, Callable, Coroutine
+from collections.abc import Callable, Coroutine
+from typing import Any
 
 from fastlife.request import Request
 

@@ -1,4 +1,5 @@
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 import pytest
 
@@ -72,6 +73,27 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 },
             },
             id="x-real-ip and port",
+        ),
+        pytest.param(
+            {
+                "scope": {
+                    "type": "http",
+                    "client": "127.0.0.1",
+                    "headers": [
+                        (b"x-real-ip", b"1.2.3.4"),
+                        (b"x-forwarded-port", b"heighty"),
+                    ],
+                },
+                "expected": {
+                    "type": "http",
+                    "client": ("1.2.3.4", None),
+                    "headers": [
+                        (b"x-real-ip", b"1.2.3.4"),
+                        (b"x-forwarded-port", b"heighty"),
+                    ],
+                },
+            },
+            id="x-real-ip and invalid port",
         ),
         pytest.param(
             {

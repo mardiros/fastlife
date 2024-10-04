@@ -1,4 +1,4 @@
-from typing import Mapping
+from collections.abc import Mapping
 
 import pytest
 from httpx import Response
@@ -138,8 +138,9 @@ def test_html_body(client: WebTestClient):
 
 def test_html_nobody(client: WebTestClient):
     wr = WebResponse(client, origin="", response=Response(status_code=204))
-    with pytest.raises(AssertionError):
-        wr.html_body
+    with pytest.raises(AssertionError) as ctx:
+        wr.html_body  # noqa: B018
+    assert str(ctx.value) == "body element not found or multiple body found"
 
 
 def test_html_form(client: WebTestClient):
@@ -169,8 +170,9 @@ def test_html_form(client: WebTestClient):
 )
 def test_form_none(client: WebTestClient, response: Response):
     wr = WebResponse(client, origin="", response=response)
-    with pytest.raises(AssertionError):
-        wr.form
+    with pytest.raises(AssertionError) as ctx:
+        wr.form  # noqa: B018
+    assert str(ctx.value) == "form element not found"
 
 
 def test_by_text(client: WebTestClient):

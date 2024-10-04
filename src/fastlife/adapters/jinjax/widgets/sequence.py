@@ -1,4 +1,5 @@
-from typing import Any, Sequence, Type
+from collections.abc import Sequence
+from typing import Any
 
 from markupsafe import Markup
 
@@ -17,7 +18,7 @@ class SequenceWidget(Widget[Sequence[Widget[Any]]]):
         aria_label: str | None = None,
         value: Sequence[Widget[Any]] | None,
         error: str | None = None,
-        item_type: Type[Any],
+        item_type: type[Any],
         token: str,
         removable: bool,
     ):

@@ -1,5 +1,6 @@
+from collections.abc import Callable, Sequence
 from enum import Enum, IntEnum
-from typing import Annotated, Any, Callable, Literal, Sequence, Set
+from typing import Annotated, Any, Literal
 
 import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
@@ -65,8 +66,8 @@ class Banger(BaseModel):
 
 
 class MultiSet(BaseModel):
-    flavors: Set[Flavor] = Field(default_factory=set)
-    foobarz: Set[Literal["foo", "bar", "baz"]] = Field(default_factory=set)
+    flavors: set[Flavor] = Field(default_factory=set)
+    foobarz: set[Literal["foo", "bar", "baz"]] = Field(default_factory=set)
 
 
 def test_render_template(

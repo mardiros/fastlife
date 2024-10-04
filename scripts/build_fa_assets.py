@@ -2,9 +2,9 @@
 
 import re
 import sys
+from collections.abc import Iterator
 from importlib import metadata, util
 from pathlib import Path
-from typing import Iterator
 
 package_name = "fontawesomefree"
 root_dir = Path(__file__).parents[1]

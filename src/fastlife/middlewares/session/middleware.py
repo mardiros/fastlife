@@ -1,7 +1,7 @@
 """Deal with http session."""
 
 from datetime import timedelta
-from typing import Literal, Type
+from typing import Literal
 
 from starlette.datastructures import MutableHeaders
 from starlette.requests import HTTPConnection
@@ -25,7 +25,7 @@ class SessionMiddleware(AbstractMiddleware):
         cookie_same_site: Literal["lax", "strict", "none"] = "lax",
         cookie_secure: bool = False,
         cookie_domain: str = "",
-        serializer: Type[AbsractSessionSerializer] = SignedSessionSerializer,
+        serializer: type[AbsractSessionSerializer] = SignedSessionSerializer,
     ) -> None:
         self.app = app
         self.max_age = int(duration.total_seconds())

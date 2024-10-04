@@ -1,4 +1,4 @@
-from typing import Mapping
+from collections.abc import Mapping
 
 from tests.fastlife_app.config import MySettings
 from tests.fastlife_app.domain.model import AuthenticatedUser, TokenInfo

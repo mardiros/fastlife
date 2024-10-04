@@ -2,14 +2,10 @@
 Set of functions to unserialize www-form-urlencoded format to python simple types.
 """
 
+from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
 from typing import (
     Annotated,
     Any,
-    Mapping,
-    MutableMapping,
-    MutableSequence,
-    Optional,
-    Sequence,
 )
 
 from fastapi import Depends
@@ -22,7 +18,7 @@ def unflatten_struct(
     unflattened_output: MutableMapping[str, Any] | MutableSequence[Any],
     level: int = 0,
     *,
-    csrf_token_name: Optional[str] = None,
+    csrf_token_name: str | None = None,
 ) -> Mapping[str, Any] | Sequence[Any]:
     """
     Take a flatten_input map, with key segmented by `.` and build a nested dict.

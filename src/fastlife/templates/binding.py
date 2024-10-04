@@ -2,7 +2,8 @@
 Bind template to the view in order to build an html response.
 """
 
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from fastapi import Depends, Response
 

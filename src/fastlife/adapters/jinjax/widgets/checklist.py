@@ -2,7 +2,7 @@
 Widget for field of type Set.
 """
 
-from typing import Sequence
+from collections.abc import Sequence
 
 from pydantic import BaseModel, Field
 

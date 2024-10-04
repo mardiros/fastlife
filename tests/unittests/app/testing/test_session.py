@@ -1,6 +1,5 @@
 import time
 from http.cookiejar import Cookie
-from typing import Type
 
 import pytest
 
@@ -14,7 +13,7 @@ def session(
     settings: Settings,
     client: WebTestClient,
     sessdata: str,
-    dummy_session_serializer: Type[AbsractSessionSerializer],
+    dummy_session_serializer: type[AbsractSessionSerializer],
 ):
     client.session_serializer = dummy_session_serializer("", 0)
     client.cookies.jar.set_cookie(

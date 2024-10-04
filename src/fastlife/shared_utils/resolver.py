@@ -1,4 +1,5 @@
 """Resolution of python objects for dependency injection and more."""
+
 import importlib.util
 from pathlib import Path
 from types import UnionType
@@ -20,8 +21,10 @@ def resolve(value: str) -> Any:
 
     try:
         attr = getattr(module, attr_name)
-    except AttributeError:
-        raise ValueError(f"Attribute {attr_name} not found in module {module_name}")
+    except AttributeError as exc:
+        raise ValueError(
+            f"Attribute {attr_name} not found in module {module_name}"
+        ) from exc
 
     return attr
 
@@ -32,7 +35,7 @@ def resolve_extended(value: str) -> UnionType:
     if len(values) == 1:
         return resolve(value)
     types = [resolve(t) for t in values if t != "builtins:NoneType"]
-    return Union[tuple(types)]  # type: ignore
+    return Union[tuple(types)]  # type: ignore # noqa: UP007
 
 
 def resolve_path(value: str) -> str:

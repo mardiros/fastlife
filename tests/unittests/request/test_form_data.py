@@ -1,4 +1,5 @@
-from typing import Any, Mapping, MutableMapping, MutableSequence
+from collections.abc import Mapping, MutableMapping, MutableSequence
+from typing import Any
 
 import pytest
 

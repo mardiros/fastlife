@@ -1,4 +1,5 @@
-from typing import Annotated, Any, Mapping
+from collections.abc import Mapping
+from typing import Annotated, Any
 
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr

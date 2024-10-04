@@ -1,8 +1,10 @@
 """Serialize session."""
+
 import abc
 import json
 from base64 import b64decode, b64encode
-from typing import Any, Mapping, Tuple
+from collections.abc import Mapping
+from typing import Any
 
 import itsdangerous
 
@@ -11,8 +13,7 @@ class AbsractSessionSerializer(abc.ABC):
     """Session serializer base class"""
 
     @abc.abstractmethod
-    def __init__(self, secret_key: str, max_age: int) -> None:
-        ...
+    def __init__(self, secret_key: str, max_age: int) -> None: ...
 
     @abc.abstractmethod
     def serialize(self, data: Mapping[str, Any]) -> bytes:
@@ -20,7 +21,7 @@ class AbsractSessionSerializer(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def deserialize(self, data: bytes) -> Tuple[Mapping[str, Any], bool]:
+    def deserialize(self, data: bytes) -> tuple[Mapping[str, Any], bool]:
         """Derialize the session raw bytes content and return it as a mapping."""
         ...
 
@@ -47,7 +48,7 @@ class SignedSessionSerializer(AbsractSessionSerializer):
         signed = self.signer.sign(encoded)
         return signed
 
-    def deserialize(self, data: bytes) -> Tuple[Mapping[str, Any], bool]:
+    def deserialize(self, data: bytes) -> tuple[Mapping[str, Any], bool]:
         """Deserialize the session.
 
         If the signature is incorect, the session restart from the begining.

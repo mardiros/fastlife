@@ -1,6 +1,7 @@
 """A dummy view to test the i18n translations."""
 
-from typing import Annotated, Any, Mapping
+from collections.abc import Mapping
+from typing import Annotated, Any
 
 from fastapi import Path
 

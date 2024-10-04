@@ -1,4 +1,5 @@
 """Types for OpenAPI documentation."""
+
 from pydantic import BaseModel, Field
 
 

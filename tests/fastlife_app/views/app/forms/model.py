@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class Person(BaseModel):
-    fistname: str = Field(title="First name")
+    firstname: str = Field(title="First name")
     lastname: str = Field(title="Last name")
     age: int = Field(title="Age")
 

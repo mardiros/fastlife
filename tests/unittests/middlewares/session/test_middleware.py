@@ -1,5 +1,6 @@
+from collections.abc import Mapping
 from datetime import timedelta
-from typing import Any, Mapping, Type
+from typing import Any
 
 import pytest
 
@@ -131,7 +132,7 @@ def test_security_flags(params: Mapping[str, Any]):
     ],
 )
 async def test_middleware(
-    params: Mapping[str, Any], dummy_session_serializer: Type[AbsractSessionSerializer]
+    params: Mapping[str, Any], dummy_session_serializer: type[AbsractSessionSerializer]
 ):
     data = {}
 

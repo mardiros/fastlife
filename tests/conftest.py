@@ -1,7 +1,8 @@
 import json
 import os
+from collections.abc import Mapping, MutableMapping, Sequence
 from pathlib import Path
-from typing import Any, Mapping, MutableMapping, Sequence, Tuple, Type, cast
+from typing import Any, cast
 from urllib.parse import urlencode
 
 import pytest
@@ -46,7 +47,7 @@ def dummy_request_param(
     if "headers" in req_params:
         headers: Mapping[str, str] = dict(req_params["headers"])
         headers = {
-            **dict(cast(Sequence[Tuple[str, str]], scope["headers"])),
+            **dict(cast(Sequence[tuple[str, str]], scope["headers"])),
             **headers,
         }
         req_params["headers"] = list(
@@ -81,13 +82,12 @@ def dummy_registry(settings: MySettings) -> MyRegistry:
 
 
 class DummySessionSerializer(AbsractSessionSerializer):
-    def __init__(self, secret_key: str, max_age: int) -> None:
-        ...
+    def __init__(self, secret_key: str, max_age: int) -> None: ...
 
     def serialize(self, data: Mapping[str, Any]) -> bytes:
         return json.dumps(data).encode("utf-8")
 
-    def deserialize(self, data: bytes) -> Tuple[Mapping[str, Any], bool]:
+    def deserialize(self, data: bytes) -> tuple[Mapping[str, Any], bool]:
         ret: Mapping[str, Any] = json.loads(data)
         broken = "broken" in ret
         if broken:
@@ -96,5 +96,5 @@ class DummySessionSerializer(AbsractSessionSerializer):
 
 
 @pytest.fixture()
-def dummy_session_serializer() -> Type[AbsractSessionSerializer]:
+def dummy_session_serializer() -> type[AbsractSessionSerializer]:
     return DummySessionSerializer
