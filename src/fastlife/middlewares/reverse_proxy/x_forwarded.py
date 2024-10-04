@@ -36,11 +36,19 @@ class XForwardedStar(AbstractMiddleware):
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] in ("http", "websocket"):
             headers = scope["headers"]
+            x_real_ip = get_header(headers, b"x-real-ip")
+            client = (
+                (
+                    x_real_ip,
+                    get_header_int(headers, b"x-real-port")
+                    or get_header_int(headers, b"x-forwarded-port")
+                    or 0,
+                )
+                if x_real_ip
+                else None
+            )
             new_vals = {
-                "client": (
-                    get_header(headers, b"x-real-ip"),
-                    get_header_int(headers, b"x-forwarded-port"),
-                ),
+                "client": client,
                 "host": get_header(headers, b"x-forwarded-host"),
                 "scheme": get_header(headers, b"x-forwarded-proto"),
             }

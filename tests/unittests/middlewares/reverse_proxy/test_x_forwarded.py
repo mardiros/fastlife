@@ -33,7 +33,6 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 "expected": {
                     "type": "http",
                     "headers": [],
-                    "client": (None, None),
                 },
             },
             id="no proxy headers",
@@ -47,7 +46,7 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 },
                 "expected": {
                     "type": "http",
-                    "client": ("1.2.3.4", None),
+                    "client": ("1.2.3.4", 0),
                     "headers": [(b"x-real-ip", b"1.2.3.4")],
                 },
             },
@@ -60,19 +59,40 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                     "client": "127.0.0.1",
                     "headers": [
                         (b"x-real-ip", b"1.2.3.4"),
-                        (b"x-forwarded-port", b"80"),
+                        (b"x-real-port", b"42180"),
                     ],
                 },
                 "expected": {
                     "type": "http",
-                    "client": ("1.2.3.4", 80),
+                    "client": ("1.2.3.4", 42180),
                     "headers": [
                         (b"x-real-ip", b"1.2.3.4"),
-                        (b"x-forwarded-port", b"80"),
+                        (b"x-real-port", b"42180"),
                     ],
                 },
             },
             id="x-real-ip and port",
+        ),
+        pytest.param(
+            {
+                "scope": {
+                    "type": "http",
+                    "client": "127.0.0.1",
+                    "headers": [
+                        (b"x-real-ip", b"1.2.3.4"),
+                        (b"x-forwarded-port", b"42180"),
+                    ],
+                },
+                "expected": {
+                    "type": "http",
+                    "client": ("1.2.3.4", 42180),
+                    "headers": [
+                        (b"x-real-ip", b"1.2.3.4"),
+                        (b"x-forwarded-port", b"42180"),
+                    ],
+                },
+            },
+            id="x-real-ip and port forwarded",
         ),
         pytest.param(
             {
@@ -86,7 +106,7 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 },
                 "expected": {
                     "type": "http",
-                    "client": ("1.2.3.4", None),
+                    "client": ("1.2.3.4", 0),
                     "headers": [
                         (b"x-real-ip", b"1.2.3.4"),
                         (b"x-forwarded-port", b"heighty"),
@@ -104,7 +124,6 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 "expected": {
                     "type": "http",
                     "host": "ararat",
-                    "client": (None, None),
                     "headers": [(b"x-forwarded-host", b"ararat")],
                 },
             },
@@ -120,7 +139,6 @@ def test_get_header(headers: list[tuple[bytes, bytes]], key: bytes, expected: st
                 "expected": {
                     "type": "http",
                     "scheme": "https",
-                    "client": (None, None),
                     "headers": [(b"x-forwarded-proto", b"https")],
                 },
             },
