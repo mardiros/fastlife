@@ -15,7 +15,7 @@ It is an extension of the Jinja2 template engine.
 the structure and capabilities of RESTful APIs in a machine-readable format.
 FastAPI generates the OpenAPI spec file directly from its API.
 
-[Redoc]https://redocly.com/docs/redoc
+[Redoc](https://redocly.com/docs/redoc)
 : An alternative to Swagger UI. An interactive documentation from Open API Format.
 
 [Swagger UI](https://swagger.io/tools/swagger-ui/)
