@@ -6,6 +6,8 @@ docs/_build
 .pytest_cache
 .mypy_cache
 .coverage
+docs/source/develop/
+!docs/source/develop/.gitkeep
 junit
 htmlcov
 coverage.xml
