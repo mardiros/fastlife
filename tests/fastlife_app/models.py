@@ -38,12 +38,12 @@ class Group(BaseModel):
 
 
 class PhoneNumber(BaseModel):
-    type: Literal["phonenumber"] = Field(default="phonenumber")
+    type: Literal["phonenumber"] = Field(default="phonenumber", title="Phone")
     number: str = Field(min_length=4)
 
 
 class Email(BaseModel):
-    type: Literal["email"] = Field(default="email")
+    type: Literal["email"] = Field(default="email", title="Email")
     address: str = Field(min_length=5)
 
 
