@@ -84,6 +84,7 @@ myst_enable_extensions = [
     "tasklist",
     "deflist",
     "fieldlist",
+    "linkify",
 ]
 
 

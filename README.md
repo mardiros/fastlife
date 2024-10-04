@@ -9,18 +9,18 @@
 > Please note that this project is still in active development. Features and APIs may change frequently.
 > Even the name is not definitive.
 
-An opinionated Python web framework (based on FastAPI).
+An opinionated Python web framework (based on {term}`FastAPI`).
 
 ## Purpose
 
 Fastlife helps at building Web Application with session, security, html test client,
 and html form generated from pydantic schema using customizable widget.
 
-Templates are made using [JinjaX](https://jinjax.scaletti.dev/) and an extensible [set of
+Templates are made using {term}`JinjaX` and an extensible [set of
 component](https://mardiros.github.io/fastlife/components/index.html) is available
 in order to build pages.
 
-Those components are currently stylized by [tailwindcss](https://tailwindcss.com/),
+Those components are currently stylized by {term}`Tailwind CSS`,
 using [pytailwindcss](https://github.com/timonweb/pytailwindcss).
 
 Moreover, you can also write API, in an opinionated way to enforce documentation
@@ -29,7 +29,7 @@ consistency.
 
 ## First class configuration.
 
-Fastlife is adding a "Configurator", like Pyramid to get a better scallable codebase.
+Fastlife is adding a "Configurator", like {term}`Pyramid` to get a better scallable codebase.
 
 The configurator in fastlife organizes configuration settings hierarchically,
 enabling easy management and overriding at different levels.
