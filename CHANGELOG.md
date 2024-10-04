@@ -1,3 +1,6 @@
+## 0.16.4  - Released on 2024-10-04
+* Add support of x-real-port for port detection, fallback port to 0 instead of None if missing
+
 ## 0.16.3  - Released on 2024-10-03
 * Fix middleware that process the x-forwarded-headers to respect ASGI spec for client
 
