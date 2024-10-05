@@ -88,6 +88,23 @@ def test_set_input_value(webform: WebForm):
         pytest.param(
             """
             <form>
+                <input type="hidden" name="csrf" value="token">
+            </form>
+            """,
+            id="input",
+        )
+    ],
+)
+def test_repr(webform: WebForm):
+    assert repr(webform) == "<MultiDict('csrf': 'token')>"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        pytest.param(
+            """
+            <form>
                 <input type="radio" name="colors" value="red">
                 <input type="radio" name="colors" value="green" checked>
                 <input type="radio" name="colors" value="blue">
