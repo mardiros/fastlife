@@ -18,7 +18,7 @@ cleandoc:
     rm -rf docs/source/develop
 
 lint:
-    FORCE_COLOR=1 poetry run ruff check --fix .
+    FORCE_COLOR=1 poetry run ruff check .
 
 test: lint mypy unittest functest
 
