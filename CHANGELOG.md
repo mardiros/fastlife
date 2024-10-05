@@ -14,9 +14,9 @@
 * Make the Configurator, Request and Registry Generic.
 * Breaking change, remove settings `api_swagger_ui_url` and `api_redoc_url`
   now to register those url, use
-  {meth}`fastlife.config.configurator.Configurator.set_api_documentation_info`
+  {meth}`fastlife.config.configurator.GenericConfigurator.set_api_documentation_info`
 * Breaking change, in the method
-  {meth}`fastlife.config.configurator.Configurator.set_api_documentation_info`
+  {meth}`fastlife.config.configurator.GenericConfigurator.set_api_documentation_info`
   summary is now kwargs only.
 
 ## 0.15.1  - Released on 2024-09-29
@@ -24,7 +24,7 @@
 
 ## 0.15.0  - Released on 2024-09-29
 * Add an {class}`fastlife.security.policy.AbstractSecurityPolicy` class
-* New method {meth}`fastlife.config.configurator.Configurator.set_security_policy`
+* New method {meth}`fastlife.config.configurator.GenericConfigurator.set_security_policy`
 * Breaking change, the check_permission has been removed from the settings.
   to configure the permission policy, a security policy has to be implemented.
 

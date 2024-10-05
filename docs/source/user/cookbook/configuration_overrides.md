@@ -79,7 +79,7 @@ This way, the implementation access its own settings saved in the registry setti
 ## Finalize our typing
 
 The {class}`Request <fastlife.request.request.Request>` and the
-{class}`Configurator <fastlife.config.configurator.Configurator>` types are
+{class}`Configurator <fastlife.config.configurator.GenericConfigurator>` types are
 expecting the {class}`DefaultRegistry <fastlife.config.registry.DefaultRegistry>`
 to be used, and now we have additionnal properties, so, in order to finalize it,
 we need to build our own request and configurator type.
