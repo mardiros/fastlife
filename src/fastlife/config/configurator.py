@@ -239,6 +239,10 @@ class GenericConfigurator(Generic[TRegistry]):
         """
         if isinstance(module, str):
             if module.startswith("."):
+                if module.startswith(".."):
+                    raise ConfigurationError(
+                        "Relative import works for children modules, not parents"
+                    )
                 caller_module = inspect.getmodule(inspect.stack()[1][0])
                 # we could do an assert here but caller_module could really be none ?
                 parent_module = resolve_package(caller_module)  # type: ignore
