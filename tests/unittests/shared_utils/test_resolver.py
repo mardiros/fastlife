@@ -61,7 +61,7 @@ def test_resolve_path_error(root_dir: Path):
     [
         pytest.param(fastlife.middlewares, fastlife.middlewares, id="regular package"),
         pytest.param(fastlife.middlewares.base, fastlife.middlewares, id="module"),
-        pytest.param(sys, sys, id="compiled package")
+        pytest.param(sys, sys, id="compiled package"),
     ],
 )
 def test_resolve_package(input: ModuleType, expected: ModuleType):
