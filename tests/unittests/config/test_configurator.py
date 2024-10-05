@@ -43,12 +43,12 @@ async def test_include(conf: Configurator):
         ),
         pytest.param(
             ".random_module_that_dont_exists",
-            "Can't resolve tests.unittests.configurator.random_module_that_dont_exists",
+            "Can't resolve tests.unittests.config.random_module_that_dont_exists",
             id="unexisting relative module",
         ),
         pytest.param(
             ".my_broken_collection.subtruc",
-            "Can't resolve tests.unittests.configurator.my_broken_collection.subtruc",
+            "Can't resolve tests.unittests.config.my_broken_collection.subtruc",
             id="unexisting relative sub module",
         ),
     ],

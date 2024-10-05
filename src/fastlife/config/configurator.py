@@ -30,7 +30,7 @@ from fastapi.types import IncEx
 
 from fastlife.config.openapiextra import OpenApiTag
 from fastlife.middlewares.base import AbstractMiddleware
-from fastlife.request.request import Request
+from fastlife.request.request import GenericRequest, Request
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
@@ -546,8 +546,8 @@ class GenericConfigurator(Generic[TRegistry]):
             # class is wrong.
             # Until we store a security policy per rooter, we rebuild an
             # incomplete request here.
-            request = Request(self.registry, request)
-            resp = handler(request, exc)
+            req = GenericRequest[DefaultRegistry](self.registry, request)
+            resp = handler(req, exc)
             if isinstance(resp, Response):
                 return resp
 
@@ -559,7 +559,7 @@ class GenericConfigurator(Generic[TRegistry]):
                     "did not return a Response"
                 )
 
-            return request.registry.get_renderer(template)(request).render(
+            return req.registry.get_renderer(template)(req).render(
                 template,
                 params=resp,
                 status_code=status_code,
