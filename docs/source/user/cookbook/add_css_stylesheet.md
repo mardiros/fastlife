@@ -202,8 +202,8 @@ from fastlife import Configurator, Settings
 def build_app():
     config = Configurator(Settings())
     config.add_template_search_path("myapp:templates")
-    config.include("myapp.views")
-    config.include("myapp.static")
+    config.include(".views")
+    config.include(".static")
     return config.build_asgi_app()
 
 app = build_app()

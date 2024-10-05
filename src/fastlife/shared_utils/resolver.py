@@ -2,7 +2,7 @@
 
 import importlib.util
 from pathlib import Path
-from types import UnionType
+from types import ModuleType, UnionType
 from typing import Any, Union
 
 
@@ -51,3 +51,24 @@ def resolve_path(value: str) -> str:
     package_path = spec.origin
     full_path = Path(package_path).parent / resource_name
     return str(full_path)
+
+
+def resolve_package(mod: ModuleType) -> ModuleType:
+    """
+    Return the
+    [regular package](https://docs.python.org/3/glossary.html#term-regular-package)
+    of a module or itself if it is the ini file of a package.
+
+    """
+
+    # Compiled package has no __file__ attribute, ModuleType declare it as NoneType
+    if not hasattr(mod, "__file__") or mod.__file__ is None:
+        return mod
+
+    module_path = Path(mod.__file__)
+    if module_path.name == "__init__.py":
+        return mod
+
+    parent_module_name = mod.__name__.rsplit(".", 1)[0]
+    parent_module = importlib.import_module(parent_module_name)
+    return parent_module
