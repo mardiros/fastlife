@@ -97,12 +97,20 @@ from fastlife import Configurator, Settings
 def build_app():
     config = Configurator(Settings())
     config.add_template_search_path("myapp:templates")
-    config.include("myapp.views")
+    config.include(".views")
     return config.build_asgi_app()
 
 app = build_app()
 
 EOF
+```
+
+```{tip}
+Packaging an app in a package have lots of benefits,
+
+in this situation, the template search path can be made using the package itself,
+and the {meth}`config.include <fastlife.config.configurator.Configurator.include>`
+can be relative from the module.
 ```
 
 ### Adding a view and its template.
