@@ -69,6 +69,19 @@ def test_redirect_on_login(client: WebTestClient):
     assert resp.headers["Location"] == "http://testserver.local/admin/login"
 
 
+def test_follow_redirect_on_login_then_hx_redirect(client: WebTestClient):
+    resp = client.get("/admin/secured", follow_redirects=True)
+
+    resp.form.set("payload.username", "Bob")
+    resp.form.set("payload.password", "secret")
+    resp = resp.form.submit()
+    assert resp.html.h1.text == "Welcome back Bob!"
+
+    resp.form.set("payload.nick", "nicky")
+    resp = resp.form.submit()
+    assert resp.html.h1.text == "Hello nicky!"
+
+
 def test_redirect_on_logout(client: WebTestClient):
     client.session["user_id"] = "2"
     resp = client.get("/admin/secured", follow_redirects=False)
