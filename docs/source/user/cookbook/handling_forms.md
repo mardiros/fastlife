@@ -102,14 +102,14 @@ Run the tests to verify it works.
 
 ## Customizing the form.
 
+### Customize fields display
+
 The display of the fields can be simply enhanced by filled out pydantic properties
 properly.
 
 - The `title` of the `Field` is converted to the label of the field.
 - The `description` of the `Field` is converted to a hint of the field.
 - The `examples[0]` of the `Field` is converted to a placeholder of the field.
-
-###
 
 ```bash
 cat << 'EOF' > src/myapp/views.py
@@ -140,6 +140,15 @@ Run it and you will see a raw html without any css.
 The recipe [add css stylesheet](#add-css-stylesheet) can fix the problem.
 :::
 
+### Widgets per type
+
+Python builtin types and Pydantic models have their own widget. For example,
+boolean use {jinjax:component}`checkboxes <Checkbox>`, enum types use
+{jinjax:component}`select <Select>`.
+
+It is also possible to create widgets and use an annotation in order to get
+a full control of the rendering. We just need to inherits a class from
+{class}`fastlife.adapters.jinjax.widgets.base.Widget`
 
 ### Example of form using different widgets
 
@@ -165,3 +174,67 @@ class PetForm(BaseModel):
     favorite_toy: str = Field(title="Favorite Toy")
     magic_power: bool = Field(title="Has Magic Power")
 ```
+
+## Do some HTMX.
+
+We can update the form to do the hello in {term}`HTMX`
+
+```bash
+cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
+{# def person #}
+<html>
+    <head>
+      <script src="https://unpkg.com/htmx.org@2.0.1" crossorigin="anonymous"></script>
+    </head>
+    <body>
+      <H1 id="hello-world">Hello {{ person.model.nick|default("World") }}!</H1>
+      <Form hx-post="{{ request.url_for('hx-hello')}}" hx-target="#hello-world">
+        {{ pydantic_form(person) }}
+        <Button>Submit</Button>
+      </Form>
+    </body>
+<html>
+EOF
+```
+
+Now we have a form that post on a route named `hx-hello` and its response,
+will replace the inner html part of the element with the id "hello-world".
+
+lets add this view.
+
+```
+cat << 'EOF' > src/myapp/views.py
+from typing import Annotated
+
+from fastlife import view_config, Response, TemplateParams
+from pydantic import BaseModel, Field
+from fastlife.request.form import FormModel, form_model
+
+
+class Person(BaseModel):
+    nick: str = Field(
+        title="Nickname", description="Avatar from the 80s", examples=["RadRacer"]
+    )
+
+
+@view_config("home", "/", methods=["GET"], template="HelloWorld.jinja")
+async def hello_world(
+    person: Annotated[FormModel[Person], form_model(Person, "person")],
+) -> TemplateParams:
+    return {"person": person}
+
+
+@view_config("hx-hello", "/hx-hello", methods=["POST"])
+async def hx_hello_world(
+    person: Annotated[FormModel[Person], form_model(Person, "person")],
+) -> Response:
+    return Response(f"Hello {person.model.nick}!")
+
+EOF
+```
+
+In the real world, we may reuse the same route for the GET and the POST,
+event with HTMX, and do a embed the response in different layout depending
+it is a HTMX request or not. The alternative is to use the hx-target
+attribute. All of this is well documented at HTMX website to lean more
+about HTMX at https://htmx.org/.
