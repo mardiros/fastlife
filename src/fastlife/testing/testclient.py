@@ -13,7 +13,8 @@ from starlette.types import ASGIApp
 from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 from fastlife.shared_utils.resolver import resolve
-from fastlife.testing.dom import Element, WebForm
+from fastlife.testing.dom import Element
+from fastlife.testing.form import WebForm
 from fastlife.testing.session import Session
 
 CookieTypes = httpx._types.CookieTypes  # type: ignore
