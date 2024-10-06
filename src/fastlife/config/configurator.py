@@ -11,8 +11,6 @@ The configurator is designed to handle the setup during the configuration
 phase.
 """
 
-import importlib
-import inspect
 import logging
 from collections import defaultdict
 from collections.abc import Callable, Mapping, Sequence
@@ -35,7 +33,7 @@ from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
 from fastlife.services.policy import check_permission
-from fastlife.shared_utils.resolver import resolve, resolve_package
+from fastlife.shared_utils.resolver import resolve, resolve_maybe_relative
 
 from .registry import DefaultRegistry, TRegistry
 from .settings import Settings
@@ -238,20 +236,11 @@ class GenericConfigurator(Generic[TRegistry]):
         :param ignore: ignore submodules
         """
         if isinstance(module, str):
-            if module.startswith("."):
-                if module.startswith(".."):
-                    raise ConfigurationError(
-                        "Relative import works for children modules, not parents"
-                    )
-                caller_module = inspect.getmodule(inspect.stack()[1][0])
-                # we could do an assert here but caller_module could really be none ?
-                parent_module = resolve_package(caller_module)  # type: ignore
-                package = parent_module.__name__
-                module = f"{package}{module}"
             try:
-                module = importlib.import_module(module)
+                module = resolve_maybe_relative(module, stack_depth=2)
             except ModuleNotFoundError as exc:
                 raise ConfigurationError(f"Can't resolve {module}") from exc
+
         old, self._route_prefix = self._route_prefix, route_prefix
         try:
             self.scanner.scan(  # type: ignore

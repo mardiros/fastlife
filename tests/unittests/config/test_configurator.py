@@ -23,8 +23,13 @@ async def test_app(conf: Configurator):
     assert isinstance(app, FastAPI)
 
 
-async def test_include(conf: Configurator):
+def test_include(conf: Configurator):
     conf.include("tests.fastlife_app", ignore=".views.api")
+    assert len(conf.build_asgi_app().routes) != 0
+
+
+def test_include_relative(conf: Configurator):
+    conf.include("...fastlife_app", ignore=".views.api")
     assert len(conf.build_asgi_app().routes) != 0
 
 
@@ -32,28 +37,23 @@ async def test_include(conf: Configurator):
     "module,expected_error",
     [
         pytest.param(
-            "..fastlife_app",
-            "Relative import works for children modules, not parents",
-            id="relative to parent",
-        ),
-        pytest.param(
             "_random_module_that_dont_exists",
             "Can't resolve _random_module_that_dont_exists",
             id="unexisting module",
         ),
         pytest.param(
             ".random_module_that_dont_exists",
-            "Can't resolve tests.unittests.config.random_module_that_dont_exists",
+            "Can't resolve .random_module_that_dont_exists",
             id="unexisting relative module",
         ),
         pytest.param(
             ".my_broken_collection.subtruc",
-            "Can't resolve tests.unittests.config.my_broken_collection.subtruc",
+            "Can't resolve .my_broken_collection.subtruc",
             id="unexisting relative sub module",
         ),
     ],
 )
-async def test_include_raises_configuration_error(
+def test_include_raises_configuration_error(
     conf: Configurator, module: str, expected_error: str
 ):
     with pytest.raises(ConfigurationError) as exc:
