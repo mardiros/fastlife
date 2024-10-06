@@ -104,7 +104,7 @@ def resolve_maybe_relative(mod: str, stack_depth: int = 1) -> ModuleType:
         package = parent_module.__name__
         mod, count = _strip_left_dots(mod)
         package = _get_parent(package, count)
-        mod = f"{package}.{mod}"
+        mod = f"{package}.{mod}".rstrip(".")
 
     module = importlib.import_module(mod)
     return module
