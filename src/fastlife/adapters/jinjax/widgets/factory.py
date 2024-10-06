@@ -48,6 +48,13 @@ class WidgetFactory:
         removable: bool = False,
         field: FieldInfo | None = None,
     ) -> Markup:
+        """
+        Get the markup for the given model.
+
+        :param model: the model to build the html markup.
+        :param removable: Include a button to remove the model in the markup.
+        :param field: only build the markup of this field is not None.
+        """
         return self.get_widget(
             model.model.__class__,
             model.form_data,
@@ -67,6 +74,12 @@ class WidgetFactory:
         removable: bool,
         field: FieldInfo | None = None,
     ) -> Widget[Any]:
+        """
+        build the widget for the given type and return it.
+        :param base: the type to build, it has to be a builtin or a Pydantic model.
+        :param form_data: form values to render.
+        :param form_errors: form errors to render.
+        """
         return self.build(
             base,
             value=form_data.get(prefix, {}),
@@ -86,6 +99,21 @@ class WidgetFactory:
         form_errors: Mapping[str, Any],
         field: FieldInfo | None = None,
     ) -> Widget[Any]:
+        """
+        build widget tree for the given type.
+        This function is recurive and shoud not be used directly.
+        The type is a composite, it can be pydantic model, builtin, list or unions.
+
+        The {meth}`WidgetFactory.get_widget` or {meth}`WidgetFactory.get_markup`
+        should be used.
+
+        :param typ: the type to build, it has to be a builtin or a Pydantic model.
+        :param name: name of the widget to build.
+        :param value: value for the widget.
+        :param removable: True if it has to include a remove button.
+        :param form_errors: errors in the form.
+        :param field: field information used to customize the widget.
+        """
         if field and field.metadata:
             for widget in field.metadata:
                 if isclass(widget) and issubclass(widget, Widget):
