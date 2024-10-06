@@ -276,6 +276,8 @@ def run_autodoc(app: Sphinx) -> str | None:
 
 INDEX_TPL = """\
 
+.. _jinjax-components:
+
 JinjaX Components
 =================
 

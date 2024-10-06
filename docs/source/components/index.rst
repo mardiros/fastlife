@@ -1,4 +1,6 @@
 
+.. _jinjax-components:
+
 JinjaX Components
 =================
 

@@ -117,7 +117,7 @@ can be relative from the module.
 
 ```bash
 cat << 'EOF' >  src/myapp/views.py
-from fastlife import view_config, Response
+from fastlife import view_config
 
 @view_config("hello_world", "/",  template="HelloWorld.jinja")
 def hello_world() -> dict[str, str]:

@@ -22,6 +22,15 @@
   ] = None,
   method: Annotated[Literal["get", "post"] | None, "Http method used"] = None,
   action: Annotated[str | None, "url where the form will be submitted"] = None,
+  hx_target: Annotated[
+    str | None,
+    "target the element for swapping than the one issuing the AJAX request."
+  ] = None,
+  hx_select: Annotated[str | None, "select the content swapped from response of the AJAX request."] = None,
+  hx_swap: Annotated[
+    str | None,
+    "specify how the response will be swapped in relative to the target of an AJAX request."
+  ] = None,
   hx_post: Annotated[
     str | Literal[True] | None,
     "url where the form will be submitted using htmx. if ``True``, the current url is used."\
@@ -40,6 +49,9 @@
       {%- if hx_post is not none %}
         hx-post="{% if hx_post is not true %}{{hx_post}}{% endif %}"
       {%- endif %}
+      {%- if hx_select %} hx-select="{{ hx_select }}" {%- endif %}
+      {%- if hx_swap %} hx-swap="{{ hx_swap }}" {%- endif %}
+      {%- if hx_target %} hx-target="{{ hx_target }}" {%- endif %}
     {%- endif %}
     {%- if action is not none %} action="{{action}}" {%- endif %}
     {%- if method %} method="{{method}}" {%- endif -%}
