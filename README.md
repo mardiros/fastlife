@@ -3,7 +3,7 @@
 [![Documentation](https://github.com/mardiros/fastlife/actions/workflows/gh-pages.yml/badge.svg)](https://mardiros.github.io/fastlife/)
 [![Continuous Integration](https://github.com/mardiros/fastlife/actions/workflows/main.yml/badge.svg)](https://github.com/mardiros/fastlife/actions/workflows/main.yml)
 [![Coverage Report](https://codecov.io/gh/mardiros/fastlife/graph/badge.svg?token=DTpi73d7mf)](https://codecov.io/gh/mardiros/fastlife)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/94d107797b15b5e8843e/maintainability)](https://codeclimate.com/github/mardiros/fastlife/maintainability)
 
 > ⚠️ **Under Heavy Development**
 > Please note that this project is still in active development. Features and APIs may change frequently.

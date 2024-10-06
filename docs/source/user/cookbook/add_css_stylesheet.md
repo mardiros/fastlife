@@ -1,3 +1,4 @@
+(add-css-stylesheet)=
 # Add CSS stylesheet
 
 To add CSS stylesheet, we have many choices, and know, we can split the works in
@@ -133,7 +134,7 @@ EOF
 
 :::{tip}
 Tailwind CSS can grab class names in python file too.
-All the [basic JinjaX compoments](jinjax-components) classes of fastlife are
+All the [basic JinjaX compoments](#jinjax-components) classes of fastlife are
 actually in
 {class}`the Constant <fastlife.templating.renderer.constants.Constant` class
 that is completly replacable in the settings:
@@ -254,7 +255,7 @@ using the `{# css component.css #}` syntax.
 
 In that case, the `{{ catalog.render_assets() }}` has to be added to the layout
 
-```jinja2
+```html
 <head>
   <meta charset="utf-8" />
   <title>{{ html_title }}</title>

@@ -97,7 +97,7 @@ mypy:
     poetry run mypy src/ tests/
 
 fmt:
-    poetry run ruff check .
+    poetry run ruff check --fix .
     poetry run ruff format src tests
 
 black: fmt

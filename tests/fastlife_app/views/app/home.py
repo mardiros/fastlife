@@ -1,9 +1,8 @@
 from typing import Annotated
 
-from fastapi import Response
 from pydantic import BaseModel
 
-from fastlife import Configurator, configure
+from fastlife import Configurator, Response, TemplateParams, configure, view_config
 from fastlife.request.form import FormModel, form_model
 from fastlife.templates import Template, template
 from tests.fastlife_app.models import Account, Group
@@ -13,11 +12,11 @@ class Person(BaseModel):
     nick: str
 
 
+@view_config("home", "/", methods=["GET", "POST"], template="HelloWorld.jinja")
 async def hello_world(
-    template: Annotated[Template, template("HelloWorld.jinja")],
     person: Annotated[FormModel[Person], form_model(Person, "person")],
-) -> Response:
-    return template(person=person.model)
+) -> TemplateParams:
+    return {"person": person.model}
 
 
 async def autoform(
@@ -38,5 +37,4 @@ async def autoform(
 
 @configure
 def includeme(config: Configurator):
-    config.add_route("home", "/", hello_world, methods=["GET", "POST"])
     config.add_route("autoform", "/autoform", autoform, methods=["GET", "POST"])
