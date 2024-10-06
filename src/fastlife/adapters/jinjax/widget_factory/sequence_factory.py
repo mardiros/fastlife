@@ -83,7 +83,7 @@ class SequenceFactoryMixin:
                 ]
 
             else:
-                raise NotImplementedError
+                raise NotImplementedError  # coverage: ignore
         elif issubclass(choice_wrapper, Enum):
             choices = [
                 Checkable(
@@ -97,7 +97,7 @@ class SequenceFactoryMixin:
                 for e in choice_wrapper
             ]
         else:
-            raise NotImplementedError
+            raise NotImplementedError  # coverage: ignore
 
         return ChecklistWidget(
             field_name,

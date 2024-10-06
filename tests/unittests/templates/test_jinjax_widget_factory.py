@@ -35,6 +35,9 @@ class Bar(BaseModel):
     foo: str = Field()
 
 
+class DummyOptional(BaseModel):
+    foobar: str | None = Field()
+
 class DummyModel(BaseModel):
     name: str = Field()
     description: Annotated[str, CustomWidget] = Field(min_length=2)
@@ -337,5 +340,26 @@ def test_render_set_checked(
             "name": "payload.foobarz[]",
             "value": "foo",
             "checked": True,
+        },
+    )
+
+
+def test_render_optional(
+    renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+
+):
+    result = renderer.render_template(
+        "DummyForm.jinja",
+        model=FormModel[DummyOptional].default("payload", DummyOptional),
+        token="tkt",
+    )
+    html = soup(result)
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-foobar-tkt",
+            "type": "text",
+            "name": "payload.foobar",
+            "value": "",
         },
     )

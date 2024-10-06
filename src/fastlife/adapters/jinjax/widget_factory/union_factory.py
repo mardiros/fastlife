@@ -1,5 +1,5 @@
 """
-Create markup for pydantic forms.
+Create markup for Union (and optionals fields).
 """
 
 from collections.abc import Callable, Mapping
@@ -41,7 +41,7 @@ class UnionFactoryMixin:
             # if the optional type is a complex type,
             and not is_complex_type(types[0])
         ):
-            return self.build(
+            return self.build(  # coverage: ignore
                 types[0],
                 name=field_name,
                 field=field,
