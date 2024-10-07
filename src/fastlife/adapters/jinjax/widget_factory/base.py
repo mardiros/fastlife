@@ -1,3 +1,5 @@
+"""Abstract class for builder."""
+
 import abc
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
@@ -13,6 +15,8 @@ T = TypeVar("T")
 
 
 class BaseWidgetBuilder(abc.ABC, Generic[T]):
+    """Base class for the builder of widget."""
+
     def __init__(self, factory: "WidgetFactory") -> None:
         self.factory = factory
 

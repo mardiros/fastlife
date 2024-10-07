@@ -1,4 +1,4 @@
-"""Build for enum and literals."""
+"""Handle Literal type."""
 
 from collections.abc import Mapping
 from typing import Any, Literal
@@ -6,13 +6,15 @@ from typing import Any, Literal
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
-from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.adapters.jinjax.widgets.dropdown import DropDownWidget
 from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
 
 
 class LiteralBuilder(BaseWidgetBuilder[str]):  # str|int|bool
+    """Builder for Literal."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Literal."""
         return origin is Literal
 
     def build(
@@ -24,7 +26,8 @@ class LiteralBuilder(BaseWidgetBuilder[str]):  # str|int|bool
         value: str | None,
         form_errors: Mapping[str, Any],
         removable: bool,
-    ) -> Widget[str]:
+    ) -> HiddenWidget | DropDownWidget:
+        """Build the widget."""
         choices: list[str] = field_type.__args__  # type: ignore
         if len(choices) == 1:
             return HiddenWidget(

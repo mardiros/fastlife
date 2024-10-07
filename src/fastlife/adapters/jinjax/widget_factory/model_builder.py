@@ -1,6 +1,4 @@
-"""
-Mixin for model.
-"""
+"""Handle Pydantic BaseModel type."""
 
 from collections.abc import Mapping
 from typing import Any
@@ -14,7 +12,10 @@ from fastlife.adapters.jinjax.widgets.model import ModelWidget
 
 
 class ModelBuilder(BaseWidgetBuilder[Mapping[str, Any]]):
+    """Builder for Pydantic BaseModel values."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Pydantic BaseModel."""
         return issubclass(typ, BaseModel)
 
     def build(
@@ -27,6 +28,7 @@ class ModelBuilder(BaseWidgetBuilder[Mapping[str, Any]]):
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
+        """Build the widget."""
         value = value or {}
         ret: dict[str, Any] = {}
         for key, child_field in field_type.model_fields.items():

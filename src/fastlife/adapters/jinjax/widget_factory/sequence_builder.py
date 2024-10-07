@@ -1,6 +1,4 @@
-"""
-Build sequence types.
-"""
+"""Handle Sequence type."""
 
 from collections.abc import Mapping, MutableSequence, Sequence
 from typing import Any
@@ -13,7 +11,10 @@ from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
 
 
 class SequenceBuilder(BaseWidgetBuilder[Sequence[Any]]):
+    """Builder for Sequence values."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Sequence, MutableSequence or list"""
         return origin is Sequence or origin is MutableSequence or origin is list
 
     def build(
@@ -26,6 +27,7 @@ class SequenceBuilder(BaseWidgetBuilder[Sequence[Any]]):
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Sequence[Any]]:
+        """Build the widget."""
         typ = field_type.__args__[0]  # type: ignore
         value = value or []
         items: Sequence[Any] = [

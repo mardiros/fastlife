@@ -1,4 +1,4 @@
-"""Add factory for builtin types and simple types added by pydantic such as secrets."""
+"""Handle simple types (str, int, float, ...)."""
 
 from collections.abc import Mapping
 from decimal import Decimal
@@ -13,7 +13,10 @@ from fastlife.adapters.jinjax.widgets.text import TextWidget
 
 
 class SimpleTypeBuilder(BaseWidgetBuilder[str | int | str | float | Decimal | UUID]):
+    """Builder for simple types."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for simple types: int, str, float, Decimal, UUID"""
         return issubclass(typ, int | str | float | Decimal | UUID)
 
     def build(
@@ -26,6 +29,7 @@ class SimpleTypeBuilder(BaseWidgetBuilder[str | int | str | float | Decimal | UU
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[int | str | float | Decimal | UUID]:
+        """Build the widget."""
         return TextWidget(
             field_name,
             placeholder=str(field.examples[0]) if field and field.examples else None,

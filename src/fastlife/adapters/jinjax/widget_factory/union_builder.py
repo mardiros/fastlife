@@ -1,6 +1,4 @@
-"""
-Create markup for Union (and optionals fields).
-"""
+"""Handle Union type."""
 
 from collections.abc import Mapping
 from types import NoneType
@@ -16,7 +14,10 @@ from fastlife.shared_utils.infer import is_complex_type, is_union
 
 
 class UnionBuilder(BaseWidgetBuilder[Any]):
+    """Builder for Union."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for unions Union[A,B], A | B or event Optional[A], A | None"""
         return is_union(typ)
 
     def build(
@@ -29,6 +30,7 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
+        """Build the widget."""
         types: list[type[Any]] = []
         # required = True
         for typ in field_type.__args__:  # type: ignore

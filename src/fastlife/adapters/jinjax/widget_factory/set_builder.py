@@ -1,6 +1,4 @@
-"""
-Mixin for sequence and set.
-"""
+"""Handle Set type."""
 
 from collections.abc import Mapping
 from enum import Enum
@@ -14,7 +12,10 @@ from fastlife.adapters.jinjax.widgets.checklist import Checkable, ChecklistWidge
 
 
 class SetBuilder(BaseWidgetBuilder[set[Any]]):
+    """Builder for Set."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Set"""
         return origin is set
 
     def build(
@@ -27,6 +28,7 @@ class SetBuilder(BaseWidgetBuilder[set[Any]]):
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
+        """Build the widget."""
         choice_wrapper = field_type.__args__[0]
         choices = []
         choice_wrapper_origin = get_origin(choice_wrapper)

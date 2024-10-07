@@ -1,4 +1,4 @@
-"""Add factory for builtin types and simple types added by pydantic such as secrets."""
+"""Handle EmailStr pydantic type."""
 
 from collections.abc import Mapping
 from typing import Any
@@ -7,12 +7,14 @@ from pydantic.fields import FieldInfo
 from pydantic.networks import EmailStr
 
 from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
-from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.adapters.jinjax.widgets.text import TextWidget
 
 
 class EmailStrBuilder(BaseWidgetBuilder[EmailStr]):
+    """Builder for Pydantic EmailStr."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for EmailStr."""
         return issubclass(typ, EmailStr)  # type: ignore
 
     def build(
@@ -24,7 +26,8 @@ class EmailStrBuilder(BaseWidgetBuilder[EmailStr]):
         value: EmailStr | None,
         form_errors: Mapping[str, Any],
         removable: bool,
-    ) -> Widget[Any]:
+    ) -> TextWidget:
+        """Build the widget."""
         return TextWidget(
             field_name,
             input_type="email",

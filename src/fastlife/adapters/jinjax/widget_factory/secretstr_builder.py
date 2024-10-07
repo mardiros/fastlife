@@ -1,4 +1,4 @@
-"""Add factory for builtin types and simple types added by pydantic such as secrets."""
+"""Handle Pydantic SecretStr type."""
 
 from collections.abc import Mapping
 from typing import Any
@@ -12,7 +12,10 @@ from fastlife.adapters.jinjax.widgets.text import TextWidget
 
 
 class SecretStrBuilder(BaseWidgetBuilder[SecretStr]):
+    """Builder for Pydantic SecretStr."""
+
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Pydantic SecretStr."""
         return issubclass(typ, SecretStr)
 
     def build(
@@ -25,6 +28,7 @@ class SecretStrBuilder(BaseWidgetBuilder[SecretStr]):
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[SecretStr]:
+        """Build the widget."""
         return TextWidget(
             field_name,
             input_type="password",

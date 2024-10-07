@@ -1,4 +1,4 @@
-"""Build for enum and literals."""
+"""Handle Enum type."""
 
 from collections.abc import Mapping
 from enum import Enum
@@ -12,8 +12,10 @@ from fastlife.adapters.jinjax.widgets.dropdown import DropDownWidget
 
 
 class EnumBuilder(BaseWidgetBuilder[Enum]):
+    """Builder for Enum."""
 
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Enum."""
         return issubclass(typ, Enum)
 
     def build(
@@ -26,6 +28,7 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Enum]:
+        """Build the widget."""
         options = [(item.name, item.value) for item in field_type]  # type: ignore
         return DropDownWidget(
             field_name,
