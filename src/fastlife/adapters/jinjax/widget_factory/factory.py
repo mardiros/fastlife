@@ -3,36 +3,31 @@ Create markup for pydantic forms.
 """
 
 import secrets
-from collections.abc import Mapping, MutableSequence, Sequence
-from decimal import Decimal
-from enum import Enum
+from collections.abc import Mapping
 from inspect import isclass
-from typing import Any, Literal, cast, get_origin
-from uuid import UUID
+from typing import Any, cast, get_origin
 
 from markupsafe import Markup
-from pydantic import BaseModel, EmailStr, SecretStr
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.request.form import FormModel
 from fastlife.services.templates import AbstractTemplateRenderer
-from fastlife.shared_utils.infer import is_union
 
-from .builtin_factory import BuiltinFactoryMixin
-from .enum_factory import EnumFactoryMixin
-from .model_factory import ModelFactoryMixin
-from .sequence_factory import SequenceFactoryMixin
-from .union_factory import UnionFactoryMixin
+from .base import BaseWidgetBuilder
+from .bool_builder import BoolBuilder
+from .emailstr_builder import EmailStrBuilder
+from .enum_builder import EnumBuilder
+from .literal_builder import LiteralBuilder
+from .model_builder import ModelBuilder
+from .secretstr_builder import SecretStrBuilder
+from .sequence_builder import SequenceBuilder
+from .set_builder import SetBuilder
+from .simpletype_builder import SimpleTypeBuilder
+from .union_builder import UnionBuilder
 
 
-class WidgetFactory(
-    ModelFactoryMixin,
-    UnionFactoryMixin,
-    SequenceFactoryMixin,
-    EnumFactoryMixin,
-    BuiltinFactoryMixin,
-):
+class WidgetFactory:
     """
     Form builder for pydantic model.
 
@@ -43,6 +38,23 @@ class WidgetFactory(
     def __init__(self, renderer: AbstractTemplateRenderer, token: str | None = None):
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
+        self.builders: list[BaseWidgetBuilder[Any]] = [
+            # Order is super important here
+            # starts by the union type
+            UnionBuilder(self),
+            # and to other types that have an origin
+            SetBuilder(self),
+            LiteralBuilder(self),
+            SequenceBuilder(self),
+            # from this part, order does not really matter
+            ModelBuilder(self),
+            BoolBuilder(self),
+            EnumBuilder(self),
+            EmailStrBuilder(self),
+            SecretStrBuilder(self),
+            # we keep simple types, str, int at the end
+            SimpleTypeBuilder(self),
+        ]
 
     def get_markup(
         self,
@@ -139,53 +151,15 @@ class WidgetFactory(
                     )
 
         type_origin = get_origin(typ)
-        if type_origin:
-            if is_union(typ):
-                return self.build_union(name, typ, field, value, form_errors, removable)
-
-            if (
-                type_origin is Sequence
-                or type_origin is MutableSequence
-                or type_origin is list
-            ):
-                return self.build_sequence(
-                    name, typ, field, value, form_errors, removable
+        for builder in self.builders:
+            if builder.accept(typ, type_origin):
+                return builder.build(
+                    field_name=name,
+                    field_type=typ,
+                    field=field,
+                    value=value,
+                    form_errors=form_errors,
+                    removable=removable,
                 )
-
-            if type_origin is Literal:
-                return self.build_literal(
-                    name, typ, field, value, form_errors, removable
-                )
-
-            if type_origin is set:
-                return self.build_set(name, typ, field, value, form_errors, removable)
-
-        if issubclass(typ, Enum):  # if it raises here, the type_origin is unknown
-            return self.build_enum(name, typ, field, value, form_errors, removable)
-
-        if issubclass(typ, BaseModel):  # if it raises here, the type_origin is unknown
-            return self.build_model(
-                name, typ, field, value or {}, form_errors, removable
-            )
-
-        if issubclass(typ, bool):
-            return self.build_boolean(
-                name, typ, field, value or False, form_errors, removable
-            )
-
-        if issubclass(typ, EmailStr):  # type: ignore
-            return self.build_emailtype(
-                name, typ, field, value or "", form_errors, removable
-            )
-
-        if issubclass(typ, SecretStr):
-            return self.build_secretstr(
-                name, typ, field, value or "", form_errors, removable
-            )
-
-        if issubclass(typ, int | str | float | Decimal | UUID):
-            return self.build_simpletype(
-                name, typ, field, value or "", form_errors, removable
-            )
 
         raise NotImplementedError(f"{typ} not implemented")  # coverage: ignore
