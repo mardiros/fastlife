@@ -1,32 +1,37 @@
-"""
-Mixin for model.
-"""
+"""Handle Pydantic BaseModel type."""
 
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from typing import Any
 
 from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 
+from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
 from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.adapters.jinjax.widgets.model import ModelWidget
 
 
-class ModelFactoryMixin:
-    token: str
-    build: Callable[..., Any]
+class ModelBuilder(BaseWidgetBuilder[Mapping[str, Any]]):
+    """Builder for Pydantic BaseModel values."""
 
-    def build_model(
+    def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for Pydantic BaseModel."""
+        return issubclass(typ, BaseModel)
+
+    def build(
         self,
+        *,
         field_name: str,
-        typ: type[BaseModel],
+        field_type: type[BaseModel],
         field: FieldInfo | None,
-        value: Mapping[str, Any],
+        value: Mapping[str, Any] | None,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
+        """Build the widget."""
+        value = value or {}
         ret: dict[str, Any] = {}
-        for key, child_field in typ.model_fields.items():
+        for key, child_field in field_type.model_fields.items():
             child_key = f"{field_name}.{key}" if field_name else key
             if child_field.exclude:
                 continue
@@ -34,7 +39,7 @@ class ModelFactoryMixin:
                 raise ValueError(  # coverage: ignore
                     f"Missing annotation for {child_field} in {child_key}"
                 )
-            ret[key] = self.build(
+            ret[key] = self.factory.build(
                 child_field.annotation,
                 name=child_key,
                 field=child_field,
@@ -53,7 +58,7 @@ class ModelFactoryMixin:
                 if field and field.json_schema_extra
                 else None
             ),
-            token=self.token,
+            token=self.factory.token,
             error=form_errors.get(field_name),
             nested=field is not None,
         )

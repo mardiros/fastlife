@@ -1,32 +1,36 @@
-"""
-Create markup for Union (and optionals fields).
-"""
+"""Handle Union type."""
 
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from types import NoneType
 from typing import Any
 
 from pydantic import ValidationError
 from pydantic.fields import FieldInfo
 
+from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
 from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.adapters.jinjax.widgets.union import UnionWidget
-from fastlife.shared_utils.infer import is_complex_type
+from fastlife.shared_utils.infer import is_complex_type, is_union
 
 
-class UnionFactoryMixin:
-    token: str
-    build: Callable[..., Any]
+class UnionBuilder(BaseWidgetBuilder[Any]):
+    """Builder for Union."""
 
-    def build_union(
+    def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
+        """True for unions Union[A,B], A | B or event Optional[A], A | None"""
+        return is_union(typ)
+
+    def build(
         self,
+        *,
         field_name: str,
         field_type: type[Any],
         field: FieldInfo | None,
-        value: Any,
+        value: Any | None,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> Widget[Any]:
+        """Build the widget."""
         types: list[type[Any]] = []
         # required = True
         for typ in field_type.__args__:  # type: ignore
@@ -41,7 +45,7 @@ class UnionFactoryMixin:
             # if the optional type is a complex type,
             and not is_complex_type(types[0])
         ):
-            return self.build(  # coverage: ignore
+            return self.factory.build(  # coverage: ignore
                 types[0],
                 name=field_name,
                 field=field,
@@ -57,7 +61,7 @@ class UnionFactoryMixin:
                 except ValidationError:
                     pass
                 else:
-                    child = self.build(
+                    child = self.factory.build(
                         typ,
                         name=field_name,
                         field=field,
@@ -78,7 +82,7 @@ class UnionFactoryMixin:
                 if field and field.json_schema_extra
                 else None
             ),
-            token=self.token,
+            token=self.factory.token,
             removable=removable,
             error=form_errors.get(field_name),
         )
