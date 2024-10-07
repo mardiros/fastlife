@@ -9,20 +9,19 @@ log = logging.getLogger(__name__)
 
 
 def get_header(headers: Sequence[tuple[bytes, bytes]], key: bytes) -> str | None:
-    for hdr in headers:
-        if hdr[0].lower() == key:
-            return hdr[1].decode("latin1")
+    for hkey, val in headers:
+        if hkey.lower() == key:
+            return val.decode("latin1")
     return None
 
 
 def get_header_int(headers: Sequence[tuple[bytes, bytes]], key: bytes) -> int | None:
-    for hdr in headers:
-        if hdr[0].lower() == key:
-            ret = hdr[1].decode("latin1")
+    for hkey, val in headers:
+        if hkey.lower() == key:
             try:
-                return int(ret)
+                return int(val.decode("latin1"))
             except ValueError:
-                pass
+                break
     return None
 
 
