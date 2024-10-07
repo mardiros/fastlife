@@ -1,3 +1,4 @@
+"""Pydantic models"""
 from collections.abc import Sequence
 from typing import Any
 
