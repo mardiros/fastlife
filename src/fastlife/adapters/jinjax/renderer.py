@@ -221,6 +221,20 @@ def component():
         return ret
 
 
+def to_include(
+    name: str,
+    ignores: Sequence[re.Pattern[str]] | None = None,
+    includes: Sequence[re.Pattern[str]] | None = None,
+) -> bool:
+    if includes and not any(include.match(name) for include in includes):
+        return False
+
+    if ignores and any(ignore.match(name) for ignore in ignores):
+        return False
+
+    return True
+
+
 class InspectableCatalog(Catalog):
     """
     JinjaX Catalog with introspection support.
@@ -247,20 +261,9 @@ class InspectableCatalog(Catalog):
                     prefix, name, file_ext=file_ext
                 )
 
-                to_include = True
-                if includes:
-                    to_include = False
-                    for include in includes:
-                        if include.match(name):
-                            to_include = True
-                            break
-                if to_include and ignores:
-                    for ignore in ignores:
-                        if ignore.match(name):
-                            to_include = False
-                            break
+                is_included = to_include(name, ignores, includes)
 
-                if to_include:
+                if is_included:
                     component = InspectableComponent(
                         name=name, prefix=prefix, path=path, source=path.read_text()
                     )
