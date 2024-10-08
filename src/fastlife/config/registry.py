@@ -37,3 +37,6 @@ class DefaultRegistry:
 
 
 TRegistry = TypeVar("TRegistry", bound=DefaultRegistry, covariant=True)
+"""
+A TypeVar used to override the DefaultRegistry to add more helpers in the registry.
+"""
