@@ -250,7 +250,7 @@ class MySecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser, DefaultRegistry
 
     @abc.abstractmethod
     async def authenticated_userid(self) -> str | None:
-        return self.token  # this is an example right
+        return self.token  # Don't do that in the real world
 
     async def has_permission(
         self, permission: str
