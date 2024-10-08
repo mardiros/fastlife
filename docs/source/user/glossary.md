@@ -57,14 +57,14 @@ Pydantic Settings
 
 
 Redoc
-  An alternative to Swagger UI. An interactive documentation from Open API Format.
+  An alternative to Swagger UI. An interactive documentation from {term}`OpenAPI` Format.
 
   Website: https://redocly.com/docs/redoc
 
 
 Swagger UI
   Swagger UI is a web interface that create a documentation and a playground to test
-  API based on the Open API format.
+  API based on the {term}`OpenAPI` format.
 
   Website: https://swagger.io/tools/swagger-ui/
 

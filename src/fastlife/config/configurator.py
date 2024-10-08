@@ -299,7 +299,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
     def add_openapi_tag(self, tag: OpenApiTag) -> Self:
-        """Register a tag description in the documentation."""
+        """Register a tag description in the {term}`OpenAPI` documentation."""
         if tag.name in self.tags:
             raise ConfigurationError(f"Tag {tag.name} can't be registered twice.")
         self.tags[tag.name] = tag
