@@ -1,3 +1,7 @@
+## 0.17.0  - Released on 2024-10-08
+* Fix @configure decorator signature for GenericConfigurator
+* Breaking change - rename Configurator.set_open_tag to Configurator.set_openapi_tag
+
 ## 0.16.4  - Released on 2024-10-04
 * Add support of x-real-port for port detection, fallback port to 0 instead of None if missing
 
