@@ -61,11 +61,11 @@ def test_include_raises_configuration_error(
     assert str(exc.value) == expected_error
 
 
-def test_add_open_tag(conf: Configurator):
-    conf.add_open_tag(OpenApiTag(name="foo", description="Foos foo"))
+def test_add_openapi_tag(conf: Configurator):
+    conf.add_openapi_tag(OpenApiTag(name="foo", description="Foos foo"))
 
     with pytest.raises(ConfigurationError) as ctx:
-        conf.add_open_tag(OpenApiTag(name="foo", description="Foo's bar"))
+        conf.add_openapi_tag(OpenApiTag(name="foo", description="Foo's bar"))
 
     assert str(ctx.value) == "Tag foo can't be registered twice."
 

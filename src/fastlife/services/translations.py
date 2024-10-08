@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 locale_name = str
 
+
 def find_mo_files(root_path: str) -> Iterator[tuple[str, str, pathlib.Path]]:
     """
     Find .mo files in a locales directory.
@@ -27,7 +28,6 @@ def find_mo_files(root_path: str) -> Iterator[tuple[str, str, pathlib.Path]]:
 
         for mo_file in lc_messages_dir.glob("*.mo"):
             yield locale_dir.name, mo_file.stem, mo_file
-
 
 
 class Localizer:

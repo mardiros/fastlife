@@ -31,5 +31,5 @@ class FStringTemplateRendererFactory(AbstractTemplateRendererFactory):
 
 
 @configure
-def includeme(conf: Configurator):
+def includeme(conf: Configurator) -> None:
     conf.add_renderer(".fstring", FStringTemplateRendererFactory())

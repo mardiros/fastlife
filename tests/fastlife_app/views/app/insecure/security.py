@@ -3,5 +3,5 @@ from fastlife.security.policy import InsecurePolicy
 
 
 @configure
-def includeme(conf: Configurator):
+def includeme(conf: Configurator) -> None:
     conf.set_security_policy(InsecurePolicy)

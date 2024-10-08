@@ -17,7 +17,7 @@ from collections.abc import Callable, Mapping, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Annotated, Any, Generic, Self
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Self, TypeVar
 
 import venusian
 from fastapi import Depends, FastAPI, Response
@@ -298,7 +298,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self.api_redoc_url = redoc_url
         return self
 
-    def add_open_tag(self, tag: OpenApiTag) -> Self:
+    def add_openapi_tag(self, tag: OpenApiTag) -> Self:
         """Register a tag description in the documentation."""
         if tag.name in self.tags:
             raise ConfigurationError(f"Tag {tag.name} can't be registered twice.")
@@ -590,8 +590,11 @@ class Configurator(GenericConfigurator[DefaultRegistry]):
     """
 
 
+TConfigurator = TypeVar("TConfigurator", bound=GenericConfigurator[Any])
+
+
 def configure(
-    wrapped: Callable[[Configurator], None],
+    wrapped: Callable[[TConfigurator], None],
 ) -> Callable[[Any], None]:
     """
     Decorator used to attach route in a submodule while using the configurator.include.
