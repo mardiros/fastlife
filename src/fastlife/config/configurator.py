@@ -591,7 +591,7 @@ class Configurator(GenericConfigurator[DefaultRegistry]):
 
 
 def configure(
-    wrapped: Callable[[Configurator], None],
+    wrapped: Callable[[GenericConfigurator[Any]], None],
 ) -> Callable[[Any], None]:
     """
     Decorator used to attach route in a submodule while using the configurator.include.
