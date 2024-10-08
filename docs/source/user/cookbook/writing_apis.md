@@ -246,7 +246,7 @@ class MySecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser, DefaultRegistry
     async def identity(self) -> AuthenticatedUser | None:
         if token is None:
             return None
-        return AuthenticatedUser(user_id=token)  # this is an example right
+        return AuthenticatedUser(user_id=token)  # Don't do that in the real world
 
     @abc.abstractmethod
     async def authenticated_userid(self) -> str | None:
