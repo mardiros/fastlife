@@ -68,7 +68,7 @@ def resource(
 
             config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
             if description:
-                config.add_open_tag(
+                config.add_openapi_tag(
                     OpenApiTag(
                         name=tag, description=description, externalDocs=external_docs
                     )

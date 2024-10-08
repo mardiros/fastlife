@@ -7,6 +7,6 @@ def locale_negociator(request: Request) -> str:
 
 
 @configure
-def includeme(config: Configurator):
+def includeme(config: Configurator) -> None:
     config.set_locale_negociator(locale_negociator)
     config.add_translation_dirs("tests.fastlife_app:locales")

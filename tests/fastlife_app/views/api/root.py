@@ -15,7 +15,7 @@ async def info() -> Info:
 
 
 @configure
-def includeme(config: Configurator):
+def includeme(config: Configurator) -> None:
     config.set_api_documentation_info(
         "Dummy API",
         "4.2",

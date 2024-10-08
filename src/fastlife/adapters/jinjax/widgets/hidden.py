@@ -1,4 +1,5 @@
 """Hidden fields"""
+
 from typing import Any
 
 from .base import Widget
