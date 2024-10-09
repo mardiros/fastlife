@@ -1,10 +1,11 @@
 import re
 
 import pytest
+from jinjax.exceptions import InvalidArgument
 
-from fastlife.adapters.jinjax.renderer import (
+from fastlife.adapters.jinjax import JinjaxTemplateRenderer
+from fastlife.adapters.jinjax.jinjax_ext.inspectable_component import (
     InspectableComponent,
-    JinjaxTemplateRenderer,
     has_content,
 )
 from fastlife.config.settings import Settings
@@ -149,3 +150,11 @@ open: bool = True, content: Any)
     :param content: child node.
 """
     )
+
+
+def test_jinjax_syntax_error(jinjax_engine: JinjaxTemplateRenderer) -> None:
+    components_iter = jinjax_engine.catalog.iter_components(
+        includes=[re.compile(r"^SyntaxError$")]
+    )
+    with pytest.raises(InvalidArgument):
+        next(components_iter)
