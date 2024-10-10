@@ -5,7 +5,7 @@ import pytest
 from fastapi import Request as FastApiRequest
 
 from fastlife import GenericRequest, Settings
-from fastlife.adapters.jinjax import JinjaxTemplateRenderer
+from fastlife.adapters.jinjax import JinjaxEngine
 from tests.fastlife_app.config import MyRegistry, MySettings
 
 Request = GenericRequest[MyRegistry]
@@ -37,12 +37,12 @@ def dummy_request(dummy_registry: MyRegistry) -> Request:
 
 @pytest.fixture()
 def jinjax_engine(settings: Settings):
-    return JinjaxTemplateRenderer(settings)
+    return JinjaxEngine(settings)
 
 
 @pytest.fixture()
-def renderer(jinjax_template_engine: JinjaxTemplateRenderer, dummy_request: Request):
-    return jinjax_template_engine(dummy_request)
+def renderer(jinjax_engine: JinjaxEngine, dummy_request: Request):
+    return jinjax_engine(dummy_request)
 
 
 @pytest.fixture()

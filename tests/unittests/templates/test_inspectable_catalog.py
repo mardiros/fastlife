@@ -3,7 +3,7 @@ import re
 import pytest
 from jinjax.exceptions import InvalidArgument
 
-from fastlife.adapters.jinjax import JinjaxTemplateRenderer
+from fastlife.adapters.jinjax import JinjaxEngine
 from fastlife.adapters.jinjax.jinjax_ext.inspectable_component import (
     InspectableComponent,
     has_content,
@@ -33,7 +33,7 @@ def test_has_content(content: str, expected: bool) -> None:
 
 
 def test_jinjax_template_ignores() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+    renderer = JinjaxEngine(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(ignores=[re.compile(r"^[^A]")]):
         components.append(component)
@@ -73,7 +73,7 @@ of an AJAX request.
 
 
 def test_jinjax_template_includes() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+    renderer = JinjaxEngine(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(
         includes=[re.compile(r"^pydantic_form\.Widget$")]
@@ -96,7 +96,7 @@ fastlife.adapters.jinjax.widgets.base.Widget, content: Any)
 
 
 def test_jinjax_template_render_no_params() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+    renderer = JinjaxEngine(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(
         includes=[re.compile(r"^CsrfToken$")]
@@ -116,7 +116,7 @@ def test_jinjax_template_render_no_params() -> None:
 
 
 def test_jinjax_template_render_codeblock() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+    renderer = JinjaxEngine(Settings())
     components: list[InspectableComponent] = []
     for component in renderer.catalog.iter_components(
         includes=[re.compile(r"^Details$")]
@@ -152,7 +152,7 @@ open: bool = True, content: Any)
     )
 
 
-def test_jinjax_syntax_error(jinjax_engine: JinjaxTemplateRenderer) -> None:
+def test_jinjax_syntax_error(jinjax_engine: JinjaxEngine) -> None:
     components_iter = jinjax_engine.catalog.iter_components(
         includes=[re.compile(r"^SyntaxError$")]
     )

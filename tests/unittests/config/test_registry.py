@@ -6,7 +6,7 @@ from fastlife.config.registry import DefaultRegistry
 def test_get_renderer(dummy_registry: DefaultRegistry):
     assert (
         dummy_registry.get_renderer(".jinja").__class__.__qualname__
-        == "JinjaxTemplateRenderer"
+        == "JinjaxEngine"
     )
 
 

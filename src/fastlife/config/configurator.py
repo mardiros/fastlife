@@ -171,7 +171,7 @@ class GenericConfigurator(Generic[TRegistry]):
         # if settings have been manipulated, everythins is taken into account.
         self.add_renderer(
             self.registry.settings.jinjax_file_ext,
-            resolve("fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer")(
+            resolve("fastlife.adapters.jinjax.renderer:JinjaxEngine")(
                 self.registry.settings
             ),
         )

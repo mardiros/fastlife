@@ -162,7 +162,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         )
 
 
-class JinjaxTemplateRenderer(AbstractTemplateRendererFactory):
+class JinjaxEngine(AbstractTemplateRendererFactory):
     """
     The default template renderer factory. Based on JinjaX.
 
