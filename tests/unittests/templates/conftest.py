@@ -4,9 +4,11 @@ import bs4
 import pytest
 from fastapi import Request as FastApiRequest
 
-from fastlife import Registry, Request, Settings
-from fastlife.adapters.jinjax import JinjaxTemplateRenderer
-from tests.fastlife_app.config import MySettings
+from fastlife import GenericRequest, Settings
+from fastlife.adapters.jinjax import JinjaxEngine
+from tests.fastlife_app.config import MyRegistry, MySettings
+
+Request = GenericRequest[MyRegistry]
 
 
 @pytest.fixture(scope="session")
@@ -20,7 +22,7 @@ def settings(components_dir: Path) -> MySettings:
 
 
 @pytest.fixture()
-def dummy_request(dummy_registry: Registry) -> Request:
+def dummy_request(dummy_registry: MyRegistry) -> Request:
     scope = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
@@ -34,8 +36,13 @@ def dummy_request(dummy_registry: Registry) -> Request:
 
 
 @pytest.fixture()
-def renderer(settings: Settings, dummy_request: Request):
-    return JinjaxTemplateRenderer(settings)(dummy_request)
+def jinjax_engine(settings: Settings):
+    return JinjaxEngine(settings)
+
+
+@pytest.fixture()
+def renderer(jinjax_engine: JinjaxEngine, dummy_request: Request):
+    return jinjax_engine(dummy_request)
 
 
 @pytest.fixture()

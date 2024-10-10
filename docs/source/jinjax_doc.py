@@ -14,7 +14,7 @@ from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
 from sphinx.util import relative_uri  # type: ignore
 
-from fastlife.adapters.jinjax.renderer import JinjaxTemplateRenderer
+from fastlife.adapters.jinjax.renderer import JinjaxEngine
 from fastlife.config.settings import Settings
 
 
@@ -253,7 +253,7 @@ def run_autodoc(app: Sphinx) -> str | None:
 
     :return: The top level module name, relative to the api directory.
     """
-    renderer = JinjaxTemplateRenderer(Settings())
+    renderer = JinjaxEngine(Settings())
     outdir = Path(app.srcdir) / app.config.jinjax_doc_output_dir
     outdir.mkdir(parents=True, exist_ok=True)
     toctree = ""

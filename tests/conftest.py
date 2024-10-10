@@ -76,7 +76,7 @@ def settings() -> MySettings:
 def dummy_registry(settings: MySettings) -> MyRegistry:
     ret = MyRegistry(settings)
     ret.renderers[f".{settings.jinjax_file_ext}"] = resolve(  # type: ignore
-        "fastlife.adapters.jinjax.renderer:JinjaxTemplateRenderer"
+        "fastlife.adapters.jinjax.renderer:JinjaxEngine"
     )(settings)
     return ret
 

@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     registry_class: str = Field(default="fastlife.config.registry:DefaultRegistry")
     """Implementation class for the application regitry."""
     template_renderer_class: str = Field(
-        default="fastlife.templates.renderer:JinjaxTemplateRenderer"
+        default="fastlife.templates.renderer:JinjaxEngine"
     )
     """
     Implementation class for the
