@@ -86,7 +86,6 @@ class InspectableComponent(Component):
         if match:
             headers = match.group(0)
             header = headers.split("#}")[:-1]
-            def_found = False
             docstring = ""
 
             expr = None
@@ -94,12 +93,6 @@ class InspectableComponent(Component):
                 item = header.pop(0).strip(" -\n")
 
                 expr = self.read_metadata_item(item, RX_ARGS_START)  # type: ignore
-                if expr:
-                    if def_found:
-                        raise DuplicateDefDeclaration(self.name)
-                    def_found = True
-                    continue
-
                 doc = self.read_metadata_item(item, RX_DOC_START)  # type: ignore
                 if doc:
                     docstring += f"    {doc.strip()}\n"
@@ -108,10 +101,7 @@ class InspectableComponent(Component):
             sigargs = f"*, {expr}" if expr else ""
             signature = SIGNATURE.format(args=sigargs, docstring=docstring or "")
 
-        try:
-            astree = ast.parse(signature)
-        except SyntaxError as err:
-            raise InvalidArgument(err) from err
+        astree = ast.parse(signature)
         return cast(ast.FunctionDef, astree.body[0])
 
     def build_docstring(self) -> str:

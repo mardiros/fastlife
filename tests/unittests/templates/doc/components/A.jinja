@@ -1,0 +1,38 @@
+{# doc
+  Create html ``<a>`` node with htmx support by default.
+  The `hx-get` parameter is set with the href directly unless the
+  `disabled-htmx` attribute has been set.
+#}
+{# def
+  href: Annotated[str, "target link."],
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.A_CLASS`."
+  ] = None,
+  hx_target: Annotated[
+    str,
+    "target the element for swapping than the one issuing the AJAX request."
+  ] = "#maincontent",
+  hx_select: Annotated[str | None, "select the content swapped from response of the AJAX request."] = None,
+  hx_swap: Annotated[
+    str,
+    "specify how the response will be swapped in relative to the target of an AJAX request."
+  ] = "innerHTML show:body:top",
+  hx_push_url: Annotated[bool, "replace the browser url with the link."] = True,
+  disable_htmx: Annotated[bool, "do not add any `hx-*` attibute to the link."] = False
+#}
+
+<a href="{{href}}"
+  {%- if id %} id="{{ id }}" {%- endif %}
+  {%- if not disable_htmx %}
+    hx-get="{{ href }}"
+    hx-target="{{ hx_target }}"
+    hx-swap="{{ hx_swap }}"
+    {%- if hx_push_url %} hx-push-url="true" {%- endif %}
+    {%- if hx_select %} hx-select="{{ hx_select }}" {%- endif %}
+  {%- endif %}
+    class="{{ attrs.class or A_CLASS }}"
+>
+  {{- content -}}
+</a>

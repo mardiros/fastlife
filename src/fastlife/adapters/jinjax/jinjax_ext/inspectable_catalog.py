@@ -7,6 +7,7 @@ import re
 from collections.abc import Iterator, Sequence
 
 from jinja2.exceptions import TemplateSyntaxError
+from jinjax import DuplicateDefDeclaration, InvalidArgument
 from jinjax.catalog import Catalog
 
 from .inspectable_component import InspectableComponent
@@ -57,17 +58,30 @@ class InspectableCatalog(Catalog):
                 is_included = to_include(name, ignores, includes)
 
                 if is_included:
-                    component = InspectableComponent(
-                        name=name, prefix=prefix, path=path, source=path.read_text()
-                    )
+                    try:
+                        component = InspectableComponent(
+                            name=name, prefix=prefix, path=path, source=path.read_text()
+                        )
+                    except InvalidArgument as exc:
+                        log.error(f"Definition Syntax Error in <{name}/>: {exc}")
+                        log.error(path.read_text())
+                        continue
+                    except DuplicateDefDeclaration as exc:
+                        log.error(f"Duplicate Definition in <{name}/>: {exc}")
+                        log.error(path.read_text())
+                        continue
 
                     self.jinja_env.loader = loader
+
                     try:
                         component.tmpl = self.jinja_env.get_template(
                             tmpl_name, globals=self._tmpl_globals
                         )
                     except TemplateSyntaxError as exc:
-                        log.error(f"Syntax Error: {exc} on {exc.lineno} :")
+                        log.error(
+                            f"Template Syntax Error in <{name}/>: {exc} on "
+                            "{exc.lineno} :"
+                        )
                         log.error(path.read_text())
                         continue
                     yield component
