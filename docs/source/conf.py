@@ -46,7 +46,8 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
+    "icons_wall",
+"fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
     "myst_parser",
     "autodoc2",
 ]
@@ -108,6 +109,8 @@ html_theme = "furo"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["static"]
+
+html_extra_path = []
 
 # -- Options for HTML output -------------------------------------------------
 

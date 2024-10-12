@@ -27,6 +27,15 @@ buildcss:
         -i tests/fastlife_app/assets/styles/main.css \
         -o tests/fastlife_app/static/css/main.css
 
+buildiconcss:
+    poetry run tailwindcss \
+        -c docs/source/iconswall/tailwind.config.js \
+        -i docs/source/iconswall/main.css \
+        -o docs/source/iconswall/iconwall.css
+    echo "<style>" > docs/source/iconswall/IconsCss.jinja
+    cat docs/source/iconswall/iconwall.css >> docs/source/iconswall/IconsCss.jinja
+    echo "</style>" >> docs/source/iconswall/IconsCss.jinja
+
 buildicons:
     poetry run scripts/build_heroicon_tags.py
 
