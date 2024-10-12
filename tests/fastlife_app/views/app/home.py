@@ -1,15 +1,9 @@
 from typing import Annotated
 
-from pydantic import BaseModel
-
 from fastlife import Configurator, Response, TemplateParams, configure, view_config
 from fastlife.request.form import FormModel, form_model
 from fastlife.templates import Template, template
-from tests.fastlife_app.models import Account, Group
-
-
-class Person(BaseModel):
-    nick: str
+from tests.fastlife_app.models import Account, Group, Person
 
 
 @view_config("home", "/", methods=["GET", "POST"], template="HelloWorld.jinja")

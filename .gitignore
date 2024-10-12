@@ -11,3 +11,4 @@ docs/source/develop/
 junit
 htmlcov
 coverage.xml
+tests/unittests/templates/doc/docs/components

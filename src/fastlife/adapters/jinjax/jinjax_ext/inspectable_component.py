@@ -9,9 +9,7 @@ from pathlib import Path
 from typing import cast
 
 from jinja2 import Template
-from jinjax import InvalidArgument
 from jinjax.component import RX_ARGS_START, RX_META_HEADER, Component
-from jinjax.exceptions import DuplicateDefDeclaration
 
 from .docstring import generate_docstring
 

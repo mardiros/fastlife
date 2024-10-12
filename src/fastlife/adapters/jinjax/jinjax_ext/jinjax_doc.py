@@ -4,8 +4,7 @@ from pathlib import Path
 from typing import Any, ClassVar, cast
 
 from docutils import nodes
-from jinjax import InvalidArgument
-from sphinx.addnodes import desc_signature, index, pending_xref
+from sphinx.addnodes import index, pending_xref
 from sphinx.application import Sphinx
 from sphinx.builders import Builder
 from sphinx.directives import ObjectDescription
@@ -25,8 +24,19 @@ def create_ref_node(arg_type: str) -> nodes.Node:
     At the monent, type inferred are types containing a `.`, otherwise
     considered as a simple type from the python standard library.
 
+    This function is used to create links in component parameters.
+
     :param arg_type: type to render.
     """
+    if "|" in arg_type:
+        typs = [t.strip() for t in arg_type.split("|")]
+        typs_group = nodes.literal()
+        for idx, typ in enumerate(typs):
+            if idx:
+                typs_group += nodes.Text(" | ")
+            typs_group += create_ref_node(typ)
+        return typs_group
+
     if "." in arg_type:
         ref_node = pending_xref(
             "",
@@ -35,6 +45,7 @@ def create_ref_node(arg_type: str) -> nodes.Node:
             reftarget=arg_type,
             refexplicit=True,
             refwarn=True,
+            classes=[],
         )
         ref_node += nodes.Text(arg_type)
         return ref_node
@@ -59,19 +70,6 @@ def handle_arg_type(arg_type: str, signature_node: nodes.literal) -> None:
 class JinjaxComponent(ObjectDescription[str]):
     """Description of a Jinjax component."""
 
-    def handle_signature(self, sig: str, signode: desc_signature) -> str:
-        node = self.env.get_domain("jinjax").get_full_qualified_name(sig)
-        if node:
-            signode.append(node)
-        return sig
-
-    def add_target_and_index(self, name: str, sig: str, signode: nodes.Node) -> None:
-        """Add anchor for references and indexing."""
-        targetname = f"jinjax.{name}"
-        signode["names"].append(targetname)
-        self.state.document.note_explicit_target(signode)
-        self.env.domaindata["jinjax"]["components"][name] = self.env.docname
-
     def run(self) -> list[nodes.Node]:
         """Generate structured and styled documentation for the directive."""
         container_node = nodes.container(classes=["jinjax-component"])
@@ -86,10 +84,8 @@ class JinjaxComponent(ObjectDescription[str]):
         else:
             # no parameters in the component
             signature = "def component(): pass"
-        try:
-            astree = ast.parse(signature)
-        except SyntaxError as err:
-            raise InvalidArgument(f"SyntaxError {err} in \n{signature}") from err
+
+        astree = ast.parse(signature)
         func_def = cast(ast.FunctionDef, astree.body[0])
 
         # Create a colorized signature line with separate spans for each part
@@ -99,7 +95,7 @@ class JinjaxComponent(ObjectDescription[str]):
             text=component_name, classes=["jinjax-component-name"]
         )
 
-        def process_arg(arg: ast.arg, default_value: Any, signature_node: Any):
+        def process_arg(arg: ast.arg, default_value: Any, signature_node: Any) -> None:
             arg_name = arg.arg.replace("_", "-").rstrip("-")
             arg_type = ast.unparse(arg.annotation) if arg.annotation else "Any"
             signature_node += nodes.inline(text=" ")
@@ -248,12 +244,14 @@ class JinjaxDomain(Domain):
         return []
 
 
-def run_autodoc(app: Sphinx) -> str | None:
+def run_autodoc(app: Sphinx) -> None:
     """Run autodoc for a single package.
 
     :return: The top level module name, relative to the api directory.
     """
-    renderer = JinjaxEngine(Settings())
+    renderer = JinjaxEngine(
+        Settings(template_search_path=app.config.jinjax_template_search_path)
+    )
     outdir = Path(app.srcdir) / app.config.jinjax_doc_output_dir
     outdir.mkdir(parents=True, exist_ok=True)
     toctree = ""
@@ -290,8 +288,9 @@ fastlife comes with a set of compoments:
 """
 
 
-def setup(app: Sphinx):
+def setup(app: Sphinx) -> None:
     app.add_config_value("jinjax_doc_index_template", INDEX_TPL, "env")
     app.add_config_value("jinjax_doc_output_dir", "components", "env")
+    app.add_config_value("jinjax_template_search_path", "fastlife:components", "env")
     app.add_domain(JinjaxDomain)
     app.connect("builder-inited", run_autodoc)

@@ -46,12 +46,13 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "jinjax_doc",
+    "fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
     "myst_parser",
     "autodoc2",
 ]
 
 jinjax_doc_output_dir = "components"
+jinjax_template_search_path = "fastlife:components"
 
 autodoc2_packages = [
     {"path": "../../src/fastlife"},
