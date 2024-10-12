@@ -6,6 +6,10 @@ from pydantic import BaseModel, Field, SecretStr, field_validator
 from fastlife.adapters.jinjax.widgets.base import Widget
 
 
+class Person(BaseModel):
+    nick: str
+
+
 class GroupsChoice(Widget[Any]):
     def get_template(self) -> str:
         return "GroupsChoice.jinja"

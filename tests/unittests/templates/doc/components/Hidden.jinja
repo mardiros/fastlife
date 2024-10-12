@@ -1,0 +1,6 @@
+{# def
+  name: Annotated[str, "submitted name in the form"],
+  value: Annotated[str, "submitted value in the form"],
+  id: Annotated[str | None, "unique identifier of the element."] = None,
+#}
+<input name="{{name}}" value="{{value}}" type="hidden" {%if id %}id="{{id}}" {%endif%} />

@@ -9,7 +9,9 @@ from pydantic.fields import FieldInfo
 from fastlife.adapters.jinjax.widgets.base import Widget
 
 if TYPE_CHECKING:
-    from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
+    from fastlife.adapters.jinjax.widget_factory.factory import (  # coverage: ignore
+        WidgetFactory,
+    )
 
 T = TypeVar("T")
 

@@ -1,7 +1,7 @@
 """Main template renderer based on JinjaX."""
 
-from .renderer import JinjaxTemplateRenderer
+from .renderer import JinjaxEngine
 
 __all__ = [
-    "JinjaxTemplateRenderer",
+    "JinjaxEngine",
 ]

@@ -1,7 +1,7 @@
 """
 Base class to of the template renderer.
 
-Fastlife comes with {class}`fastlife.templating.renderer.jinjax.JinjaxTemplateRenderer`,
+Fastlife comes with {class}`fastlife.templating.renderer.jinjax.JinjaxEngine`,
 the rendering engine, it can be overriden from the setting
 :attr:`fastlife.config.settings.Settings.template_renderer_class`.
 

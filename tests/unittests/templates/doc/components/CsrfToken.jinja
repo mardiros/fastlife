@@ -1,0 +1,5 @@
+{# doc
+  a :jinjax:component:`Hidden` field automaticaly injected in every
+  :jinjax:component:`Form` to protect against CSRF Attacks.
+#}
+<Hidden :name="csrf_token.name" :value="csrf_token.value" />

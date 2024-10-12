@@ -1,13 +1,14 @@
+import logging
 import re
+from typing import Any
 
 import pytest
 
-from fastlife.adapters.jinjax.renderer import (
+from fastlife.adapters.jinjax import JinjaxEngine
+from fastlife.adapters.jinjax.jinjax_ext.inspectable_component import (
     InspectableComponent,
-    JinjaxTemplateRenderer,
     has_content,
 )
-from fastlife.config.settings import Settings
 
 
 @pytest.mark.parametrize(
@@ -31,10 +32,11 @@ def test_has_content(content: str, expected: bool) -> None:
     assert has_content(content) is expected
 
 
-def test_jinjax_template_ignores() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+def test_jinjax_template_ignores(jinjax_engine: JinjaxEngine) -> None:
     components: list[InspectableComponent] = []
-    for component in renderer.catalog.iter_components(ignores=[re.compile(r"^[^A]")]):
+    for component in jinjax_engine.catalog.iter_components(
+        ignores=[re.compile(r"^[^A]")]
+    ):
         components.append(component)
     assert len(components) == 1
     docstring = components[0].build_docstring()
@@ -71,10 +73,9 @@ of an AJAX request.
     )
 
 
-def test_jinjax_template_includes() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+def test_jinjax_template_includes(jinjax_engine: JinjaxEngine) -> None:
     components: list[InspectableComponent] = []
-    for component in renderer.catalog.iter_components(
+    for component in jinjax_engine.catalog.iter_components(
         includes=[re.compile(r"^pydantic_form\.Widget$")]
     ):
         components.append(component)
@@ -94,10 +95,9 @@ fastlife.adapters.jinjax.widgets.base.Widget, content: Any)
     )
 
 
-def test_jinjax_template_render_no_params() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+def test_jinjax_template_render_no_params(jinjax_engine: JinjaxEngine) -> None:
     components: list[InspectableComponent] = []
-    for component in renderer.catalog.iter_components(
+    for component in jinjax_engine.catalog.iter_components(
         includes=[re.compile(r"^CsrfToken$")]
     ):
         components.append(component)
@@ -114,10 +114,9 @@ def test_jinjax_template_render_no_params() -> None:
     )
 
 
-def test_jinjax_template_render_codeblock() -> None:
-    renderer = JinjaxTemplateRenderer(Settings())
+def test_jinjax_template_render_codeblock(jinjax_engine: JinjaxEngine) -> None:
     components: list[InspectableComponent] = []
-    for component in renderer.catalog.iter_components(
+    for component in jinjax_engine.catalog.iter_components(
         includes=[re.compile(r"^Details$")]
     ):
         components.append(component)
@@ -149,3 +148,36 @@ open: bool = True, content: Any)
     :param content: child node.
 """
     )
+
+
+def test_jinjax_syntax_error(jinjax_engine: JinjaxEngine, caplog: Any) -> None:
+    components: list[InspectableComponent] = []
+    with caplog.at_level(logging.ERROR):
+        for component in jinjax_engine.catalog.iter_components(
+            includes=[re.compile(r"^SyntaxError$")]
+        ):
+            components.append(component)
+    assert len(components) == 0
+    assert "Definition Syntax Error in <SyntaxError/>:" in caplog.text
+
+
+def test_jinjax_syntax_error2(jinjax_engine: JinjaxEngine, caplog: Any) -> None:
+    components: list[InspectableComponent] = []
+    with caplog.at_level(logging.ERROR):
+        for component in jinjax_engine.catalog.iter_components(
+            includes=[re.compile(r"^SyntaxError2$")]
+        ):
+            components.append(component)
+    assert len(components) == 0
+    assert "Template Syntax Error in <SyntaxError2/>:" in caplog.text
+
+
+def test_jinjax_syntax_error3(jinjax_engine: JinjaxEngine, caplog: Any) -> None:
+    components: list[InspectableComponent] = []
+    with caplog.at_level(logging.ERROR):
+        for component in jinjax_engine.catalog.iter_components(
+            includes=[re.compile(r"^SyntaxError3$")]
+        ):
+            components.append(component)
+    assert len(components) == 0
+    assert "Duplicate Definition in <SyntaxError3/>:" in caplog.text

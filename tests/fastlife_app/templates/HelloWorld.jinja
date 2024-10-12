@@ -1,7 +1,10 @@
-{# def person = None #}
+{# def
+  person: Annotated[fastlife_app.models.Person | None, "You"] = None,
+  method: Annotated[Literal['get', 'post'], "Form method"] = 'post'
+#}
 <Layout>
   <H1>Hello {{ person.nick|default("World") }}!</H1>
-  <Form  method="post">
+  <Form :method="method">
     <Input name="person.nick" label="Name" aria_label="First name and last name, or surname" />
     <Button aria_label="submit">Submit</Button>
   </Form>
