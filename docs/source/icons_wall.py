@@ -1,9 +1,4 @@
-import re
-import sys
-from collections.abc import Iterator
-from importlib import util
 from pathlib import Path
-from zipfile import ZipFile
 
 import jinjax.catalog
 from sphinx.application import Sphinx
@@ -11,46 +6,8 @@ from sphinx.application import Sphinx
 from fastlife.adapters.jinjax.renderer import build_searchpath
 from fastlife.shared_utils.resolver import resolve_path
 
-package_name = "heroicons"
-root_dir = Path(__file__).parents[1]
-
-
-def to_name(filename: str) -> str:
-    ret = "".join([c.capitalize() for c in filename[:-4].split("-")])
-    if ret[0].isdigit():
-        ret = f"Hero{ret}"
-    return ret
-
-
-def add_attrs(content: str) -> str:
-    ret = "{# def id=None, title=None #}\n\n" + content.replace(
-        'viewBox="',
-        '{% if id %}id="{{id}}" {%endif%}class="{{attrs.class or \'\'}}" viewBox="',
-    )
-    ret = re.sub(
-        r"(<path[^>]*?)/>",
-        r"\1>{% if title %}<title>{{title}}</title>{% endif %}</path>",
-        ret,
-    )
-    return ret
-
-
-def iter_zip(heroicons_path: Path) -> Iterator[tuple[str, str]]:
-    iconzip = heroicons_path / "heroicons.zip"
-    with ZipFile(iconzip, "r") as zip_ref:
-        file_list = zip_ref.namelist()
-        for filepath in file_list:
-            with zip_ref.open(filepath) as file:
-                content = file.read().decode("utf-8")
-                yield filepath, content
-
 
 def write_jinja(app: Sphinx) -> Path:
-    spec = util.find_spec(package_name)
-    if spec is None or spec.origin is None:
-        print(f"Package {package_name} is probably not installed", file=sys.stderr)
-        sys.exit(-1)
-
     iconsdir = Path(resolve_path("fastlife:components")) / "icons"
 
     outdir = Path(app.srcdir) / app.config.icon_wall_output_dir
