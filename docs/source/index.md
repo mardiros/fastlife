@@ -19,8 +19,8 @@ user/glossary
 
 develop/fastlife/fastlife
 components/index
+iconswall/icons
 ```
-
 
 ## Indices and tables
 

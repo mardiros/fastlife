@@ -12,3 +12,5 @@ junit
 htmlcov
 coverage.xml
 tests/unittests/templates/doc/docs/components
+docs/source/iconswall/IconsWall.jinja
+docs/source/iconswall/icons.md
