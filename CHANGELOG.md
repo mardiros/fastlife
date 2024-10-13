@@ -1,3 +1,7 @@
+## 0.18.0  - Released on 2024-10-13
+* Make the sphinx pluging {mod}`fastlife.adapters.jinjax.jinjax_ext.jinjax_doc`
+  parts from the API in order to let users build their own component documentation.
+
 ## 0.17.0  - Released on 2024-10-08
 * Fix @configure decorator signature for GenericConfigurator
 * Breaking change - rename Configurator.set_open_tag to Configurator.set_openapi_tag

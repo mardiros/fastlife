@@ -47,7 +47,7 @@ release = version
 # ones.
 extensions = [
     "icons_wall",
-"fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
+    "fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
     "myst_parser",
     "autodoc2",
 ]
