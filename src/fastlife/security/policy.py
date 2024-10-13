@@ -63,6 +63,7 @@ class HasPermission(int, metaclass=BoolMeta):
     where authenticated user are not redirected. they have an error message,
     or the frontend may use the information to adapt its interface.
     """
+
     kind: Literal["allowed", "unauthenticated", "denied"]
     reason: str
 

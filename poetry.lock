@@ -1711,25 +1711,6 @@ lint = ["flake8 (>=6.0)", "importlib-metadata (>=6.0)", "mypy (==1.10.1)", "pyte
 test = ["cython (>=3.0)", "defusedxml (>=0.7.1)", "pytest (>=8.0)", "setuptools (>=70.0)", "typing_extensions (>=4.9)"]
 
 [[package]]
-name = "sphinx-autodoc-typehints"
-version = "1.25.3"
-description = "Type hints (PEP 484) support for the Sphinx autodoc extension"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "sphinx_autodoc_typehints-1.25.3-py3-none-any.whl", hash = "sha256:d3da7fa9a9761eff6ff09f8b1956ae3090a2d4f4ad54aebcade8e458d6340835"},
-    {file = "sphinx_autodoc_typehints-1.25.3.tar.gz", hash = "sha256:70db10b391acf4e772019765991d2de0ff30ec0899b9ba137706dc0b3c4835e0"},
-]
-
-[package.dependencies]
-sphinx = ">=7.1.2"
-
-[package.extras]
-docs = ["furo (>=2023.9.10)"]
-numpy = ["nptyping (>=2.5)"]
-testing = ["covdefaults (>=2.3)", "coverage (>=7.3.2)", "diff-cover (>=8.0.1)", "pytest (>=7.4.3)", "pytest-cov (>=4.1)", "sphobjinv (>=2.3.1)", "typing-extensions (>=4.8)"]
-
-[[package]]
 name = "sphinx-autodoc2"
 version = "0.5.0"
 description = "Analyse a python project and create documentation for it."
@@ -1887,17 +1868,6 @@ python-versions = "*"
 files = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
     {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
-]
-
-[[package]]
-name = "tomlkit"
-version = "0.12.5"
-description = "Style preserving TOML library"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "tomlkit-0.12.5-py3-none-any.whl", hash = "sha256:af914f5a9c59ed9d0762c7b64d3b5d5df007448eb9cd2edc8a46b1eafead172f"},
-    {file = "tomlkit-0.12.5.tar.gz", hash = "sha256:eef34fba39834d4d6b73c9ba7f3e4d1c417a4e56f89a7e96e090dd0d24b8fb3c"},
 ]
 
 [[package]]
@@ -2293,4 +2263,4 @@ testing = ["beautifulsoup4"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "711ac73bdc01ebf39a754963f37b5e98b5cefd93d9059d3b351657eb96f3c8da"
+content-hash = "463250da6ad7ef22cc9b8d2f20b8463f24ddd6779c53422678cf8cde22e9cd6b"
