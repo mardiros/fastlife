@@ -3,7 +3,12 @@ Icons
 .. raw:: html
 
     <p>
-        Available icons, click to copy
+        Fastlife comes with a set of icons that comes from
+        <a href="https://heroicons.com/">heroicons</a>
+        (MIT License - Copyright (c) Tailwind Labs, Inc.).
+    </p>
+    <p>
+        Available icons, click to copy.
     </p>
     
     
