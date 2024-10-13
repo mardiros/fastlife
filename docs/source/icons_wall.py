@@ -17,7 +17,6 @@ def write_icons(fw: IO[str], catalog: InspectableCatalog):
             f"onclick=\"copyText('&lt;{name} /&gt;')\">"
         )
         fw.write(f'<{name} class="w-16 h-16" title="{name}" />\n')
-        fw.write(f'<p class="mt-2">{name}</p>\n\n')
         fw.write(
             component.build_docstring()
         )
