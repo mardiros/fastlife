@@ -255,9 +255,10 @@ def run_autodoc(app: Sphinx) -> None:
     outdir = Path(app.srcdir) / app.config.jinjax_doc_output_dir
     outdir.mkdir(parents=True, exist_ok=True)
     toctree = ""
-    for component in renderer.catalog.iter_components(
-        ignores=[re.compile(r"icons..*..*")]
-    ):
+
+    ignores = [re.compile(rx) for rx in app.config.jinjax_ignores_pattern.split(",")]
+
+    for component in renderer.catalog.iter_components(ignores=ignores):
         outfile = outdir / f"{component.name}.rst"
 
         outfile.write_text(
@@ -292,5 +293,6 @@ def setup(app: Sphinx) -> None:
     app.add_config_value("jinjax_doc_index_template", INDEX_TPL, "env")
     app.add_config_value("jinjax_doc_output_dir", "components", "env")
     app.add_config_value("jinjax_template_search_path", "fastlife:components", "env")
+    app.add_config_value("jinjax_ignores_pattern", r"^icons\..*", "env")
     app.add_domain(JinjaxDomain)
     app.connect("builder-inited", run_autodoc)

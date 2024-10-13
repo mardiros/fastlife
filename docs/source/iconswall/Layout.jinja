@@ -1,9 +1,24 @@
-# Icons
+<p>
+    Available icons, click to copy
+</p>
 
+{#
 <script
-      src="https://unpkg.com/htmx.org@1.9.8"
+      src="https://unpkg.com/htmx.org@2.0.1"
       integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
       crossorigin="anonymous"></script>
+#}
+
+<script>
+    function copyText(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+</script>
 
 <IconsCss />
 
