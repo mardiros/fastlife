@@ -466,7 +466,11 @@ class GenericConfigurator(Generic[TRegistry]):
         :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
             parameters.
         :param endpoint: the function that will reveive the request.
-        :param permission: a permission to validate by the security policy.
+        :param template: the template rendered by the
+            {class}`fastlife.service.templates.AbstractTemplateRenderer`.
+        :param permission: a permission to validate by the
+            {class}`Security Policy <fastlife.security.policy.AbstractSecurityPolicy>`.
+        :param status_code: customize response status code.
         :param methods: restrict route to a list of http methods.
         :return: the configurator.
         """
