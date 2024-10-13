@@ -1,12 +1,11 @@
 """
 Base class to of the template renderer.
 
-Fastlife comes with {class}`fastlife.templating.renderer.jinjax.JinjaxEngine`,
-the rendering engine, it can be overriden from the setting
-:attr:`fastlife.config.settings.Settings.template_renderer_class`.
+Fastlife comes with {class}`fastlife.adapters.jinjax.renderer.JinjaxEngine`,
+the rendering engine.
 
-In that case, those base classes have to be implemented.
-
+More template engine can be registered using the configurator method
+{meth}`add_renderer <fastlife.config.configurator.GenericConfigurator.add_renderer>`
 """
 
 import abc

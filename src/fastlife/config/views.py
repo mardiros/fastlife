@@ -36,14 +36,20 @@ def view_config(
     methods: list[str] | None = None,
 ) -> Callable[..., Any]:
     """
-    A decorator function to add a view in the app.
+    A decorator function to register a view in the
+    {class}`Configurator <fastlife.config.configurator.GenericConfigurator>`
+    while scaning a module using {func}`include
+    <fastlife.config.configurator.GenericConfigurator.include>`.
 
     :param name: name of the route, used to build route from the helper
         {meth}`fastlife.request.request.Request.url_for` in order to create links.
     :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
         parameters.
+    :param template: the template rendered by the
+        {class}`fastlife.services.templates.AbstractTemplateRenderer`.
     :param permission: a permission to validate by the
-        {attr}`fastlife.config.settings.Settings.check_permission` function.
+        {class}`Security Policy <fastlife.security.policy.AbstractSecurityPolicy>`.
+    :param status_code: customize response status code.
     :param methods: restrict route to a list of http methods.
 
     :return: the configuration callback.
