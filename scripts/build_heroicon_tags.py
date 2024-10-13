@@ -21,7 +21,15 @@ def to_name(filename: str) -> str:
 
 
 def add_attrs(content: str) -> str:
-    ret = "{# def id=None, title=None #}\n\n" + content.replace(
+    ret = dedent(
+        """\
+        {# def
+            id: Annotated[str | "unique identifier of the element."] = None,
+            title: Annotated[str | None, "title element of the svg"] = None,
+            class_: Annotated[str | None, "css classapplide to the svg element"] = None,
+        #}
+        """
+    ) + content.replace(
         'viewBox="',
         '{% if id %}id="{{id}}" {%endif%}class="{{attrs.class or \'\'}}" viewBox="',
     )
@@ -83,8 +91,11 @@ def main():
             dedent(
                 f"""\
                 {{# def
-                    id=None,
-                    title=None,
+                    id: Annotated[str | None, "identifier of the element."] = None,
+                    title: Annotated[str | None, "title element of the svg"] = None,
+                    class_: Annotated[
+                        str | None, "css class applied to the svg element"
+                    ] = None,
                     mode: Literal["{'","'.join(modes)}"] = "solid"
                 #}}
 
@@ -93,8 +104,9 @@ def main():
             )
         )
 
-    icons_wall = root_dir / "tests" / "fastlife_app" / "components" / "IconsWall.jinja"
-    icons_wall.unlink()
+    icons_wall = root_dir / "tests" / "fastlife_app" / "templates" / "IconsWall.jinja"
+    icons_wall.unlink(missing_ok=True)
+    icons_wall.parent.mkdir(exist_ok=True)
     with open(icons_wall, "w") as fw:
         fw.write("<Layout>\n")
         fw.write(

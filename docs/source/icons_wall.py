@@ -1,61 +1,72 @@
+import re
 from pathlib import Path
+from typing import IO
 
-import jinjax.catalog
 from sphinx.application import Sphinx
 
+from fastlife.adapters.jinjax.jinjax_ext.inspectable_catalog import InspectableCatalog
 from fastlife.adapters.jinjax.renderer import build_searchpath
-from fastlife.shared_utils.resolver import resolve_path
 
 
-def write_jinja(app: Sphinx) -> Path:
-    iconsdir = Path(resolve_path("fastlife:components")) / "icons"
+def write_icons(fw: IO[str], catalog: InspectableCatalog):
+    includes = [re.compile(r"^icons\.[a-zA-Z0-9]+$")]
+    for component in catalog.iter_components(includes=includes):
+        name = component.name
+        fw.write(
+            '<div class="flex flex-col items-center text-center cursor-pointer" '
+            f"onclick=\"copyText('&lt;{name} /&gt;')\">"
+        )
+        fw.write(f'<{name} class="w-16 h-16" title="{name}" />\n')
+        fw.write(
+            component.build_docstring()
+        )
+        fw.write("\n</div>\n")
 
-    outdir = Path(app.srcdir) / app.config.icon_wall_output_dir
+
+def write_jinja(app: Sphinx, catalog: InspectableCatalog, outdir: Path) -> None:
     outdir.mkdir(parents=True, exist_ok=True)
     icons_wall: Path = outdir / "IconsWall.jinja"
     icons_wall.unlink(missing_ok=True)
     with open(icons_wall, "w") as fw:
         fw.write("<Layout>\n")
-        fw.write(
-            """
-            <script>
-            function copyText(text) {
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-            }
-            </script>
-            """
-        )
-        fw.write("<p>Available icons, click to copy</p>\n")
 
         fw.write('<div class="grid grid-cols-2 gap-4 p-6">\n')
-        for file in iconsdir.glob("*.jinja"):
-            name = file.name[: -len(".jinja")]
-            fw.write(
-                '<div class="flex flex-col items-center text-center cursor-pointer" '
-                f"onclick=\"copyText('&lt;icons.{name} /&gt;')\">"
-            )
-            fw.write(f'<icons.{name} class="w-16 h-16" title="{name}" />\n')
-            fw.write(f'<p class="mt-2">{name}</p>\n')
-            fw.write("</div>\n")
-
+        write_icons(fw, catalog)
         fw.write("</div>\n")
         fw.write("</Layout>\n")
-    return icons_wall
 
 
 def generate_page(app: Sphinx) -> None:
-    tpl = write_jinja(app)
-    outfile = tpl.parent / "icons.md"
-    catalog = jinjax.catalog.Catalog(auto_reload=False)
-    for p in build_searchpath(f"fastlife:components,{tpl.parent}"):
-        catalog.add_folder(p)
+    catalog = InspectableCatalog(auto_reload=False)
 
-    outfile.write_text(catalog.render("IconsWall"))
+    outdir = Path(app.srcdir) / app.config.icon_wall_output_dir
+
+    for path in build_searchpath(f"fastlife:components,{outdir}"):
+        catalog.add_folder(path)
+
+    write_jinja(app, catalog, outdir)
+    icons_wall = catalog.render("IconsWall")  # type: ignore
+    outfile: Path = outdir / "icons.rst"
+    with open(outfile, "w") as wf:
+        wf.write("Icons\n")
+        wf.write("-----\n")
+        wf.write(".. raw:: html\n\n")
+        lines = iter(icons_wall.split("\n"))
+        while True:
+            try:
+                line = next(lines)
+            except StopIteration:
+                break
+
+            if line.startswith(".. "):
+                wf.write(f"{line}\n")
+                line = next(lines)
+                while len(line) == 0 or line.startswith("    "):
+                    line = next(lines)
+
+                wf.write(".. raw:: html\n\n")
+
+            wf.write(f"    {line}\n")
 
 
 def setup(app: Sphinx) -> None:

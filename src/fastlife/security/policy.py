@@ -53,6 +53,16 @@ class BoolMeta(type):
 
 
 class HasPermission(int, metaclass=BoolMeta):
+    """
+    A type used to know if a permission is allowed or not.
+
+    It behave has a boolean, but 3 possibilities exists defind has 3 sub-types
+    {class}`Allowed` {class}`Unauthenticated` or {class}`Denied`.
+
+    In many cases Unauthenticated call may redirect to a login page,
+    where authenticated user are not redirected. they have an error message,
+    or the frontend may use the information to adapt its interface.
+    """
     kind: Literal["allowed", "unauthenticated", "denied"]
     reason: str
 

@@ -54,9 +54,7 @@ class InspectableCatalog(Catalog):
                 path, tmpl_name = self._get_component_path(
                     prefix, name, file_ext=file_ext
                 )
-
                 is_included = to_include(name, ignores, includes)
-
                 if is_included:
                     try:
                         component = InspectableComponent(

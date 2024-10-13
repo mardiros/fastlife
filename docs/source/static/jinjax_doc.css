@@ -21,6 +21,7 @@ body {
   white-space: pre-wrap; /* Ensures line breaks wrap as needed */
   background-color: transparent;
   border: none;
+  text-align: left;
 }
 
 .jinjax-component-name {

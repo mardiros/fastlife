@@ -1,5 +1,8 @@
-{# def id=None, title=None #}
-
+{# def
+    id: Annotated[str | "unique identifier of the element."] = None,
+    title: Annotated[str | None, "title element of the svg"] = None,
+    class_: Annotated[str | None, "css classapplide to the svg element"] = None,
+#}
 <svg xmlns="http://www.w3.org/2000/svg" {% if id %}id="{{id}}" {%endif%}class="{{attrs.class or ''}}" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm.75-10.25v2.5h2.5a.75.75 0 0 1 0 1.5h-2.5v2.5a.75.75 0 0 1-1.5 0v-2.5h-2.5a.75.75 0 0 1 0-1.5h2.5v-2.5a.75.75 0 0 1 1.5 0Z" clip-rule="evenodd">{% if title %}<title>{{title}}</title>{% endif %}</path>
 </svg>
