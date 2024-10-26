@@ -295,7 +295,6 @@ name = "fastlifeweb"
 version = "0.18.0"
 source = { editable = "." }
 dependencies = [
-    { name = "babel" },
     { name = "fastapi", extra = ["standard"] },
     { name = "itsdangerous" },
     { name = "jinjax" },
@@ -321,6 +320,7 @@ testing = [
 
 [package.dependency-groups]
 dev = [
+    { name = "babel" },
     { name = "beautifulsoup4" },
     { name = "behave" },
     { name = "email-validator" },
@@ -346,7 +346,6 @@ doc = [
 
 [package.metadata]
 requires-dist = [
-    { name = "babel", specifier = ">=2.16.0,<3" },
     { name = "beautifulsoup4", marker = "extra == 'testing'" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.0,<1" },
     { name = "furo", marker = "extra == 'docs'", specifier = ">=2024.5.6" },
@@ -366,6 +365,7 @@ requires-dist = [
 
 [package.metadata.dependency-groups]
 dev = [
+    { name = "babel", specifier = ">=2.16.0,<3" },
     { name = "beautifulsoup4", specifier = ">=4.12.2,<5" },
     { name = "behave", specifier = ">=1.2.6,<2" },
     { name = "email-validator", specifier = ">=2.0.0.post2,<3" },

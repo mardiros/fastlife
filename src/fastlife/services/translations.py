@@ -142,12 +142,16 @@ class TranslationDictionary:
     def get(self, locale_name: LocaleName) -> Localizer:
         return self.translations[locale_name]
 
+    def __contains__(self, other: LocaleName) -> bool:
+        return other in self.translations
+
 
 class LocalizerFactory:
     """Initialize the proper translation context per request."""
 
     def __init__(self) -> None:
         self._translations = TranslationDictionary()
+        self.null_localizer = Localizer()
 
     def load(self, path: str) -> None:
         """
@@ -159,4 +163,6 @@ class LocalizerFactory:
 
     def __call__(self, request: "Request") -> Localizer:
         """Create the translation context for the given request."""
+        if request.locale_name not in self._translations:
+            return self.null_localizer
         return self._translations.get(request.locale_name)
