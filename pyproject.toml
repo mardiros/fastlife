@@ -15,7 +15,6 @@ classifiers = [
 version = "0.18.0"
 requires-python = ">=3.11"
 dependencies = [
-    "babel >=2.16.0,<3",
     "fastapi[standard] >=0.115.0,<1",
     "itsdangerous >=2.1.2,<3",
     "jinjax >=0.44,<0.45",
@@ -26,7 +25,6 @@ dependencies = [
     "python-multipart >=0.0.9,<1",
     "venusian >=3.0.0,<4",
 ]
-
 
 [project.urls]
 Homepage = "https://mardiros.github.io/fastlife"
@@ -51,6 +49,7 @@ docs = [
 
 [dependency-groups]
 dev = [
+    "babel >=2.16.0,<3",
     "beautifulsoup4 >= 4.12.2,<5",
     "behave >= 1.2.6,<2",
     "email-validator >= 2.0.0.post2,<3",
@@ -73,7 +72,6 @@ doc = [
     "sphinx >=7.0.1,<8",
     "sphinx-autodoc2 >=0.5.0,<1",
 ]
-
 
 [tool.pyright]
 include = ["src"]
