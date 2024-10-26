@@ -26,7 +26,7 @@ class FStringTemplateRenderer(AbstractTemplateRenderer):
         return text.format(**params)
 
     def render_inline(self, template: InlineTemplate) -> str:
-        raise NotImplementedError
+        return template.template.format(**template.model_dump())
 
 
 class FStringTemplateRendererFactory(AbstractTemplateRendererFactory):
