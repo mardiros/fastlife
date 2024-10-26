@@ -160,5 +160,4 @@ def test_request_has_permission_wit_insecurity_policy(client: WebTestClient):
 def test_inline_renderer(client: WebTestClient):
     resp = client.get("/inline/hello-world")
     assert resp.status_code == 200
-    print(resp.html)
     assert resp.html.h1.text == "Hello World!"

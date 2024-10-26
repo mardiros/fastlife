@@ -9,6 +9,7 @@ from fastlife.services.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )
+from fastlife.templates.inline import InlineTemplate
 
 templates = Path(__file__).parent / "templates"
 
@@ -23,6 +24,9 @@ class FStringTemplateRenderer(AbstractTemplateRenderer):
     ) -> str:
         text = (templates / template).read_text()
         return text.format(**params)
+
+    def render_inline(self, template: InlineTemplate) -> str:
+        raise NotImplementedError
 
 
 class FStringTemplateRendererFactory(AbstractTemplateRendererFactory):

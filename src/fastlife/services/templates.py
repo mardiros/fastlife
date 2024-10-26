@@ -55,7 +55,7 @@ class AbstractTemplateRenderer(abc.ABC):
             request.cookies.get(reg.settings.csrf_token_name) or _create_csrf_token()
         )
         if isinstance(params, InlineTemplate):
-            data = self.render_template(params)
+            data = self.render_inline(params)
         else:
             data = self.render_template(template, **params)
         resp = Response(
@@ -73,7 +73,7 @@ class AbstractTemplateRenderer(abc.ABC):
     @abc.abstractmethod
     def render_template(
         self,
-        template: str | InlineTemplate,
+        template: str,
         *,
         globals: Mapping[str, Any] | None = None,
         **params: Any,
@@ -94,6 +94,15 @@ class AbstractTemplateRenderer(abc.ABC):
         :param template: name of the template to render.
         :param globals: some variable that will be passed to all rendered templates.
         :param params: paramaters that are limited to the main rendered templates.
+        :return: The template rendering result.
+        """
+
+    @abc.abstractmethod
+    def render_inline(self, template: InlineTemplate) -> str:
+        """
+        Render an inline template.
+
+        :param template: the template to render.
         :return: The template rendering result.
         """
 
