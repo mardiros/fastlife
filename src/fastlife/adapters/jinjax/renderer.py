@@ -3,6 +3,7 @@ Template rending based on JinjaX.
 """
 
 import logging
+import textwrap
 from collections.abc import Mapping, MutableMapping, Sequence
 from typing import (
     TYPE_CHECKING,
@@ -16,6 +17,7 @@ from fastlife import Request
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
 from fastlife.request.form import FormModel
 from fastlife.request.localizer import get_localizer
+from fastlife.templates.inline import InlineTemplate
 
 if TYPE_CHECKING:
     from fastlife.config.settings import Settings  # coverage: ignore
@@ -102,8 +104,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
             child components without "props drilling".
         :param params: parameters used to render the template.
         """
-        # Jinja template does accept the file extention while rendering the template
-        # we strip it before rendering.
+
         template = template[: -len(self.settings.jinjax_file_ext) - 1]
         if globals:
             self.globals.update(globals)
@@ -114,6 +115,27 @@ class JinjaxRenderer(AbstractTemplateRenderer):
 
         return self.catalog.render(  # type: ignore
             template, __globals=self.build_globals(), **params
+        )
+
+    def render_inline(self, template: InlineTemplate) -> str:
+        """
+        Render the JinjaX component with the given parameter.
+
+        :param template: the template to render
+        :param globals: parameters that will be used by the JinjaX component and all its
+            child components without "props drilling".
+        :param params: parameters used to render the template.
+        """
+        params = template.model_dump()
+        src = (
+            f"{{# def {', '.join(params.keys())} #}}\n"
+            f"{textwrap.dedent(template.template)}"
+        )
+        return self.catalog.render(
+            template.__class__.__qualname__,
+            __source=src,
+            __globals=self.build_globals(),
+            **params,
         )
 
     def pydantic_form(
