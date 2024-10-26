@@ -3,6 +3,7 @@ Template rending based on JinjaX.
 """
 
 import logging
+import textwrap
 from collections.abc import Mapping, MutableMapping, Sequence
 from typing import (
     TYPE_CHECKING,
@@ -16,6 +17,7 @@ from fastlife import Request
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
 from fastlife.request.form import FormModel
 from fastlife.request.localizer import get_localizer
+from fastlife.templates.inline import InlineTemplate
 
 if TYPE_CHECKING:
     from fastlife.config.settings import Settings  # coverage: ignore
@@ -89,7 +91,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
 
     def render_template(
         self,
-        template: str,
+        template: str | InlineTemplate,
         *,
         globals: Mapping[str, Any] | None = None,
         **params: Any,
@@ -104,7 +106,20 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         """
         # Jinja template does accept the file extention while rendering the template
         # we strip it before rendering.
-        template = template[: -len(self.settings.jinjax_file_ext) - 1]
+        if isinstance(template, InlineTemplate):
+            params = template.model_dump()
+            src = (
+                f"{{# def {', '.join(params.keys())} #}}\n"
+                f"{textwrap.dedent(template.template)}"
+            )
+            return self.catalog.render(
+                template.__class__.__qualname__,
+                __source=src,
+                __globals=self.build_globals(),
+                **params,
+            )
+        else:
+            template = template[: -len(self.settings.jinjax_file_ext) - 1]
         if globals:
             self.globals.update(globals)
 

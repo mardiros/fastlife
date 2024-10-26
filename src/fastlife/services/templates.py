@@ -14,6 +14,7 @@ from typing import Any
 
 from fastlife import Request, Response
 from fastlife.security.csrf import create_csrf_token
+from fastlife.templates.inline import InlineTemplate
 
 TemplateParams = Mapping[str, Any]
 
@@ -42,7 +43,7 @@ class AbstractTemplateRenderer(abc.ABC):
         status_code: int = 200,
         content_type: str = "text/html",
         globals: Mapping[str, Any] | None = None,
-        params: TemplateParams,
+        params: TemplateParams | InlineTemplate,
         _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Response:
         """
@@ -53,7 +54,10 @@ class AbstractTemplateRenderer(abc.ABC):
         request.scope[reg.settings.csrf_token_name] = (
             request.cookies.get(reg.settings.csrf_token_name) or _create_csrf_token()
         )
-        data = self.render_template(template, **params)
+        if isinstance(params, InlineTemplate):
+            data = self.render_template(params)
+        else:
+            data = self.render_template(template, **params)
         resp = Response(
             data, status_code=status_code, headers={"Content-Type": content_type}
         )
@@ -69,7 +73,7 @@ class AbstractTemplateRenderer(abc.ABC):
     @abc.abstractmethod
     def render_template(
         self,
-        template: str,
+        template: str | InlineTemplate,
         *,
         globals: Mapping[str, Any] | None = None,
         **params: Any,
