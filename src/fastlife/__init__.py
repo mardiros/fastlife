@@ -1,3 +1,7 @@
+from importlib import metadata
+
+__version__ = metadata.version("fastlifeweb")
+
 from fastapi import Response
 
 from .config import (
