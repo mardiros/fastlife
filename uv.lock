@@ -333,6 +333,7 @@ dev = [
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
     { name = "pytest-playwright" },
+    { name = "sphinx" },
     { name = "types-beautifulsoup4" },
 ]
 doc = [
@@ -377,6 +378,7 @@ dev = [
     { name = "pytest-asyncio", specifier = ">=0.21.0,<0.22" },
     { name = "pytest-cov", specifier = ">=4.1.0,<5" },
     { name = "pytest-playwright", specifier = ">=0.4.3,<0.5" },
+    { name = "sphinx", specifier = ">=7.0.1,<8" },
     { name = "types-beautifulsoup4", specifier = ">=4.12.0.6,<5" },
 ]
 doc = [
