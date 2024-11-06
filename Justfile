@@ -6,29 +6,29 @@ export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
 export CLICOLOR_FORCE := "1"
 
 install:
-    poetry install --with dev --with doc
+    uv sync --group dev --group doc
 
 doc:
-    cd docs && poetry run make html
+    cd docs && uv run make html
     xdg-open docs/build/html/index.html
 
 cleandoc:
-    cd docs && poetry run make clean
+    cd docs && uv run make clean
     rm -rf docs/source/components
     rm -rf docs/source/develop
 
 lint:
-    FORCE_COLOR=1 poetry run ruff check .
+    uv run ruff check .
 
 test: lint mypy unittest functest
 
 buildcss:
-    poetry run tailwindcss \
+    uv run tailwindcss \
         -i tests/fastlife_app/assets/styles/main.css \
         -o tests/fastlife_app/static/css/main.css
 
 buildiconcss:
-    poetry run tailwindcss \
+    uv run tailwindcss \
         -c docs/source/iconswall/tailwind.config.js \
         -i docs/source/iconswall/main.css \
         -o docs/source/iconswall/iconwall.css
@@ -37,49 +37,49 @@ buildiconcss:
     echo "</style>" >> docs/source/iconswall/IconsCss.jinja
 
 buildicons:
-    poetry run scripts/build_heroicon_tags.py
+    uv run scripts/build_heroicon_tags.py
 
 
 compiletestlocales:
-    poetry run pybabel extract \
+    uv run pybabel extract \
         --output tests/fastlife_app/locales/fastlife_test.pot \
         --mapping=tests/fastlife_app/locales/extraction.ini \
         .
 
-    poetry run pybabel update \
+    uv run pybabel update \
         --domain fastlife_test \
         --input-file tests/fastlife_app/locales/fastlife_test.pot \
         --output-dir tests/fastlife_app/locales \
         --previous \
         tests/fastlife_app
 
-    poetry run pybabel compile \
+    uv run pybabel compile \
         --domain fastlife_test \
         --directory tests/fastlife_app/locales
 
 
-    poetry run pybabel update \
+    uv run pybabel update \
         --domain form_error \
         --input-file tests/fastlife_app/locales/form_error.pot \
         --output-dir tests/fastlife_app/locales \
         --previous \
         tests/fastlife_app
 
-    poetry run pybabel compile \
+    uv run pybabel compile \
         --domain form_error \
         --directory tests/fastlife_app/locales
 
 
 unittest test_suite=default_unittest_suite:
-    poetry run pytest -sxv {{test_suite}}
+    uv run pytest -sxv {{test_suite}}
 
 lf:
-    poetry run pytest -sxvvv --lf
+    uv run pytest -sxvvv --lf
 
 cov test_suite=default_unittest_suite:
     rm -f .coverage
     rm -rf htmlcov
-    poetry run pytest --cov-report=html --cov={{package}} {{test_suite}}
+    uv run pytest --cov-report=html --cov={{package}} {{test_suite}}
     xdg-open htmlcov/index.html
 
 # start the playwright server in a docker container
@@ -88,48 +88,52 @@ playwrightserver:
     docker run -p 3000:3000 --rm --init -it mcr.microsoft.com/playwright:v1.41.0-jammy /bin/sh -c "cd /home/pwuser && npx -y playwright@1.41.0 run-server --port 3000 --host 0.0.0.0"
 
 functest test_suite=default_functest_suite:
-    poetry run behave --tags=-dev --tags=-icons --no-capture {{test_suite}}
+    uv run behave --tags=-dev --tags=-icons --no-capture {{test_suite}}
 
 wip:
-    poetry run behave --tags=wip --no-capture tests/functionals/
+    uv run behave --tags=wip --no-capture tests/functionals/
 
 funcdevtest:
-    poetry run behave --tags=dev --no-capture tests/functionals/
+    uv run behave --tags=dev --no-capture tests/functionals/
 
 showicons:
-    poetry run behave --tags=icons --no-capture tests/functionals/
+    uv run behave --tags=icons --no-capture tests/functionals/
 
 showopenapi:
-    poetry run behave --tags=openapi --no-capture tests/functionals/
+    uv run behave --tags=openapi --no-capture tests/functionals/
 
 mypy:
-    poetry run mypy src/ tests/
+    uv run mypy src/ tests/
 
 fmt:
-    poetry run ruff check --fix .
-    poetry run ruff format src tests
+    uv run ruff check --fix .
+    uv run ruff format src tests
 
 black: fmt
     echo "$(tput setaf 3)Warning: Use 'just fmt' instead$(tput setaf 7)"
 
-gh-pages:
-    poetry export --with doc -f requirements.txt -o docs/requirements.txt --without-hashes
-
-release major_minor_patch: test gh-pages && changelog
-    poetry version {{major_minor_patch}}
-    poetry install
+release major_minor_patch: test && changelog
+    #! /bin/bash
+    # Try to bump the version first
+    if ! uvx pdm bump {{major_minor_patch}}; then
+        # If it fails, check if pdm-bump is installed
+        if ! uvx pdm self list | grep -q pdm-bump; then
+            # If not installed, add pdm-bump
+            uvx pdm self add pdm-bump
+        fi
+        # Attempt to bump the version again
+        uvx pdm bump {{major_minor_patch}}
+    fi
+    uv sync
 
 changelog:
-    poetry run python scripts/write_changelog.py
+    uv run python scripts/write_changelog.py
     cat CHANGELOG.md >> CHANGELOG.md.new
     rm CHANGELOG.md
     mv CHANGELOG.md.new CHANGELOG.md
     $EDITOR CHANGELOG.md
 
 publish:
-    git commit -am "Release $(poetry version -s)"
-    poetry build
-    poetry publish
-    git push
-    git tag "$(poetry version -s)"
-    git push origin "$(poetry version -s)"
+    git commit -am "Release $(uv run scripts/get_version.py)"
+    git tag "v$(uv run scripts/get_version.py)"
+    git push origin "v$(uv run scripts/get_version.py)"

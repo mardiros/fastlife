@@ -1,75 +1,84 @@
-[tool.poetry]
-authors = ["Guillaume Gauvrit <guillaume@gauvr.it>"]
+[project]
+authors = [{ name = "Guillaume Gauvrit", email = "guillaume@gauvr.it" }]
 description = "High-level web framework"
 name = "fastlifeweb"
-license = "BSD-derived"
-packages = [{ include = "fastlife", from = "src" }]
-homepage = "https://github.com/mardiros/fastlife"
-repository = "https://github.com/mardiros/fastlife"
+license = { text = "MIT License" }
 readme = "README.md"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Framework :: AsyncIO",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
+    "License :: OSI Approved :: MIT License",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Internet :: WWW/HTTP",
 ]
 version = "0.18.0"
+requires-python = ">=3.11"
+dependencies = [
+    "babel >=2.16.0,<3",
+    "fastapi[standard] >=0.115.0,<1",
+    "itsdangerous >=2.1.2,<3",
+    "jinjax >=0.44,<0.45",
+    "markupsafe >=2.1.3,<3",
+    "multidict >=6.0.5,<7",
+    "pydantic >=2.5.3,<3",
+    "pydantic-settings >=2.0.3,<3",
+    "python-multipart >=0.0.9,<1",
+    "venusian >=3.0.0,<4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-babel = "^2.16.0"
-beautifulsoup4 = { version = "^4.12.2", optional = true }
-fastapi = { version = "^0.115.0", extras = ["standard"] }
-itsdangerous = "^2.1.2"
-jinjax = "^0.44"
-markupsafe = "^2.1.3"
-multidict = "^6.0.5"
-pydantic = "^2.5.3"
-pydantic-settings = "^2.0.3"
-python-multipart = "^0.0.9"
-sphinx = { version = "^7.0.1", optional = true }
-venusian = "^3.0.0"
 
-[tool.poetry.group.dev]
-optional = true
+[project.urls]
+Homepage = "https://mardiros.github.io/fastlife"
+Documentation = "https://mardiros.github.io/fastlife"
+Repository = "https://github.com/mardiros/fastlife.git"
+Issues = "https://github.com/mardiros/fastlife/issues"
+Changelog = "https://mardiros.github.io/fastlife/user/changelog.html"
 
-[tool.poetry.extras]
+[tool.pdm.build]
+includes = ["src", "CHANGELOG.md", "tailwind.config.js"]
+excludes = ["tests"]
+
+[project.optional-dependencies]
 testing = ["beautifulsoup4"]
-doc = ["sphinx"]
+docs = [
+    "furo >=2024.5.6",
+    "linkify-it-py >=2.0.3,<3",
+    "myst-parser >=4.0.0,<5",
+    "sphinx >=7.0.1,<8",
+    "sphinx-autodoc2 >=0.5.0,<1",
+]
 
-[tool.poetry.group.dev.dependencies]
-beautifulsoup4 = "^4.12.2"
-behave = "^1.2.6"
-heroicons = "^2.7.0"
-httpx = "^0.25.0"
-mypy = "^1.4.0"
-pytest = "^8.2.0"
-pytest-asyncio = "^0.21.0"
-pytest-cov = "^4.1.0"
-sphinx = "^7.0.1"
-types-beautifulsoup4 = "^4.12.0.6"
-isort = "^5.12.0"
-email-validator = "^2.0.0.post2"
-hypercorn = "^0.14.4"
-pytest-playwright = "^0.4.3"
-pytailwindcss = "^0.2.0"
+[dependency-groups]
+dev = [
+    "beautifulsoup4 >= 4.12.2,<5",
+    "behave >= 1.2.6,<2",
+    "email-validator >= 2.0.0.post2,<3",
+    "heroicons >= 2.7.0,<3",
+    "httpx >= 0.25.0,<0.26",
+    "hypercorn >= 0.14.4,<0.15",
+    "mypy >= 1.4.0,<2",
+    "pytailwindcss >= 0.2.0,<0.3",
+    "pytest >= 8.2.0,<9",
+    "pytest-asyncio >= 0.21.0,<0.22",
+    "pytest-cov >= 4.1.0,<5",
+    "pytest-playwright >= 0.4.3,<0.5",
+    "types-beautifulsoup4 >= 4.12.0.6,<5",
+]
+doc = [
+    "furo >=2024.5.6",
+    "linkify-it-py >=2.0.3,<3",
+    "myst-parser >=4.0.0,<5",
+    "sphinx >=7.0.1,<8",
+    "sphinx-autodoc2 >=0.5.0,<1",
+]
 
-[tool.poetry.group.doc]
-optional = true
-
-[tool.poetry.group.doc.dependencies]
-furo = "^2024.5.6"
-myst-parser = "^4.0.0"
-sphinx = "^7.0.1"
-sphinx-autodoc2 = "^0.5.0"
-linkify-it-py = "^2.0.3"
 
 [tool.pyright]
 include = ["src"]
 typeCheckingMode = "strict"
 reportMissingTypeStubs = false
+venvPath = ".venv"
 
 [[tool.mypy.overrides]]
 module = "fastlife.*"
@@ -99,8 +108,7 @@ profile = "black"
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 filterwarnings = [
-    "error",                                                                           # setuptools
-    'ignore:.*pkg_resources is deprecated as an API.*:DeprecationWarning',
+    "error",
     'ignore:.*Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning', # venusian
     'ignore:.*find_module\(\) is deprecated.*:DeprecationWarning',
     'ignore:.*FileFinder.find_loader\(\) is deprecated.*:DeprecationWarning',
@@ -109,8 +117,13 @@ filterwarnings = [
 testpaths = ["tests"]
 
 [tool.coverage.report]
-exclude_lines = ["# coverage: ignore", "\\s+\\.\\.\\.$"]
+exclude_lines = [
+    "if TYPE_CHECKING:",
+    "except ImportError",
+    "\\s+\\.\\.\\.$",
+    "# coverage: ignore",
+]
 
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core"]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
