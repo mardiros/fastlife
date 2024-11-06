@@ -44,7 +44,7 @@ class HackTranslations(GNUTranslations):
     def _default_plural(self, n: int) -> int:
         return int(n != 1)  # germanic plural by default
 
-    def merge(self, other: GNUTranslations):
+    def merge(self, other: GNUTranslations) -> None:
         if hasattr(other, "_catalog"):
             self._catalog.update(other._catalog)  # type: ignore
         if hasattr(other, "plural"):
@@ -52,13 +52,13 @@ class HackTranslations(GNUTranslations):
 
 
 class Localizer:
-    def __init__(self):
+    def __init__(self) -> None:
         self.translations: dict[Domain, HackTranslations] = defaultdict(
             HackTranslations
         )
         self.global_translations = HackTranslations()
 
-    def register(self, domain: str, file: BufferedReader):
+    def register(self, domain: str, file: BufferedReader) -> None:
         trans = GNUTranslations(file)
         self.translations[domain].merge(trans)
         self.global_translations.merge(trans)

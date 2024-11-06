@@ -34,4 +34,6 @@ def test_find_mo_files():
 def test_load():
     factory = LocalizerFactory()
     factory.load("tests.fastlife_app:locales")
-    assert set(factory._translations.keys()) == {"en", "fr"}  # type: ignore
+    assert set(
+        factory._translations.translations.keys(),  # type: ignore
+    ) == {"en", "fr"}
