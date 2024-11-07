@@ -1,6 +1,6 @@
 import pathlib
 from collections import defaultdict
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from gettext import GNUTranslations
 from io import BufferedReader
 from typing import TYPE_CHECKING
@@ -33,16 +33,17 @@ def find_mo_files(root_path: str) -> Iterator[tuple[LocaleName, Domain, pathlib.
             yield locale_dir.name, mo_file.stem, mo_file
 
 
-class HackTranslations(GNUTranslations):
+def _default_plural(n: int) -> int:
+    return int(n != 1)  # germanic plural by default
+
+
+class MergedTranslations(GNUTranslations):
     _catalog: dict[str, str]
 
     def __init__(self) -> None:
         super().__init__()
         self._catalog = {}
-        self.plural = lambda n: int(n != 1)  # type: ignore
-
-    def _default_plural(self, n: int) -> int:
-        return int(n != 1)  # germanic plural by default
+        self.plural: Callable[[int], int] = _default_plural
 
     def merge(self, other: GNUTranslations) -> None:
         if hasattr(other, "_catalog"):
@@ -53,10 +54,10 @@ class HackTranslations(GNUTranslations):
 
 class Localizer:
     def __init__(self) -> None:
-        self.translations: dict[Domain, HackTranslations] = defaultdict(
-            HackTranslations
+        self.translations: dict[Domain, MergedTranslations] = defaultdict(
+            MergedTranslations
         )
-        self.global_translations = HackTranslations()
+        self.global_translations = MergedTranslations()
 
     def register(self, domain: str, file: BufferedReader) -> None:
         trans = GNUTranslations(file)
