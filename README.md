@@ -1,6 +1,6 @@
 # Fastlife
 
-[![Documentation](https://github.com/mardiros/fastlife/actions/workflows/gh-pages.yml/badge.svg)](https://mardiros.github.io/fastlife/)
+[![Documentation](https://github.com/mardiros/fastlife/actions/workflows/publish-doc.yml/badge.svg)](https://mardiros.github.io/fastlife/)
 [![Continuous Integration](https://github.com/mardiros/fastlife/actions/workflows/tests.yml/badge.svg)](https://github.com/mardiros/fastlife/actions/workflows/tests.yml)
 [![Coverage Report](https://codecov.io/gh/mardiros/fastlife/graph/badge.svg?token=DTpi73d7mf)](https://codecov.io/gh/mardiros/fastlife)
 [![Maintainability](https://api.codeclimate.com/v1/badges/94d107797b15b5e8843e/maintainability)](https://codeclimate.com/github/mardiros/fastlife/maintainability)
