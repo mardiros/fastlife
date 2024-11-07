@@ -1,3 +1,9 @@
+## 0.19.0  - Released on 2024-11-07
+* Drop Babel from depenencies for i18n, rely on GNUTranslations only
+* Change License to MIT
+* Replace poetry by uv/pdm
+* Update CI workflows
+
 ## 0.18.0  - Released on 2024-10-13
 * Make the sphinx pluging {mod}`fastlife.adapters.jinjax.jinjax_ext.jinjax_doc`
   parts from the API in order to let users build their own component documentation.
