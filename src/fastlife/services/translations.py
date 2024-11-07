@@ -1,18 +1,21 @@
 import pathlib
-from collections.abc import Iterator
+from collections import defaultdict
+from collections.abc import Callable, Iterator
+from gettext import GNUTranslations
+from io import BufferedReader
 from typing import TYPE_CHECKING
-
-from babel.support import NullTranslations, Translations
 
 from fastlife.shared_utils.resolver import resolve_path
 
 if TYPE_CHECKING:
     from fastlife import Request  # coverage: ignore
 
-locale_name = str
+LocaleName = str
+Domain = str
+CONTEXT_ENCODING = "%s\x04%s"
 
 
-def find_mo_files(root_path: str) -> Iterator[tuple[str, str, pathlib.Path]]:
+def find_mo_files(root_path: str) -> Iterator[tuple[LocaleName, Domain, pathlib.Path]]:
     """
     Find .mo files in a locales directory.
 
@@ -30,30 +33,54 @@ def find_mo_files(root_path: str) -> Iterator[tuple[str, str, pathlib.Path]]:
             yield locale_dir.name, mo_file.stem, mo_file
 
 
+def _default_plural(n: int) -> int:
+    return int(n != 1)  # germanic plural by default
+
+
+class MergedTranslations(GNUTranslations):
+    _catalog: dict[str, str]
+
+    def __init__(self) -> None:
+        super().__init__()
+        self._catalog = {}
+        self.plural: Callable[[int], int] = _default_plural
+
+    def merge(self, other: GNUTranslations) -> None:
+        if hasattr(other, "_catalog"):
+            self._catalog.update(other._catalog)  # type: ignore
+        if hasattr(other, "plural"):
+            self.plural = other.plural  # type: ignore
+
+
 class Localizer:
-    def __init__(
-        self, request: "Request", translations: Translations | NullTranslations
-    ) -> None:
-        self.locale_name = request.locale_name
-        self.translations = translations
+    def __init__(self) -> None:
+        self.translations: dict[Domain, MergedTranslations] = defaultdict(
+            MergedTranslations
+        )
+        self.global_translations = MergedTranslations()
+
+    def register(self, domain: str, file: BufferedReader) -> None:
+        trans = GNUTranslations(file)
+        self.translations[domain].merge(trans)
+        self.global_translations.merge(trans)
 
     def gettext(self, message: str, mapping: dict[str, str] | None = None) -> str:
-        ret = self.translations.gettext(message)
-        if mapping is not None:
+        ret = self.global_translations.gettext(message)
+        if mapping:
             ret = ret.format(**mapping)
         return ret
 
     def ngettext(
         self, singular: str, plural: str, n: int, mapping: dict[str, str] | None = None
     ) -> str:
-        ret = self.translations.ngettext(singular, plural, n)
+        ret = self.global_translations.ngettext(singular, plural, n)
         mapping_num = {"num": n, **(mapping or {})}
         return ret.format(**mapping_num)
 
     def dgettext(
         self, domain: str, message: str, mapping: dict[str, str] | None = None
     ) -> str:
-        ret = self.translations.dgettext(domain, message)
+        ret = self.translations[domain].gettext(message)
         if mapping:
             ret = ret.format(**mapping)
         return ret
@@ -66,14 +93,14 @@ class Localizer:
         n: int,
         mapping: dict[str, str] | None = None,
     ) -> str:
-        ret = self.translations.dngettext(domain, singular, plural, n)
+        ret = self.translations[domain].ngettext(singular, plural, n)
         mapping_num = {"num": n, **(mapping or {})}
         return ret.format(**mapping_num)
 
     def pgettext(
         self, context: str, message: str, mapping: dict[str, str] | None = None
     ) -> str:
-        ret = str(self.translations.pgettext(context, message))
+        ret = self.global_translations.pgettext(context, message)
         if mapping:
             ret = ret.format(**mapping)
         return ret
@@ -85,7 +112,7 @@ class Localizer:
         message: str,
         mapping: dict[str, str] | None = None,
     ) -> str:
-        ret = str(self.translations.dpgettext(domain, context, message))
+        ret = self.translations[domain].pgettext(context, message)
         if mapping:
             ret = ret.format(**mapping)
         return ret
@@ -99,18 +126,33 @@ class Localizer:
         n: int,
         mapping: dict[str, str] | None = None,
     ) -> str:
-        ret = self.translations.dnpgettext(domain, context, singular, plural, n)
+        ret = self.translations[domain].npgettext(context, singular, plural, n)
         mapping_num = {"num": n, **(mapping or {})}
         return ret.format(**mapping_num)
+
+
+class TranslationDictionary:
+    def __init__(self) -> None:
+        self.translations: dict[LocaleName, Localizer] = defaultdict(Localizer)
+
+    def load(self, root_path: str) -> None:
+        for locale_name, domain, file_ in find_mo_files(root_path):
+            with file_.open("rb") as stream:
+                self.translations[locale_name].register(domain, stream)
+
+    def get(self, locale_name: LocaleName) -> Localizer:
+        return self.translations[locale_name]
+
+    def __contains__(self, other: LocaleName) -> bool:
+        return other in self.translations
 
 
 class LocalizerFactory:
     """Initialize the proper translation context per request."""
 
-    _translations: dict[locale_name, Translations]
-
     def __init__(self) -> None:
-        self._translations = {}
+        self._translations = TranslationDictionary()
+        self.null_localizer = Localizer()
 
     def load(self, path: str) -> None:
         """
@@ -118,21 +160,10 @@ class LocalizerFactory:
         :param path: a python module and the locales dir separated by a `:`
         """
         root_path = resolve_path(path)
-        for locale_name, domain, file_ in find_mo_files(root_path):
-            with file_.open("rb") as f:
-                t = Translations(f, domain)
-                if locale_name not in self._translations:
-                    self._translations[locale_name] = Translations()
-                self._translations[locale_name].add(t)
-                self._translations[locale_name].merge(t)
+        self._translations.load(root_path)
 
     def __call__(self, request: "Request") -> Localizer:
         """Create the translation context for the given request."""
-        trans: Translations | NullTranslations | None = self._translations.get(
-            request.locale_name
-        )
-        if not trans:
-            trans = self._translations.get(request.registry.settings.default_locale)
-        if not trans:
-            trans = NullTranslations()
-        return Localizer(request, trans)
+        if request.locale_name not in self._translations:
+            return self.null_localizer
+        return self._translations.get(request.locale_name)
