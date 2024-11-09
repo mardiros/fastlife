@@ -15,6 +15,7 @@ class InlineTemplate(BaseModel):
     They use a component lirary to stay small but contains a view logic
     tighly coupled with the view and its code can stay in the same module of that view.
     """
+
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     template: ClassVar[str]
