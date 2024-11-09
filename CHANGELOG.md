@@ -1,4 +1,4 @@
-## 0.20.0  - Released on 2024-11-09
+## 0.20.1  - Released on 2024-11-09
 * Add a new class GenericRegistry in order to properly type custom Configurator / Registry / Settings
 * Using InlineTemplate, we can pass arbitrary types for pydantic form
 
