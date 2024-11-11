@@ -34,4 +34,7 @@ def test_i18n_helpers(apiclient: TestClient):
         "le chient flemmard",
         "pgettext_0": "pêcher",
         "pgettext_1": "poisson",
+        "npgettext_0": "0 crayon",
+        "npgettext_1": "1 crayon",
+        "npgettext_2": "2 crayons",
     }

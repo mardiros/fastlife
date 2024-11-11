@@ -139,6 +139,24 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                         "field": lczr.gettext("email address"),
                     },
                 ),
+                "npgettext_0": lczr.npgettext(
+                    "crayon",
+                    "{} pen",
+                    "{} pens",
+                    0,
+                ),
+                "npgettext_1": lczr.npgettext(
+                    "crayon",
+                    "{} pen",
+                    "{} pens",
+                    1,
+                ),
+                "npgettext_2": lczr.npgettext(
+                    "crayon",
+                    "{} pen",
+                    "{} pens",
+                    2,
+                ),
             }
         )
     )
