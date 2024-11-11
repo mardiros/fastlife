@@ -13,7 +13,7 @@ phase.
 
 import logging
 from collections import defaultdict
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
@@ -43,6 +43,8 @@ if TYPE_CHECKING:
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
+    from fastlife.services.templates import TemplateParams
+    from fastlife.templates.inline import InlineTemplate
 
 from fastlife.services.locale_negociator import LocaleNegociator
 
@@ -483,13 +485,15 @@ class GenericConfigurator(Generic[TRegistry]):
 
             def render(
                 request: Request,
-                resp: Annotated[Response | Mapping[str, Any], Depends(endpoint)],
+                resp: Annotated[
+                    "Response | TemplateParams | InlineTemplate", Depends(endpoint)
+                ],
             ) -> Response:
                 if isinstance(resp, Response):
                     return resp
+
                 return request.registry.get_renderer(template)(request).render(
-                    template,
-                    params=resp,
+                    template, params=resp
                 )
 
             endpoint = render
