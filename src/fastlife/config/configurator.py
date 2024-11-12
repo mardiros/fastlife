@@ -12,6 +12,7 @@ phase.
 """
 
 import logging
+from asyncio import iscoroutine
 from collections import defaultdict
 from collections.abc import Callable, Sequence
 from enum import Enum
@@ -42,8 +43,8 @@ if TYPE_CHECKING:
     from fastlife.security.policy import AbstractSecurityPolicy  # coverage: ignore
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
+        TemplateParams,
     )
-    from fastlife.services.templates import TemplateParams
     from fastlife.templates.inline import InlineTemplate
 
 from fastlife.services.locale_negociator import LocaleNegociator
@@ -145,6 +146,8 @@ class GenericConfigurator(Generic[TRegistry]):
         ] = {}
 
         self._registered_permissions: set[str] = set()
+
+        self._renderer_globals: dict[str, Any] = {}
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
@@ -443,6 +446,57 @@ class GenericConfigurator(Generic[TRegistry]):
         )
         return self
 
+    def add_renderer_global(
+        self, name: str, value: Any, *, evaluate: bool = True
+    ) -> None:
+        """
+        Add a rendering global value.
+
+        :param name: the name or key of the global value available in the template.
+        :param value: a value, or a callable or
+            an async function with a request in parameter that will evaluate the value.
+        :param evaluate: set to false if you want to inject helper methods in the
+            template.
+        """
+        self._renderer_globals[name] = value, evaluate
+
+    async def _build_renderer_globals(self, request: Request) -> dict[str, Any]:
+        """
+        Build globals variables accessible in any templates.
+
+        * `request` is the {class}`current request <fastlife.request.request.Request>`
+        * `authenticated_user` is used to access to the authenticated user if the
+            security policy has been installed.
+        * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
+        * `gettext`, `ngettext`, `dgettext`, `dngettext`, `pgettext`, `dpgettext`,
+        `npgettext`, `dnpgettext` methods are installed for i18n purpose.
+        """
+        settings = self.registry.settings
+        lczr = request.registry.localizer(request)
+        custom_globals = {}
+        for key, (val, evaluate) in self._renderer_globals.items():
+            if evaluate and callable(val):
+                val = val(request)
+                if iscoroutine(val):
+                    val = await val
+            custom_globals[key] = val
+        return {
+            "request": request,
+            "csrf_token": {
+                "name": settings.csrf_token_name,
+                "value": request.scope.get(settings.csrf_token_name, ""),
+            },
+            "gettext": lczr.gettext,
+            "ngettext": lczr.ngettext,
+            "dgettext": lczr.dgettext,
+            "dngettext": lczr.dngettext,
+            "pgettext": lczr.pgettext,
+            "dpgettext": lczr.dpgettext,
+            "npgettext": lczr.npgettext,
+            "dnpgettext": lczr.dnpgettext,
+            **custom_globals,
+        }
+
     def add_route(
         self,
         name: str,
@@ -483,7 +537,7 @@ class GenericConfigurator(Generic[TRegistry]):
 
         if template:
 
-            def render(
+            async def render(
                 request: Request,
                 resp: Annotated[
                     "Response | TemplateParams | InlineTemplate", Depends(endpoint)
@@ -493,7 +547,9 @@ class GenericConfigurator(Generic[TRegistry]):
                     return resp
 
                 return request.registry.get_renderer(template)(request).render(
-                    template, params=resp
+                    template,
+                    params=resp,
+                    globals=(await self._build_renderer_globals(request)),
                 )
 
             endpoint = render
