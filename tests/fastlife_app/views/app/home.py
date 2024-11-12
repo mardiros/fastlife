@@ -1,16 +1,22 @@
 from typing import Annotated
 
-from fastlife import Configurator, Response, TemplateParams, configure, view_config
+from fastlife import Configurator, Response, configure, view_config
+from fastlife.adapters.jinjax.renderer import JinjaXTemplate
 from fastlife.request.form import FormModel, form_model
 from fastlife.templates import Template, template
 from tests.fastlife_app.models import Account, Group, Person
 
 
+class HelloWorld(JinjaXTemplate):
+    template = """<HelloWorld :person="person">"""
+    person: Person
+
+
 @view_config("home", "/", methods=["GET", "POST"], template="HelloWorld.jinja")
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
-) -> TemplateParams:
-    return {"person": person.model}
+) -> HelloWorld:
+    return HelloWorld(person=person.model)
 
 
 async def autoform(

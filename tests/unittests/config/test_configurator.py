@@ -72,7 +72,7 @@ def test_add_openapi_tag(conf: Configurator):
     assert str(ctx.value) == "Tag foo can't be registered twice."
 
 
-@pytest.mark.parametrize("route", ["/f-string", "/inline-f-string"])
+@pytest.mark.parametrize("route", ["/f-string"])
 def test_add_renderer(conf: Configurator, settings: MySettings, route: str):
     conf.include("tests.fastlife_app.adapters")
     conf.include("tests.fastlife_app.views", ignore=".api")

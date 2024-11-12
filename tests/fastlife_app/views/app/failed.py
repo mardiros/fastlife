@@ -1,8 +1,8 @@
 from fastapi import Request, Response
 
+from fastlife.adapters.jinjax.renderer import JinjaXTemplate
 from fastlife.config.exceptions import exception_handler
 from fastlife.config.views import view_config
-from fastlife.services.templates import TemplateParams
 
 
 class MyGoodException(Exception):
@@ -24,14 +24,19 @@ class YourFault(Exception):
         self.message = message
 
 
-@exception_handler(MyGoodException, template="E500.jinja")
-def my_good_handler(request: Request, exc: MyGoodException) -> TemplateParams:
-    return {"message": "It's a trap"}
+class Error500(JinjaXTemplate):
+    template = """<E500 :message="message" />"""
+    message: str
 
 
-@exception_handler(MyBadException)
-def my_bad_handler(request: Request, exc: MyBadException) -> TemplateParams:
-    return {"message": "It's a trap"}
+class Error422(JinjaXTemplate):
+    template = """<E422 :message="message" />"""
+    message: str
+
+
+@exception_handler(MyGoodException)
+def my_good_handler(request: Request, exc: MyGoodException) -> Error500:
+    return Error500(message="It's a trap")
 
 
 @exception_handler(MyUglyException, status_code=500)
@@ -42,18 +47,13 @@ def my_ugly_handler(request: Request, exc: MyUglyException) -> Response:
 
 
 @exception_handler(YourFault, status_code=422, template="E422.jinja")
-def your_fault_handler(request: Request, exc: YourFault) -> TemplateParams:
-    return {"message": exc.message}
+def your_fault_handler(request: Request, exc: YourFault) -> Error422:
+    return Error422(message=exc.message)
 
 
 @view_config("failed", "/failed-good")
 async def failed() -> Response:
     raise MyGoodException
-
-
-@view_config("failed", "/failed-bad")
-async def failed_bad() -> Response:
-    raise MyBadException
 
 
 @view_config("failed", "/failed-ugly")

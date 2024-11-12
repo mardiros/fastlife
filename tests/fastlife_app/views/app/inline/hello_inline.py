@@ -27,7 +27,7 @@ class HelloInline(InlineTemplate):
     method: Annotated[Literal["get", "post"], "Form method"] = "post"
 
 
-@view_config("hello-inline", "/inline/hello-world", template=".jinja", methods=["GET"])
+@view_config("hello-inline", "/inline/hello-world", methods=["GET"])
 async def hello_inline(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
 ) -> HelloInline:

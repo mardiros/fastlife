@@ -9,6 +9,18 @@ from fastlife import view_config
 from fastlife.request.localizer import Localizer
 
 
+class HelloWorld:
+    template = """<i18n.Hello
+        :yolo="yolo"
+        :apple_count="apple_count"
+        :orange_count="orange_count"
+        :banana_count="banana_count">"""
+    yolo: str
+    apple_count: int
+    orange_count: int
+    banana_count: int
+
+
 @view_config(
     "hello-i18n", "/{locale}/hello", template="i18n.Hello.jinja", methods=["GET"]
 )
