@@ -20,7 +20,7 @@ cleandoc:
 lint:
     uv run ruff check .
 
-test: lint mypy unittest functest
+test: lint typecheck unittest functest
 
 buildcss:
     uv run tailwindcss \
@@ -102,7 +102,7 @@ showicons:
 showopenapi:
     uv run behave --tags=openapi --no-capture tests/functionals/
 
-mypy:
+typecheck:
     uv run mypy src/ tests/
 
 fmt:

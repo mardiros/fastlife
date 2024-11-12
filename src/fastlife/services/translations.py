@@ -117,6 +117,18 @@ class Localizer:
             ret = ret.format(**mapping)
         return ret
 
+    def npgettext(
+        self,
+        context: str,
+        singular: str,
+        plural: str,
+        n: int,
+        mapping: dict[str, str] | None = None,
+    ) -> str:
+        ret = self.global_translations.npgettext(context, singular, plural, n)
+        mapping_num = {"num": n, **(mapping or {})}
+        return ret.format(**mapping_num)
+
     def dnpgettext(
         self,
         domain: str,

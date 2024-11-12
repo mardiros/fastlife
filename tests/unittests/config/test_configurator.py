@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 from fastapi import FastAPI
 
@@ -91,3 +93,44 @@ def test_all_registered_permissions(conf: Configurator):
         "foos:read",
         "foos:write",
     ]
+
+
+@pytest.mark.parametrize("params", [{}])
+async def test_global_vars(conf: Configurator, dummy_request_param: Any):
+    def get_synchronous_hook():
+        return "synchronous_hook"
+
+    def get_synchronous_info(request: Any):
+        return "synchrounos"
+
+    async def authenticated_user(request: Any):
+        return "anonymous"
+
+    conf.add_renderer_global("foo", "bar")
+    conf.add_renderer_global("synchronous_hook", get_synchronous_hook, evaluate=False)
+    conf.add_renderer_global("sync_nfo", get_synchronous_info)
+    conf.add_renderer_global("authenticated_user", authenticated_user)
+
+    rglobals: Any = await conf._build_renderer_globals(  # type: ignore
+        dummy_request_param
+    )
+    lczr = dummy_request_param.registry.localizer(dummy_request_param)
+    assert rglobals == {
+        "foo": "bar",
+        "synchronous_hook": get_synchronous_hook,
+        "sync_nfo": "synchrounos",
+        "authenticated_user": "anonymous",
+        "csrf_token": {
+            "name": "csrf_token",
+            "value": "",
+        },
+        "dgettext": lczr.dgettext,
+        "dngettext": lczr.dngettext,
+        "dnpgettext": lczr.dnpgettext,
+        "dpgettext": lczr.dpgettext,
+        "gettext": lczr.gettext,
+        "ngettext": lczr.ngettext,
+        "npgettext": lczr.npgettext,
+        "pgettext": lczr.pgettext,
+        "request": dummy_request_param,
+    }
