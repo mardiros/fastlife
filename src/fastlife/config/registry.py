@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 from fastlife.services.locale_negociator import LocaleNegociator, default_negociator
 from fastlife.services.translations import LocalizerFactory
@@ -11,10 +11,15 @@ if TYPE_CHECKING:
 
 from .settings import Settings
 
+TSettings = TypeVar("TSettings", bound=Settings, covariant=True)
+"""
+A TypeVar used to override the DefaultRegistry to add more helpers in the registry.
+"""
 
-class DefaultRegistry:
+
+class GenericRegistry(Generic[TSettings]):
     """
-    The application registry got fastlife dependency injection.
+    Application registry for fastlife dependency injection.
     It is initialized by the configurator and accessed by the `fastlife.Registry`.
     """
 
@@ -34,6 +39,12 @@ class DefaultRegistry:
             if template.endswith(key):
                 return val
         raise RuntimeError(f"No renderer registered for template {template}")
+
+
+DefaultRegistry = GenericRegistry[Settings]
+"""
+The default registry until you need to inject more component in the registry.
+"""
 
 
 TRegistry = TypeVar("TRegistry", bound=DefaultRegistry, covariant=True)
