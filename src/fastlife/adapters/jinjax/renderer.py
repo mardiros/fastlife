@@ -55,6 +55,10 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
     return searchpath
 
 
+class JinjaXTemplate(InlineTemplate):
+    renderer = ".jinja"
+
+
 class JinjaxRenderer(AbstractTemplateRenderer):
     """Render templates using JinjaX."""
 
