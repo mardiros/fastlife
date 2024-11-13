@@ -6,54 +6,56 @@ from collections.abc import Sequence
 from typing import Any, Union
 
 from markupsafe import Markup
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from fastlife.services.templates import AbstractTemplateRenderer
 
-from .base import TypeWrapper, Widget
+from .base import TypeWrapper, Widget, TWidget
 
 
-class UnionWidget(Widget[Widget[Any]]):
+class UnionWidget(Widget[TWidget]):
     """
     Widget for union types.
-
-    :param name: input name.
-    :param title: title for the widget.
-    :param hint: hint for human.
-    :param aria_label: html input aria-label value.
-    :param value: current value.
-    :param error: error of the value if any.
-    :param children_types: childrens types list.
-    :param removable: display a button to remove the widget for optional fields.
-    :param token: token used to get unique id on the form.
-
     """
 
-    def __init__(
-        self,
-        name: str,
-        *,
-        title: str | None,
-        hint: str | None = None,
-        aria_label: str | None = None,
-        value: Widget[Any] | None,
-        error: str | None = None,
-        children_types: Sequence[type[BaseModel]],
-        removable: bool = False,
-        token: str,
-    ):
-        super().__init__(
-            name,
-            value=value,
-            error=error,
-            title=title,
-            hint=hint,
-            aria_label=aria_label,
-            token=token,
-            removable=removable,
-        )
-        self.children_types = children_types
-        self.parent_name = name
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+      <div id="{{id}}">
+        <Details>
+          <Summary :id="id + '-union-summary'">
+            <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+            <pydantic_form.Error :text="error" />
+          </Summary>
+          <div hx-sync="this" id="{{id}}-child">
+            {% if child %}
+            {{ child }}
+            {% else %}
+            {% for typ in types %}
+            <Button type="button"
+                hx-target="closest div"
+                :hx-get="typ.url"
+                :hx-vals="typ.params|tojson"
+                :id="typ.id"
+                onclick={{ "document.getElementById('" + id + "-remove-btn').hidden=false" }}
+              :class="SECONDARY_BUTTON_CLASS">{{typ.title}}</Button>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <Button type="button" :id="id + '-remove-btn'" :hx-target="'#' + id"
+            :hx-vals="parent_type.params|tojson" :hx-get="parent_type.url" :hidden="not child"
+            :class="SECONDARY_BUTTON_CLASS">
+            Remove
+          </Button>
+        </Details>
+      </div>
+    </pydantic_form.Widget>
+    """
+
+    children_types: Sequence[type[BaseModel]]
+    parent_type: TypeWrapper | None = Field(default=None)
+
+    types: Sequence[TypeWrapper] | None = Field(default=None)
+    child: str = Field(default="")
 
     def build_types(self, route_prefix: str) -> Sequence[TypeWrapper]:
         """Wrap types in the union in order to get the in their own widgets."""
@@ -62,24 +64,15 @@ class UnionWidget(Widget[Widget[Any]]):
             for typ in self.children_types
         ]
 
-    def get_template(self) -> str:
-        return "pydantic_form.Union.jinja"
-
     def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version."""
-        child = Markup(self.value.to_html(renderer)) if self.value else ""
-        return Markup(
-            renderer.render_template(
-                self.get_template(),
-                widget=self,
-                types=self.build_types(renderer.route_prefix),
-                parent_type=TypeWrapper(
-                    Union[tuple(self.children_types)],  # type: ignore # noqa: UP007
-                    renderer.route_prefix,
-                    self.parent_name,
-                    self.token,
-                    title=self.title,
-                ),
-                child=child,
-            )
+        self.child = Markup(self.value.to_html(renderer)) if self.value else ""
+        self.types = self.build_types(renderer.route_prefix)
+        self.parent_type = TypeWrapper(
+            Union[tuple(self.children_types)],  # type: ignore # noqa: UP007
+            renderer.route_prefix,
+            self.name,
+            self.token,
+            title=self.title,
         )
+        return Markup(renderer.render_inline(self))

@@ -1,6 +1,6 @@
 from fastapi import Request, Response
 
-from fastlife.adapters.jinjax.renderer import JinjaXTemplate
+from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from fastlife.config.exceptions import exception_handler
 from fastlife.config.views import view_config
 
@@ -46,7 +46,7 @@ def my_ugly_handler(request: Request, exc: MyUglyException) -> Response:
     )
 
 
-@exception_handler(YourFault, status_code=422, template="E422.jinja")
+@exception_handler(YourFault, status_code=422)
 def your_fault_handler(request: Request, exc: YourFault) -> Error422:
     return Error422(message=exc.message)
 

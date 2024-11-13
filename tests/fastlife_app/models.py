@@ -10,11 +10,6 @@ class Person(BaseModel):
     nick: str
 
 
-class GroupsChoice(Widget[Any]):
-    def get_template(self) -> str:
-        return "GroupsChoice.jinja"
-
-
 class Permission(BaseModel):
     name: str = Field(title="Permission")
 
@@ -39,6 +34,31 @@ class Group(BaseModel):
         if value:
             return [val for val in value if val is not None]
         return value
+
+
+class GroupsChoice(Widget[Any]):
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+      <Details :id="id">
+        <Summary :id="id + '-summary'">
+          <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+          <pydantic_form.Error :text="error" />
+        </Summary>
+        <div>
+          {% for group in all_groups %}
+          <div class="flex items-center">
+            <Checkbox :id="group.id" :name={{name + '[]' }} :value="group.name"
+              :checked="value and group.name in value" />
+            <Label class="ms-2 text-base text-neutral-900 dark:text-white"
+                :for="group.id">
+                {{group.name}}
+            </Label>
+          </div>
+          {% endfor %}
+        </div>
+      </Details>
+    </pydantic_form.Widget>
+    """
 
 
 class PhoneNumber(BaseModel):

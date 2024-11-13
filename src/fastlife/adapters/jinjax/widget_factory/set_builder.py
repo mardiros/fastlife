@@ -65,8 +65,8 @@ class SetBuilder(BaseWidgetBuilder[set[Any]]):
             raise NotImplementedError  # coverage: ignore
 
         return ChecklistWidget(
-            field_name,
-            title=field.title if field else "",
+            name=field_name,
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

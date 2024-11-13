@@ -120,10 +120,6 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
         "synchronous_hook": get_synchronous_hook,
         "sync_nfo": "synchrounos",
         "authenticated_user": "anonymous",
-        "csrf_token": {
-            "name": "csrf_token",
-            "value": "",
-        },
         "dgettext": lczr.dgettext,
         "dngettext": lczr.dngettext,
         "dnpgettext": lczr.dnpgettext,

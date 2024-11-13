@@ -1,52 +1,31 @@
 from collections.abc import Sequence
 
+from pydantic import Field
+
+from fastlife.domain.model import Builtins
+
 from .base import Widget
 
 
-class TextWidget(Widget[str]):
+class TextWidget(Widget[Builtins]):
     """
     Widget for text like field (email, ...).
-
-    :param name: input name.
-    :param title: title for the widget.
-    :param hint: hint for human.
-    :param aria_label: html input aria-label value.
-    :param placeholder: html input placeholder value.
-    :param error: error of the value if any.
-    :param value: current value.
-    :param removable: display a button to remove the widget for optional fields.
-    :param token: token used to get unique id on the form.
     """
 
-    def __init__(
-        self,
-        name: str,
-        *,
-        title: str | None,
-        hint: str | None = None,
-        aria_label: str | None = None,
-        placeholder: str | None = None,
-        error: str | None = None,
-        value: str = "",
-        input_type: str = "text",
-        removable: bool = False,
-        token: str,
-    ) -> None:
-        super().__init__(
-            name,
-            value=value,
-            title=title,
-            hint=hint,
-            aria_label=aria_label,
-            token=token,
-            error=error,
-            removable=removable,
-        )
-        self.placeholder = placeholder or ""
-        self.input_type = input_type
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+      <div class="pt-4">
+        <Label :for="id">{{title}}</Label>
+        <pydantic_form.Error :text="error" />
+        <Input :name="name" :value="value" :type="input_type" :id="id"
+          :aria-label="aria_label" :placeholder="placeholder" />
+        <pydantic_form.Hint :text="hint" />
+      </div>
+    </pydantic_form.Widget>
+    """
 
-    def get_template(self) -> str:
-        return "pydantic_form.Text.jinja"
+    input_type: str = Field(default="text")
+    placeholder: str | None = Field(default=None)
 
 
 class TextareaWidget(Widget[Sequence[str]]):
@@ -69,43 +48,24 @@ class TextareaWidget(Widget[Sequence[str]]):
         def split(cls, s: Any) -> Sequence[str]:
             return s.split() if s else []
     ```
-
-    :param name: input name.
-    :param title: title for the widget.
-    :param hint: hint for human.
-    :param aria_label: html input aria-label value.
-    :param placeholder: html input placeholder value.
-    :param error: error of the value if any.
-    :param value: current value.
-    :param removable: display a button to remove the widget for optional fields.
-    :param token: token used to get unique id on the form.
-
     """
 
-    def __init__(
-        self,
-        name: str,
-        *,
-        title: str | None,
-        hint: str | None = None,
-        aria_label: str | None = None,
-        placeholder: str | None = None,
-        error: str | None = None,
-        value: Sequence[str] | None = None,
-        removable: bool = False,
-        token: str,
-    ) -> None:
-        super().__init__(
-            name,
-            value=value or [],
-            title=title,
-            hint=hint,
-            aria_label=aria_label,
-            token=token,
-            error=error,
-            removable=removable,
-        )
-        self.placeholder = placeholder or ""
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+      <div class="pt-4">
+        <Label :for="id">{{title}}</Label>
+        <pydantic_form.Error :text="error" />
+        <Textarea :name="name" :id="id" :aria-label="aria_label">
+            {%- if v is string -%}
+            {{- v -}}}
+            {%- else -%}
+            {%- for v in value %}{{v}}
+    {% endfor -%}
+            {% endif %}
+        </Textarea>
+        <pydantic_form.Hint :text="hint" />
+      </div>
+    </pydantic_form.Widget>
+    """
 
-    def get_template(self) -> str:
-        return "pydantic_form.Textarea.jinja"
+    placeholder: str = Field(default="")

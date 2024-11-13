@@ -3,7 +3,7 @@ from uuid import UUID
 from pydantic import Field
 
 from fastlife import Request, view_config
-from fastlife.adapters.jinjax.renderer import JinjaXTemplate
+from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from tests.fastlife_app.models import BaseModel
 
 
@@ -13,7 +13,7 @@ class Person(BaseModel):
 
 
 class HelloWorld(JinjaXTemplate):
-    template = "<HelloWorld/>"
+    template = "<HelloWorld :person='person'/>"
     person: Person | None = Field(default=None)
 
 

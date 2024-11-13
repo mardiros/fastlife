@@ -29,11 +29,11 @@ class EmailStrBuilder(BaseWidgetBuilder[EmailStr]):
     ) -> TextWidget:
         """Build the widget."""
         return TextWidget(
-            field_name,
+            name=field_name,
             input_type="email",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
-            title=field.title if field else "",
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

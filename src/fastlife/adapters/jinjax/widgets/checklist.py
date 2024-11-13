@@ -3,8 +3,9 @@ Widget for field of type Set.
 """
 
 from collections.abc import Sequence
+from typing import Self
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from .base import Widget
 
@@ -19,52 +20,45 @@ class Checkable(BaseModel):
     checked: bool
     error: str | None = Field(default=None)
 
-    @property
-    def id(self) -> str:
-        id = f"{self.name}-{self.value}-{self.token}"
-        return id.replace(".", "-").replace("_", "-")
+    id: str | None = Field(default=None)
+    field_name: str | None = Field(default=None)
 
-    @property
-    def field_name(self) -> str:
-        return f"{self.name}[]"
+    @model_validator(mode="after")
+    def fill_props(self) -> Self:
+        self.id = f"{self.name}-{self.value}-{self.token}"
+        self.field_name = f"{self.name}[]"
+        return self
 
 
 class ChecklistWidget(Widget[Sequence[Checkable]]):
     """
     Widget for field of type Set.
-
-    :param name: field name.
-    :param title: title for the widget.
-    :param hint: hint for human.
-    :param aria_label: html input aria-label value.
-    :param value: current value.
-    :param error: error of the value if any.
-    :param removable: display a button to remove the widget for optional fields.
-    :param token: token used to get unique id on the form.
     """
 
-    def __init__(
-        self,
-        name: str,
-        *,
-        title: str | None,
-        hint: str | None = None,
-        aria_label: str | None = None,
-        value: Sequence[Checkable],
-        error: str | None = None,
-        token: str,
-        removable: bool,
-    ) -> None:
-        super().__init__(
-            name,
-            value=value,
-            error=error,
-            token=token,
-            title=title,
-            hint=hint,
-            aria_label=aria_label,
-            removable=removable,
-        )
-
-    def get_template(self) -> str:
-        return "pydantic_form.Checklist.jinja"
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+      <div class="pt-4">
+        <Details>
+          <Summary :id="id + '-summary'">
+            <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+            <pydantic_form.Error :text="error" />
+          </Summary>
+          <div>
+            {% for value in value %}
+            <div class="flex items-center mb-4">
+                <Checkbox :name="value.field_name" type="checkbox"
+                    :id="value.id"
+                    :value="value.value"
+                    :checked="value.checked" />
+                <Label :for="value.id"
+                    class="ms-2 text-base text-neutral-900 dark:text-white">
+                    {{- value.label -}}
+                </Label>
+                <pydantic_form.Error :text="value.error" />
+            </div>
+            {% endfor %}
+          </div>
+        </Details>
+      </div>
+    </pydantic_form.Widget>
+    """

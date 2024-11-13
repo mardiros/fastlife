@@ -5,14 +5,16 @@ Create markup for pydantic forms.
 import secrets
 from collections.abc import Mapping
 from inspect import isclass
-from typing import Any, cast, get_origin
+from typing import TYPE_CHECKING, Any, cast, get_origin
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.request.form import FormModel
-from fastlife.services.templates import AbstractTemplateRenderer
+
+if TYPE_CHECKING:
+    from fastlife.services.templates import AbstractTemplateRenderer
 
 from .base import BaseWidgetBuilder
 from .bool_builder import BoolBuilder
@@ -35,7 +37,7 @@ class WidgetFactory:
     :param token: reuse a token.
     """
 
-    def __init__(self, renderer: AbstractTemplateRenderer, token: str | None = None):
+    def __init__(self, renderer: "AbstractTemplateRenderer", token: str | None = None):
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.builders: list[BaseWidgetBuilder[Any]] = [
@@ -135,10 +137,10 @@ class WidgetFactory:
                     return cast(
                         Widget[Any],
                         widget(
-                            name,
+                            name=name,
                             value=value,
                             removable=removable,
-                            title=field.title if field else "",
+                            title=field.title or "" if field else "",
                             hint=field.description if field else None,
                             aria_label=(
                                 field.json_schema_extra.get("aria_label")  # type:ignore

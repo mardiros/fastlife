@@ -142,7 +142,7 @@ def test_permission_on_view_wit_insecurity_policy(client: WebTestClient):
     assert resp.html.h1.text == "Hello World!"
 
 
-def test_request_has_permission_wit_insecurity_policy(client: WebTestClient):
+def test_request_has_permission_with_insecurity_policy(client: WebTestClient):
     resp = client.get("/insecure/request-has-permission")
     assert resp.html.h1.text == "Hello None!"
 

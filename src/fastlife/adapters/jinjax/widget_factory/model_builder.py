@@ -48,10 +48,10 @@ class ModelBuilder(BaseWidgetBuilder[Mapping[str, Any]]):
                 removable=False,
             )
         return ModelWidget(
-            field_name,
+            name=field_name,
             value=list(ret.values()),
             removable=removable,
-            title=field.title if field and field.title else "",
+            title=field.title or "" if field and field.title else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

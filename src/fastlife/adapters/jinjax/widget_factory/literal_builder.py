@@ -31,15 +31,15 @@ class LiteralBuilder(BaseWidgetBuilder[str]):  # str|int|bool
         choices: list[str] = field_type.__args__  # type: ignore
         if len(choices) == 1:
             return HiddenWidget(
-                field_name,
+                name=field_name,
                 value=choices[0],
                 token=self.factory.token,
             )
         return DropDownWidget(
-            field_name,
-            options=choices,
+            name=field_name,
+            options=choices,  # type: ignore
             removable=removable,
-            title=field.title if field else "",
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

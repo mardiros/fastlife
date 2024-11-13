@@ -23,6 +23,7 @@ class HelloInline(InlineTemplate):
       </Form>
     </Layout>
     """
+    renderer = ".jinja"
     person: Annotated[Person | None, "You"] = Field(default=None)
     method: Annotated[Literal["get", "post"], "Form method"] = "post"
 

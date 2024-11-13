@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends, Query, Response
 
 from fastlife import Request
-from fastlife.adapters.jinjax.renderer import JinjaXTemplate
+from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from fastlife.config.views import view_config
 from fastlife.request.form import FormModel
 from fastlife.security.policy import Forbidden
@@ -24,11 +24,11 @@ User = Annotated[AuthenticatedUser, Depends(authenticated_user)]
 
 class Secured(JinjaXTemplate):
     template = """<Secured :user="user" />"""
-    user: FormModel[Person]
+    user: User
 
 
 class HelloWorld(JinjaXTemplate):
-    template = """<HelloWorld :user="user" :person="person">"""
+    template = """<HelloWorld :user="user" :person="person" />"""
     user: User
     person: Person
 
@@ -55,7 +55,7 @@ async def secured(
                 )
             },
         )
-    return Secured(user=person)
+    return Secured(user=user)
 
 
 @view_config(

@@ -4,7 +4,7 @@ Template rending based on JinjaX.
 
 import logging
 import textwrap
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -55,10 +55,6 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
     return searchpath
 
 
-class JinjaXTemplate(InlineTemplate):
-    renderer = ".jinja"
-
-
 class JinjaxRenderer(AbstractTemplateRenderer):
     """Render templates using JinjaX."""
 
@@ -70,28 +66,8 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         super().__init__(request)
         self.catalog = catalog
         self.settings = request.registry.settings
-        self.globals: MutableMapping[str, Any] = {}
         self.translations = get_localizer(request)
-
-    def build_globals(self) -> Mapping[str, Any]:
-        """
-        Build globals variables accessible in any templates.
-
-        * `request` is the {class}`current request <fastlife.request.request.Request>`
-        * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
-        """
-        settings = self.settings
-        ret = {
-            "request": self.request,
-            "csrf_token": {
-                "name": settings.csrf_token_name,
-                "value": self.request.scope.get(settings.csrf_token_name, ""),
-            },
-            "pydantic_form": self.pydantic_form,
-            "localizer": self.translations,
-            **self.globals,
-        }
-        return ret
+        self.globals["pydantic_form"] = self.pydantic_form
 
     def render_template(
         self,
@@ -118,7 +94,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         )
 
         return self.catalog.render(  # type: ignore
-            template, __globals=self.build_globals(), **params
+            template, __globals=self.globals, **params
         )
 
     def render_inline(self, template: InlineTemplate) -> str:
@@ -131,6 +107,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         :param params: parameters used to render the template.
         """
         params = template.model_dump()
+        # params["self"] = params
         src = (
             f"{{# def {', '.join(params.keys())} #}}\n"
             f"{textwrap.dedent(template.template)}"
@@ -138,7 +115,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         return self.catalog.render(
             template.__class__.__qualname__,
             __source=src,
-            __globals=self.build_globals(),
+            __globals=self.globals,
             **params,
         )
 

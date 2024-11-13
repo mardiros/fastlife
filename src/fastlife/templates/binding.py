@@ -8,7 +8,6 @@ from typing import Any
 from fastapi import Depends, Response
 
 from fastlife.request import Request
-from fastlife.security.csrf import create_csrf_token
 
 Template = Callable[..., Response]
 """Type to annotate a FastAPI depency injection."""
@@ -24,11 +23,7 @@ def get_template(template: str, *, content_type: str = "text/html") -> TemplateE
     :param content_type: response ``Content-Type`` header.
     """
 
-    def render_template(
-        request: Request,
-        *,
-        _create_csrf_token: Callable[..., str] = create_csrf_token,
-    ) -> Template:
+    def render_template(request: Request) -> Template:
         reg = request.registry
 
         def parametrizer(**kwargs: Any) -> Response:

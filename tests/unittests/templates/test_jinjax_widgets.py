@@ -43,7 +43,7 @@ def test_render_template(renderer: AbstractTemplateRenderer):
 def test_render_boolean(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    boolean = BooleanWidget("foo", title="Foo", token="XxX")
+    boolean = BooleanWidget(name="foo", title="Foo", token="XxX")
     result = boolean.to_html(renderer)
     html = soup(result)
     assert html.find("label", attrs={"for": "foo-XxX"})
@@ -54,7 +54,7 @@ def test_render_boolean(
 def test_render_boolean_removable(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    boolean = BooleanWidget("foo", title="Foo", token="XxX", removable=True)
+    boolean = BooleanWidget(name="foo", title="Foo", token="XxX", removable=True)
     result = boolean.to_html(renderer)
     html = soup(result)
     assert html.find("label", attrs={"for": "foo-XxX"})
@@ -78,7 +78,7 @@ def test_render_dropdown(
     soup: Callable[[str], bs4.BeautifulSoup],
 ):
     boolean = DropDownWidget(
-        "foxo", title="Foo", options=params["options"], token="XxX"
+        name="foxo", title="Foo", options=params["options"], token="XxX"
     )
     result = boolean.to_html(renderer)
     html = soup(result)
@@ -93,7 +93,7 @@ def test_render_dropdown(
 def test_render_hidden(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    hid = HiddenWidget("foo", value="bar", token="x")
+    hid = HiddenWidget(name="foo", value="bar", token="x")
     result = hid.to_html(renderer)
     html = soup(result)
     assert html.find(
@@ -104,7 +104,7 @@ def test_render_hidden(
 def test_render_text(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    hid = TextWidget("foo", title="Foo", value="bar", token="x")
+    hid = TextWidget(name="foo", title="Foo", value="bar", token="x")
     result = hid.to_html(renderer)
     html = soup(result)
     assert html.find(
@@ -115,7 +115,9 @@ def test_render_text(
 def test_render_text_help(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    hid = TextWidget("foo", title="Foo", value="bar", token="x", hint="This is foobar")
+    hid = TextWidget(
+        name="foo", title="Foo", value="bar", token="x", hint="This is foobar"
+    )
     result = hid.to_html(renderer)
     html = soup(result)
     assert html.find(
@@ -129,7 +131,7 @@ def test_render_text_help(
 def test_render_text_removable(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    text = TextWidget("foo", title="Foo", token="x", removable=True)
+    text = TextWidget(name="foo", title="Foo", token="x", removable=True)
     result = text.to_html(renderer)
     html = soup(result)
     assert html.find("button", attrs={"type": "button"})
@@ -148,7 +150,7 @@ def test_render_textarea(
     value: str | Sequence[str],
     expected: str,
 ):
-    hid = TextareaWidget("foo", title="Foo", value=["foo", "bar"], token="x")
+    hid = TextareaWidget(name="foo", title="Foo", value=["foo", "bar"], token="x")
     result = hid.to_html(renderer)
     html = soup(result)
     textarea = html.find("textarea", attrs={"id": "foo-x", "name": "foo"})
@@ -160,9 +162,9 @@ def test_render_model(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ModelWidget(
-        "foo",
+        name="foo",
         title="Foo",
-        value=[TextWidget("name", title="n", token="x", removable=True)],
+        value=[TextWidget(name="name", title="n", token="x", removable=True)],
         removable=False,
         token="x",
         nested=False,
@@ -177,9 +179,9 @@ def test_render_nested_model(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ModelWidget(
-        "foo",
+        name="foo",
         title="Foo",
-        value=[TextWidget("name", title="n", token="x", removable=True)],
+        value=[TextWidget(name="name", title="n", token="x", removable=True)],
         removable=False,
         token="x",
         nested=True,
@@ -195,11 +197,11 @@ def test_render_sequence(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = SequenceWidget(
-        "foo",
+        name="foo",
         title="Foo",
         value=[
-            TextWidget("x", title="x", token="x", removable=True),
-            TextWidget("y", title="y", token="x", removable=True),
+            TextWidget(name="x", title="x", token="x", removable=True),
+            TextWidget(name="y", title="y", token="x", removable=True),
         ],
         removable=False,
         token="x",
@@ -217,7 +219,7 @@ def test_render_checklist(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ChecklistWidget(
-        "foobar",
+        name="foobar",
         title="Foobar",
         value=[
             Checkable(label="Foo", name="foobar", value="f", token="x", checked=True),
@@ -254,7 +256,7 @@ def test_render_union(
         bar: str
 
     model = UnionWidget(
-        "foobar",
+        name="foobar",
         title="foobar",
         value=None,
         children_types=[Foo, Bar],
@@ -270,11 +272,15 @@ def test_render_custom(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     class CustomWidget(Widget[Any]):
-        def get_template(self) -> str:
-            return "CustomWidget.jinja"
+        template = """
+        <div id="{{id}}" contenteditable>{{value}}</div>
+        {% if error %}
+        <p id="{{id}}-error">{{error}}</p>
+        {% endif %}
+        """
 
     model = CustomWidget(
-        "foo",
+        name="foo",
         title="foo",
         value="foobar",
         removable=False,
@@ -289,22 +295,26 @@ def test_render_custom(
     "widget",
     [
         pytest.param(
-            TextWidget("foo", title="Foo", token="x", error="It did not work"),
+            TextWidget(name="foo", title="Foo", token="x", error="It did not work"),
             id="text",
         ),
         pytest.param(
-            BooleanWidget("foo", title="Foo", token="x", error="It did not work"),
+            BooleanWidget(name="foo", title="Foo", token="x", error="It did not work"),
             id="boolean",
         ),
         pytest.param(
             DropDownWidget(
-                "foo", title="Foo", options=["A"], token="x", error="It did not work"
+                name="foo",
+                title="Foo",
+                options=["A"],  # type: ignore
+                token="x",
+                error="It did not work",
             ),
             id="dropdown",
         ),
         pytest.param(
             ChecklistWidget(
-                "foo",
+                name="foo",
                 title="Foobar",
                 value=[
                     Checkable(
@@ -319,7 +329,7 @@ def test_render_custom(
         ),
         pytest.param(
             ChecklistWidget(
-                "foo",
+                name="foo",
                 title="Foobar",
                 value=[
                     Checkable(
@@ -338,10 +348,10 @@ def test_render_custom(
         ),
         pytest.param(
             SequenceWidget(
-                "foo",
+                name="foo",
                 title="Foo",
                 value=[
-                    TextWidget("x", title="x", token="x", removable=True),
+                    TextWidget(name="x", title="x", token="x", removable=True),
                 ],
                 removable=False,
                 token="x",
@@ -352,8 +362,8 @@ def test_render_custom(
             id="sequence",
         ),
         pytest.param(
-            UnionWidget(
-                "foo",
+            UnionWidget[Any](
+                name="foo",
                 title="foo",
                 value=None,
                 error="It did not work",
@@ -365,9 +375,9 @@ def test_render_custom(
         ),
         pytest.param(
             ModelWidget(
-                "foo",
+                name="foo",
                 title="Foo",
-                value=[TextWidget("name", title="n", token="x", removable=True)],
+                value=[TextWidget(name="name", title="n", token="x", removable=True)],
                 error="It did not work",
                 removable=False,
                 token="x",

@@ -6,6 +6,7 @@ from fastapi import Request as FastAPIRequest
 from fastapi.params import Depends
 
 from fastlife.config.registry import DefaultRegistry, TRegistry
+from fastlife.domain.model import CSRFToken, create_csrf_token
 
 if TYPE_CHECKING:
     from fastlife.security.policy import (  # coverage: ignore
@@ -25,11 +26,28 @@ class GenericRequest(FastAPIRequest, Generic[TRegistry]):
     security_policy: "AbstractSecurityPolicy[Any, TRegistry] | None"
     """Request locale used for the i18n of the response."""
 
+    csrf_token: CSRFToken
+
+    renderer_globals: dict[str, Any]
+
     def __init__(self, registry: TRegistry, request: FastAPIRequest) -> None:
         super().__init__(request.scope, request.receive)
         self.registry = registry
         self.locale_name = registry.locale_negociator(self)
         self.security_policy = None  # build it from the ? registry
+        self.renderer_globals = {}
+
+        self.csrf_token = CSRFToken(
+            name=registry.settings.csrf_token_name,
+            value=request.scope.get(registry.settings.csrf_token_name)
+            or create_csrf_token(),
+        )
+
+    def add_renderer_globals(self, **kwargs: Any):
+        """
+        Add global variables to the template renderer context for the current request.
+        """
+        self.renderer_globals.update(kwargs)
 
     async def has_permission(
         self, permission: str

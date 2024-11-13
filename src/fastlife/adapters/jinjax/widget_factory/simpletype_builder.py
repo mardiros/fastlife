@@ -31,9 +31,9 @@ class SimpleTypeBuilder(BaseWidgetBuilder[str | int | str | float | Decimal | UU
     ) -> Widget[int | str | float | Decimal | UUID]:
         """Build the widget."""
         return TextWidget(
-            field_name,
+            name=field_name,
             placeholder=str(field.examples[0]) if field and field.examples else None,
-            title=field.title if field else "",
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

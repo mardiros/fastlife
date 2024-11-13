@@ -35,6 +35,7 @@ from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
 from fastlife.services.policy import check_permission
 from fastlife.shared_utils.resolver import resolve, resolve_maybe_relative
+from fastlife.templates.inline import is_inline_template_returned
 
 from .registry import DefaultRegistry, TRegistry
 from .settings import Settings
@@ -43,7 +44,6 @@ if TYPE_CHECKING:
     from fastlife.security.policy import AbstractSecurityPolicy  # coverage: ignore
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
-        TemplateParams,
     )
     from fastlife.templates.inline import InlineTemplate
 
@@ -471,7 +471,6 @@ class GenericConfigurator(Generic[TRegistry]):
         * `gettext`, `ngettext`, `dgettext`, `dngettext`, `pgettext`, `dpgettext`,
         `npgettext`, `dnpgettext` methods are installed for i18n purpose.
         """
-        settings = self.registry.settings
         lczr = request.registry.localizer(request)
         custom_globals = {}
         for key, (val, evaluate) in self._renderer_globals.items():
@@ -482,10 +481,6 @@ class GenericConfigurator(Generic[TRegistry]):
             custom_globals[key] = val
         return {
             "request": request,
-            "csrf_token": {
-                "name": settings.csrf_token_name,
-                "value": request.scope.get(settings.csrf_token_name, ""),
-            },
             "gettext": lczr.gettext,
             "ngettext": lczr.ngettext,
             "dgettext": lczr.dgettext,
@@ -495,6 +490,7 @@ class GenericConfigurator(Generic[TRegistry]):
             "npgettext": lczr.npgettext,
             "dnpgettext": lczr.dnpgettext,
             **custom_globals,
+            **request.renderer_globals,
         }
 
     def add_route(
@@ -535,21 +531,21 @@ class GenericConfigurator(Generic[TRegistry]):
             self._registered_permissions.add(permission)
             dependencies.append(Depends(check_permission(permission)))
 
-        if template:
+        if template or is_inline_template_returned(endpoint):
 
             async def render(
                 request: Request,
-                resp: Annotated[
-                    "Response | TemplateParams | InlineTemplate", Depends(endpoint)
-                ],
+                resp: Annotated["Response | InlineTemplate", Depends(endpoint)],
             ) -> Response:
                 if isinstance(resp, Response):
                     return resp
 
+                template = resp.renderer
+                globs = await self._build_renderer_globals(request)
                 return request.registry.get_renderer(template)(request).render(
                     template,
                     params=resp,
-                    globals=(await self._build_renderer_globals(request)),
+                    globals=globs,
                 )
 
             endpoint = render
@@ -583,9 +579,8 @@ class GenericConfigurator(Generic[TRegistry]):
     def add_exception_handler(
         self,
         status_code_or_exc: int | type[Exception],
-        handler: Any,
+        handler: Callable[..., "Response | InlineTemplate"],
         *,
-        template: str | None = None,
         status_code: int = 500,
     ) -> Self:
         """
@@ -593,7 +588,7 @@ class GenericConfigurator(Generic[TRegistry]):
 
         """
 
-        def exception_handler(request: BaseRequest, exc: Exception) -> Any:
+        async def exception_handler(request: BaseRequest, exc: Exception) -> Any:
             # FastAPI exception handler does not provide our request object
             # it seems like it is rebuild from the asgi scope. Even the router
             # class is wrong.
@@ -604,18 +599,11 @@ class GenericConfigurator(Generic[TRegistry]):
             if isinstance(resp, Response):
                 return resp
 
-            if not template:
-                raise RuntimeError(
-                    "No template set for "
-                    f"{exc.__module__}:{exc.__class__.__qualname__} but "
-                    f"{handler.__module__}:{handler.__qualname__} "
-                    "did not return a Response"
-                )
-
-            return req.registry.get_renderer(template)(req).render(
-                template,
+            return req.registry.get_renderer(resp.renderer)(req).render(
+                resp.template,
                 params=resp,
                 status_code=status_code,
+                globals=(await self._build_renderer_globals(req)),
             )
 
         self.exception_handlers.append((status_code_or_exc, exception_handler))

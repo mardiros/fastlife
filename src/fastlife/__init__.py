@@ -3,6 +3,7 @@ from importlib import metadata
 __version__ = metadata.version("fastlifeweb")
 
 from fastapi import Response
+from fastapi.responses import RedirectResponse
 
 from .config import (
     Configurator,
@@ -39,4 +40,5 @@ __all__ = [
     "get_request",
     "Registry",
     "Response",
+    "RedirectResponse",
 ]

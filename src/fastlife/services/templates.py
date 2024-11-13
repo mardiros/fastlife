@@ -9,11 +9,10 @@ More template engine can be registered using the configurator method
 """
 
 import abc
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from typing import Any
 
 from fastlife import Request, Response
-from fastlife.security.csrf import create_csrf_token
 from fastlife.templates.inline import InlineTemplate
 
 TemplateParams = Mapping[str, Any]
@@ -30,6 +29,7 @@ class AbstractTemplateRenderer(abc.ABC):
 
     def __init__(self, request: Request) -> None:
         self.request = request
+        self.globals: dict[str, Any] = {}
 
     @property
     def route_prefix(self) -> str:
@@ -44,16 +44,13 @@ class AbstractTemplateRenderer(abc.ABC):
         content_type: str = "text/html",
         globals: Mapping[str, Any] | None = None,
         params: TemplateParams | InlineTemplate,
-        _create_csrf_token: Callable[..., str] = create_csrf_token,
     ) -> Response:
         """
         Render the template and build the HTTP Response.
         """
         request = self.request
-        reg = request.registry
-        request.scope[reg.settings.csrf_token_name] = (
-            request.cookies.get(reg.settings.csrf_token_name) or _create_csrf_token()
-        )
+        if globals:
+            self.globals.update(globals)
         if isinstance(params, InlineTemplate):
             data = self.render_inline(params)
         else:
@@ -62,8 +59,8 @@ class AbstractTemplateRenderer(abc.ABC):
             data, status_code=status_code, headers={"Content-Type": content_type}
         )
         resp.set_cookie(
-            reg.settings.csrf_token_name,
-            request.scope[reg.settings.csrf_token_name],
+            request.csrf_token.name,
+            request.csrf_token.value,
             secure=request.url.scheme == "https",
             samesite="strict",
             max_age=60 * 15,

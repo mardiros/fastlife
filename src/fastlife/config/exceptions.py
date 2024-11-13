@@ -11,7 +11,6 @@ from .configurator import VENUSIAN_CATEGORY, Configurator
 def exception_handler(
     exception: type[Exception],
     *,
-    template: str | None = None,
     status_code: int | None = None,
 ) -> Callable[..., Any]:
     """
@@ -34,7 +33,6 @@ def exception_handler(
             config.add_exception_handler(
                 exception,
                 wrapped,
-                template=template,
                 **({} if status_code is None else {"status_code": status_code}),
             )
 
