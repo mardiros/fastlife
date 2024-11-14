@@ -43,7 +43,7 @@ class AbstractTemplateRenderer(abc.ABC):
         status_code: int = 200,
         content_type: str = "text/html",
         globals: Mapping[str, Any] | None = None,
-        params: TemplateParams | InlineTemplate,
+        params: InlineTemplate,
     ) -> Response:
         """
         Render the template and build the HTTP Response.
@@ -51,10 +51,7 @@ class AbstractTemplateRenderer(abc.ABC):
         request = self.request
         if globals:
             self.globals.update(globals)
-        if isinstance(params, InlineTemplate):
-            data = self.render_inline(params)
-        else:
-            data = self.render_template(template, **params)
+        data = self.render_inline(params)
         resp = Response(
             data, status_code=status_code, headers={"Content-Type": content_type}
         )
