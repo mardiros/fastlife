@@ -4,7 +4,7 @@ from fastlife.domain.model import Builtins
 from .base import Widget
 
 
-class HiddenWidget(Widget[str]):
+class HiddenWidget(Widget[Builtins]):
     '''
     Widget to annotate to display a field as an hidden field.
 

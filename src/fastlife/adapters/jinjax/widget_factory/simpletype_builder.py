@@ -10,14 +10,15 @@ from pydantic.fields import FieldInfo
 from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
 from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.adapters.jinjax.widgets.text import TextWidget
+from fastlife.domain.model import Builtins
 
 
-class SimpleTypeBuilder(BaseWidgetBuilder[str | int | str | float | Decimal | UUID]):
+class SimpleTypeBuilder(BaseWidgetBuilder[Builtins]):
     """Builder for simple types."""
 
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
         """True for simple types: int, str, float, Decimal, UUID"""
-        return issubclass(typ, int | str | float | Decimal | UUID)
+        return issubclass(typ, Builtins)
 
     def build(
         self,
@@ -25,10 +26,10 @@ class SimpleTypeBuilder(BaseWidgetBuilder[str | int | str | float | Decimal | UU
         field_name: str,
         field_type: type[Any],
         field: FieldInfo | None,
-        value: int | str | float | Decimal | UUID | None,
+        value: Builtins | None,
         form_errors: Mapping[str, Any],
         removable: bool,
-    ) -> Widget[int | str | float | Decimal | UUID]:
+    ) -> Widget[Builtins]:
         """Build the widget."""
         return TextWidget(
             name=field_name,
