@@ -70,7 +70,7 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
                         removable=False,
                     )
 
-        widget = UnionWidget(
+        widget = UnionWidget[Any](
             name=field_name,
             # we assume those types are BaseModel
             value=child,

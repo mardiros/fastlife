@@ -107,7 +107,6 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         :param params: parameters used to render the template.
         """
         params = template.model_dump()
-        # params["self"] = params
         src = (
             f"{{# def {', '.join(params.keys())} #}}\n"
             f"{textwrap.dedent(template.template)}"

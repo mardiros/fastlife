@@ -51,13 +51,10 @@ def check_csrf() -> Callable[[Request], Coroutine[Any, Any, bool]]:
         ):
             return True
 
-        cookie = request.cookies.get(request.csrf_token.name)
-        if not cookie:
-            raise CSRFAttack("CSRF token did not match")
-
+        token = request.csrf_token
         form_data = await request.form()
-        value = form_data.get(request.csrf_token.name)
-        if value != cookie:
+        value = form_data.get(token.name)
+        if value != token.value:
             raise CSRFAttack("CSRF token did not match")
 
         return True

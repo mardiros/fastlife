@@ -16,7 +16,7 @@ class TestForm(JinjaXTemplate):
     model: FormModel[Any]
 
 
-@view_config("form", "/form/{type}", template="TestForm.jinja", methods=["GET", "POST"])
+@view_config("form", "/form/{type}", methods=["GET", "POST"])
 async def testform(
     request: Request,
     type: Annotated[str, Path],

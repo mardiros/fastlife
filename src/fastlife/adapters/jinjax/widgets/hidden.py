@@ -10,10 +10,11 @@ class HiddenWidget(Widget[str]):
 
     ::
         from pydantic import BaseModel
+        from fastlife.adapters.jinjax.widgets.base import CustomWidget
         from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
 
         class MyForm(BaseModel):
-            id: Annotated[str, HiddenWidget] = Field(...)
+            id: Annotated[str, CustomWidget(HiddenWidget)] = Field(...)
             """Identifier in the database."""
 
     '''

@@ -3,11 +3,12 @@ from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, field_validator
 
+from fastlife.adapters.jinjax.widgets.base import CustomWidget
 from fastlife.adapters.jinjax.widgets.text import TextareaWidget
 
 
 class Form(BaseModel):
-    aliases: Annotated[Sequence[str], TextareaWidget] = Field(
+    aliases: Annotated[Sequence[str], CustomWidget(TextareaWidget)] = Field(
         title="Aliases", description="One alias per line", default_factory=list
     )
 

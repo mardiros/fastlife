@@ -22,7 +22,7 @@ class HelloWorld(JinjaXTemplate):
 
 
 @view_config(
-    "hello-i18n", "/{locale}/hello", template="i18n.Hello.jinja", methods=["GET"]
+    "hello-i18n", "/{locale}/hello", methods=["GET"]
 )
 async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> HelloWorld:
     return HelloWorld(

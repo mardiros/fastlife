@@ -33,12 +33,13 @@ class TextareaWidget(Widget[Sequence[str]]):
     Render a Textearea for a string or event a sequence of string.
 
     ```
+    from fastlife.adapters.jinjax.widgets.base import CustomWidget
     from fastlife.adapters.jinjax.widgets.text import TextareaWidget
     from pydantic import BaseModel, Field, field_validator
 
     class TaggedParagraphForm(BaseModel):
-        paragraph: Annotated[str, TextareaWidget] = Field(...)
-        tags: Annotated[Sequence[str], TextareaWidget] = Field(
+        paragraph: Annotated[str, CustomWidget(TextareaWidget)] = Field(...)
+        tags: Annotated[Sequence[str], CustomWidget(TextareaWidget)] = Field(
             default_factory=list,
             title="Tags",
             description="One tag per line",

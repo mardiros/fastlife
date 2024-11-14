@@ -80,7 +80,14 @@ def _get_fullname(typ: type[Any]) -> str:
     return f"{typ.__module__}:{typ.__name__}"
 
 
-TWidget = TypeVar("TWidget", bound=Widget[Any], contravariant=True)
+TWidget = TypeVar("TWidget", bound=Widget[Any])
+
+
+class CustomWidget(Generic[TWidget]):
+    typ: type[Any]
+
+    def __init__(self, typ: type[TWidget]) -> None:
+        self.typ = typ
 
 
 class TypeWrapper:

@@ -26,8 +26,6 @@ class GenericRequest(FastAPIRequest, Generic[TRegistry]):
     security_policy: "AbstractSecurityPolicy[Any, TRegistry] | None"
     """Request locale used for the i18n of the response."""
 
-    csrf_token: CSRFToken
-
     renderer_globals: dict[str, Any]
 
     def __init__(self, registry: TRegistry, request: FastAPIRequest) -> None:
@@ -36,14 +34,17 @@ class GenericRequest(FastAPIRequest, Generic[TRegistry]):
         self.locale_name = registry.locale_negociator(self)
         self.security_policy = None  # build it from the ? registry
         self.renderer_globals = {}
+        self._csrf_token: CSRFToken | None = None
 
-        self.csrf_token = CSRFToken(
-            name=registry.settings.csrf_token_name,
-            value=request.scope.get(registry.settings.csrf_token_name)
-            or create_csrf_token(),
-        )
+    @property
+    def csrf_token(self) -> CSRFToken:
+        if self._csrf_token is None:
+            name = self.registry.settings.csrf_token_name
+            value = self.cookies.get(name) or create_csrf_token()
+            self._csrf_token = CSRFToken(name=name, value=value)
+        return self._csrf_token
 
-    def add_renderer_globals(self, **kwargs: Any):
+    def add_renderer_globals(self, **kwargs: Any) -> None:
         """
         Add global variables to the template renderer context for the current request.
         """

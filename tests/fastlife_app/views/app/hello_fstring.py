@@ -10,6 +10,6 @@ class HelloInline(InlineTemplate):
     name: str
 
 
-@view_config("hello-inline-f-string", "/f-string", template=".fstring", methods=["GET"])
+@view_config("hello-inline-f-string", "/f-string", methods=["GET"])
 async def hello_inline_fstring() -> InlineTemplate:
     return HelloInline(name="world")

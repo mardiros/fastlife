@@ -47,7 +47,7 @@ class ModelBuilder(BaseWidgetBuilder[Mapping[str, Any]]):
                 form_errors=form_errors,
                 removable=False,
             )
-        return ModelWidget(
+        return ModelWidget[Any](
             name=field_name,
             value=list(ret.values()),
             removable=removable,

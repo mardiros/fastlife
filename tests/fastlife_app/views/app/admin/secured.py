@@ -37,7 +37,6 @@ class HelloWorld(JinjaXTemplate):
     "secured_page",
     "/secured",
     permission="admin",
-    template="Secured.jinja",
     methods=["GET", "POST"],
 )
 async def secured(
@@ -62,7 +61,6 @@ async def secured(
     "secured_hello",
     "/secured-hello",
     permission="admin",
-    template="HelloWorld.jinja",
     methods=["GET"],
 )
 async def secured_hello(

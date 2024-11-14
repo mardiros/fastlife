@@ -4,6 +4,7 @@ from pathlib import Path
 import bs4
 import pytest
 
+from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from fastlife.adapters.jinjax.renderer import JinjaxRenderer
 
 
@@ -19,16 +20,16 @@ def tmp_dir(components_dir: Path) -> Iterator[Path]:
 def node(
     renderer: JinjaxRenderer, template_string: str, tmp_dir: Path
 ) -> Iterator[bs4.PageElement]:
-    component = tmp_dir / "X.jinja"
-    component.write_text(template_string)
+    class X(JinjaXTemplate):
+        template = template_string
+
     try:
-        res = renderer.render_template("t.X.jinja")
+        res = renderer.render_inline(X())
         bsoup = bs4.BeautifulSoup(res, features="html.parser")
         yield next(bsoup.children)  # type: ignore
     except Exception as exc:
         # Display the error in the assertion is a compromise
         yield exc  # type: ignore
-    component.unlink()
 
 
 @pytest.fixture()
@@ -201,7 +202,7 @@ def test_render_Checkbox(node: bs4.PageElement, expected: bs4.PageElement):
     [
         pytest.param(
             """<CsrfToken />""",
-            """<input type="hidden" name="csrf_token" value=""/>""",
+            """<input type="hidden" name="csrf_token" value="CsRfT"/>""",
             id="csrf",
         ),
     ],
@@ -216,37 +217,37 @@ def test_render_CSRFToken(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Form>XxX</Form>""",
             """<form class="space-y-4 md:space-y-6">
-  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
+  <input name="csrf_token" type="hidden" value="CsRfT"/>XxX</form>""",
             id="form",
         ),
         pytest.param(
             """<Form class="form">XxX</Form>""",
             """<form class="form">
-  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
+  <input name="csrf_token" type="hidden" value="CsRfT"/>XxX</form>""",
             id="form-css",
         ),
         pytest.param(
             """<Form class="form" action="" method="post">XxX</Form>""",
             """<form class="form" action="" method="post">
-  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
+  <input name="csrf_token" type="hidden" value="CsRfT"/>XxX</form>""",
             id="form-post",
         ),
         pytest.param(
             """<Form class="form" hx-post>XxX</Form>""",
             """<form class="form" hx-post="">
-  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
+  <input name="csrf_token" type="hidden" value="CsRfT"/>XxX</form>""",
             id="form-hx-post",
         ),
         pytest.param(
             """<Form hx-post="/go" class="form">XxX</Form>""",
             """<form class="form" hx-post="/go">
-  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
+  <input name="csrf_token" type="hidden" value="CsRfT"/>XxX</form>""",
             id="form-hx-post-url",
         ),
         pytest.param(
             """<Form method="get" hx-post="/go" class="form">XxX</Form>""",
             """<form class="form" hx-post="/go" method="get">
-  <input name="csrf_token" type="hidden" value=""/>XxX</form>""",
+  <input name="csrf_token" type="hidden" value="CsRfT"/>XxX</form>""",
             id="form-hx-get",
         ),
     ],

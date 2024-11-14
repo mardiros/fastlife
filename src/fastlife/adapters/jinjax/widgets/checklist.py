@@ -25,7 +25,7 @@ class Checkable(BaseModel):
 
     @model_validator(mode="after")
     def fill_props(self) -> Self:
-        self.id = f"{self.name}-{self.value}-{self.token}"
+        self.id = f"{self.name}-{self.value}-{self.token}".replace(".", "-")
         self.field_name = f"{self.name}[]"
         return self
 

@@ -41,7 +41,7 @@ class SequenceBuilder(BaseWidgetBuilder[Sequence[Any]]):
             )
             for idx, v in enumerate(value)
         ]
-        return SequenceWidget(
+        return SequenceWidget[Any](
             name=field_name,
             title=field.title or "" if field else "",
             hint=field.description if field else None,

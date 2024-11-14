@@ -38,13 +38,9 @@ async def test_get_csrf_token_reuse_token(dummy_request_param: Request):
     ],
 )
 async def test_create_csrf_token(dummy_request_param: Request):
-    def create_token():
-        return "xxxCsrfTokenxxx"
-
     template = get_template("Layout.jinja")
     renderer: Any = template(
         dummy_request_param,
-        _create_csrf_token=create_token,  # type: ignore
     )
     response = renderer()
     assert "set-cookie" in response.headers

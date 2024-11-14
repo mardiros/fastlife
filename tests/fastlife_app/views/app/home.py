@@ -4,7 +4,7 @@ from fastlife import view_config
 from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from fastlife.request.form import FormModel, form_model
 from fastlife.request.request import Request
-from tests.fastlife_app.models import Account, Group, Person, Sequence
+from tests.fastlife_app.models import Account, Group, Person
 
 
 class HelloWorld(JinjaXTemplate):
@@ -12,7 +12,7 @@ class HelloWorld(JinjaXTemplate):
     person: Person
 
 
-@view_config("home", "/", methods=["GET", "POST"], template="HelloWorld.jinja")
+@view_config("home", "/", methods=["GET", "POST"])
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
 ) -> HelloWorld:

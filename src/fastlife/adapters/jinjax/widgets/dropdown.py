@@ -32,16 +32,16 @@ class DropDownWidget(Widget[str]):
     </pydantic_form.Widget>
     """
 
-    options: list[dict[str, str]] = Field(default_factory=list)
+    options: list[dict[str | int, str | int]] = Field(default_factory=list)
 
     @field_validator("options", mode="before")
     @classmethod
     def validate_options(
-        cls, options: Sequence[str | tuple[str, str]] | None
-    ) -> Sequence[dict[str, str]]:
+        cls, options: Sequence[str | int | tuple[str | int, str | int]] | None
+    ) -> Sequence[dict[str | int, str | int]]:
         if not options:
             return []
-        ret: list[dict[str, str]] = []
+        ret: list[dict[str | int, str | int]] = []
         for opt in options:
             if isinstance(opt, tuple):
                 ret.append({"value": opt[0], "text": opt[1]})

@@ -23,7 +23,7 @@ def endpoint3() -> MyTemplate:
     return MyTemplate()
 
 
-def endpoint4() -> Union[MyTemplate, RedirectResponse]:   # noqa: UP007
+def endpoint4() -> Union[MyTemplate, RedirectResponse]:  # noqa: UP007
     return MyTemplate()
 
 

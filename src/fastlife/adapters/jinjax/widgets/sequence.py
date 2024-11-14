@@ -6,10 +6,10 @@ from pydantic import Field
 
 from fastlife.services.templates import AbstractTemplateRenderer
 
-from .base import TypeWrapper, Widget, TWidget
+from .base import TWidget, TypeWrapper, Widget
 
 
-class SequenceWidget(Widget[Sequence[TWidget | Any]]):
+class SequenceWidget(Widget[Sequence[TWidget]]):
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <Details :id="id">

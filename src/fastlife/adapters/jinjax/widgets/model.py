@@ -1,17 +1,16 @@
 """Pydantic models"""
 
 from collections.abc import Sequence
-from typing import Any
 
 from markupsafe import Markup
 from pydantic import Field
 
 from fastlife.services.templates import AbstractTemplateRenderer
 
-from .base import Widget, TWidget
+from .base import TWidget, Widget
 
 
-class ModelWidget(Widget[Sequence[TWidget | Any]]):
+class ModelWidget(Widget[Sequence[TWidget]]):
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
     <div id="{{id}}"{% if nested %} class="m-4"{%endif%}>

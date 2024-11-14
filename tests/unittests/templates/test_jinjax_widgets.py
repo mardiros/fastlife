@@ -161,7 +161,7 @@ def test_render_textarea(
 def test_render_model(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    model = ModelWidget(
+    model = ModelWidget[TextWidget](
         name="foo",
         title="Foo",
         value=[TextWidget(name="name", title="n", token="x", removable=True)],
@@ -178,7 +178,7 @@ def test_render_model(
 def test_render_nested_model(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    model = ModelWidget(
+    model = ModelWidget[Widget[str]](
         name="foo",
         title="Foo",
         value=[TextWidget(name="name", title="n", token="x", removable=True)],
@@ -196,7 +196,7 @@ def test_render_nested_model(
 def test_render_sequence(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    model = SequenceWidget(
+    model = SequenceWidget[TextWidget](
         name="foo",
         title="Foo",
         value=[
@@ -255,7 +255,7 @@ def test_render_union(
     class Bar(BaseModel):
         bar: str
 
-    model = UnionWidget(
+    model = UnionWidget[Any](
         name="foobar",
         title="foobar",
         value=None,
@@ -347,7 +347,7 @@ def test_render_custom(
             id="checklist-checkable",
         ),
         pytest.param(
-            SequenceWidget(
+            SequenceWidget[TextWidget](
                 name="foo",
                 title="Foo",
                 value=[
@@ -374,7 +374,7 @@ def test_render_custom(
             id="union",
         ),
         pytest.param(
-            ModelWidget(
+            ModelWidget[TextWidget](
                 name="foo",
                 title="Foo",
                 value=[TextWidget(name="name", title="n", token="x", removable=True)],
