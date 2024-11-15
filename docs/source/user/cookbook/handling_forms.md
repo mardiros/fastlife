@@ -20,26 +20,6 @@ To starts handling form, we will use the helloworld example from the
 [bootstrap with poetry](#bootstrap-with-poetry) and add
 a simple form in the page to say hello, has a classic example.
 
-We will first update the template to add a form in it:
-
-```bash
-cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
-{# def person #}
-<html>
-    <body>
-      <H1>Hello {{ person.model.nick|default("World") }}!</H1>
-      <Form method="post">
-        {{ pydantic_form(person) }}
-        <Button>Submit</Button>
-      </Form>
-    </body>
-<html>
-EOF
-```
-
-In jinjax, we have to declare the definition of the variables of the templates,
-The annotation are optional and ommited here.
-
 The function
 :meth:`pydantic_form <fastlife.adapters.jinjax.renderer.JinjaxRenderer.pydantic_form>`
 invoked here will render the template content, but not the
@@ -68,14 +48,37 @@ class Person(BaseModel):
     nick: str
 
 
-@view_config("home", "/", methods=["GET", "POST"], template="HelloWorld.jinja")
+class HelloWorld(JinjaXTemplate):
+    template = """
+    <html>
+        <body>
+          <H1>Hello {{ person.model.nick|default("World") }}!</H1>
+          <Form method="post">
+            {{ pydantic_form(person) }}
+            <Button>Submit</Button>
+          </Form>
+        </body>
+    <html>
+    """
+    person: FormModel[Person]
+
+
+@view_config("home", "/", methods=["GET", "POST"])
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
-) -> TemplateParams:
-    return {"person": person}
+) -> HelloWorld:
+    return HelloWorld(person= person)
 
 EOF
 ```
+
+
+:::{tip}
+Usually, with jinjax, we have to declare the definition of the variables in templates,
+but using the JinjaXTemplate object, the definition is automatically creating with
+the attributes of the class. `person` in our example.
+:::
+
 
 Now, if you run the app and start a browser, you see the form with one field to the
 the nick name.
@@ -168,9 +171,9 @@ class MyWidget(Widget[str]):
 
 
 class PetForm(BaseModel):
-    id: Annotated[UUID, HiddenWidget] = Field(default=uuid1)
-    nick: Annotated[str, MyWidget] = Field(title="Pet's Name")
-    description: Annotated[str, TextareaWidget] = Field(title="Pet's hobbies")
+    id: Annotated[UUID, CustomWidget(HiddenWidget)] = Field(default=uuid1)
+    nick: Annotated[str, CustomWidget(MyWidget)] = Field(title="Pet's Name")
+    description: Annotated[str, CustomWidget(TextareaWidget)] = Field(title="Pet's hobbies")
     favorite_toy: str = Field(title="Favorite Toy")
     magic_power: bool = Field(title="Has Magic Power")
 ```

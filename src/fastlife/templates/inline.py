@@ -1,22 +1,26 @@
 """Inline templates."""
 
-from typing import ClassVar
+import inspect
+from collections.abc import Callable
+from typing import Any, get_args
 
-from pydantic import BaseModel
-from pydantic.config import ConfigDict
+from fastlife.domain.model.template import InlineTemplate
+from fastlife.shared_utils.infer import is_union
 
 
-class InlineTemplate(BaseModel):
-    """
-    Inline templates are used to encourage the location of behavior and the view typing.
+def is_inline_template_returned(endpoint: Callable[..., Any]) -> bool:
+    signature = inspect.signature(endpoint)
+    return_annotation = signature.return_annotation
 
-    Pages produce templates that are not reusable and don't need to be reusable
-    in there essence, they don't need to be in a component library.
-    They use a component lirary to stay small but contains a view logic
-    tighly coupled with the view and its code can stay in the same module of that view.
-    """
+    if isinstance(return_annotation, type) and issubclass(
+        return_annotation, InlineTemplate
+    ):
+        return True
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    if is_union(return_annotation):
+        return any(
+            isinstance(arg, type) and issubclass(arg, InlineTemplate)
+            for arg in get_args(return_annotation)
+        )
 
-    template: ClassVar[str]
-    """The template string to render."""
+    return False

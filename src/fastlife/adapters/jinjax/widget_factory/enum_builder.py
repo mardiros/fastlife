@@ -31,10 +31,10 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
         """Build the widget."""
         options = [(item.name, item.value) for item in field_type]  # type: ignore
         return DropDownWidget(
-            field_name,
+            name=field_name,
             options=options,  # type: ignore
             removable=removable,
-            title=field.title if field else "",
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

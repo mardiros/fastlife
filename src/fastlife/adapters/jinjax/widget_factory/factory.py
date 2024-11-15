@@ -4,15 +4,16 @@ Create markup for pydantic forms.
 
 import secrets
 from collections.abc import Mapping
-from inspect import isclass
-from typing import Any, cast, get_origin
+from typing import TYPE_CHECKING, Any, get_origin
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
-from fastlife.adapters.jinjax.widgets.base import Widget
+from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
 from fastlife.request.form import FormModel
-from fastlife.services.templates import AbstractTemplateRenderer
+
+if TYPE_CHECKING:
+    from fastlife.services.templates import AbstractTemplateRenderer
 
 from .base import BaseWidgetBuilder
 from .bool_builder import BoolBuilder
@@ -35,7 +36,7 @@ class WidgetFactory:
     :param token: reuse a token.
     """
 
-    def __init__(self, renderer: AbstractTemplateRenderer, token: str | None = None):
+    def __init__(self, renderer: "AbstractTemplateRenderer", token: str | None = None):
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.builders: list[BaseWidgetBuilder[Any]] = [
@@ -131,24 +132,22 @@ class WidgetFactory:
         """
         if field and field.metadata:
             for widget in field.metadata:
-                if isclass(widget) and issubclass(widget, Widget):
-                    return cast(
-                        Widget[Any],
-                        widget(
-                            name,
-                            value=value,
-                            removable=removable,
-                            title=field.title if field else "",
-                            hint=field.description if field else None,
-                            aria_label=(
-                                field.json_schema_extra.get("aria_label")  # type:ignore
-                                if field and field.json_schema_extra
-                                else None
-                            ),
-                            token=self.token,
-                            error=form_errors.get(name),
+                if isinstance(widget, CustomWidget):
+                    ret: Widget[Any] = widget.typ(
+                        name=name,
+                        value=value,
+                        removable=removable,
+                        title=field.title or "" if field else "",
+                        hint=field.description if field else None,
+                        aria_label=(
+                            field.json_schema_extra.get("aria_label")  # type:ignore
+                            if field and field.json_schema_extra
+                            else None
                         ),
+                        token=self.token,
+                        error=form_errors.get(name),
                     )
+                    return ret
 
         type_origin = get_origin(typ)
         for builder in self.builders:

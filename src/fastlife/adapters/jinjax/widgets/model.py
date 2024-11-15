@@ -1,51 +1,44 @@
 """Pydantic models"""
 
 from collections.abc import Sequence
-from typing import Any
 
 from markupsafe import Markup
+from pydantic import Field
 
 from fastlife.services.templates import AbstractTemplateRenderer
 
-from .base import Widget
+from .base import TWidget, Widget
 
 
-class ModelWidget(Widget[Sequence[Widget[Any]]]):
-    def __init__(
-        self,
-        name: str,
-        *,
-        value: Sequence[Widget[Any]],
-        error: str | None = None,
-        removable: bool,
-        title: str,
-        hint: str | None = None,
-        aria_label: str | None = None,
-        token: str,
-        nested: bool,
-    ):
-        super().__init__(
-            name,
-            title=title,
-            hint=hint,
-            aria_label=aria_label,
-            value=value,
-            error=error,
-            removable=removable,
-            token=token,
-        )
-        self.nested = nested
+class ModelWidget(Widget[Sequence[TWidget]]):
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+    <div id="{{id}}"{% if nested %} class="m-4"{%endif%}>
+        {% if nested %}
+        <Details>
+        <Summary :id="id + '-summary'">
+            <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+            <pydantic_form.Error :text="error" />
+        </Summary>
+        <div>
+            {% for child in children_widgets %}
+            {{ child }}
+            {% endfor %}
+        </div>
+        </Details>
+        {% else %}
+            {% for child in children_widgets %}
+            {{ child }}
+            {% endfor %}
+        {% endif %}
+    </div>
+    </pydantic_form.Widget>
+    """
 
-    def get_template(self) -> str:
-        return "pydantic_form.Model.jinja"
+    nested: bool = Field(default=False)
+    children_widgets: list[str] | None = Field(default=None)
 
     def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version."""
-        children_widget = [child.to_html(renderer) for child in self.value or []]
-        kwargs = {
-            "widget": self,
-            "children_widget": children_widget,
-        }
-        return Markup(
-            renderer.render_template(self.get_template(), globals=None, **kwargs)
-        )
+        self.children_widgets = [child.to_html(renderer) for child in self.value or []]
+        return Markup(renderer.render_template(self))

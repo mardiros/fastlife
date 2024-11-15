@@ -1,12 +1,13 @@
 """Widget base class."""
 
-import abc
 import secrets
 from collections.abc import Mapping
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, Self, TypeVar
 
 from markupsafe import Markup
+from pydantic import Field, model_validator
 
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.services.templates import AbstractTemplateRenderer
 from fastlife.shared_utils.infer import is_union
 
@@ -21,7 +22,7 @@ def get_title(typ: type[Any]) -> str:
     )
 
 
-class Widget(abc.ABC, Generic[T]):
+class Widget(JinjaXTemplate, Generic[T]):
     """
     Base class for widget of pydantic fields.
 
@@ -39,48 +40,37 @@ class Widget(abc.ABC, Generic[T]):
 
     name: str
     "variable name, nested variables have dots."
-    value: T | None
+    id: str = Field(default="")
+    "variable name, nested variables have dots."
+    value: T | None = Field(default=None)
     """Value of the field."""
-    title: str
+    title: str = Field(default="")
     "Human title for the widget."
-    hint: str
+    hint: str | None = Field(default=None)
     "A help message for the the widget."
-    aria_label: str
+
+    error: str | None = Field(default=None)
+    "Error message."
+
+    aria_label: str | None = Field(default=None)
     "Non visible text alternative."
-    token: str
+    token: str = Field(default="")
     "unique token to ensure id are unique in the DOM."
-    removable: bool
+    removable: bool = Field(default=False)
     "Indicate that the widget is removable from the dom."
 
-    def __init__(
-        self,
-        name: str,
-        *,
-        value: T | None = None,
-        error: str | None = None,
-        title: str | None = None,
-        hint: str | None = None,
-        token: str | None = None,
-        aria_label: str | None = None,
-        removable: bool = False,
-    ):
-        self.name = name
-        self.value = value
-        self.error = error
-        self.title = title or name.split(".")[-1]
-        self.hint = hint or ""
-        self.aria_label = aria_label or ""
-        self.token = token or secrets.token_urlsafe(4).replace("_", "-")
-        self.removable = removable
-        self.id = f"{self.name}-{self.token}".replace("_", "-").replace(".", "-")
-
-    @abc.abstractmethod
-    def get_template(self) -> str:
-        """Get the widget component template."""
+    @model_validator(mode="after")
+    def fill_props(self) -> Self:
+        self.title = self.title or self.name.split(".")[-1]
+        self.token = self.token or secrets.token_urlsafe(4).replace("_", "-")
+        self.id = self.id or f"{self.name}-{self.token}".replace("_", "-").replace(
+            ".", "-"
+        )
+        return self
 
     def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version."""
-        return Markup(renderer.render_template(self.get_template(), widget=self))
+        return Markup(renderer.render_template(self))
 
 
 def _get_fullname(typ: type[Any]) -> str:
@@ -88,6 +78,16 @@ def _get_fullname(typ: type[Any]) -> str:
         typs = [_get_fullname(t) for t in typ.__args__]  # type: ignore
         return "|".join(typs)  # type: ignore
     return f"{typ.__module__}:{typ.__name__}"
+
+
+TWidget = TypeVar("TWidget", bound=Widget[Any])
+
+
+class CustomWidget(Generic[TWidget]):
+    typ: type[Any]
+
+    def __init__(self, typ: type[TWidget]) -> None:
+        self.typ = typ
 
 
 class TypeWrapper:

@@ -1,9 +1,10 @@
 pydantic_form.Widget
 ====================
 
-.. jinjax:component:: pydantic_form.Widget(widget: fastlife.adapters.jinjax.widgets.base.Widget, content: Any)
+.. jinjax:component:: pydantic_form.Widget(widget_id: str, removable: bool, content: Any)
 
     Base component for widget
 
-    :param widget: widget to display.
+    :param widget_id: widget to display.
+    :param removable: Set to true to add a remove button
     :param content: child node.

@@ -4,7 +4,7 @@ Template rending based on JinjaX.
 
 import logging
 import textwrap
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Sequence
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -66,58 +66,10 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         super().__init__(request)
         self.catalog = catalog
         self.settings = request.registry.settings
-        self.globals: MutableMapping[str, Any] = {}
         self.translations = get_localizer(request)
+        self.globals["pydantic_form"] = self.pydantic_form
 
-    def build_globals(self) -> Mapping[str, Any]:
-        """
-        Build globals variables accessible in any templates.
-
-        * `request` is the {class}`current request <fastlife.request.request.Request>`
-        * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
-        """
-        settings = self.settings
-        ret = {
-            "request": self.request,
-            "csrf_token": {
-                "name": settings.csrf_token_name,
-                "value": self.request.scope.get(settings.csrf_token_name, ""),
-            },
-            "pydantic_form": self.pydantic_form,
-            "localizer": self.translations,
-            **self.globals,
-        }
-        return ret
-
-    def render_template(
-        self,
-        template: str,
-        *,
-        globals: Mapping[str, Any] | None = None,
-        **params: Any,
-    ) -> str:
-        """
-        Render the JinjaX component with the given parameter.
-
-        :param template: the template to render
-        :param globals: parameters that will be used by the JinjaX component and all its
-            child components without "props drilling".
-        :param params: parameters used to render the template.
-        """
-
-        template = template[: -len(self.settings.jinjax_file_ext) - 1]
-        if globals:
-            self.globals.update(globals)
-
-        self.catalog.jinja_env.install_gettext_translations(  # type: ignore
-            self.translations, newstyle=True
-        )
-
-        return self.catalog.render(  # type: ignore
-            template, __globals=self.build_globals(), **params
-        )
-
-    def render_inline(self, template: InlineTemplate) -> str:
+    def render_template(self, template: InlineTemplate) -> str:
         """
         Render the JinjaX component with the given parameter.
 
@@ -134,7 +86,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         return self.catalog.render(
             template.__class__.__qualname__,
             __source=src,
-            __globals=self.build_globals(),
+            __globals=self.globals,
             **params,
         )
 

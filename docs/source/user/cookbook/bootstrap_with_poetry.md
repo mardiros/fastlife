@@ -117,32 +117,26 @@ can be relative from the module.
 
 ```bash
 cat << 'EOF' >  src/myapp/views.py
-from fastlife import view_config
+from fastlife import JinjaXTemplate, view_config
 
-@view_config("hello_world", "/",  template="HelloWorld.jinja")
-def hello_world() -> dict[str, str]:
-    return {}
+class HelloWorld(JinjaXTemplate):
+    template = """
+    <html>
+        <body>
+            <H1>Hello World!</H1>
+        </body>
+    <html>
+    """
+
+@view_config("hello_world", "/")
+def hello_world() -> HelloWorld:
+    return HelloWorld()
 EOF
 ```
 
-While using a template, then the return type of a view is a dict,
-you can use the TemplateParams return type from fastlife if you want
-an explicit name.
 
-
-The view requires a template, we already register our template path
-in the entrypoint, and we can write it down.
-
-```
-mkdir src/myapp/templates
-cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
-<html>
-    <body>
-        <H1>Hello World!</H1>
-    </body>
-<html>
-EOF
-```
+The view here hello_world return a template HelloWorld which is going to be
+rendered by the JinjaX template engine.
 
 The `H1` here is a component from the fastlife component library which
 will render a `<h1>` in HTML. In {term}`JinjaX`, the template engined used,

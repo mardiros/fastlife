@@ -1,11 +1,12 @@
 {# doc Base component for widget #}
 {# def
-widget: Annotated[fastlife.adapters.jinjax.widgets.base.Widget, "widget to display."],
+widget_id: Annotated[str, "widget to display."],
+removable: Annotated[bool, "Set to true to add a remove button"],
 #}
-{% set container_id = widget.id + "-container" %}
+{% set container_id = widget_id + "-container" %}
 <div id="{{container_id}}">
   {{ content }}
-  {% if widget.removable %}
+  {% if removable %}
   <Button type="button" :onclick={{"document.getElementById('" + container_id + "').remove()" }}>
     Remove
   </Button>

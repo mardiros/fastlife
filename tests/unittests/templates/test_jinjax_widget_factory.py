@@ -6,13 +6,18 @@ import bs4
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 from fastlife.adapters.jinjax.renderer import JinjaxRenderer
-from fastlife.adapters.jinjax.widgets.base import Widget
+from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
 from fastlife.request.form import FormModel
+from tests.unittests.templates.test_jinjax_components import JinjaXTemplate
 
 
-class CustomWidget(Widget[Any]):
-    def get_template(self) -> str:
-        return "CustomWidget.jinja"
+class MyWidget(Widget[str]):
+    template = """
+    <div id="{{id}}" contenteditable>{{value}}</div>
+    {% if error %}
+    <p id="{{id}}-error">{{error}}</p>
+    {% endif %}
+    """
 
 
 class Flavor(Enum):
@@ -41,7 +46,7 @@ class DummyOptional(BaseModel):
 
 class DummyModel(BaseModel):
     name: str = Field()
-    description: Annotated[str, CustomWidget] = Field(min_length=2)
+    description: Annotated[str, CustomWidget(MyWidget)] = Field(min_length=2)
     private: str = Field(exclude=True)
     type: Literal["foo", "bar"] = Field()
     flavor: Flavor = Field()
@@ -60,13 +65,20 @@ class Tempo(BaseModel):
 
 
 class CustomSelect(Widget[Any]):
-    def get_template(self) -> str:
-        return "CustomSelect.jinja"
+    template = """
+    <Select :name="name" :id="id" multiple>
+      {% for tempo in tempos %}
+      <Option :value="tempo.id" :selected="value==tempo.id">
+        {{tempo.name}}
+      </Option>
+      {% endfor %}
+    </Select>
+    """
 
 
 class Banger(BaseModel):
     name: str = Field()
-    tempo: Annotated[Sequence[Tempo], CustomSelect] = Field()
+    tempo: Annotated[Sequence[Tempo], CustomWidget(CustomSelect)] = Field()
 
 
 class MultiSet(BaseModel):
@@ -74,14 +86,27 @@ class MultiSet(BaseModel):
     foobarz: set[Literal["foo", "bar", "baz"]] = Field(default_factory=set)
 
 
+class DummyForm(JinjaXTemplate):
+    template = """
+    <Form>
+      {{ pydantic_form(model=model, token=token) }}
+      <Button>Submit</Button>
+    </Form>
+    """
+    model: FormModel[DummyModel | Banger | MultiSet | DummyOptional]
+    token: str
+
+
 def test_render_template(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    result = renderer.render_template(
-        "DummyForm.jinja",
-        model=FormModel[DummyModel].default("payload", DummyModel),
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
+            "payload", DummyModel
+        ),
         token="tkt",
     )
+    result = renderer.render_template(form)
     html = soup(result)
 
     assert html.find(
@@ -168,9 +193,8 @@ def test_render_template(
 def test_render_template_values(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    result = renderer.render_template(
-        "DummyForm.jinja",
-        model=FormModel[DummyModel].from_payload(
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
             "payload",
             DummyModel,
             {
@@ -186,6 +210,7 @@ def test_render_template_values(
         ),
         token="tkt",
     )
+    result = renderer.render_template(form)
 
     html = soup(result)
     assert html.find(
@@ -256,34 +281,41 @@ def test_render_template_values(
 def test_render_custom_list(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    result = renderer.render_template(
-        "DummyForm.jinja",
-        model=FormModel[Banger].from_payload(
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
             "payload",
             Banger,
             {
                 "payload": {
                     "name": "asturia",
-                    "tempo": 1,
+                    "tempo": [1],
                 }
             },
         ),
         token="tkt",
-        globals={
-            "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
-        },
     )
+    renderer.globals.update(
+        {
+            "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
+        }
+    )
+
+    result = renderer.render_template(form)
+
     html = soup(result)
     assert html.find("option", attrs={"value": "1", "selected": ""})
     assert html.find("option", attrs={"value": "2"})
 
 
 def test_render_set(renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]):
-    result = renderer.render_template(
-        "DummyForm.jinja",
-        model=FormModel[MultiSet].default("payload", MultiSet),
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
+            "payload", MultiSet
+        ),
         token="tkt",
     )
+
+    result = renderer.render_template(form)
     html = soup(result)
     assert html.find(
         "input",
@@ -309,18 +341,22 @@ def test_render_set(renderer: JinjaxRenderer, soup: Callable[[str], bs4.Beautifu
 def test_render_set_checked(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    result = renderer.render_template(
-        "DummyForm.jinja",
-        model=FormModel[MultiSet].from_payload(
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
             "payload",
             MultiSet,
             {"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
         ),
-        globals={
-            "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
-        },
         token="tkt",
     )
+    renderer.globals.update(
+        {
+            "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
+        }
+    )
+
+    result = renderer.render_template(form)
+
     html = soup(result)
     assert html.find(
         "input",
@@ -348,11 +384,14 @@ def test_render_set_checked(
 def test_render_optional(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    result = renderer.render_template(
-        "DummyForm.jinja",
-        model=FormModel[DummyOptional].default("payload", DummyOptional),
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
+            "payload", DummyOptional
+        ),
         token="tkt",
     )
+
+    result = renderer.render_template(form)
     html = soup(result)
     assert html.find(
         "input",

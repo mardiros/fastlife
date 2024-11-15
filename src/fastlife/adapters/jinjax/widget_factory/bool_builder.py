@@ -28,9 +28,9 @@ class BoolBuilder(BaseWidgetBuilder[bool]):
     ) -> BooleanWidget:
         """Build the widget."""
         return BooleanWidget(
-            field_name,
+            name=field_name,
             removable=removable,
-            title=field.title if field else "",
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

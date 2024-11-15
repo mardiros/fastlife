@@ -18,7 +18,6 @@ no way to prevent to set the cookie in the request.
 
 """
 
-import secrets
 from collections.abc import Callable, Coroutine
 from typing import Any
 
@@ -29,11 +28,6 @@ class CSRFAttack(Exception):
     """
     An exception raised if the cookie and the csrf token hidden field did not match.
     """
-
-
-def create_csrf_token() -> str:
-    """A helper that create a csrf token."""
-    return secrets.token_urlsafe(5)
 
 
 def check_csrf() -> Callable[[Request], Coroutine[Any, Any, bool]]:
@@ -56,15 +50,11 @@ def check_csrf() -> Callable[[Request], Coroutine[Any, Any, bool]]:
             != "application/x-www-form-urlencoded"
         ):
             return True
-        csrf_token_name = request.registry.settings.csrf_token_name
 
-        cookie = request.cookies.get(csrf_token_name)
-        if not cookie:
-            raise CSRFAttack("CSRF token did not match")
-
+        token = request.csrf_token
         form_data = await request.form()
-        value = form_data.get(csrf_token_name)
-        if value != cookie:
+        value = form_data.get(token.name)
+        if value != token.value:
             raise CSRFAttack("CSRF token did not match")
 
         return True

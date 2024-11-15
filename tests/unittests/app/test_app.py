@@ -105,16 +105,6 @@ def test_exception_handler_with_template(client: WebTestClient):
     assert resp.content_type == "text/html"
 
 
-def test_exception_handler_runtime_error(client: WebTestClient):
-    with pytest.raises(RuntimeError) as exc:
-        client.get("/failed-bad")
-    assert str(exc.value) == (
-        "No template set for "
-        "tests.fastlife_app.views.app.failed:MyBadException but "
-        "tests.fastlife_app.views.app.failed:my_bad_handler did not return a Response"
-    )
-
-
 def test_exception_handler_raw_response(client: WebTestClient):
     resp = client.get("/failed-ugly")
     assert resp.text == "It's a trap"
@@ -152,7 +142,7 @@ def test_permission_on_view_wit_insecurity_policy(client: WebTestClient):
     assert resp.html.h1.text == "Hello World!"
 
 
-def test_request_has_permission_wit_insecurity_policy(client: WebTestClient):
+def test_request_has_permission_with_insecurity_policy(client: WebTestClient):
     resp = client.get("/insecure/request-has-permission")
     assert resp.html.h1.text == "Hello None!"
 

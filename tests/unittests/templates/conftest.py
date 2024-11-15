@@ -4,7 +4,7 @@ import bs4
 import pytest
 from fastapi import Request as FastApiRequest
 
-from fastlife import GenericRequest, Settings
+from fastlife import Configurator, GenericRequest, Settings
 from fastlife.adapters.jinjax import JinjaxEngine
 from tests.fastlife_app.config import MyRegistry, MySettings
 
@@ -21,6 +21,11 @@ def settings(components_dir: Path) -> MySettings:
     return MySettings(template_search_path=f"{components_dir!s},fastlife:components")
 
 
+@pytest.fixture
+def conf(settings: Settings) -> Configurator:
+    return Configurator(settings)
+
+
 @pytest.fixture()
 def dummy_request(dummy_registry: MyRegistry) -> Request:
     scope = {
@@ -32,6 +37,7 @@ def dummy_request(dummy_registry: MyRegistry) -> Request:
         "path": "/",
     }
     req = Request(dummy_registry, FastApiRequest(scope))
+    req.csrf_token.value = "CsRfT"
     return req
 
 
@@ -41,8 +47,13 @@ def jinjax_engine(settings: Settings):
 
 
 @pytest.fixture()
-def renderer(jinjax_engine: JinjaxEngine, dummy_request: Request):
-    return jinjax_engine(dummy_request)
+async def renderer(
+    conf: Configurator, jinjax_engine: JinjaxEngine, dummy_request: Request
+):
+    globs = await conf._build_renderer_globals(dummy_request)  # type: ignore
+    ret = jinjax_engine(dummy_request)
+    ret.globals.update(globs)
+    return ret
 
 
 @pytest.fixture()

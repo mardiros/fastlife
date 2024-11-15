@@ -1,14 +1,18 @@
 # views.py
 from pathlib import Path
 
-from fastlife import Configurator, configure, view_config
+from fastlife import Configurator, JinjaXTemplate, configure, view_config
 
 templates_dir = Path(__file__).parent
 
 
-@view_config("hello_world", "/", template="HelloWorld.jinja")
-async def hello_world() -> dict[str, str]:
-    return {}
+class HelloWorld(JinjaXTemplate):
+    template = "<Layout>Hello World</Layout>"
+
+
+@view_config("hello_world", "/")
+async def hello_world() -> HelloWorld:
+    return HelloWorld()
 
 
 @configure

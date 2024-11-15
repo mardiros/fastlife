@@ -1,10 +1,10 @@
-from collections.abc import Mapping
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
-from fastlife import Request, Response, view_config
+from fastlife import Request, view_config
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.request.form import FormModel, form_model
 from tests.fastlife_app.config import MyRequest
 
@@ -14,11 +14,16 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
-@view_config("login", "/login", template="Login.jinja", methods=["GET", "POST"])
+class LoginTemplate(JinjaXTemplate):
+    template = """<Login :model="model" />"""
+    model: FormModel[LoginForm]
+
+
+@view_config("login", "/login", methods=["GET", "POST"])
 async def login(
     request: MyRequest,
     loginform: Annotated[FormModel[LoginForm], form_model(LoginForm)],
-) -> Response | Mapping[str, Any]:
+) -> LoginTemplate | RedirectResponse:
     assert request.security_policy
     if loginform.is_valid:
         if user := await request.registry.uow.users.get_user_by_credencials(
@@ -26,13 +31,13 @@ async def login(
         ):
             await request.security_policy.remember(user)
         return RedirectResponse(request.url_for("secured_page"), status_code=303)
-    return {"model": loginform}
+    return LoginTemplate(model=loginform)
 
 
 @view_config("logout", "/logout", methods=["GET"])
 async def logout(
     request: Request,
-) -> Response:
+) -> RedirectResponse:
     assert request.security_policy
     await request.security_policy.forget()
     return RedirectResponse(request.url_for("home"), status_code=302)

@@ -8,9 +8,10 @@ from pydantic.networks import EmailStr
 
 from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
 from fastlife.adapters.jinjax.widgets.text import TextWidget
+from fastlife.domain.model.types import Builtins
 
 
-class EmailStrBuilder(BaseWidgetBuilder[EmailStr]):
+class EmailStrBuilder(BaseWidgetBuilder[Builtins]):
     """Builder for Pydantic EmailStr."""
 
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
@@ -23,17 +24,17 @@ class EmailStrBuilder(BaseWidgetBuilder[EmailStr]):
         field_name: str,
         field_type: type[Any],
         field: FieldInfo | None,
-        value: EmailStr | None,
+        value: Builtins | None,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> TextWidget:
         """Build the widget."""
         return TextWidget(
-            field_name,
+            name=field_name,
             input_type="email",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
-            title=field.title if field else "",
+            title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(
                 field.json_schema_extra.get("aria_label")  # type:ignore

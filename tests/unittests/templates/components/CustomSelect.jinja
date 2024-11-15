@@ -1,8 +1,0 @@
-{# def widget #}
-<Select :name="widget.name" :id="widget.id" multiple>
-  {% for tempo in tempos %}
- <Option :value="tempo.id" :selected="widget.value==tempo.id">
-    {{tempo.name}}
-  </Option>
-  {% endfor %}
-</Select>

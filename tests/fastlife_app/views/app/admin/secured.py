@@ -4,9 +4,9 @@ from fastapi import Depends, Query, Response
 
 from fastlife import Request
 from fastlife.config.views import view_config
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.request.form import FormModel
 from fastlife.security.policy import Forbidden
-from fastlife.services.templates import TemplateParams
 from tests.fastlife_app.service.uow import AuthenticatedUser
 from tests.fastlife_app.views.app.home import Person, form_model
 
@@ -22,18 +22,28 @@ async def authenticated_user(request: Request) -> AuthenticatedUser:
 User = Annotated[AuthenticatedUser, Depends(authenticated_user)]
 
 
+class Secured(JinjaXTemplate):
+    template = """<Secured :user="user" />"""
+    user: User
+
+
+class HelloWorld(JinjaXTemplate):
+    template = """<HelloWorld :user="user" :person="person" />"""
+    user: User
+    person: Person
+
+
 @view_config(
     "secured_page",
     "/secured",
     permission="admin",
-    template="Secured.jinja",
     methods=["GET", "POST"],
 )
 async def secured(
     request: Request,
     user: User,
     person: Annotated[FormModel[Person], form_model(Person)],
-) -> TemplateParams | Response:
+) -> Secured | Response:
     if request.method == "POST":
         return Response(
             "...",
@@ -44,19 +54,18 @@ async def secured(
                 )
             },
         )
-    return {"user": user}
+    return Secured(user=user)
 
 
 @view_config(
     "secured_hello",
     "/secured-hello",
     permission="admin",
-    template="HelloWorld.jinja",
     methods=["GET"],
 )
 async def secured_hello(
     user: User,
     nick: Annotated[str, Query(...)],
-) -> TemplateParams:
+) -> HelloWorld:
     person = Person(nick=nick)
-    return {"user": user, "person": person}
+    return HelloWorld(user=user, person=person)

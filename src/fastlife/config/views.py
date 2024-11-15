@@ -31,7 +31,6 @@ def view_config(
     path: str,
     *,
     permission: str | None = None,
-    template: str | None = None,
     status_code: int | None = None,
     methods: list[str] | None = None,
 ) -> Callable[..., Any]:
@@ -72,7 +71,6 @@ def view_config(
                 permission=permission,
                 status_code=status_code,
                 methods=methods,
-                template=template,
             )
 
         venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
