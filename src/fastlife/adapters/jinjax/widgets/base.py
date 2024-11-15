@@ -70,7 +70,7 @@ class Widget(JinjaXTemplate, Generic[T]):
 
     def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version."""
-        return Markup(renderer.render_inline(self))
+        return Markup(renderer.render_template(self))
 
 
 def _get_fullname(typ: type[Any]) -> str:

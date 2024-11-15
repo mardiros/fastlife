@@ -69,7 +69,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self.translations = get_localizer(request)
         self.globals["pydantic_form"] = self.pydantic_form
 
-    def render_inline(self, template: InlineTemplate) -> str:
+    def render_template(self, template: InlineTemplate) -> str:
         """
         Render the JinjaX component with the given parameter.
 

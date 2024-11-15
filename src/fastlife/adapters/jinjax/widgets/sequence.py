@@ -71,4 +71,4 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
         self.children_widgets = [
             Markup(item.to_html(renderer)) for item in self.value or []
         ]
-        return Markup(renderer.render_inline(self))
+        return Markup(renderer.render_template(self))

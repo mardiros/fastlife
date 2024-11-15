@@ -51,7 +51,7 @@ class AbstractTemplateRenderer(abc.ABC):
         request = self.request
         if globals:
             self.globals.update(globals)
-        data = self.render_inline(params)
+        data = self.render_template(params)
         resp = Response(
             data, status_code=status_code, headers={"Content-Type": content_type}
         )
@@ -65,7 +65,7 @@ class AbstractTemplateRenderer(abc.ABC):
         return resp
 
     @abc.abstractmethod
-    def render_inline(self, template: InlineTemplate) -> str:
+    def render_template(self, template: InlineTemplate) -> str:
         """
         Render an inline template.
 

@@ -106,7 +106,7 @@ def test_render_template(
         ),
         token="tkt",
     )
-    result = renderer.render_inline(form)
+    result = renderer.render_template(form)
     html = soup(result)
 
     assert html.find(
@@ -210,7 +210,7 @@ def test_render_template_values(
         ),
         token="tkt",
     )
-    result = renderer.render_inline(form)
+    result = renderer.render_template(form)
 
     html = soup(result)
     assert html.find(
@@ -300,7 +300,7 @@ def test_render_custom_list(
         }
     )
 
-    result = renderer.render_inline(form)
+    result = renderer.render_template(form)
 
     html = soup(result)
     assert html.find("option", attrs={"value": "1", "selected": ""})
@@ -315,7 +315,7 @@ def test_render_set(renderer: JinjaxRenderer, soup: Callable[[str], bs4.Beautifu
         token="tkt",
     )
 
-    result = renderer.render_inline(form)
+    result = renderer.render_template(form)
     html = soup(result)
     assert html.find(
         "input",
@@ -355,7 +355,7 @@ def test_render_set_checked(
         }
     )
 
-    result = renderer.render_inline(form)
+    result = renderer.render_template(form)
 
     html = soup(result)
     assert html.find(
@@ -391,7 +391,7 @@ def test_render_optional(
         token="tkt",
     )
 
-    result = renderer.render_inline(form)
+    result = renderer.render_template(form)
     html = soup(result)
     assert html.find(
         "input",

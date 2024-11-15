@@ -24,7 +24,7 @@ def node(
         template = template_string
 
     try:
-        res = renderer.render_inline(X())
+        res = renderer.render_template(X())
         bsoup = bs4.BeautifulSoup(res, features="html.parser")
         yield next(bsoup.children)  # type: ignore
     except Exception as exc:

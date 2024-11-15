@@ -13,7 +13,7 @@ templates = Path(__file__).parent / "templates"
 
 
 class FStringTemplateRenderer(AbstractTemplateRenderer):
-    def render_inline(self, template: InlineTemplate) -> str:
+    def render_template(self, template: InlineTemplate) -> str:
         return template.template.format(**template.model_dump())
 
 

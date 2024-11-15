@@ -75,4 +75,4 @@ class UnionWidget(Widget[TWidget]):
             self.token,
             title=self.title,
         )
-        return Markup(renderer.render_inline(self))
+        return Markup(renderer.render_template(self))

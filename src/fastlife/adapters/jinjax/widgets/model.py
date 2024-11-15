@@ -41,4 +41,4 @@ class ModelWidget(Widget[Sequence[TWidget]]):
     def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
         """Return the html version."""
         self.children_widgets = [child.to_html(renderer) for child in self.value or []]
-        return Markup(renderer.render_inline(self))
+        return Markup(renderer.render_template(self))
