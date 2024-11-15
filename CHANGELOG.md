@@ -1,3 +1,13 @@
+## 0.21.0  - Released on 2024-11-15
+* Make the InlineTemplate the only way to render views template.
+  * Breaking change: template args is not supported in Configutor.add_route.
+  * Breaking change: template args is not supported in @view_config.
+  * Breaking change: template and Template dedendencies have been removed.
+* Add new method in the configurator to register global vars for template:
+    {meth}`fastlife.config.configurator.GenericConfigurator.add_renderer_global`.
+* Add npgettext i18n helper method support.
+* Remove babel from dependency list (only a dev dependency).
+
 ## 0.20.1  - Released on 2024-11-09
 * Add a new class GenericRegistry in order to properly type custom Configurator / Registry / Settings
 * Using InlineTemplate, we can pass arbitrary types for pydantic form
