@@ -15,6 +15,7 @@ from fastlife.adapters.jinjax.widgets.model import ModelWidget
 from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
 from fastlife.adapters.jinjax.widgets.text import TextareaWidget, TextWidget
 from fastlife.adapters.jinjax.widgets.union import UnionWidget
+from fastlife.domain.model.types import Builtins
 from fastlife.services.templates import AbstractTemplateRenderer
 
 
@@ -178,7 +179,7 @@ def test_render_model(
 def test_render_nested_model(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
-    model = ModelWidget[Widget[str]](
+    model = ModelWidget[Widget[Builtins]](
         name="foo",
         title="Foo",
         value=[TextWidget(name="name", title="n", token="x", removable=True)],

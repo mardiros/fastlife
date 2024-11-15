@@ -6,7 +6,7 @@ from fastapi import Request as FastAPIRequest
 from fastapi.params import Depends
 
 from fastlife.config.registry import DefaultRegistry, TRegistry
-from fastlife.domain.model import CSRFToken, create_csrf_token
+from fastlife.domain.model.security import CSRFToken, create_csrf_token
 
 if TYPE_CHECKING:
     from fastlife.security.policy import (  # coverage: ignore

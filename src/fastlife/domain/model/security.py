@@ -1,11 +1,8 @@
-from decimal import Decimal
+"""Models relative to the security."""
+
 import secrets
-from uuid import UUID
 
 from pydantic import BaseModel
-
-
-Builtins = str | int | str | float | Decimal | UUID
 
 
 def create_csrf_token() -> str:
@@ -14,5 +11,9 @@ def create_csrf_token() -> str:
 
 
 class CSRFToken(BaseModel):
+    """Represent the CSRF Token"""
+
     name: str
+    """Name of the token while serialized."""
     value: str
+    """Value that must match between parts, cookie and posted form."""

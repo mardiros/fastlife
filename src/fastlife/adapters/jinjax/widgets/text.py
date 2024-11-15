@@ -2,7 +2,7 @@ from collections.abc import Sequence
 
 from pydantic import Field
 
-from fastlife.domain.model import Builtins
+from fastlife.domain.model.types import Builtins
 
 from .base import Widget
 

@@ -1,6 +1,7 @@
 """Hidden fields"""
 
-from fastlife.domain.model import Builtins
+from fastlife.domain.model.types import Builtins
+
 from .base import Widget
 
 

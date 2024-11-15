@@ -1,16 +1,14 @@
 """Handle simple types (str, int, float, ...)."""
 
 from collections.abc import Mapping
-from decimal import Decimal
 from typing import Any
-from uuid import UUID
 
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
 from fastlife.adapters.jinjax.widgets.base import Widget
 from fastlife.adapters.jinjax.widgets.text import TextWidget
-from fastlife.domain.model import Builtins
+from fastlife.domain.model.types import Builtins
 
 
 class SimpleTypeBuilder(BaseWidgetBuilder[Builtins]):
