@@ -37,16 +37,7 @@ fastlife comes with a set of compoments:
    Th
    Thead
    Tr
-   pydantic_form.Boolean
-   pydantic_form.Checklist
-   pydantic_form.Dropdown
    pydantic_form.Error
-   pydantic_form.Hidden
    pydantic_form.Hint
-   pydantic_form.Model
-   pydantic_form.Sequence
-   pydantic_form.Text
-   pydantic_form.Textarea
-   pydantic_form.Union
    pydantic_form.Widget
 
