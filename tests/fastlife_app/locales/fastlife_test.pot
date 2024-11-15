@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-11-11 20:53+0100\n"
+"POT-Creation-Date: 2024-11-15 08:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,4 +114,9 @@ msgid "{} pen"
 msgid_plural "{} pens"
 msgstr[0] ""
 msgstr[1] ""
+
+#: tests/fastlife_app/views/app/i18n/hello_i18n.py:29
+msgctxt "Yolo"
+msgid "you only live once"
+msgstr ""
 
