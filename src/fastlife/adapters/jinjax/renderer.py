@@ -4,7 +4,7 @@ Template rending based on JinjaX.
 
 import logging
 import textwrap
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -68,34 +68,6 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         self.settings = request.registry.settings
         self.translations = get_localizer(request)
         self.globals["pydantic_form"] = self.pydantic_form
-
-    def render_template(
-        self,
-        template: str,
-        *,
-        globals: Mapping[str, Any] | None = None,
-        **params: Any,
-    ) -> str:
-        """
-        Render the JinjaX component with the given parameter.
-
-        :param template: the template to render
-        :param globals: parameters that will be used by the JinjaX component and all its
-            child components without "props drilling".
-        :param params: parameters used to render the template.
-        """
-
-        template = template[: -len(self.settings.jinjax_file_ext) - 1]
-        if globals:
-            self.globals.update(globals)
-
-        self.catalog.jinja_env.install_gettext_translations(  # type: ignore
-            self.translations, newstyle=True
-        )
-
-        return self.catalog.render(  # type: ignore
-            template, __globals=self.globals, **params
-        )
 
     def render_inline(self, template: InlineTemplate) -> str:
         """

@@ -22,25 +22,6 @@ from fastlife.services.templates import AbstractTemplateRenderer
 class Foo(BaseModel): ...
 
 
-def test_render_template(renderer: AbstractTemplateRenderer):
-    res = renderer.render_template("Page.jinja", page_title="dummy title")
-    assert (
-        res
-        == textwrap.dedent(
-            """
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8" />
-            <title>dummy title</title>
-          </head>
-          <body><div>Hello World</div></body>
-        </html>
-        """
-        ).strip()
-    )
-
-
 def test_render_boolean(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):

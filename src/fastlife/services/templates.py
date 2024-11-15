@@ -65,33 +65,6 @@ class AbstractTemplateRenderer(abc.ABC):
         return resp
 
     @abc.abstractmethod
-    def render_template(
-        self,
-        template: str,
-        *,
-        globals: Mapping[str, Any] | None = None,
-        **params: Any,
-    ) -> str:
-        """
-        Render the given template with the given params.
-
-        While rendering templates, the globals parameter is keps by the instantiated
-        renderer and sent to every rendering made by the request.
-        This is used by the pydantic form method that will render other templates
-        for the request.
-        In traditional frameworks, only one template is rendered containing the whole
-        pages. But, while rendering a pydantic form, every field is rendered in its
-        distinct template. The template renderer keep the globals and git it back
-        to every templates. This can be used to fillout options in a select without
-        performing an ajax request for example.
-
-        :param template: name of the template to render.
-        :param globals: some variable that will be passed to all rendered templates.
-        :param params: paramaters that are limited to the main rendered templates.
-        :return: The template rendering result.
-        """
-
-    @abc.abstractmethod
     def render_inline(self, template: InlineTemplate) -> str:
         """
         Render an inline template.

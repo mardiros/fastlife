@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from fastlife import Configurator, Settings, JinjaXTemplate
+from fastlife import Configurator, JinjaXTemplate, Settings
 
 templates_dir = Path(__file__).parent / "templates"
 

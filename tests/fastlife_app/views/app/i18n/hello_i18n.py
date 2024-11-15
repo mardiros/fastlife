@@ -21,9 +21,7 @@ class HelloWorld(JinjaXTemplate):
     banana_count: int
 
 
-@view_config(
-    "hello-i18n", "/{locale}/hello", methods=["GET"]
-)
+@view_config("hello-i18n", "/{locale}/hello", methods=["GET"])
 async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> HelloWorld:
     return HelloWorld(
         yolo=lczr.pgettext("Yolo", "you only live once"),
