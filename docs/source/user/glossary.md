@@ -21,6 +21,13 @@ Jinjax
 
   Website: https://jinjax.scaletti.dev/
 
+Locality Of Behavior
+  An HTMX, or Hypermedia driven application principle that says:
+
+  > The behaviour of a unit of code should be as obvious as possible by looking
+  > only at that unit of code
+
+  Website: https://htmx.org/essays/locality-of-behaviour/
 
 OpenAPI
   OpenAPI is a specification for building APIs that defines a standard way to describe

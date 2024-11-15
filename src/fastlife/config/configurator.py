@@ -518,8 +518,6 @@ class GenericConfigurator(Generic[TRegistry]):
         :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
             parameters.
         :param endpoint: the function that will reveive the request.
-        :param template: the template rendered by the
-            {class}`fastlife.service.templates.AbstractTemplateRenderer`.
         :param permission: a permission to validate by the
             {class}`Security Policy <fastlife.security.policy.AbstractSecurityPolicy>`.
         :param status_code: customize response status code.
@@ -531,7 +529,7 @@ class GenericConfigurator(Generic[TRegistry]):
             self._registered_permissions.add(permission)
             dependencies.append(Depends(check_permission(permission)))
 
-        if template or is_inline_template_returned(endpoint):
+        if is_inline_template_returned(endpoint):
 
             async def render(
                 request: Request,

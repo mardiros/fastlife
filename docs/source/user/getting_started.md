@@ -1,6 +1,5 @@
 # Getting Started
 
-
 ## Installation
 
 Today, there is a myriad of tools to start a Python project.
@@ -58,21 +57,25 @@ fastapi dev hello_world.py
 
 ```
 
-```{literalinclude} examples/templates/HelloWorld.jinja
-:language: html
-```
+The template is included inline, for many reasons.
 
-To use {term}`JinjaX` templates, templates path has to be registered using the
-{meth}`Configurator.add_template_search_path <fastlife.config.configurator.GenericConfigurator.add_template_search_path>` or using
-the settings {attr}`template_search_path <fastlife.config.settings.Settings.template_search_path>`.
+The first one is to encourage the principle of {term}`locality of behavior`, instead of
+the "separation of concern".
 
-Settings are {term}`pydantic settings`, it can be set from a environment variable prefixed by `fastlife_`.
-You may also override the settings class to inject your own setting and override the prefix.
+The second reason is that it encore typing. While inlining template in the code,
+we can add parameters to the returned object too, an instance of a
+{class}`fastlife.domain.model.templates.JinjaXTemplate` is a self complete object
+ready to be rendered.
 
-On the other hand, adding template search path during the configuration phase makes the app
-more modular, and kept the module responsible of templates add its own template to the path.
+Don't be afraid, we have written html node here, for the introduction, but,
+it is also encouraged to build a set of library component with pure template,
+such as a Layout component to set the template to somethinf like
+`<Layout>Hello World</Layout>`.
 
 ```{note}
+The {meth}`fastlife.config.configurator.GenericConfigurator.add_template_search_path`
+method is here to register your components library.
+
 The most concerning can develop and register their own template engine using the
 {meth}`fastlife.config.configurator.GenericConfigurator.add_renderer`.
 ```
@@ -90,7 +93,14 @@ Let's write a simple `views` module, with our previous view, and nothing more.
   :language: python
 ```
 
-Now, we can use the {meth}`config.include() <fastlife.config.configurator.GenericConfigurator.include>`
+We have a library of component, created directly in the same directory for simplicity.
+
+```{literalinclude} examples/modular/Layout.jinja
+  :language: html
+```
+
+And now, we can use the
+{meth}`config.include() <fastlife.config.configurator.GenericConfigurator.include>`
 method to inject routes in the final application.
 
 ```{literalinclude} examples/modular/entrypoint.py
@@ -122,16 +132,14 @@ will be called with the configurator as first argument in order to configure the
 The {mod}`fastlife.testing.testclient` module define a set of class to help
 writing test for web pages.
 
-```{note}
+````{note}
 
   This module required the extra `testing` installable via the command
 
   ```bash
   pip install fastlifeweb[testing]
 
-```
-
-
+````
 
 ```{literalinclude} examples/modular/test_views.py
   :language: python

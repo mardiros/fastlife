@@ -55,13 +55,13 @@ In the previous section, we've specified a `registry_class` and now it's time
 to implement it.
 
 ```python
-from fastlife import DefaultRegistry
+from fastlife import GenericRegistry
 from fastlife.shared_utils.resolver import resolve
 from myapp.service.uow import AbstractUnitOfWork
 
 ... # previous code redacted
 
-class MyRegistry(DefaultRegistry):
+class MyRegistry(GenericRegistry[MySettings]):
     uow: AbstractUnitOfWork
 
     def __init__(self, settings: MySettings) -> None:
@@ -85,7 +85,7 @@ to be used, and now we have additionnal properties, so, in order to finalize it,
 we need to build our own request and configurator type.
 
 ```python
-from fastlife import GenericConfigurator, Settings, DefaultRegistry
+from fastlife import GenericConfigurator, GenericRegistry, Settings, DefaultRegistry
 from fastlife.request import GenericRequest, get_request
 
 ... # previous code redacted
