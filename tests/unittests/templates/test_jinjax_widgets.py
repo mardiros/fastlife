@@ -46,11 +46,26 @@ def test_render_boolean_removable(
 @pytest.mark.parametrize(
     "params",
     [
-        {"options": ["A", "B"], "expected_text": ["A", "B"]},
-        {
-            "options": [("A", "A Plan"), ("B", "B Plan")],
-            "expected_text": ["A Plan", "B Plan"],
-        },
+        pytest.param(
+            {"options": None, "expected_text": [], "expected_value": []},
+            id="None",
+        ),
+        pytest.param(
+            {
+                "options": ["A", "B"],
+                "expected_text": ["A", "B"],
+                "expected_value": ["A", "B"],
+            },
+            id="list[str]",
+        ),
+        pytest.param(
+            {
+                "options": [("A", "A Plan"), ("B", "B Plan")],
+                "expected_text": ["A Plan", "B Plan"],
+                "expected_value": ["A", "B"],
+            },
+            id="list[tuple[str,str]]",
+        ),
     ],
 )
 def test_render_dropdown(
@@ -67,7 +82,9 @@ def test_render_dropdown(
 
     select = html.find("select", attrs={"id": "foxo-XxX", "name": "foxo"})
     assert isinstance(select, bs4.Tag)
-    assert [n.attrs["value"] for n in select.find_all("option")] == ["A", "B"]
+    assert [n.attrs["value"] for n in select.find_all("option")] == params[
+        "expected_value"
+    ]
     assert [n.text for n in select.find_all("option")] == params["expected_text"]
 
 
