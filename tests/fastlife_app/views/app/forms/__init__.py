@@ -4,7 +4,7 @@ from fastapi import Path, Response
 from pydantic import BaseModel
 
 from fastlife import view_config
-from fastlife.adapters.jinjax.inline import JinjaXTemplate
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.request.form import FormModel
 from fastlife.request.form_data import MappingFormData
 from fastlife.request.request import Request

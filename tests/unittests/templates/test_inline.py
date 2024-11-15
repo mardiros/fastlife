@@ -3,7 +3,7 @@ from typing import Any, Union
 import pytest
 
 from fastlife import RedirectResponse
-from fastlife.adapters.jinjax.inline import JinjaXTemplate
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.templates.inline import InlineTemplate, is_inline_template_returned
 
 

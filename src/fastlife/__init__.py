@@ -16,6 +16,7 @@ from .config import (
     resource_view,
     view_config,
 )
+from .domain.model.template import JinjaXTemplate
 from .request import GenericRequest, Registry, Request, get_request
 
 # from .request.form_data import model
@@ -41,4 +42,6 @@ __all__ = [
     "Registry",
     "Response",
     "RedirectResponse",
+    # Template
+    "JinjaXTemplate",
 ]

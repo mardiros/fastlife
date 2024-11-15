@@ -4,8 +4,8 @@ from pathlib import Path
 import bs4
 import pytest
 
-from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from fastlife.adapters.jinjax.renderer import JinjaxRenderer
+from fastlife.domain.model.template import JinjaXTemplate
 
 
 @pytest.fixture(scope="module")

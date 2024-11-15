@@ -3,8 +3,8 @@ from typing import Annotated
 from fastapi import Depends, Query, Response
 
 from fastlife import Request
-from fastlife.adapters.jinjax.inline import JinjaXTemplate
 from fastlife.config.views import view_config
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.request.form import FormModel
 from fastlife.security.policy import Forbidden
 from tests.fastlife_app.service.uow import AuthenticatedUser

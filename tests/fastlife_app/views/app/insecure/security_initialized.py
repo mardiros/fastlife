@@ -3,7 +3,7 @@ from uuid import UUID
 from pydantic import Field
 
 from fastlife import Request, view_config
-from fastlife.adapters.jinjax.inline import JinjaXTemplate
+from fastlife.domain.model.template import JinjaXTemplate
 from tests.fastlife_app.models import BaseModel
 
 

@@ -1,5 +1,5 @@
 from fastlife import Request, view_config
-from fastlife.adapters.jinjax.inline import JinjaXTemplate
+from fastlife.domain.model.template import JinjaXTemplate
 
 
 class IconsWall(JinjaXTemplate):
