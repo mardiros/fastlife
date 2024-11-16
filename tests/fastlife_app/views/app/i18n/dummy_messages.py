@@ -21,6 +21,15 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                         "jumpee": lczr.gettext("lazy dog"),
                     },
                 ),
+                "__call__": lczr(  # the same string is extracted
+                    # but if you call the lczr gettext, it can handle it
+                    # in a simpler way
+                    "The {jumper} jumps over a {jumpee}",
+                    mapping={
+                        "jumper": lczr.gettext("quick brown fox"),
+                        "jumpee": lczr.gettext("lazy dog"),
+                    },
+                ),
                 "ngettext_0": lczr.ngettext(
                     "The quick brown fox jumps over a {jumpee}",
                     "{num} quick brown foxes jumps over a {jumpee}",

@@ -64,6 +64,9 @@ class Localizer:
         self.translations[domain].merge(trans)
         self.global_translations.merge(trans)
 
+    def __call__(self, message: str, mapping: dict[str, str] | None = None) -> str:
+        return self.gettext(message, mapping)
+
     def gettext(self, message: str, mapping: dict[str, str] | None = None) -> str:
         ret = self.global_translations.gettext(message)
         if mapping:
