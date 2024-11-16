@@ -17,11 +17,11 @@ T = TypeVar("T", bound=BaseModel)
 class FormModel(Generic[T]):
     prefix: str
     model: T
-    errors: Mapping[str, str]
+    errors: dict[str, str]
     is_valid: bool
 
     def __init__(
-        self, prefix: str, model: T, errors: Mapping[str, Any], is_valid: bool = False
+        self, prefix: str, model: T, errors: dict[str, Any], is_valid: bool = False
     ) -> None:
         self.prefix = prefix
         self.model = model
@@ -31,6 +31,10 @@ class FormModel(Generic[T]):
     @classmethod
     def default(cls, prefix: str, pydantic_type: type[T]) -> "FormModel[T]":
         return cls(prefix, pydantic_type.model_construct(), {})
+
+    def add_error(self, field: str, value: str) -> None:
+        self.errors[f"{self.prefix}.{field}"] = value
+        self.is_valid = False
 
     def edit(self, pydantic_type: T) -> None:
         """

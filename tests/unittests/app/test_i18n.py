@@ -18,6 +18,7 @@ def test_hello_i18n(client: WebTestClient):
 def test_i18n_helpers(apiclient: TestClient):
     resp = apiclient.get("/fr/dummy-messages")
     assert resp.json() == {
+        "__call__": "Le renard marron rapide saute par dessus chient flemmard",
         "dgettext": "addresse email invalide",
         "dngettext_0": "0 entrée dans addresse email",
         "dngettext_1": "1 entrée dans addresse email",

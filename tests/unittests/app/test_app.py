@@ -49,6 +49,18 @@ def test_session(client: WebTestClient):
     logout.click()
 
 
+def test_local_error(client: WebTestClient):
+    resp = client.get("/admin/login")
+    assert len(resp.html.h2) == 1
+    assert resp.html.h2[0].text == "Let's authenticate"
+
+    assert "csrf_token" in resp.form
+    resp.form.set("payload.username", "Bob")
+    resp.form.set("payload.password", "' or 1 = 1#")
+    resp = resp.form.submit()
+    assert resp.by_text("Bad username or password") is not None, resp.html
+
+
 def test_forbidden(client: WebTestClient):
     resp = client.get("/admin/login")
     input_ = resp.by_label_text("username")
