@@ -6,15 +6,46 @@ from pydantic import SecretStr
 
 from fastlife.request.form import FormModel
 from tests.fastlife_app.models import Account
+from tests.fastlife_app.views.app.forms.model import Form as ModelForm
+from tests.fastlife_app.views.app.forms.model import Person
+from tests.fastlife_app.views.app.forms.unionfield import Form as UnionForm
+
+MyModelForm = FormModel[ModelForm]
+AccountForm = FormModel[Account]
 
 
 def test_default():
-    account = FormModel[Account].default("p", Account)
+    account = AccountForm.default("p", Account)
     assert account.is_valid is False
     assert account.form_data == {
         "p": {"aliases": [], "groups": [], "interest": set(), "recovery_address": None}
     }
+    assert account.fatal_error == ""
     assert account.errors == {}
+
+
+def test_fatal_error():
+    account = AccountForm.default("p", Account)
+    account.set_fatal_error("Internal Server Error")
+    assert account.is_valid is False
+    assert account.fatal_error == "Internal Server Error"
+
+
+def test_field_error():
+    editform = MyModelForm(
+        "x",
+        ModelForm.model_construct(),
+        errors={"firstname": "missing"},
+        is_valid=False,
+    )
+    p = ModelForm(professor=Person(firstname="Haruto", lastname="Watanabe", age=80))
+    editform.edit(p)
+    assert editform.model.model_dump() == {
+        "professor": {"firstname": "Haruto", "lastname": "Watanabe", "age": 80}
+    }
+    assert (
+        editform.is_valid
+    ), "A pydandict model passed in the edit form is always considered valid"
 
 
 @pytest.mark.parametrize(
@@ -117,7 +148,48 @@ def test_from_payload(
     expected_form_data: Mapping[str, Any],
     expected_errors: Mapping[str, str],
 ):
-    account = FormModel[Account].from_payload("p", Account, payload)
+    account = AccountForm.from_payload("p", Account, payload)
     assert account.is_valid is expected_valid
     assert account.form_data == expected_form_data
     assert account.errors == expected_errors
+
+
+@pytest.mark.parametrize(
+    "payload,expected_is_valid,expected_form_data,expected_errors",
+    [
+        pytest.param(
+            {},
+            False,
+            {"x": {}},
+            {"x.pet": "Field required"},
+            id="default",
+        ),
+        pytest.param(
+            {"x": {"pet": {"type": "cat"}}},
+            False,
+            {"x": {"pet": {"type": "cat"}}},
+            {
+                "x.pet.nick": "Field required, Field required",
+                "x.pet.type": "Input should be 'dog'",  # FIXME
+            },
+            id="missing field",
+        ),
+        pytest.param(
+            {"x": {"pet": {"type": "cat", "nick": "whisker"}}},
+            True,
+            {"x": {"pet": {"nick": "whisker", "type": "cat"}}},
+            {},
+            id="valid",
+        ),
+    ],
+)
+def test_from_payload_union(
+    payload: dict[str, str],
+    expected_is_valid: bool,
+    expected_form_data: dict[str, Any],
+    expected_errors: dict[str, str],
+):
+    result = FormModel[UnionForm].from_payload("x", UnionForm, payload)
+    assert result.is_valid is expected_is_valid
+    assert result.form_data == expected_form_data
+    assert result.errors == expected_errors

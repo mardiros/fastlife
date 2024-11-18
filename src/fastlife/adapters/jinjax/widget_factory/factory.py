@@ -10,6 +10,7 @@ from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.request.form import FormModel
 
 if TYPE_CHECKING:
@@ -26,6 +27,11 @@ from .sequence_builder import SequenceBuilder
 from .set_builder import SetBuilder
 from .simpletype_builder import SimpleTypeBuilder
 from .union_builder import UnionBuilder
+
+
+class FatalError(JinjaXTemplate):
+    template = """<pydantic_form.FatalError :message="message" />"""
+    message: str
 
 
 class WidgetFactory:
@@ -71,7 +77,10 @@ class WidgetFactory:
         :param removable: Include a button to remove the model in the markup.
         :param field: only build the markup of this field is not None.
         """
-        return self.get_widget(
+        ret = Markup()
+        if model.fatal_error:
+            ret += self.renderer.render_template(FatalError(message=model.fatal_error))
+        ret += self.get_widget(
             model.model.__class__,
             model.form_data,
             model.errors,
@@ -79,6 +88,7 @@ class WidgetFactory:
             removable=removable,
             field=field,
         ).to_html(self.renderer)
+        return ret
 
     def get_widget(
         self,
