@@ -190,6 +190,22 @@ def test_render_template(
     )
 
 
+def test_render_fatal_error(renderer: JinjaxRenderer):
+    form = DummyForm(
+        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
+            "payload", DummyModel
+        ),
+        token="tkt",
+    )
+    result = renderer.render_template(form)
+    assert ' role="alert"' not in result
+    assert '<span class="sm:inline text-xl">' not in result
+    form.model.set_fatal_error("Internal Server Error")
+    result = renderer.render_template(form)
+    assert ' role="alert"' in result
+    assert '<span class="sm:inline text-xl">Internal Server Error</span>' in result
+
+
 def test_render_template_values(
     renderer: JinjaxRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):

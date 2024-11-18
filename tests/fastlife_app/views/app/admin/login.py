@@ -32,7 +32,10 @@ async def login(
             await request.security_policy.remember(user)
             return RedirectResponse(request.url_for("secured_page"), status_code=303)
         else:
-            loginform.add_error("username", "Bad username or password.")
+            if loginform.model.username == "root":
+                loginform.set_fatal_error("Something went wrong")
+            else:
+                loginform.add_error("username", "Bad username or password.")
     return LoginTemplate(model=loginform)
 
 

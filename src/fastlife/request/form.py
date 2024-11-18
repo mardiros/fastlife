@@ -17,6 +17,7 @@ T = TypeVar("T", bound=BaseModel)
 class FormModel(Generic[T]):
     prefix: str
     model: T
+    fatal_error: str
     errors: dict[str, str]
     is_valid: bool
 
@@ -25,12 +26,17 @@ class FormModel(Generic[T]):
     ) -> None:
         self.prefix = prefix
         self.model = model
+        self.fatal_error = ""
         self.errors = errors
         self.is_valid = is_valid
 
     @classmethod
     def default(cls, prefix: str, pydantic_type: type[T]) -> "FormModel[T]":
         return cls(prefix, pydantic_type.model_construct(), {})
+
+    def set_fatal_error(self, value: str) -> None:
+        self.fatal_error = value
+        self.is_valid = False
 
     def add_error(self, field: str, value: str) -> None:
         self.errors[f"{self.prefix}.{field}"] = value

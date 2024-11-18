@@ -1,0 +1,8 @@
+{# doc display an error for a field. #}
+{# def message: Annotated[str | None, "error message"] #}
+{%- if message -%}
+<div class="flex items-center bg-red-50 border border-red-400 text-red-700" role="alert">
+  <icons.Fire class="m-3 w-16 h-16 fill-orange-500" />
+  <span class="sm:inline text-xl">{{ message }}</span>
+</div>
+{%- endif -%}
