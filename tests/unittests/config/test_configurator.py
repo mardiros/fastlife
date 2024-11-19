@@ -17,6 +17,7 @@ from tests.fastlife_app.config import MySettings
 
 @pytest.fixture
 def conf(settings: Settings) -> Configurator:
+    settings.request_class = "tests.fastlife_app.config:CustomRequest"
     return Configurator(settings)
 
 

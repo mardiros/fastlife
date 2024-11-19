@@ -53,7 +53,7 @@ class OAuth2SecurityPolicy(AbstractSecurityPolicy[TokenInfo, MyRegistry]):
         """Return app-specific user object."""
         tinfo: TokenInfo | None = None
         if self.token:
-            tinfo = await self.request.registry.uow.tokens.get_by_token(
+            tinfo = await self.request.uow.tokens.get_by_token(
                 token=self.token
             )
         return tinfo

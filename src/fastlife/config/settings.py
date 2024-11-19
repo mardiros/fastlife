@@ -31,6 +31,12 @@ class Settings(BaseSettings):
     """
     registry_class: str = Field(default="fastlife.config.registry:DefaultRegistry")
     """Implementation class for the application regitry."""
+
+    request_class: str = Field(default="fastlife.request.request:GenericRequest")
+    """
+    Request class instanciated by the router, and returned in dependency injection.
+    """
+
     template_renderer_class: str = Field(
         default="fastlife.templates.renderer:JinjaxEngine"
     )

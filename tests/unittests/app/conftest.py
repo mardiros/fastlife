@@ -2,12 +2,14 @@ import pytest
 from fastapi import FastAPI
 
 from fastlife.testing import WebTestClient
+from tests.fastlife_app.config import MyRequestFactory
 from tests.fastlife_app.entrypoint import MyConfigurator, MySettings
 
 
 @pytest.fixture
 async def app(settings: MySettings):
     conf = MyConfigurator(settings=settings)
+    conf.set_request_factory(MyRequestFactory)
     conf.include(
         "tests.fastlife_app.views", ignore=[".api", ".app.admin", ".app.insecure"]
     )

@@ -32,7 +32,7 @@ class SecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser, MyRegistry]):
 
     def __init__(self, request: MyRequest):
         super().__init__(request)
-        self.uow = request.registry.uow
+        self.uow = request.uow
 
     async def identity(self) -> AuthenticatedUser | None:
         if "user_id" not in self.request.session:

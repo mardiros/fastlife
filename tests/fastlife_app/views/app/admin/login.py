@@ -26,7 +26,7 @@ async def login(
 ) -> LoginTemplate | RedirectResponse:
     assert request.security_policy
     if loginform.is_valid:
-        if user := await request.registry.uow.users.get_user_by_credencials(
+        if user := await request.uow.users.get_user_by_credencials(
             loginform.model.username, loginform.model.password.get_secret_value()
         ):
             await request.security_policy.remember(user)

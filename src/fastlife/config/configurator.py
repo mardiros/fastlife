@@ -46,6 +46,7 @@ if TYPE_CHECKING:
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
     from fastlife.templates.inline import InlineTemplate
+    from fastlife.config.request_factory import RequestFactory
 
 from fastlife.services.locale_negociator import LocaleNegociator
 
@@ -255,6 +256,13 @@ class GenericConfigurator(Generic[TRegistry]):
             )
         finally:
             self._route_prefix = old
+        return self
+
+    def set_request_factory(self, request_factory: "type[RequestFactory]") -> Self:
+        """
+        Update the request factory, that create the request of dependency injection.
+        """
+        self.registry.request_factory = request_factory(self.registry)
         return self
 
     def set_locale_negociator(self, locale_negociator: LocaleNegociator) -> Self:

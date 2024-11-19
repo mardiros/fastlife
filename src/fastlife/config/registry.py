@@ -9,6 +9,7 @@ if TYPE_CHECKING:
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
 
+from .request_factory import RequestFactory
 from .settings import Settings
 
 TSettings = TypeVar("TSettings", bound=Settings, covariant=True)
@@ -27,12 +28,14 @@ class GenericRegistry(Generic[TSettings]):
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
     locale_negociator: LocaleNegociator
     localizer: LocalizerFactory
+    request_factory: RequestFactory
 
     def __init__(self, settings: Settings) -> None:
         self.settings = settings
         self.locale_negociator = default_negociator(self.settings)
         self.renderers = {}
         self.localizer = LocalizerFactory()
+        self.request_factory = RequestFactory(self)
 
     def get_renderer(self, template: str) -> "AbstractTemplateRendererFactory":
         for key, val in self.renderers.items():
