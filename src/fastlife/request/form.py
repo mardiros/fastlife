@@ -7,7 +7,7 @@ from fastapi import Depends
 from pydantic import BaseModel, ValidationError
 
 from fastlife import Registry
-from fastlife.request.form_data import MappingFormData
+from fastlife.adapters.fastapi.form_data import MappingFormData
 from fastlife.shared_utils.infer import is_union
 
 T = TypeVar("T", bound=BaseModel)

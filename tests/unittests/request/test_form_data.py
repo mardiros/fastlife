@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 
 from fastlife import Request
-from fastlife.request.form_data import (
+from fastlife.adapters.fastapi.form_data import (
     unflatten_mapping_form_data,
     unflatten_sequence_form_data,
     unflatten_struct,
