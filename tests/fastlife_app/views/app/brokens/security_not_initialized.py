@@ -1,5 +1,4 @@
-from fastlife import Request, view_config
-from fastlife.domain.model.template import JinjaXTemplate
+from fastlife import JinjaXTemplate, Request, view_config
 
 
 class HelloWorld(JinjaXTemplate):

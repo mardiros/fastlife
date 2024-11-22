@@ -2,11 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends, Query, Response
 
-from fastlife import Request
-from fastlife.adapters.fastapi.form import form_model
-from fastlife.config.views import view_config
-from fastlife.domain.model.form import FormModel
-from fastlife.domain.model.template import JinjaXTemplate
+from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
 from fastlife.security.policy import Forbidden
 from tests.fastlife_app.service.uow import AuthenticatedUser
 from tests.fastlife_app.views.app.home import Person

@@ -6,11 +6,13 @@ from fastapi import Response
 from fastapi.responses import RedirectResponse
 
 from .adapters.fastapi.form import form_model
+from .adapters.fastapi.localizer import Localizer
 from .adapters.fastapi.request import GenericRequest, Registry, Request, get_request
 from .config import (
     Configurator,
     GenericConfigurator,
     configure,
+    exception_handler,
     resource,
     resource_view,
     view_config,
@@ -33,6 +35,7 @@ __all__ = [
     "view_config",
     "resource",
     "resource_view",
+    "exception_handler",
     # Model
     "Request",
     "GenericRequest",
@@ -45,4 +48,6 @@ __all__ = [
     "FormModel",
     # Template
     "JinjaXTemplate",
+    # i18n
+    "Localizer",
 ]
