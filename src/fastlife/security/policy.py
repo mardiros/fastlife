@@ -10,7 +10,7 @@ from fastapi import Depends, HTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
 
 from fastlife import GenericRequest, get_request
-from fastlife.config.registry import TRegistry
+from fastlife.services.registry import TRegistry
 
 CheckPermissionHook = Callable[..., Coroutine[Any, Any, None]] | Callable[..., None]
 CheckPermission = Callable[[str], CheckPermissionHook]

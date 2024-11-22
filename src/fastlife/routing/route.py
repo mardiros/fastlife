@@ -10,7 +10,7 @@ from starlette.responses import Response
 from fastlife.request.request import Request
 
 if TYPE_CHECKING:
-    from fastlife.config.registry import DefaultRegistry  # coverage: ignore
+    from fastlife.services.registry import DefaultRegistry  # coverage: ignore
 
 
 class Route(APIRoute):

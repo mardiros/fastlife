@@ -7,9 +7,7 @@ from fastapi.responses import RedirectResponse
 
 from .config import (
     Configurator,
-    DefaultRegistry,
     GenericConfigurator,
-    GenericRegistry,
     configure,
     resource,
     resource_view,
@@ -19,6 +17,8 @@ from .domain.model.template import JinjaXTemplate
 from .request import GenericRequest, Registry, Request, get_request
 
 # from .request.form_data import model
+
+from .services.registry import DefaultRegistry, GenericRegistry
 from .services.templates import TemplateParams
 from .settings import Settings
 

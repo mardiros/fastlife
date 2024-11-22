@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING, Any, Generic
 
 from starlette.requests import Request as BaseRequest
 
-from fastlife.config.registry import TRegistry
 from fastlife.domain.model.security import CSRFToken, create_csrf_token
+from fastlife.services.registry import TRegistry
 
 if TYPE_CHECKING:
     from fastlife.security.policy import (  # coverage: ignore

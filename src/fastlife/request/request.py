@@ -5,8 +5,8 @@ from typing import Annotated, Any
 from fastapi import Request as FastAPIRequest
 from fastapi.params import Depends
 
-from fastlife.config.registry import DefaultRegistry
 from fastlife.domain.model.request import GenericRequest
+from fastlife.services.registry import DefaultRegistry
 
 
 def get_request(request: FastAPIRequest) -> GenericRequest[Any]:

@@ -77,9 +77,6 @@ class AbstractTemplateRenderer(abc.ABC):
 class AbstractTemplateRendererFactory(abc.ABC):
     """
     The template render factory.
-
-    The implementation of this class is found using the settings
-    :attr:`fastlife.config.settings.Settings.template_renderer_class`.
     """
 
     @abc.abstractmethod
