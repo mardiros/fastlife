@@ -17,9 +17,7 @@ from .domain.model.template import JinjaXTemplate
 from .request import GenericRequest, Registry, Request, get_request
 
 # from .request.form_data import model
-
 from .services.registry import DefaultRegistry, GenericRegistry
-from .services.templates import TemplateParams
 from .settings import Settings
 
 __all__ = [
@@ -29,7 +27,6 @@ __all__ = [
     "Configurator",
     "DefaultRegistry",
     "GenericRegistry",
-    "TemplateParams",
     "Settings",
     "view_config",
     "resource",

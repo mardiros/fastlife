@@ -15,8 +15,6 @@ from typing import Any
 from fastlife import Request, Response
 from fastlife.templates.inline import InlineTemplate
 
-TemplateParams = Mapping[str, Any]
-
 
 class AbstractTemplateRenderer(abc.ABC):
     """

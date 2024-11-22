@@ -39,7 +39,7 @@ that wrap a pydantic BaseModel in order to provide errors management.
 cat << 'EOF' > src/myapp/views.py
 from typing import Annotated
 
-from fastlife import view_config, TemplateParams
+from fastlife import view_config
 from pydantic import BaseModel
 from fastlife.request.form import FormModel, form_model
 
@@ -67,7 +67,7 @@ class HelloWorld(JinjaXTemplate):
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
 ) -> HelloWorld:
-    return HelloWorld(person= person)
+    return HelloWorld(person=person)
 
 EOF
 ```
@@ -118,7 +118,7 @@ properly.
 cat << 'EOF' > src/myapp/views.py
 from typing import Annotated
 
-from fastlife import view_config, TemplateParams
+from fastlife import view_config
 from pydantic import BaseModel, Field
 from fastlife.request.form import FormModel, form_model
 
@@ -129,11 +129,26 @@ class Person(BaseModel):
     )
 
 
+class HelloWorld(JinjaXTemplate):
+    template = """
+    <html>
+        <body>
+          <H1>Hello {{ person.model.nick|default("World") }}!</H1>
+          <Form method="post">
+            {{ pydantic_form(person) }}
+            <Button>Submit</Button>
+          </Form>
+        </body>
+    <html>
+    """
+    person: FormModel[Person]
+
+
 @view_config("home", "/", methods=["GET", "POST"], template="HelloWorld.jinja")
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
-) -> TemplateParams:
-    return {"person": person}
+) -> HelloWorld:
+    return HelloWorld(person=person)
 
 EOF
 ```
@@ -209,7 +224,7 @@ lets add this view.
 cat << 'EOF' > src/myapp/views.py
 from typing import Annotated
 
-from fastlife import view_config, Response, TemplateParams
+from fastlife import view_config, Response
 from pydantic import BaseModel, Field
 from fastlife.request.form import FormModel, form_model
 
@@ -220,11 +235,26 @@ class Person(BaseModel):
     )
 
 
+class HelloWorld(JinjaXTemplate):
+    template = """
+    <html>
+        <body>
+          <H1>Hello {{ person.model.nick|default("World") }}!</H1>
+          <Form method="post">
+            {{ pydantic_form(person) }}
+            <Button>Submit</Button>
+          </Form>
+        </body>
+    <html>
+    """
+    person: FormModel[Person]
+
+
 @view_config("home", "/", methods=["GET"], template="HelloWorld.jinja")
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
-) -> TemplateParams:
-    return {"person": person}
+) -> HelloWorld:
+    return HelloWorld(person=person)
 
 
 @view_config("hx-hello", "/hx-hello", methods=["POST"])
