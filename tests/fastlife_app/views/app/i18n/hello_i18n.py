@@ -5,8 +5,8 @@ from typing import Annotated
 from fastapi import Path
 
 from fastlife import view_config
+from fastlife.adapters.fastapi.localizer import Localizer
 from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.request.localizer import Localizer
 
 
 class HelloWorld(JinjaXTemplate):

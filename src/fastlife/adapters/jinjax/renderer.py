@@ -15,8 +15,8 @@ from pydantic.fields import FieldInfo
 
 from fastlife import Request
 from fastlife.adapters.fastapi.form import FormModel
+from fastlife.adapters.fastapi.localizer import get_localizer
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
-from fastlife.request.localizer import get_localizer
 from fastlife.templates.inline import InlineTemplate
 
 if TYPE_CHECKING:
