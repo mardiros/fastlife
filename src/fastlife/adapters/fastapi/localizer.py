@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 
-from fastlife.request.request import Request
+from fastlife.adapters.fastapi.request import Request
 from fastlife.services.translations import Localizer as RequestLocalizer
 
 

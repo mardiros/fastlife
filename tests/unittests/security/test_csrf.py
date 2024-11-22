@@ -1,7 +1,7 @@
 import pytest
 
+from fastlife.adapters.fastapi.request import Request
 from fastlife.domain.model.security import create_csrf_token
-from fastlife.request import Request
 from fastlife.security.csrf import CSRFAttack, check_csrf
 
 

@@ -5,8 +5,8 @@ from typing import Any
 
 from fastapi import Depends
 
-from fastlife import Registry
 from fastlife.adapters.fastapi.form_data import MappingFormData
+from fastlife.adapters.fastapi.request import Registry
 from fastlife.domain.model.form import FormModel, T
 
 

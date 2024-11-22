@@ -7,7 +7,7 @@ from fastapi.routing import APIRoute
 from starlette.requests import Request as StarletteRequest
 from starlette.responses import Response
 
-from fastlife.request.request import Request
+from fastlife.adapters.fastapi.request import Request
 
 if TYPE_CHECKING:
     from fastlife.services.registry import DefaultRegistry  # coverage: ignore

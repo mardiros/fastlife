@@ -27,9 +27,9 @@ from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
 
+from fastlife.adapters.fastapi.request import GenericRequest, Request
 from fastlife.config.openapiextra import OpenApiTag
 from fastlife.middlewares.base import AbstractMiddleware
-from fastlife.request.request import GenericRequest, Request
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf

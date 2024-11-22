@@ -21,7 +21,7 @@ no way to prevent to set the cookie in the request.
 from collections.abc import Callable, Coroutine
 from typing import Any
 
-from fastlife.request import Request
+from fastlife.adapters.fastapi.request import Request
 
 
 class CSRFAttack(Exception):
