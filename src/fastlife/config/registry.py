@@ -9,7 +9,7 @@ if TYPE_CHECKING:
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
 
-from .settings import Settings
+from fastlife.settings import Settings
 
 TSettings = TypeVar("TSettings", bound=Settings, covariant=True)
 """

@@ -10,7 +10,6 @@ from .config import (
     DefaultRegistry,
     GenericConfigurator,
     GenericRegistry,
-    Settings,
     configure,
     resource,
     resource_view,
@@ -21,6 +20,7 @@ from .request import GenericRequest, Registry, Request, get_request
 
 # from .request.form_data import model
 from .services.templates import TemplateParams
+from .settings import Settings
 
 __all__ = [
     # Config

@@ -3,7 +3,7 @@
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 
-from fastlife.config.settings import Settings
+from fastlife.settings import Settings
 
 LocaleName = str
 """The LocaleName is a locale such as en, fr that will be consume for translations."""

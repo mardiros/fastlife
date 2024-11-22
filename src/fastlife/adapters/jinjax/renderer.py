@@ -20,7 +20,7 @@ from fastlife.request.localizer import get_localizer
 from fastlife.templates.inline import InlineTemplate
 
 if TYPE_CHECKING:
-    from fastlife.config.settings import Settings  # coverage: ignore
+    from fastlife.settings import Settings  # coverage: ignore
 
 from fastlife.services.templates import (
     AbstractTemplateRenderer,

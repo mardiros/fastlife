@@ -10,8 +10,8 @@ from fastapi.testclient import TestClient
 from multidict import MultiDict
 from starlette.types import ASGIApp
 
-from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
+from fastlife.settings import Settings
 from fastlife.shared_utils.resolver import resolve
 from fastlife.testing.dom import Element
 from fastlife.testing.form import WebForm
