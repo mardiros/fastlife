@@ -15,6 +15,7 @@ from .config import (
     resource_view,
     view_config,
 )
+from .domain.model.form import FormModel
 from .domain.model.template import JinjaXTemplate
 
 # from .request.form_data import model
@@ -22,7 +23,6 @@ from .services.registry import DefaultRegistry, GenericRegistry
 from .settings import Settings
 
 __all__ = [
-    "form_model",
     # Config
     "configure",
     "GenericConfigurator",
@@ -34,13 +34,15 @@ __all__ = [
     "resource",
     "resource_view",
     # Model
-    # "model",
     "Request",
     "GenericRequest",
     "get_request",
     "Registry",
     "Response",
     "RedirectResponse",
+    # Form
+    "form_model",
+    "FormModel",
     # Template
     "JinjaXTemplate",
 ]
