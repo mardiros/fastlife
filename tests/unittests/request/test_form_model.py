@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 from pydantic import SecretStr
 
-from fastlife.request.form import FormModel
+from fastlife.domain.model.form import FormModel
 from tests.fastlife_app.models import Account
 from tests.fastlife_app.views.app.forms.model import Form as ModelForm
 from tests.fastlife_app.views.app.forms.model import Person

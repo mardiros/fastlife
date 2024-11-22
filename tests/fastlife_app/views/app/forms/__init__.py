@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 from fastlife import view_config
 from fastlife.adapters.fastapi.form_data import MappingFormData
+from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.request.form import FormModel
 from fastlife.request.request import Request
 from fastlife.shared_utils.resolver import resolve
 

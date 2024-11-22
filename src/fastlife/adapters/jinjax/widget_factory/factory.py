@@ -10,8 +10,8 @@ from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
+from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.request.form import FormModel
 
 if TYPE_CHECKING:
     from fastlife.services.templates import AbstractTemplateRenderer
