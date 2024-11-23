@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Generic
 
 from starlette.requests import Request as BaseRequest
 
-from fastlife.domain.model.security import CSRFToken, create_csrf_token
+from fastlife.domain.model.csrf import CSRFToken, create_csrf_token
 from fastlife.services.registry import TRegistry
 
 if TYPE_CHECKING:
