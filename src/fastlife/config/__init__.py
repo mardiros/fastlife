@@ -9,8 +9,8 @@ __all__ = [
     "Configurator",
     "GenericConfigurator",
     "configure",
-    "view_config",
+    "exception_handler",
     "resource",
     "resource_view",
-    "exception_handler",
+    "view_config",
 ]

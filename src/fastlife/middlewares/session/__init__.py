@@ -17,7 +17,7 @@ from fastlife.shared_utils.resolver import resolve
 from .middleware import SessionMiddleware
 from .serializer import AbsractSessionSerializer
 
-__all__ = ["SessionMiddleware", "AbsractSessionSerializer"]
+__all__ = ["AbsractSessionSerializer", "SessionMiddleware"]
 
 
 @configure

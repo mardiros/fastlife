@@ -25,29 +25,29 @@ from .services.registry import DefaultRegistry, GenericRegistry
 from .settings import Settings
 
 __all__ = [
-    # Config
-    "configure",
-    "GenericConfigurator",
     "Configurator",
     "DefaultRegistry",
-    "GenericRegistry",
-    "Settings",
-    "view_config",
-    "resource",
-    "resource_view",
-    "exception_handler",
-    # Model
-    "Request",
-    "GenericRequest",
-    "get_request",
-    "Registry",
-    "Response",
-    "RedirectResponse",
-    # Form
-    "form_model",
     "FormModel",
+    "GenericConfigurator",
+    "GenericRegistry",
+    "GenericRequest",
     # Template
     "JinjaXTemplate",
     # i18n
     "Localizer",
+    "RedirectResponse",
+    "Registry",
+    # Model
+    "Request",
+    "Response",
+    "Settings",
+    # Config
+    "configure",
+    "exception_handler",
+    # Form
+    "form_model",
+    "get_request",
+    "resource",
+    "resource_view",
+    "view_config",
 ]

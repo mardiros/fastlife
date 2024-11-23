@@ -42,17 +42,17 @@ class InspectableComponent(Component):
     """
 
     __slots__ = (
-        "name",
-        "prefix",
-        "url_prefix",
-        "required",
-        "optional",
         "css",
         "js",
-        "path",
         "mtime",
-        "tmpl",
+        "name",
+        "optional",
+        "path",
+        "prefix",
+        "required",
         "source",
+        "tmpl",
+        "url_prefix",
     )
 
     def __init__(
