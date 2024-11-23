@@ -6,7 +6,7 @@ Fast life did not reinvent the wheel on CSRF Protection.
 It use the good old method. A CSRF token is saved in a cookie.
 Forms post the CSRF token, and the token in the cookies and the form must match
 to process the request, otherwise an exception
-{class}`fastlife.security.csrf.CSRFAttack` is raised.
+{class}`fastlife.services.csrf.CSRFAttack` is raised.
 
 The cookie named is configurabllefia the settings
 :attr:`fastlife.config.settings.Settings.csrf_token_name`
