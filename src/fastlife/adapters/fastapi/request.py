@@ -10,6 +10,7 @@ from fastlife.service.registry import DefaultRegistry
 
 
 def get_request(request: FastAPIRequest) -> GenericRequest[Any]:
+    """Return the Fastlife Request object."""
     return request  # type: ignore
 
 
@@ -24,8 +25,9 @@ AnyRequest = Annotated[GenericRequest[Any], Depends(get_request)]
 
 
 def get_registry(request: Request) -> DefaultRegistry:
+    """Return the Fastlife Registry object."""
     return request.registry
 
 
 Registry = Annotated[DefaultRegistry, Depends(get_registry)]
-"""FastAPI dependency to access to the registry."""
+"""FastAPI dependency to access to the global registry."""

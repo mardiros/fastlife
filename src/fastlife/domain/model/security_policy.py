@@ -60,7 +60,12 @@ class HasPermission(int, metaclass=BoolMeta):
     """
 
     kind: Literal["allowed", "unauthenticated", "denied"]
+    """
+    Identified basic information of the response.
+    It distinguished unauthenticated and denied to eventually raised 401 over 403 error.
+    """
     reason: str
+    """A human explanation of the response."""
 
     def __new__(cls, reason: str) -> "HasPermission":
         instance = super().__new__(cls)

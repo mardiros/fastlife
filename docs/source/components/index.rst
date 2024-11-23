@@ -38,6 +38,7 @@ fastlife comes with a set of compoments:
    Thead
    Tr
    pydantic_form.Error
+   pydantic_form.FatalError
    pydantic_form.Hint
    pydantic_form.Widget
 

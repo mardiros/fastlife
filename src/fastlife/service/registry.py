@@ -23,9 +23,13 @@ class GenericRegistry(Generic[TSettings]):
     """
 
     settings: Settings
+    """Application settings."""
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
+    """Registered template engine."""
     locale_negociator: "LocaleNegociator"
+    """Used to fine the best language for the response."""
     localizer: "LocalizerFactory"
+    """Used to localized message."""
 
     def __init__(self, settings: Settings) -> None:
         from fastlife.service.locale_negociator import default_negociator

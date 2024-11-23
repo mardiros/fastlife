@@ -36,7 +36,8 @@ from .settings import Settings
 
 __all__ = [
     # Config
-    "Configurator",
+    "GenericConfigurator",
+    "GenericRegistry",
     "Registry",
     "Settings",
     "configure",
@@ -44,9 +45,8 @@ __all__ = [
     "exception_handler",
     "resource",
     "resource_view",
-    "GenericConfigurator",
+    "Configurator",
     "DefaultRegistry",
-    "GenericRegistry",
     # Form
     "FormModel",
     "form_model",
