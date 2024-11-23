@@ -33,8 +33,8 @@ from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
 from fastlife.security.csrf import check_csrf
+from fastlife.services.check_permission import check_permission
 from fastlife.services.registry import DefaultRegistry, TRegistry
-from fastlife.services.security_policy import check_permission
 from fastlife.settings import Settings
 from fastlife.shared_utils.resolver import resolve, resolve_maybe_relative
 from fastlife.templates.inline import is_inline_template_returned

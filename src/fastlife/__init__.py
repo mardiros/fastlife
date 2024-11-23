@@ -7,7 +7,7 @@ from fastapi.responses import RedirectResponse
 
 from .adapters.fastapi.form import form_model
 from .adapters.fastapi.localizer import Localizer
-from .adapters.fastapi.request import GenericRequest, Registry, Request, get_request
+from .adapters.fastapi.request import AnyRequest, Registry, Request, get_request
 from .config import (
     Configurator,
     GenericConfigurator,
@@ -18,6 +18,7 @@ from .config import (
     view_config,
 )
 from .domain.model.form import FormModel
+from .domain.model.request import GenericRequest
 from .domain.model.security_policy import (
     Allowed,
     Denied,
@@ -34,38 +35,40 @@ from .services.security_policy import AbstractSecurityPolicy, InsecurePolicy
 from .settings import Settings
 
 __all__ = [
-    "AbstractSecurityPolicy",
-    # Security policy
-    "Allowed",
+    # Config
     "Configurator",
-    "DefaultRegistry",
-    "Denied",
-    "Forbidden",
-    "FormModel",
+    "Registry",
+    "Settings",
+    "configure",
+    "view_config",
+    "exception_handler",
+    "resource",
+    "resource_view",
     "GenericConfigurator",
+    "DefaultRegistry",
     "GenericRegistry",
+    # Form
+    "FormModel",
+    "form_model",
+    # Request
     "GenericRequest",
+    "AnyRequest",
+    "Request",
+    "get_request",
+    # Response
+    "Response",
+    "RedirectResponse",
+    # Security
+    "AbstractSecurityPolicy",
     "HasPermission",
+    "Unauthenticated",
+    "Allowed",
+    "Denied",
+    "Unauthorized",
+    "Forbidden",
     "InsecurePolicy",
     # Template
     "JinjaXTemplate",
     # i18n
     "Localizer",
-    "RedirectResponse",
-    "Registry",
-    # Model
-    "Request",
-    "Response",
-    "Settings",
-    "Unauthenticated",
-    "Unauthorized",
-    # Config
-    "configure",
-    "exception_handler",
-    # Form
-    "form_model",
-    "get_request",
-    "resource",
-    "resource_view",
-    "view_config",
 ]
