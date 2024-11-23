@@ -36,7 +36,7 @@ We can use the configurator method
 :::{tip}
 This method is compatible with the FastAPI router, there is only a `permission`
 parameter added in order to be used with a {class}`SecurityPolicy
-<fastlife.services.security_policy.AbtractSecurityPolicy>`.
+<fastlife.service.security_policy.AbtractSecurityPolicy>`.
 :::
 
 It differs from the {meth}`Configurator.add_route
@@ -219,7 +219,7 @@ from fastapi import Depends
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 
 from fastlife import Configurator, configure, DefaultRegistry, Request
-from fastlife.services.security_policy import AbstractSecurityPolicy, Allowed, Unauthorized
+from fastlife.service.security_policy import AbstractSecurityPolicy, Allowed, Unauthorized
 
 
 class AuthenticatedUser(BaseModel):

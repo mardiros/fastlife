@@ -22,7 +22,7 @@ from fastlife.domain.model.template import InlineTemplate
 if TYPE_CHECKING:
     from fastlife.settings import Settings  # coverage: ignore
 
-from fastlife.services.templates import (
+from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )

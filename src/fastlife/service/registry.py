@@ -2,11 +2,11 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Generic, TypeVar
 
 if TYPE_CHECKING:
-    from fastlife.services.locale_negociator import LocaleNegociator  # coverage: ignore
-    from fastlife.services.templates import (  # coverage: ignore
+    from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
+    from fastlife.service.templates import (  # coverage: ignore
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
-    from fastlife.services.translations import LocalizerFactory  # coverage: ignore
+    from fastlife.service.translations import LocalizerFactory  # coverage: ignore
 
 from fastlife.settings import Settings
 
@@ -28,8 +28,8 @@ class GenericRegistry(Generic[TSettings]):
     localizer: "LocalizerFactory"
 
     def __init__(self, settings: Settings) -> None:
-        from fastlife.services.locale_negociator import default_negociator
-        from fastlife.services.translations import LocalizerFactory
+        from fastlife.service.locale_negociator import default_negociator
+        from fastlife.service.translations import LocalizerFactory
 
         self.settings = settings
         self.locale_negociator = default_negociator(self.settings)

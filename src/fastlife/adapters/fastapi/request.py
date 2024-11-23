@@ -6,7 +6,7 @@ from fastapi import Request as FastAPIRequest
 from fastapi.params import Depends
 
 from fastlife.domain.model.request import GenericRequest
-from fastlife.services.registry import DefaultRegistry
+from fastlife.service.registry import DefaultRegistry
 
 
 def get_request(request: FastAPIRequest) -> GenericRequest[Any]:

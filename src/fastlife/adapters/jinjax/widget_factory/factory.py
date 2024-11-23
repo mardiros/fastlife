@@ -14,7 +14,7 @@ from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import JinjaXTemplate
 
 if TYPE_CHECKING:
-    from fastlife.services.templates import AbstractTemplateRenderer
+    from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import BaseWidgetBuilder
 from .bool_builder import BoolBuilder

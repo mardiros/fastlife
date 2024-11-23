@@ -30,8 +30,8 @@ from .domain.model.security_policy import (
 from .domain.model.template import JinjaXTemplate
 
 # from .request.form_data import model
-from .services.registry import DefaultRegistry, GenericRegistry
-from .services.security_policy import AbstractSecurityPolicy, InsecurePolicy
+from .service.registry import DefaultRegistry, GenericRegistry
+from .service.security_policy import AbstractSecurityPolicy, InsecurePolicy
 from .settings import Settings
 
 __all__ = [

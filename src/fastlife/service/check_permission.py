@@ -26,7 +26,7 @@ def check_permission(permission_name: str) -> CheckPermissionHook:
         if request.security_policy is None:
             raise RuntimeError(
                 f"Request {request.url.path} require a security policy, "
-                "explicit fastlife.services.security_policy.InsecurePolicy is required"
+                "explicit fastlife.service.security_policy.InsecurePolicy is required"
             )
         allowed = await request.security_policy.has_permission(permission_name)
         match allowed.kind:

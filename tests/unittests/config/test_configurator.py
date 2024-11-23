@@ -12,7 +12,7 @@ from fastlife.config.configurator import (
 from fastlife.testing.testclient import WebTestClient
 from tests.fastlife_app.config import MySettings
 
-# from fastlife.services.registry import cleanup_registry
+# from fastlife.service.registry import cleanup_registry
 
 
 @pytest.fixture

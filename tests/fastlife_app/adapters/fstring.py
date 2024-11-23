@@ -4,7 +4,7 @@ from pathlib import Path
 
 from fastlife import Configurator, Request, configure
 from fastlife.domain.model.template import InlineTemplate
-from fastlife.services.templates import (
+from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )

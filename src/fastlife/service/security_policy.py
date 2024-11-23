@@ -14,7 +14,7 @@ from fastlife.domain.model.security_policy import (
     TUser,
     Unauthorized,
 )
-from fastlife.services.registry import TRegistry
+from fastlife.service.registry import TRegistry
 
 
 class AbstractSecurityPolicy(abc.ABC, Generic[TUser, TRegistry]):

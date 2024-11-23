@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends, Query, Response
 
 from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
-from fastlife.services.security_policy import Forbidden
+from fastlife.service.security_policy import Forbidden
 from tests.fastlife_app.service.uow import AuthenticatedUser
 from tests.fastlife_app.views.app.home import Person
 

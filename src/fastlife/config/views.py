@@ -45,9 +45,9 @@ def view_config(
     :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
         parameters.
     :param template: the template rendered by the
-        {class}`fastlife.services.templates.AbstractTemplateRenderer`.
+        {class}`fastlife.service.templates.AbstractTemplateRenderer`.
     :param permission: a permission to validate by the
-        {class}`Security Policy <fastlife.services.security_policy.AbstractSecurityPolicy>`.
+        {class}`Security Policy <fastlife.service.security_policy.AbstractSecurityPolicy>`.
     :param status_code: customize response status code.
     :param methods: restrict route to a list of http methods.
 
