@@ -27,10 +27,10 @@ from .domain.model.security_policy import (
     Unauthorized,
 )
 from .domain.model.template import JinjaXTemplate
-from .security.policy import AbstractSecurityPolicy, InsecurePolicy
 
 # from .request.form_data import model
 from .services.registry import DefaultRegistry, GenericRegistry
+from .services.security_policy import AbstractSecurityPolicy, InsecurePolicy
 from .settings import Settings
 
 __all__ = [

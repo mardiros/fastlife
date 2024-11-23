@@ -170,8 +170,7 @@ def resource_view(
     `collection_head`, `collection_options`, `get`, `post`, `put`, `patch`, `delete`,
     `head` or `options`.
 
-    :param permission: a permission to validate by the
-        :attr:`fastlife.config.settings.Settings.check_permission` function.
+    :param permission: a permission to validate by the security policy.
     :param status_code: returned status_code
     :param summary: OpenAPI summary for the route.
     :param description:OpenAPI description for the route.

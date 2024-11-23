@@ -8,7 +8,7 @@ from fastlife.domain.model.csrf import CSRFToken, create_csrf_token
 from fastlife.services.registry import TRegistry
 
 if TYPE_CHECKING:
-    from fastlife.security.policy import (  # coverage: ignore
+    from fastlife.services.security_policy import (  # coverage: ignore
         AbstractSecurityPolicy,
         HasPermission,
     )
@@ -63,7 +63,7 @@ class GenericRequest(BaseRequest, Generic[TRegistry]):
         if self.security_policy is None:
             raise RuntimeError(
                 f"Request {self.url.path} require a security policy, "
-                "explicit fastlife.security.policy.InsecurePolicy is required."
+                "explicit fastlife.services.security_policy.InsecurePolicy is required."
             )
 
         return await self.security_policy.has_permission(permission)

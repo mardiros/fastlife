@@ -1,5 +1,5 @@
 from fastlife import Configurator, configure
-from fastlife.security.policy import InsecurePolicy
+from fastlife.services.security_policy import InsecurePolicy
 
 
 @configure

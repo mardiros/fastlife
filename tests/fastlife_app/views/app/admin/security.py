@@ -1,7 +1,7 @@
 from starlette.status import HTTP_303_SEE_OTHER
 
 from fastlife import Configurator, Request, Response, configure, exception_handler
-from fastlife.security.policy import AbstractSecurityPolicy, Unauthorized
+from fastlife.services.security_policy import AbstractSecurityPolicy, Unauthorized
 from tests.fastlife_app.config import MyRequest
 from tests.fastlife_app.service.uow import AuthenticatedUser
 from tests.fastlife_app.views.api.security import (

@@ -51,7 +51,7 @@
 * Hotfix components to create tables
 
 ## 0.15.0  - Released on 2024-09-29
-* Add an {class}`fastlife.security.policy.AbstractSecurityPolicy` class
+* Add an {class}`fastlife.services.security_policy.AbstractSecurityPolicy` class
 * New method {meth}`fastlife.config.configurator.GenericConfigurator.set_security_policy`
 * Breaking change, the check_permission has been removed from the settings.
   to configure the permission policy, a security policy has to be implemented.
