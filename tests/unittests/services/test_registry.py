@@ -1,6 +1,6 @@
 import pytest
 
-from fastlife.config.registry import DefaultRegistry
+from fastlife.service.registry import DefaultRegistry
 
 
 def test_get_renderer(dummy_registry: DefaultRegistry):

@@ -1,6 +1,6 @@
 from base64 import b64decode, b64encode
 
-from fastlife.middlewares.session.serializer import SignedSessionSerializer
+from fastlife.adapters.itsdangerous.session import SignedSessionSerializer
 
 
 def test_serializer():

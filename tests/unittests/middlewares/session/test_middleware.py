@@ -4,8 +4,30 @@ from typing import Any
 
 import pytest
 
+from fastlife.adapters.itsdangerous.session import SignedSessionSerializer
+from fastlife.domain.model.asgi import ASGIApp
 from fastlife.middlewares.session.middleware import SessionMiddleware
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
+
+
+@pytest.fixture
+def dummy_asgi() -> tuple[ASGIApp, dict[str, Any]]:
+    data: dict[str, Any] = {}
+
+    async def app(scope: Mapping[str, Any], receive: Any, send: Any):
+        data["scope"] = scope
+
+    return app, data
+
+
+@pytest.fixture
+def asgi(dummy_asgi: tuple[ASGIApp, dict[str, Any]]) -> ASGIApp:
+    return dummy_asgi[0]
+
+
+@pytest.fixture
+def asgi_data(dummy_asgi: tuple[ASGIApp, dict[str, Any]]) -> dict[str, Any]:
+    return dummy_asgi[1]
 
 
 @pytest.mark.parametrize(
@@ -14,9 +36,6 @@ from fastlife.middlewares.session.serializer import AbsractSessionSerializer
         pytest.param(
             {
                 "middleware_params": {
-                    "app": None,
-                    "cookie_name": "sess",
-                    "duration": timedelta(hours=1),
                     "secret_key": "x" * 16,
                 },
                 "expected": "Path=/; HttpOnly; SameSite=lax",
@@ -26,9 +45,6 @@ from fastlife.middlewares.session.serializer import AbsractSessionSerializer
         pytest.param(
             {
                 "middleware_params": {
-                    "app": None,
-                    "cookie_name": "sess",
-                    "duration": timedelta(hours=1),
                     "cookie_secure": True,
                     "secret_key": "x" * 16,
                 },
@@ -39,9 +55,6 @@ from fastlife.middlewares.session.serializer import AbsractSessionSerializer
         pytest.param(
             {
                 "middleware_params": {
-                    "app": None,
-                    "cookie_name": "sess",
-                    "duration": timedelta(hours=1),
                     "cookie_domain": "foo.bar",
                     "secret_key": "x" * 16,
                 },
@@ -52,9 +65,6 @@ from fastlife.middlewares.session.serializer import AbsractSessionSerializer
         pytest.param(
             {
                 "middleware_params": {
-                    "app": None,
-                    "cookie_name": "sess",
-                    "duration": timedelta(hours=1),
                     "cookie_same_site": "strict",
                     "secret_key": "x" * 16,
                 },
@@ -65,9 +75,6 @@ from fastlife.middlewares.session.serializer import AbsractSessionSerializer
         pytest.param(
             {
                 "middleware_params": {
-                    "app": None,
-                    "cookie_name": "sess",
-                    "duration": timedelta(hours=1),
                     "cookie_secure": True,
                     "cookie_domain": "foo.bar",
                     "cookie_same_site": "strict",
@@ -79,8 +86,14 @@ from fastlife.middlewares.session.serializer import AbsractSessionSerializer
         ),
     ],
 )
-def test_security_flags(params: Mapping[str, Any]):
-    mid = SessionMiddleware(**params["middleware_params"])
+def test_security_flags(params: Mapping[str, Any], asgi: ASGIApp):
+    mid = SessionMiddleware(
+        app=asgi,
+        cookie_name="s",
+        duration=timedelta(hours=1),
+        serializer=SignedSessionSerializer,
+        **params["middleware_params"],
+    )
     assert mid.security_flags == params["expected"]
 
 
@@ -132,19 +145,17 @@ def test_security_flags(params: Mapping[str, Any]):
     ],
 )
 async def test_middleware(
-    params: Mapping[str, Any], dummy_session_serializer: type[AbsractSessionSerializer]
+    params: Mapping[str, Any],
+    dummy_session_serializer: type[AbsractSessionSerializer],
+    asgi: ASGIApp,
+    asgi_data: dict[str, Any],
 ):
-    data = {}
-
-    async def app(scope: Mapping[str, Any], receive: Any, send: Any):
-        data["scope"] = scope
-
     mid = SessionMiddleware(
-        app,
+        app=asgi,
         cookie_name="sess",
         secret_key="x" * 16,
         duration=timedelta(hours=1),
         serializer=dummy_session_serializer,
     )
     await mid(params["scope"], None, None)  # type: ignore
-    assert data["scope"] == params["expected"]
+    assert asgi_data["scope"] == params["expected"]

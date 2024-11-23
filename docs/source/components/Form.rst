@@ -6,7 +6,7 @@ Form
     Create html ``<form>`` node with htmx support by default.
     A :jinjax:component:`CsrfToken` will always be included in the form
     and will be checked by the
-    :func:`csrf policy method <fastlife.security.csrf.check_csrf>`.
+    :func:`csrf policy method <fastlife.service.csrf.check_csrf>`.
 
     ::
 

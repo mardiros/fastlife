@@ -2,7 +2,7 @@
 
 import abc
 
-from starlette.types import Receive, Scope, Send
+from fastlife.domain.model.asgi import Receive, Scope, Send
 
 
 class AbstractMiddleware(abc.ABC):

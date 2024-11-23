@@ -1,7 +1,7 @@
 import pytest
 
 from fastlife.config.configurator import ConfigurationError, Configurator
-from fastlife.config.settings import Settings
+from fastlife.settings import Settings
 
 
 def test_resource_missing_path():

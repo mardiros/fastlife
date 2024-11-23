@@ -5,11 +5,11 @@ from typing import Literal
 
 from starlette.datastructures import MutableHeaders
 from starlette.requests import HTTPConnection
-from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
+from fastlife.domain.model.asgi import ASGIApp, Message, Receive, Scope, Send
 from fastlife.middlewares.base import AbstractMiddleware
 
-from .serializer import AbsractSessionSerializer, SignedSessionSerializer
+from .serializer import AbsractSessionSerializer
 
 
 class SessionMiddleware(AbstractMiddleware):
@@ -17,6 +17,7 @@ class SessionMiddleware(AbstractMiddleware):
 
     def __init__(
         self,
+        *,
         app: ASGIApp,
         cookie_name: str,
         secret_key: str,
@@ -25,7 +26,7 @@ class SessionMiddleware(AbstractMiddleware):
         cookie_same_site: Literal["lax", "strict", "none"] = "lax",
         cookie_secure: bool = False,
         cookie_domain: str = "",
-        serializer: type[AbsractSessionSerializer] = SignedSessionSerializer,
+        serializer: type[AbsractSessionSerializer],
     ) -> None:
         self.app = app
         self.max_age = int(duration.total_seconds())

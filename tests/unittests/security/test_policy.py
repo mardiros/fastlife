@@ -1,6 +1,6 @@
 import pytest
 
-from fastlife.security.policy import HasPermission
+from fastlife.domain.model.security_policy import HasPermission
 from tests.fastlife_app.views.app.admin.security import Allowed, Denied, Unauthenticated
 
 

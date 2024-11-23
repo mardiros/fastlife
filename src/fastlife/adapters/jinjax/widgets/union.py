@@ -8,7 +8,7 @@ from typing import Union
 from markupsafe import Markup
 from pydantic import BaseModel, Field
 
-from fastlife.services.templates import AbstractTemplateRenderer
+from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import TWidget, TypeWrapper, Widget
 

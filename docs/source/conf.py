@@ -121,4 +121,5 @@ html_css_files = [
 # suppress warning...
 import pydantic
 
-pydantic.Field.__doc__ = pydantic.Field.__doc__.replace("**extra", r"\*\*extra")
+if pydantic.Field.__doc__:
+    pydantic.Field.__doc__ = pydantic.Field.__doc__.replace("**extra", r"\*\*extra")

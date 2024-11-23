@@ -1,3 +1,3 @@
 """
-Adapters are implementations of abstract classed defined in {mod}`fastlife.services`.
+Adapters are implementations of abstract classed defined in {mod}`fastlife.service`.
 """

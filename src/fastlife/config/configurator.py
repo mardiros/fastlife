@@ -27,27 +27,29 @@ from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
 
+from fastlife.adapters.fastapi.request import GenericRequest, Request
+from fastlife.adapters.fastapi.routing.route import Route
+from fastlife.adapters.fastapi.routing.router import Router
 from fastlife.config.openapiextra import OpenApiTag
+from fastlife.domain.model.template import InlineTemplate
 from fastlife.middlewares.base import AbstractMiddleware
-from fastlife.request.request import GenericRequest, Request
-from fastlife.routing.route import Route
-from fastlife.routing.router import Router
-from fastlife.security.csrf import check_csrf
-from fastlife.services.policy import check_permission
-from fastlife.shared_utils.resolver import resolve, resolve_maybe_relative
-from fastlife.templates.inline import is_inline_template_returned
-
-from .registry import DefaultRegistry, TRegistry
-from .settings import Settings
+from fastlife.service.check_permission import check_permission
+from fastlife.service.csrf import check_csrf
+from fastlife.service.registry import DefaultRegistry, TRegistry
+from fastlife.settings import Settings
+from fastlife.shared_utils.infer import is_inline_template_returned
+from fastlife.shared_utils.resolver import (
+    resolve,
+    resolve_maybe_relative,
+)
 
 if TYPE_CHECKING:
-    from fastlife.security.policy import AbstractSecurityPolicy  # coverage: ignore
-    from fastlife.services.templates import (
+    from fastlife.service.security_policy import AbstractSecurityPolicy
+    from fastlife.service.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
-    from fastlife.templates.inline import InlineTemplate
 
-from fastlife.services.locale_negociator import LocaleNegociator
+from fastlife.service.locale_negociator import LocaleNegociator
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
@@ -519,7 +521,7 @@ class GenericConfigurator(Generic[TRegistry]):
             parameters.
         :param endpoint: the function that will reveive the request.
         :param permission: a permission to validate by the
-            {class}`Security Policy <fastlife.security.policy.AbstractSecurityPolicy>`.
+            {class}`Security Policy <fastlife.service.security_policy.AbstractSecurityPolicy>`.
         :param status_code: customize response status code.
         :param methods: restrict route to a list of http methods.
         :return: the configurator.

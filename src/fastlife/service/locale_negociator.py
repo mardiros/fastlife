@@ -1,20 +1,17 @@
 """Find the localization gor the given request."""
 
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from fastlife.config.settings import Settings
+from fastlife.settings import Settings
 
 LocaleName = str
 """The LocaleName is a locale such as en, fr that will be consume for translations."""
 
-if TYPE_CHECKING:
-    from fastlife.request.request import GenericRequest  # coverage: ignore
+from fastlife.adapters.fastapi.request import GenericRequest  # coverage: ignore
 
-    LocaleNegociator = Callable[[GenericRequest[Any]], LocaleName]  # coverage: ignore
-    """Interface to implement to negociate a locale"""  # coverage: ignore
-else:
-    LocaleNegociator = Any
+LocaleNegociator = Callable[[GenericRequest[Any]], LocaleName]  # coverage: ignore
+"""Interface to implement to negociate a locale"""  # coverage: ignore
 
 
 def default_negociator(settings: Settings) -> LocaleNegociator:

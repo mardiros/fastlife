@@ -1,9 +1,6 @@
 from typing import Annotated
 
-from fastlife import view_config
-from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.request.form import FormModel, form_model
-from fastlife.request.request import Request
+from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
 from tests.fastlife_app.models import Account, Group, Person
 
 

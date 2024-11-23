@@ -7,10 +7,10 @@ from fastapi.routing import APIRoute
 from starlette.requests import Request as StarletteRequest
 from starlette.responses import Response
 
-from fastlife.request.request import Request
+from fastlife.domain.model.request import GenericRequest
 
 if TYPE_CHECKING:
-    from fastlife.config.registry import DefaultRegistry  # coverage: ignore
+    from fastlife.service.registry import DefaultRegistry  # coverage: ignore
 
 
 class Route(APIRoute):
@@ -41,7 +41,7 @@ class Route(APIRoute):
         orig_route_handler = super().get_route_handler()
 
         async def route_handler(request: StarletteRequest) -> Response:
-            req = Request(self._registry, request)
+            req = GenericRequest(self._registry, request)
             return await orig_route_handler(req)
 
         return route_handler

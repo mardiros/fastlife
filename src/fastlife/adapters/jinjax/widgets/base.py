@@ -8,7 +8,7 @@ from markupsafe import Markup
 from pydantic import Field, model_validator
 
 from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.services.templates import AbstractTemplateRenderer
+from fastlife.service.templates import AbstractTemplateRenderer
 from fastlife.shared_utils.infer import is_union
 
 T = TypeVar("T")

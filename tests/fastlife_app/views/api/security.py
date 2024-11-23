@@ -4,16 +4,18 @@ from fastapi import Depends
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 from starlette.exceptions import HTTPException
 
-from fastlife import Configurator, Request, configure
-from fastlife.config.exceptions import exception_handler
-from fastlife.security.policy import (
+from fastlife import (
     AbstractSecurityPolicy,
     Allowed,
+    Configurator,
     Denied,
     Forbidden,
     HasPermission,
+    Request,
     Unauthenticated,
     Unauthorized,
+    configure,
+    exception_handler,
 )
 from tests.fastlife_app.config import MyRegistry, MyRequest
 from tests.fastlife_app.domain.model import TokenInfo

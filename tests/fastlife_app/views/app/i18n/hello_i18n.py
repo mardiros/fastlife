@@ -4,9 +4,7 @@ from typing import Annotated
 
 from fastapi import Path
 
-from fastlife import view_config
-from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.request.localizer import Localizer
+from fastlife import JinjaXTemplate, Localizer, view_config
 
 
 class HelloWorld(JinjaXTemplate):

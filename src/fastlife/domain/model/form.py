@@ -1,13 +1,10 @@
 """HTTP Form serialization."""
 
-from collections.abc import Callable, Mapping
+from collections.abc import Mapping
 from typing import Any, Generic, TypeVar, get_origin
 
-from fastapi import Depends
 from pydantic import BaseModel, ValidationError
 
-from fastlife import Registry
-from fastlife.request.form_data import MappingFormData
 from fastlife.shared_utils.infer import is_union
 
 T = TypeVar("T", bound=BaseModel)
@@ -96,19 +93,3 @@ class FormModel(Generic[T]):
                     errors[loc] = error["msg"]
             model = pydantic_type.model_construct(**data.get(prefix, {}))
             return cls(prefix, model, errors)
-
-
-def form_model(
-    cls: type[T], name: str | None = None
-) -> Callable[[Mapping[str, Any]], FormModel[T]]:
-    """
-    Build a model, a class of type T based on Pydandic Base Model from a form payload.
-    """
-
-    def to_model(data: MappingFormData, registry: Registry) -> FormModel[T]:
-        prefix = name or registry.settings.form_data_model_prefix
-        if not data:
-            return FormModel[T].default(prefix, cls)
-        return FormModel[T].from_payload(prefix, cls, data)
-
-    return Depends(to_model)

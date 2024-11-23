@@ -29,15 +29,9 @@ class Settings(BaseSettings):
     a python module name. for instance `fastlife:components` is the directory components
     found in the fastlife package.
     """
-    registry_class: str = Field(default="fastlife.config.registry:DefaultRegistry")
+    registry_class: str = Field(default="fastlife.service.registry:DefaultRegistry")
     """Implementation class for the application regitry."""
-    template_renderer_class: str = Field(
-        default="fastlife.templates.renderer:JinjaxEngine"
-    )
-    """
-    Implementation class for the
-    {class}`fastlife.templates.renderer.AbstractTemplateRenderer`.
-    """
+
     form_data_model_prefix: str = Field(default="payload")
     """
     Pydantic form default model prefix for serialized field in www-urlencoded-form.
@@ -70,12 +64,12 @@ class Settings(BaseSettings):
     Set to true while developing, set false for production.
     """
     jinjax_global_catalog_class: str = Field(
-        default="fastlife.templates.constants:Constants"
+        default="fastlife.template_globals:Globals"
     )
     """
     Set global constants accessible in every templates.
-    Defaults to `fastlife.templates.constants:Constants`
-    See {class}`fastlife.templates.constants.Constants`
+    Defaults to `fastlife.template_globals:Globals`
+    See {class}`fastlife.template_globals.Globals`
     """
 
     session_secret_key: str = Field(default="")
@@ -101,7 +95,7 @@ class Settings(BaseSettings):
     should be true while using https on production.
     """
     session_serializer: str = Field(
-        default="fastlife.middlewares.session.serializer:SignedSessionSerializer"
+        default="fastlife.adapters.itsdangerous:SignedSessionSerializer"
     )
     """Cookie serializer for the session cookie."""
 

@@ -3,8 +3,8 @@ from http.cookiejar import Cookie
 
 import pytest
 
-from fastlife.config.settings import Settings
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
+from fastlife.settings import Settings
 from fastlife.testing.testclient import Session, WebTestClient
 
 

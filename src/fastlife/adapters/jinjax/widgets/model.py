@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from markupsafe import Markup
 from pydantic import Field
 
-from fastlife.services.templates import AbstractTemplateRenderer
+from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import TWidget, Widget
 

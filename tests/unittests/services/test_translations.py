@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastlife.services.translations import (
+from fastlife.service.translations import (
     LocalizerFactory,
     MergedTranslations,
     find_mo_files,

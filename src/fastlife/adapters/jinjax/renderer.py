@@ -14,15 +14,15 @@ from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
 from fastlife import Request
+from fastlife.adapters.fastapi.form import FormModel
+from fastlife.adapters.fastapi.localizer import get_localizer
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
-from fastlife.request.form import FormModel
-from fastlife.request.localizer import get_localizer
-from fastlife.templates.inline import InlineTemplate
+from fastlife.domain.model.template import InlineTemplate
 
 if TYPE_CHECKING:
-    from fastlife.config.settings import Settings  # coverage: ignore
+    from fastlife.settings import Settings  # coverage: ignore
 
-from fastlife.services.templates import (
+from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )

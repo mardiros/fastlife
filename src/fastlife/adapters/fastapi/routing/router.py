@@ -9,7 +9,7 @@ from typing import Any
 
 from fastapi import APIRouter
 
-from fastlife.routing.route import Route
+from fastlife.adapters.fastapi.routing.route import Route
 
 
 class Router(APIRouter):

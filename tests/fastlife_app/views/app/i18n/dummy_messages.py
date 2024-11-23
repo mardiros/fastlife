@@ -5,8 +5,7 @@ from typing import Annotated
 
 from fastapi import Path, Response
 
-from fastlife import view_config
-from fastlife.request.localizer import Localizer
+from fastlife import Localizer, view_config
 
 
 @view_config("hello-i18n", "/{locale}/dummy-messages", methods=["GET"])

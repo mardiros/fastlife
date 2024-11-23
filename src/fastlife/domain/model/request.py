@@ -1,21 +1,20 @@
 """HTTP Request representation in a python object."""
 
-from typing import TYPE_CHECKING, Annotated, Any, Generic
+from typing import TYPE_CHECKING, Any, Generic
 
-from fastapi import Request as FastAPIRequest
-from fastapi.params import Depends
+from starlette.requests import Request as BaseRequest
 
-from fastlife.config.registry import DefaultRegistry, TRegistry
-from fastlife.domain.model.security import CSRFToken, create_csrf_token
+from fastlife.domain.model.csrf import CSRFToken, create_csrf_token
+from fastlife.service.registry import TRegistry
 
 if TYPE_CHECKING:
-    from fastlife.security.policy import (  # coverage: ignore
+    from fastlife.service.security_policy import (  # coverage: ignore
         AbstractSecurityPolicy,
         HasPermission,
     )
 
 
-class GenericRequest(FastAPIRequest, Generic[TRegistry]):
+class GenericRequest(BaseRequest, Generic[TRegistry]):
     """HTTP Request representation."""
 
     registry: TRegistry
@@ -28,7 +27,7 @@ class GenericRequest(FastAPIRequest, Generic[TRegistry]):
 
     renderer_globals: dict[str, Any]
 
-    def __init__(self, registry: TRegistry, request: FastAPIRequest) -> None:
+    def __init__(self, registry: TRegistry, request: BaseRequest) -> None:
         super().__init__(request.scope, request.receive)
         self.registry = registry
         self.locale_name = registry.locale_negociator(self)
@@ -64,29 +63,7 @@ class GenericRequest(FastAPIRequest, Generic[TRegistry]):
         if self.security_policy is None:
             raise RuntimeError(
                 f"Request {self.url.path} require a security policy, "
-                "explicit fastlife.security.policy.InsecurePolicy is required."
+                "explicit fastlife.service.security_policy.InsecurePolicy is required."
             )
 
         return await self.security_policy.has_permission(permission)
-
-
-def get_request(request: FastAPIRequest) -> GenericRequest[Any]:
-    return request  # type: ignore
-
-
-Request = Annotated[GenericRequest[DefaultRegistry], Depends(get_request)]
-"""A request that is associated to the default registry."""
-# FastAPI handle its Request objects using a lenient_issubclass,
-# basically a issubclass(Request), doe to the Generic[T], it does not work.
-
-
-AnyRequest = Annotated[GenericRequest[Any], Depends(get_request)]
-"""A request version that is associated to the any registry."""
-
-
-def get_registry(request: Request) -> DefaultRegistry:
-    return request.registry
-
-
-Registry = Annotated[DefaultRegistry, Depends(get_registry)]
-"""FastAPI dependency to access to the registry."""

@@ -1,3 +1,9 @@
+"""
+Views for pydantic form.
+
+Pydantic form generate form that may contains fields that requires some ajax query.
+"""
+
 from typing import cast
 
 from fastapi import Query

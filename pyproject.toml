@@ -100,6 +100,7 @@ select = [
     "UP",  # alter when better syntax is available
     "RUF", #  the ruff devleoper's own rules
 ]
+ignore = ["RUF022"]
 
 [tool.isort]
 profile = "black"

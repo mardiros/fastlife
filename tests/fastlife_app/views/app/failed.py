@@ -1,8 +1,4 @@
-from fastapi import Request, Response
-
-from fastlife.config.exceptions import exception_handler
-from fastlife.config.views import view_config
-from fastlife.domain.model.template import JinjaXTemplate
+from fastlife import JinjaXTemplate, Request, Response, exception_handler, view_config
 
 
 class MyGoodException(Exception):

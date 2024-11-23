@@ -15,7 +15,7 @@ from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
 from fastlife.adapters.jinjax.widgets.text import TextareaWidget, TextWidget
 from fastlife.adapters.jinjax.widgets.union import UnionWidget
 from fastlife.domain.model.types import Builtins
-from fastlife.services.templates import AbstractTemplateRenderer
+from fastlife.service.templates import AbstractTemplateRenderer
 
 
 class Foo(BaseModel): ...

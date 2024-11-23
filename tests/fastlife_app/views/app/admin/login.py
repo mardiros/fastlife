@@ -3,9 +3,7 @@ from typing import Annotated
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
-from fastlife import Request, view_config
-from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.request.form import FormModel, form_model
+from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
 from tests.fastlife_app.config import MyRequest
 
 

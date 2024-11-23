@@ -3,11 +3,11 @@
 from pathlib import Path
 
 from fastlife import Configurator, Request, configure
-from fastlife.services.templates import (
+from fastlife.domain.model.template import InlineTemplate
+from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )
-from fastlife.templates.inline import InlineTemplate
 
 templates = Path(__file__).parent / "templates"
 

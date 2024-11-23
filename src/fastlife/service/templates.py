@@ -13,9 +13,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from fastlife import Request, Response
-from fastlife.templates.inline import InlineTemplate
-
-TemplateParams = Mapping[str, Any]
+from fastlife.domain.model.template import InlineTemplate
 
 
 class AbstractTemplateRenderer(abc.ABC):
@@ -77,9 +75,6 @@ class AbstractTemplateRenderer(abc.ABC):
 class AbstractTemplateRendererFactory(abc.ABC):
     """
     The template render factory.
-
-    The implementation of this class is found using the settings
-    :attr:`fastlife.config.settings.Settings.template_renderer_class`.
     """
 
     @abc.abstractmethod

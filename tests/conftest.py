@@ -8,9 +8,9 @@ from urllib.parse import urlencode
 import pytest
 from fastapi.requests import Request as FastApiRequest
 
+from fastlife.adapters.fastapi.request import GenericRequest
+from fastlife.adapters.fastapi.routing.router import Router
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
-from fastlife.request import GenericRequest
-from fastlife.routing.router import Router
 from fastlife.shared_utils.resolver import resolve
 from tests.fastlife_app.config import MyRegistry, MySettings
 
