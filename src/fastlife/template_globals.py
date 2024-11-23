@@ -16,7 +16,7 @@ def space_join(*segments: str) -> str:
     return " ".join(segments)
 
 
-class Constants(BaseModel):
+class Globals(BaseModel):
     """Templates constants."""
 
     A_CLASS: str = space_join(
@@ -315,7 +315,7 @@ class Constants(BaseModel):
     SUMMARY_CLASS: str = "flex items-center items-center font-medium cursor-pointer"
     """Default css class for {jinjax:component}`Summary`."""
 
-    TABLE_CLASS: str = "table-auto w-full text-left border-colapse"
+    TABLE_CLASS: str = "table-auto w-full text-left border-collapse"
     """Default css class for {jinjax:component}`Table`."""
 
     TD_CLASS: str = "px-4 py-2 font-normal border-b dark:border-neutral-500"

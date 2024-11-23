@@ -2,7 +2,7 @@
 module.exports = {
   darkMode: "class",
   content: [
-    "./src/fastlife/templates/constants.py",
+    "./src/fastlife/template_globals.py",
     "./src/fastlife/components/*.jinja",
     "./src/fastlife/components/**/*.jinja",
     "./tests/fastlife_app/templates/*.jinja",

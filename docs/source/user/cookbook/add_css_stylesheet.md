@@ -78,7 +78,7 @@ module.exports = {
   content: [
     "./src/myapp/templates/*.jinja",
     "./src/myapp/templates/**/*.jinja",
-    ".venv/lib/python3.*/site-packages/fastlife/templates/constants.py",
+    ".venv/lib/python3.*/site-packages/fastlife/template_globals.py",
     ".venv/lib/python3.*/site-packages/fastlife/components/*.jinja",
     ".venv/lib/python3.*/site-packages/fastlife/components/**/*.jinja",
   ],

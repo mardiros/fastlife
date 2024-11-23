@@ -64,12 +64,12 @@ class Settings(BaseSettings):
     Set to true while developing, set false for production.
     """
     jinjax_global_catalog_class: str = Field(
-        default="fastlife.templates.constants:Constants"
+        default="fastlife.template_globals:Globals"
     )
     """
     Set global constants accessible in every templates.
-    Defaults to `fastlife.templates.constants:Constants`
-    See {class}`fastlife.templates.constants.Constants`
+    Defaults to `fastlife.template_globals:Globals`
+    See {class}`fastlife.template_globals.Globals`
     """
 
     session_secret_key: str = Field(default="")
