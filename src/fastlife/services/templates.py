@@ -13,7 +13,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from fastlife import Request, Response
-from fastlife.templates.inline import InlineTemplate
+from fastlife.domain.model.template import InlineTemplate
 
 
 class AbstractTemplateRenderer(abc.ABC):

@@ -3,8 +3,8 @@ from typing import Any, Union
 import pytest
 
 from fastlife import RedirectResponse
-from fastlife.domain.model.template import JinjaXTemplate
-from fastlife.templates.inline import InlineTemplate, is_inline_template_returned
+from fastlife.domain.model.template import InlineTemplate, JinjaXTemplate
+from fastlife.shared_utils.infer import is_inline_template_returned
 
 
 class MyTemplate(JinjaXTemplate):

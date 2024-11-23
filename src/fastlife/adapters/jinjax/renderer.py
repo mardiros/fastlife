@@ -17,7 +17,7 @@ from fastlife import Request
 from fastlife.adapters.fastapi.form import FormModel
 from fastlife.adapters.fastapi.localizer import get_localizer
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
-from fastlife.templates.inline import InlineTemplate
+from fastlife.domain.model.template import InlineTemplate
 
 if TYPE_CHECKING:
     from fastlife.settings import Settings  # coverage: ignore

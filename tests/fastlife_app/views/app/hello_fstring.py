@@ -1,7 +1,7 @@
 """A dummy view to test the add_renderer"""
 
 from fastlife import view_config
-from fastlife.templates import InlineTemplate
+from fastlife.domain.model.template import InlineTemplate
 
 
 class HelloInline(InlineTemplate):

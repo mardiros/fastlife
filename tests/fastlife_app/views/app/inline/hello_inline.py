@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 from pydantic import Field
 
 from fastlife import FormModel, form_model, view_config
-from fastlife.templates.inline import InlineTemplate
+from fastlife.domain.model.template import InlineTemplate
 from tests.fastlife_app.models import Person
 
 

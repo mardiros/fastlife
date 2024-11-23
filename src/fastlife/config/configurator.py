@@ -29,6 +29,7 @@ from fastapi.types import IncEx
 
 from fastlife.adapters.fastapi.request import GenericRequest, Request
 from fastlife.config.openapiextra import OpenApiTag
+from fastlife.domain.model.template import InlineTemplate
 from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.routing.route import Route
 from fastlife.routing.router import Router
@@ -36,15 +37,17 @@ from fastlife.services.check_permission import check_permission
 from fastlife.services.csrf import check_csrf
 from fastlife.services.registry import DefaultRegistry, TRegistry
 from fastlife.settings import Settings
-from fastlife.shared_utils.resolver import resolve, resolve_maybe_relative
-from fastlife.templates.inline import is_inline_template_returned
+from fastlife.shared_utils.infer import is_inline_template_returned
+from fastlife.shared_utils.resolver import (
+    resolve,
+    resolve_maybe_relative,
+)
 
 if TYPE_CHECKING:
     from fastlife.services.security_policy import AbstractSecurityPolicy
     from fastlife.services.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
-    from fastlife.templates.inline import InlineTemplate
 
 from fastlife.services.locale_negociator import LocaleNegociator
 
