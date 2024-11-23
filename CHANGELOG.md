@@ -1,3 +1,10 @@
+## 0.22.0  - Released on 2024-11-23
+* Add a way to add fatal errors on form in order to display an error block.
+* The localizer can be called gettext in the depency in order to simple translation.
+* Expose the 99% of the usefull API in the main package.
+* Refactor all internal class to get a more hexagonal approach in order to reduce
+  circular dependencies.
+
 ## 0.21.0  - Released on 2024-11-15
 * Make the InlineTemplate the only way to render views template.
   * Breaking change: template args is not supported in Configutor.add_route.

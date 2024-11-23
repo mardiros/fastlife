@@ -292,7 +292,7 @@ standard = [
 
 [[package]]
 name = "fastlifeweb"
-version = "0.21.0"
+version = "0.22.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
@@ -318,7 +318,7 @@ testing = [
     { name = "beautifulsoup4" },
 ]
 
-[package.dependency-groups]
+[package.dev-dependencies]
 dev = [
     { name = "babel" },
     { name = "beautifulsoup4" },
@@ -363,7 +363,7 @@ requires-dist = [
     { name = "venusian", specifier = ">=3.0.0,<4" },
 ]
 
-[package.metadata.dependency-groups]
+[package.metadata.requires-dev]
 dev = [
     { name = "babel", specifier = ">=2.16.0,<3" },
     { name = "beautifulsoup4", specifier = ">=4.12.2,<5" },
