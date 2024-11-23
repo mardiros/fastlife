@@ -1,0 +1,1 @@
+"""Fastlife views."""
