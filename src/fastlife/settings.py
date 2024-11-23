@@ -95,7 +95,7 @@ class Settings(BaseSettings):
     should be true while using https on production.
     """
     session_serializer: str = Field(
-        default="fastlife.middlewares.session.serializer:SignedSessionSerializer"
+        default="fastlife.adapters.itsdangerous:SignedSessionSerializer"
     )
     """Cookie serializer for the session cookie."""
 
