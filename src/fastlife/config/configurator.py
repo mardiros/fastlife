@@ -28,11 +28,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
 
 from fastlife.adapters.fastapi.request import GenericRequest, Request
+from fastlife.adapters.fastapi.routing.route import Route
+from fastlife.adapters.fastapi.routing.router import Router
 from fastlife.config.openapiextra import OpenApiTag
 from fastlife.domain.model.template import InlineTemplate
 from fastlife.middlewares.base import AbstractMiddleware
-from fastlife.routing.route import Route
-from fastlife.routing.router import Router
 from fastlife.service.check_permission import check_permission
 from fastlife.service.csrf import check_csrf
 from fastlife.service.registry import DefaultRegistry, TRegistry
