@@ -8,8 +8,8 @@ import bs4
 import httpx
 from fastapi.testclient import TestClient
 from multidict import MultiDict
-from starlette.types import ASGIApp
 
+from fastlife.domain.model.asgi import ASGIApp
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 from fastlife.settings import Settings
 from fastlife.shared_utils.resolver import resolve

@@ -3,9 +3,9 @@ from datetime import timedelta
 from typing import Any
 
 import pytest
-from starlette.types import ASGIApp
 
 from fastlife.adapters.itsdangerous.session import SignedSessionSerializer
+from fastlife.domain.model.asgi import ASGIApp
 from fastlife.middlewares.session.middleware import SessionMiddleware
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
 

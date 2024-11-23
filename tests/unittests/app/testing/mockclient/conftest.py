@@ -5,8 +5,8 @@ import httpx
 import pytest
 from fastapi import FastAPI
 from multidict import MultiDict
-from starlette.types import ASGIApp
 
+from fastlife.domain.model.asgi import ASGIApp
 from fastlife.settings import Settings
 from fastlife.testing.testclient import WebResponse, WebTestClient
 

@@ -1,8 +1,7 @@
 import logging
 from collections.abc import Sequence
 
-from starlette.types import ASGIApp, Receive, Scope, Send
-
+from fastlife.domain.model.asgi import ASGIApp, Receive, Scope, Send
 from fastlife.middlewares.base import AbstractMiddleware
 
 log = logging.getLogger(__name__)

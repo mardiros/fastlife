@@ -1,5 +1,4 @@
-from starlette.types import ASGIApp
-
+from fastlife.domain.model.asgi import ASGIApp
 from fastlife.settings import Settings
 from fastlife.testing.testclient import WebTestClient
 
