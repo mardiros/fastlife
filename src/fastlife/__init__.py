@@ -7,7 +7,13 @@ from fastapi.responses import RedirectResponse
 
 from .adapters.fastapi.form import form_model
 from .adapters.fastapi.localizer import Localizer
-from .adapters.fastapi.request import AnyRequest, Registry, Request, get_request
+from .adapters.fastapi.request import (
+    AnyRequest,
+    Registry,
+    Request,
+    get_registry,
+    get_request,
+)
 from .config import (
     Configurator,
     GenericConfigurator,
@@ -30,7 +36,7 @@ from .domain.model.security_policy import (
 from .domain.model.template import JinjaXTemplate
 
 # from .request.form_data import model
-from .service.registry import DefaultRegistry, GenericRegistry
+from .service.registry import DefaultRegistry, GenericRegistry, TRegistry, TSettings
 from .service.security_policy import AbstractSecurityPolicy, InsecurePolicy
 from .settings import Settings
 
@@ -47,6 +53,9 @@ __all__ = [
     "resource_view",
     "Configurator",
     "DefaultRegistry",
+    "TSettings",
+    "TRegistry",
+    "get_registry",
     # Form
     "FormModel",
     "form_model",

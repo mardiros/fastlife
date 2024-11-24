@@ -41,7 +41,7 @@ class Route(APIRoute):
         orig_route_handler = super().get_route_handler()
 
         async def route_handler(request: StarletteRequest) -> Response:
-            req = GenericRequest(self._registry, request)
+            req = GenericRequest[Any, Any](self._registry, request)
             return await orig_route_handler(req)
 
         return route_handler
