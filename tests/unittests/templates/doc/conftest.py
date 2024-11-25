@@ -5,7 +5,7 @@ import pytest
 from fastlife import GenericRequest
 from tests.fastlife_app.config import MyRegistry, MySettings
 
-Request = GenericRequest[MyRegistry]
+Request = GenericRequest[None, MyRegistry]
 
 
 @pytest.fixture(scope="session")

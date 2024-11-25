@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import Depends
 
@@ -27,4 +27,4 @@ class MyRegistry(DefaultRegistry):
 
 
 MyConfigurator = GenericConfigurator[MyRegistry]
-MyRequest = Annotated[GenericRequest[MyRegistry], Depends(get_request)]
+MyRequest = Annotated[GenericRequest[Any, MyRegistry], Depends(get_request)]

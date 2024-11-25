@@ -25,11 +25,11 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TUser, TRegistry]):
     Unauthorized = Unauthorized
     """The exception raised if no user has been identified."""
 
-    request: GenericRequest[TRegistry]
+    request: GenericRequest[TUser, TRegistry]
     """Request where the security policy is applied."""
 
     def __init__(
-        self, request: Annotated[GenericRequest[TRegistry], Depends(get_request)]
+        self, request: Annotated[GenericRequest[TUser, TRegistry], Depends(get_request)]
     ):
         """
         Build the security policy.

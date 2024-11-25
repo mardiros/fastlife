@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, Generic
 from starlette.requests import Request as BaseRequest
 
 from fastlife.domain.model.csrf import CSRFToken, create_csrf_token
+from fastlife.domain.model.security_policy import TUser
 from fastlife.service.registry import TRegistry
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class GenericRequest(BaseRequest, Generic[TRegistry]):
+class GenericRequest(BaseRequest, Generic[TUser, TRegistry]):
     """HTTP Request representation."""
 
     registry: TRegistry
@@ -22,7 +23,7 @@ class GenericRequest(BaseRequest, Generic[TRegistry]):
     locale_name: str
     """Request locale used for the i18n of the response."""
 
-    security_policy: "AbstractSecurityPolicy[Any, TRegistry] | None"
+    security_policy: "AbstractSecurityPolicy[TUser, TRegistry] | None"
     """Request locale used for the i18n of the response."""
 
     renderer_globals: dict[str, Any]
