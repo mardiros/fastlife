@@ -1,3 +1,6 @@
+## 0.22.1  - Released on 2024-11-27
+* Improve Request typing
+
 ## 0.22.0  - Released on 2024-11-23
 * Add a way to add fatal errors on form in order to display an error block.
 * The localizer can be called gettext in the depency in order to simple translation.
