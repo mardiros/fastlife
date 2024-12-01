@@ -94,9 +94,6 @@ async def secured(
     permission="admin",
     methods=["GET"],
 )
-async def secured_hello(
-    user: User,
-    nick: Annotated[str, Query(...)],
-) -> HelloWorld:
+async def secured_hello(nick: Annotated[str, Query(...)]) -> HelloWorld:
     person = Person(nick=nick)
-    return HelloWorld(user=user, person=person)
+    return HelloWorld(person=person)

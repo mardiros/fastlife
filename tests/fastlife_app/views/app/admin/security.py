@@ -4,10 +4,13 @@ from starlette.status import HTTP_303_SEE_OTHER
 
 from fastlife import (
     AbstractSecurityPolicy,
+    Allowed,
     Anonymous,
     Authenticated,
     AuthenticationState,
     Configurator,
+    Denied,
+    HasPermission,
     PendingMFA,
     PreAuthenticated,
     Request,
@@ -21,9 +24,6 @@ from tests.fastlife_app.config import MyRequest
 from tests.fastlife_app.domain.model import UserAccount
 from tests.fastlife_app.service.uow import AuthnToken
 from tests.fastlife_app.views.api.security import (
-    Allowed,
-    Denied,
-    HasPermission,
     MyRegistry,
 )
 
