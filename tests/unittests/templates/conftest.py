@@ -8,7 +8,7 @@ from fastlife import Configurator, GenericRequest, Settings
 from fastlife.adapters.jinjax import JinjaxEngine
 from tests.fastlife_app.config import MyRegistry, MySettings
 
-Request = GenericRequest[None, MyRegistry]
+Request = GenericRequest[None, None, MyRegistry]
 
 
 @pytest.fixture(scope="session")

@@ -37,7 +37,5 @@ async def request_has_permission_without_policy_installed(
     if await request.has_permission("yolo"):
         assert request.security_policy
         ident = await request.security_policy.identity()
-        id = await request.security_policy.authenticated_userid()
-        assert isinstance(id, UUID)
-        return HelloWorld(person=Person(id=id, nick=str(ident)))
+        return HelloWorld(person=Person(id=UUID(int=0), nick=str(ident)))
     return HelloWorld()

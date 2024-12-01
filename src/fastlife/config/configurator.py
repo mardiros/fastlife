@@ -144,7 +144,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
         self._security_policies: dict[
-            str, type[AbstractSecurityPolicy[Any, TRegistry]]
+            str, type[AbstractSecurityPolicy[Any, Any, TRegistry]]
         ] = {}
 
         self._registered_permissions: set[str] = set()
@@ -322,7 +322,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
     def set_security_policy(
-        self, security_policy: "type[AbstractSecurityPolicy[Any, TRegistry]]"
+        self, security_policy: "type[AbstractSecurityPolicy[Any, Any, TRegistry]]"
     ) -> Self:
         """
         Set a security policy for the application.
@@ -594,7 +594,7 @@ class GenericConfigurator(Generic[TRegistry]):
             # class is wrong.
             # Until we store a security policy per rooter, we rebuild an
             # incomplete request here.
-            req = GenericRequest[Any, DefaultRegistry](self.registry, request)
+            req = GenericRequest[Any, Any, DefaultRegistry](self.registry, request)
             resp = handler(req, exc)
             if isinstance(resp, Response):
                 return resp

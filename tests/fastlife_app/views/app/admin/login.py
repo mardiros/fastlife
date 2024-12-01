@@ -27,7 +27,7 @@ async def login(
         if user := await request.registry.uow.users.get_user_by_credencials(
             loginform.model.username, loginform.model.password.get_secret_value()
         ):
-            await request.security_policy.remember(user)
+            await request.security_policy.pre_remember(user)
             return RedirectResponse(request.url_for("secured_page"), status_code=303)
         else:
             if loginform.model.username == "root":

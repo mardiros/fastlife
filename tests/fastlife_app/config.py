@@ -1,4 +1,4 @@
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi import Depends
 
@@ -10,6 +10,7 @@ from fastlife import (
     get_request,
 )
 from fastlife.shared_utils.resolver import resolve
+from tests.fastlife_app.domain.model import AuthnToken, UserAccount
 from tests.fastlife_app.service.uow import AbstractUnitOfWork
 
 
@@ -27,4 +28,6 @@ class MyRegistry(DefaultRegistry):
 
 
 MyConfigurator = GenericConfigurator[MyRegistry]
-MyRequest = Annotated[GenericRequest[Any, MyRegistry], Depends(get_request)]
+MyRequest = Annotated[
+    GenericRequest[UserAccount, AuthnToken, MyRegistry], Depends(get_request)
+]
