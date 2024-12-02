@@ -9,11 +9,12 @@ from fastlife import GenericRequest, get_request
 from fastlife.domain.model.security_policy import (
     Allowed,
     Anonymous,
+    Authenticated,
     AuthenticationState,
-    AuthenticationStatus,
     Forbidden,
     HasPermission,
     MFARequired,
+    PendingMFA,
     TClaimedIdentity,
     TIdentity,
     Unauthorized,
@@ -70,18 +71,22 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TClaimedIdentity, TIdentity, TRegi
         Return app-specific user object that pretend to be identified.
         """
         auth = await self.get_authentication_state()
-        if auth.status == AuthenticationStatus.pending_mfa:
-            return auth.claimed
-        return None
+        match auth:
+            case PendingMFA(claimed):
+                return claimed
+            case _:
+                return None
 
     async def identity(self) -> TIdentity | None:
         """
         Return app-specific user object after an mfa authentication or None.
         """
         auth = await self.get_authentication_state()
-        if auth.status == AuthenticationStatus.authenticated:
-            return auth.identity
-        return None
+        match auth:
+            case Authenticated(identity):
+                return identity
+            case _:
+                return None
 
     @abc.abstractmethod
     async def build_authentication_state(

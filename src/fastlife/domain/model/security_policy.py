@@ -2,8 +2,7 @@
 
 import logging
 from collections.abc import Callable, Coroutine
-from enum import Enum
-from typing import Any, ClassVar, Generic, Literal, TypeVar
+from typing import Any, Generic, Literal, TypeVar
 
 from fastapi import HTTPException
 from starlette.status import HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN
@@ -17,34 +16,34 @@ TIdentity = TypeVar("TIdentity")
 log = logging.getLogger(__name__)
 
 
-class AuthenticationStatus(Enum):
-    unauthenticated = "unauthenticated"
-    pending_mfa = "pending_mfa"
-    authenticated = "authenticated"
-
-
-class _Anonymous:
-    status = AuthenticationStatus.unauthenticated
-    claimed = None
-    identity = None
+class _Anonymous: ...
 
 
 Anonymous = _Anonymous()
+"""
+The user is not authenticated.
+"""
 
 
 class PendingMFA(Generic[TClaimedIdentity]):
-    status: ClassVar[AuthenticationStatus] = AuthenticationStatus.pending_mfa
+    """
+    The user provided its identity, usually validated with a first factor,
+    such as a password but it has not totally proved its authentication
+    by a second or many other factors of authentication.
+    The type TClaimedIdentity will store the relevant informations during
+    this authentication phase.
+    """
+
     claimed: TClaimedIdentity | None
-    identity = None
-    __match_args__ = ("identity",)
+    __match_args__ = ("claimed",)
 
     def __init__(self, claimed: TClaimedIdentity) -> None:
         self.claimed = claimed
 
 
 class Authenticated(Generic[TIdentity]):
-    status: ClassVar[AuthenticationStatus] = AuthenticationStatus.authenticated
-    claimed = None
+    """The identity has been validated."""
+
     __match_args__ = ("identity",)
 
     def __init__(self, identity: TIdentity) -> None:
@@ -54,7 +53,15 @@ class Authenticated(Generic[TIdentity]):
 AuthenticationState = (
     _Anonymous | PendingMFA[TClaimedIdentity] | Authenticated[TIdentity]
 )
+"""
+Type representing the state of an authentication.
+"""
+
 NoMFAAuthenticationState = AuthenticationState[None, TIdentity]
+"""
+Type representing a state of authentication when no multiple factor of authentication
+is involved.
+"""
 
 
 class Unauthorized(HTTPException):
