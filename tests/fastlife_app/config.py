@@ -29,5 +29,5 @@ class MyRegistry(DefaultRegistry):
 
 MyConfigurator = GenericConfigurator[MyRegistry]
 MyRequest = Annotated[
-    GenericRequest[UserAccount, AuthnToken, MyRegistry], Depends(get_request)
+    GenericRequest[MyRegistry, AuthnToken, UserAccount], Depends(get_request)
 ]

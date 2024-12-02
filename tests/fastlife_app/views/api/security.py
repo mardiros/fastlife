@@ -49,11 +49,11 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 MyApiRequest = Annotated[
-    GenericRequest[None, TokenInfo, MyRegistry], Depends(get_request)
+    GenericRequest[MyRegistry, TokenInfo, None], Depends(get_request)
 ]
 
 
-class OAuth2SecurityPolicy(AbstractNoMFASecurityPolicy[TokenInfo, MyRegistry]):
+class OAuth2SecurityPolicy(AbstractNoMFASecurityPolicy[MyRegistry, TokenInfo]):
     def __init__(
         self,
         request: MyApiRequest,

@@ -14,7 +14,7 @@ def get_request(request: FastAPIRequest) -> GenericRequest[Any, Any, Any]:
     return request  # type: ignore
 
 
-Request = Annotated[GenericRequest[Any, Any, DefaultRegistry], Depends(get_request)]
+Request = Annotated[GenericRequest[DefaultRegistry, Any, Any], Depends(get_request)]
 """A request that is associated to the default registry."""
 # FastAPI handle its Request objects using a lenient_issubclass,
 # basically a issubclass(Request), does not work with Generic[T].

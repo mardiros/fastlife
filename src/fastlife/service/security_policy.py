@@ -22,7 +22,7 @@ from fastlife.domain.model.security_policy import (
 from fastlife.service.registry import TRegistry
 
 
-class AbstractSecurityPolicy(abc.ABC, Generic[TClaimedIdentity, TIdentity, TRegistry]):
+class AbstractSecurityPolicy(abc.ABC, Generic[TRegistry, TIdentity, TClaimedIdentity]):
     """Security policy base class."""
 
     Forbidden = Forbidden
@@ -32,13 +32,13 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TClaimedIdentity, TIdentity, TRegi
     MFARequired = MFARequired
     """The exception raised if no user has been authenticated using a MFA."""
 
-    request: GenericRequest[TClaimedIdentity, TIdentity, TRegistry]
+    request: GenericRequest[TRegistry, TIdentity, TClaimedIdentity]
     """Request where the security policy is applied."""
 
     def __init__(
         self,
         request: Annotated[
-            GenericRequest[TClaimedIdentity, TIdentity, TRegistry], Depends(get_request)
+            GenericRequest[TRegistry, TIdentity, TClaimedIdentity], Depends(get_request)
         ],
     ):
         """
@@ -115,12 +115,12 @@ class AbstractSecurityPolicy(abc.ABC, Generic[TClaimedIdentity, TIdentity, TRegi
         """Destroy the request session."""
 
 
-class AbstractNoMFASecurityPolicy(AbstractSecurityPolicy[None, TIdentity, TRegistry]):
+class AbstractNoMFASecurityPolicy(AbstractSecurityPolicy[TRegistry, TIdentity, None]):
     async def pre_remember(self, claimed_identity: None) -> None:
         """Do Nothing."""
 
 
-class InsecurePolicy(AbstractNoMFASecurityPolicy[None, Any]):
+class InsecurePolicy(AbstractNoMFASecurityPolicy[Any, None]):
     """
     An implementation of the security policy made for explicit unsecured access.
 

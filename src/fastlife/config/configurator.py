@@ -322,7 +322,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
     def set_security_policy(
-        self, security_policy: "type[AbstractSecurityPolicy[Any, Any, TRegistry]]"
+        self, security_policy: "type[AbstractSecurityPolicy[TRegistry, Any, Any]]"
     ) -> Self:
         """
         Set a security policy for the application.

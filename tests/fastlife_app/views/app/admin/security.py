@@ -41,7 +41,7 @@ def redict_login(request: Request, exception: RedirectLogin):
     )
 
 
-class SecurityPolicy(AbstractSecurityPolicy[UserAccount, AuthnToken, MyRegistry]):
+class SecurityPolicy(AbstractSecurityPolicy[MyRegistry, AuthnToken, UserAccount]):
     Unauthorized = RedirectLogin
 
     def __init__(self, request: MyRequest):

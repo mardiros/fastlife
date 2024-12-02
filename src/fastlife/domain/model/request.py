@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     )
 
 
-class GenericRequest(BaseRequest, Generic[TClaimedIdentity, TIdentity, TRegistry]):
+class GenericRequest(BaseRequest, Generic[TRegistry, TIdentity, TClaimedIdentity]):
     """HTTP Request representation."""
 
     registry: TRegistry
@@ -24,7 +24,7 @@ class GenericRequest(BaseRequest, Generic[TClaimedIdentity, TIdentity, TRegistry
     """Request locale used for the i18n of the response."""
 
     security_policy: (
-        "AbstractSecurityPolicy[TClaimedIdentity, TIdentity, TRegistry] | None"
+        "AbstractSecurityPolicy[TRegistry, TIdentity, TClaimedIdentity] | None"
     )
     """Request locale used for the i18n of the response."""
 
