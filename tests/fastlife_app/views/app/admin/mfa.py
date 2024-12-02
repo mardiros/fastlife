@@ -54,7 +54,7 @@ async def mfa(
                 )
 
         else:
-            loginform.add_error("username", "Invalid code.")
+            loginform.add_error("code", "Invalid code.")
     return LoginTemplate(model=loginform)
 
 
