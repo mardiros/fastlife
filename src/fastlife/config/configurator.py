@@ -594,7 +594,7 @@ class GenericConfigurator(Generic[TRegistry]):
             # class is wrong.
             # Until we store a security policy per rooter, we rebuild an
             # incomplete request here.
-            req = GenericRequest[Any, Any, DefaultRegistry](self.registry, request)
+            req = GenericRequest[DefaultRegistry, Any, Any](self.registry, request)
             resp = handler(req, exc)
             if isinstance(resp, Response):
                 return resp
