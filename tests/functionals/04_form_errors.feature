@@ -1,6 +1,5 @@
 Feature: Pydantic Form Errors
 
-  @wip
   Scenario: Fatal error
     Given anonymous user on "/admin/login"
     When I fill the field "username" with "root"

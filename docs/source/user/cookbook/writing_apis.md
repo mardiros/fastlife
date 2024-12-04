@@ -161,20 +161,18 @@ All the http verb are supported so `get`, `post`, `put`, `patch`, `delete`,
 `collection_get`, `collection_post`, `collection_put`, `collection_patch`,
 `collection_delete`, `collection_head` and `collection_options`).
 
-
 Usually, the basic crud operation in a json/rest style api ares:
 
-* a `collection_post` is implemented to add an object to the collection (store a new resource).
-* a `collection_get` is implemented to retrieve a list partial objects, and have fields.
-* a `get` is implemented to retrieve a single and full object.
-* a `patch` or `put` is implemented to update a resource.
-* a `delete` is implemented to remove a resource from the collection.
+- a `collection_post` is implemented to add an object to the collection (store a new resource).
+- a `collection_get` is implemented to retrieve a list partial objects, and have fields.
+- a `get` is implemented to retrieve a single and full object.
+- a `patch` or `put` is implemented to update a resource.
+- a `delete` is implemented to remove a resource from the collection.
 
 Other methods handle personal needs.
 
 A basic crud example, included from the test suite is in the fastlife APIs
 documentation as a reference: {mod}`fastlife.config.resources`.
-
 
 ## Security Policy
 
@@ -200,12 +198,10 @@ def includeme(config: Configurator):
     config.include('.api', route_prefix='/api')
 ```
 
-
 :::{caution}
 Event if the `/api` route exists, and the swagger_ui_url point to "/api/doc",
 it will always be in include withoute the route prefix.
 :::
-
 
 Now imagine that the api module contains a security policy, it will applied
 only to the api routes.
@@ -219,8 +215,9 @@ from fastapi import Depends
 from fastapi.security.oauth2 import OAuth2PasswordBearer
 
 from fastlife import Configurator, configure, DefaultRegistry, Request
-from fastlife.service.security_policy import AbstractSecurityPolicy, Allowed, Unauthorized
-
+from fastlife.service.security_policy import (
+  AbstractNoMFASecurityPolicy, Allowed, Unauthorized
+)
 
 class AuthenticatedUser(BaseModel):
     user_id: str
@@ -233,7 +230,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 
-class MySecurityPolicy(AbstractSecurityPolicy[AuthenticatedUser, DefaultRegistry]):
+class MySecurityPolicy(AbstractNoMFASecurityPolicy[DefaultRegistry, AuthenticatedUser]):
 
     def __init__(
         self,
@@ -273,7 +270,6 @@ The security policy constructor accept any FastAPI dependency and is
 made to receive FastAPI security dependency to properly build the doc.
 But for fine grained check, it is better to always set the auto_error
 to `False` to give the maximum control of the security policy.
-
 
 :::{hint}
 In FastAPI, many things must be done in the proper order to work.

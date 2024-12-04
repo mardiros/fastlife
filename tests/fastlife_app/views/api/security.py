@@ -5,19 +5,24 @@ from fastapi.security.oauth2 import OAuth2PasswordBearer
 from starlette.exceptions import HTTPException
 
 from fastlife import (
-    AbstractSecurityPolicy,
+    AbstractNoMFASecurityPolicy,
     Allowed,
+    Anonymous,
+    Authenticated,
     Configurator,
     Denied,
     Forbidden,
+    GenericRequest,
     HasPermission,
+    NoMFAAuthenticationState,
     Request,
     Unauthenticated,
     Unauthorized,
     configure,
     exception_handler,
+    get_request,
 )
-from tests.fastlife_app.config import MyRegistry, MyRequest
+from tests.fastlife_app.config import MyRegistry
 from tests.fastlife_app.domain.model import TokenInfo
 
 
@@ -43,27 +48,30 @@ oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="http://token", scopes={"foo": "Foos resources"}, auto_error=False
 )
 
+MyApiRequest = Annotated[
+    GenericRequest[MyRegistry, TokenInfo, None], Depends(get_request)
+]
 
-class OAuth2SecurityPolicy(AbstractSecurityPolicy[TokenInfo, MyRegistry]):
+
+class OAuth2SecurityPolicy(AbstractNoMFASecurityPolicy[MyRegistry, TokenInfo]):
     def __init__(
-        self, request: MyRequest, token: Annotated[str | None, Depends(oauth2_scheme)]
+        self,
+        request: MyApiRequest,
+        token: Annotated[str | None, Depends(oauth2_scheme)],
     ):
         super().__init__(request)
         self.token = token
 
-    async def identity(self) -> TokenInfo | None:
+    async def build_authentication_state(self) -> NoMFAAuthenticationState[TokenInfo]:
         """Return app-specific user object."""
         tinfo: TokenInfo | None = None
         if self.token:
-            tinfo = await self.request.registry.uow.tokens.get_by_token(
+            tinfo = await self.request.registry.uow.api_tokens.get_by_token(
                 token=self.token
             )
-        return tinfo
-
-    async def authenticated_userid(self) -> str | None:
-        """Return a user identifier."""
-        ident = await self.identity()
-        return ident.username if ident else None
+            if tinfo:
+                return Authenticated(tinfo)
+        return Anonymous
 
     async def has_permission(self, permission: str) -> type[HasPermission]:
         """Allow access to everything if signed in."""
@@ -73,7 +81,7 @@ class OAuth2SecurityPolicy(AbstractSecurityPolicy[TokenInfo, MyRegistry]):
             return Denied
         return Allowed
 
-    async def remember(self, user: TokenInfo) -> None:
+    async def remember(self, identity: TokenInfo) -> None:
         """Save the user identity in the request session."""
 
     async def forget(self) -> None:

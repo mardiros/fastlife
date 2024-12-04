@@ -1,6 +1,10 @@
+from uuid import UUID
+
 import pytest
 
 from fastlife.testing import WebTestClient
+from tests.fastlife_app.domain.model import AuthnToken
+from tests.fastlife_app.service.uow import AbstractUnitOfWork
 
 
 def test_http_call(client: WebTestClient):
@@ -42,6 +46,9 @@ def test_session(client: WebTestClient):
     resp.form.set("payload.username", "Bob")
     resp.form.set("payload.password", "secret")
     resp = resp.form.submit()
+    assert resp.html.h2[0].text == "second factor"
+    resp.form.set("payload.code", "1234")
+    resp = resp.form.submit()
     assert resp.by_text("Welcome back Bob!", node_name="h1") is not None
 
     logout = resp.by_text("logout")
@@ -72,6 +79,9 @@ def test_forbidden(client: WebTestClient):
     resp.form.set("payload.username", "Roger")
     resp.form.set("payload.password", "secret")
     resp = resp.form.submit()
+    assert resp.html.h2[0].text == "second factor"
+    resp.form.set("payload.code", "1234")
+    resp = resp.form.submit()
     assert resp.status_code == 403
 
 
@@ -87,6 +97,8 @@ def test_follow_redirect_on_login_then_hx_redirect(client: WebTestClient):
     resp.form.set("payload.username", "Bob")
     resp.form.set("payload.password", "secret")
     resp = resp.form.submit()
+    resp.form.set("payload.code", "1234")
+    resp = resp.form.submit()
     assert resp.html.h1.text == "Welcome back Bob!"
 
     resp.form.set("payload.nick", "nicky")
@@ -94,8 +106,16 @@ def test_follow_redirect_on_login_then_hx_redirect(client: WebTestClient):
     assert resp.html.h1.text == "Hello nicky!"
 
 
-def test_redirect_on_logout(client: WebTestClient):
-    client.session["user_id"] = "2"
+async def test_redirect_on_logout(client: WebTestClient, uow: AbstractUnitOfWork):
+    await uow.tokens.add(
+        AuthnToken(
+            authntoken_id=UUID(int=2),
+            username="bob",
+            user_id=UUID(int=2),
+            permissions={"admin"},
+        )
+    )
+    client.session["authntoken_id"] = str(UUID(int=2))
     resp = client.get("/admin/secured", follow_redirects=False)
     assert resp.status_code == 200
     logout = resp.by_text("logout")

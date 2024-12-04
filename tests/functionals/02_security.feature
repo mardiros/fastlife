@@ -6,6 +6,8 @@ Feature: Authentication/Authorization
     When I fill the field "username" with "Alice"
     When I fill the field "password" with "secret"
     And I click on the "button" "login"
+    When I fill the field "code" with "1234"
+    And I click on the "button" "login"
     Then I see the text "Welcome back Alice!"
     When I click on the "link" "logout"
     Then I see the text "Hello World!"

@@ -29,7 +29,7 @@ def python_path(root_dir: Path) -> None:
 def dummy_request_param(
     dummy_registry: MyRegistry,
     params: Mapping[str, Any],
-) -> GenericRequest[Any, MyRegistry]:
+) -> GenericRequest[Any, Any, MyRegistry]:
     scope = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
@@ -56,7 +56,7 @@ def dummy_request_param(
         )
     body = req_params.pop("body", None)
     scope.update(req_params)
-    req = GenericRequest[Any, MyRegistry](dummy_registry, FastApiRequest(scope))
+    req = GenericRequest[Any, Any, MyRegistry](dummy_registry, FastApiRequest(scope))
     if body:
         req._body = body.encode("utf-8")  # type: ignore
     return req

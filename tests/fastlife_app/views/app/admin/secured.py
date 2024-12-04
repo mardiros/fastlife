@@ -1,32 +1,67 @@
 from typing import Annotated
 
 from fastapi import Depends, Query, Response
+from pydantic import Field
 
-from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
-from fastlife.service.security_policy import Forbidden
-from tests.fastlife_app.service.uow import AuthenticatedUser
+from fastlife import (
+    Authenticated,
+    FormModel,
+    JinjaXTemplate,
+    PendingMFA,
+    Request,
+    form_model,
+    view_config,
+)
+from tests.fastlife_app.service.uow import UserAccount
 from tests.fastlife_app.views.app.home import Person
 
 
-async def authenticated_user(request: Request) -> AuthenticatedUser:
+async def authenticated_user(request: Request) -> UserAccount:
     assert request.security_policy
-    ret = await request.security_policy.identity()
-    if not ret:
-        raise Forbidden()  # the route is protected by a permission, unreachable code
-    return ret
+    state = await request.security_policy.get_authentication_state()
+    match state:
+        case Authenticated(identity):
+            return identity
+        case PendingMFA(_):
+            raise request.security_policy.MFARequired()
+        case _:
+            raise request.security_policy.Forbidden()
 
 
-User = Annotated[AuthenticatedUser, Depends(authenticated_user)]
+User = Annotated[UserAccount, Depends(authenticated_user)]
 
 
 class Secured(JinjaXTemplate):
-    template = """<Secured :user="user" />"""
-    user: User
+    template = """
+    <Layout>
+      <H1>Welcome back {{ authenticated_user.username }}!</H1>
+      <A href="/admin/logout">logout</A>
+
+      <H2>Say Hello too ?</H2>
+      <Form  method="post">
+        <Input name="payload.nick" label="Name" />
+        <Button aria-label="submit">Submit</Button>
+      </Form>
+
+    </Layout>
+    """
+    person: Person | None = Field(default=None)
 
 
 class HelloWorld(JinjaXTemplate):
-    template = """<HelloWorld :user="user" :person="person" />"""
-    user: User
+    template = """
+    <Layout>
+
+      <H1>Hello {{ person.nick }}!</H1>
+
+      <H2>{{ authenticated_user.username }}, Say Hello too ?</H2>
+      <Form  method="post">
+        <Input name="payload.nick" label="Name" />
+        <Button aria-label="submit">Submit</Button>
+      </Form>
+
+    </Layout>
+    """
     person: Person
 
 
@@ -38,7 +73,6 @@ class HelloWorld(JinjaXTemplate):
 )
 async def secured(
     request: Request,
-    user: User,
     person: Annotated[FormModel[Person], form_model(Person)],
 ) -> Secured | Response:
     if request.method == "POST":
@@ -51,7 +85,7 @@ async def secured(
                 )
             },
         )
-    return Secured(user=user)
+    return Secured()
 
 
 @view_config(
@@ -60,9 +94,6 @@ async def secured(
     permission="admin",
     methods=["GET"],
 )
-async def secured_hello(
-    user: User,
-    nick: Annotated[str, Query(...)],
-) -> HelloWorld:
+async def secured_hello(nick: Annotated[str, Query(...)]) -> HelloWorld:
     person = Person(nick=nick)
-    return HelloWorld(user=user, person=person)
+    return HelloWorld(person=person)

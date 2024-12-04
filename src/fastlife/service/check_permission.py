@@ -34,6 +34,8 @@ def check_permission(permission_name: str) -> CheckPermissionHook:
                 return
             case "denied":
                 raise request.security_policy.Forbidden(detail=allowed.reason)
+            case "mfa_required":
+                raise request.security_policy.MFARequired(detail=allowed.reason)
             case "unauthenticated":
                 raise request.security_policy.Unauthorized(detail=allowed.reason)
 

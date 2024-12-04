@@ -9,18 +9,18 @@ from fastlife.domain.model.request import GenericRequest
 from fastlife.service.registry import DefaultRegistry
 
 
-def get_request(request: FastAPIRequest) -> GenericRequest[Any, Any]:
+def get_request(request: FastAPIRequest) -> GenericRequest[Any, Any, Any]:
     """Return the Fastlife Request object."""
     return request  # type: ignore
 
 
-Request = Annotated[GenericRequest[Any, DefaultRegistry], Depends(get_request)]
+Request = Annotated[GenericRequest[DefaultRegistry, Any, Any], Depends(get_request)]
 """A request that is associated to the default registry."""
 # FastAPI handle its Request objects using a lenient_issubclass,
 # basically a issubclass(Request), does not work with Generic[T].
 
 
-AnyRequest = Annotated[GenericRequest[Any, Any], Depends(get_request)]
+AnyRequest = Annotated[GenericRequest[Any, Any, Any], Depends(get_request)]
 """A request version that is associated to the any registry."""
 
 
