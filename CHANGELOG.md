@@ -1,3 +1,14 @@
+## 0.23.0  - Released on 2024-12-04
+* Update Request type.
+  * Breaking changes: Request[TUser, TRegistry] -> Request[TRegistry, TIdentity, TClaimedIdentity].
+* Update SecurityPolicy, designed for MFA by default.
+  * Breaking changes: new abstract method added. build_authentication_state.
+  * Breaking changes: there is no more get_authenticated_userid method.
+  * The identity method is not abstract anymore, result comes from the build_authentication_state.
+  * New method get_authentication_state, claimed_identity and pre_remember.
+* Add a AbstractNoMFASecurityPolicy that build a AbstractSecurityPolicy without TClaimedIdentity as None.
+* New ACL type added to raise 401 errors due to missing MFA which may not be same url as tu login/password.
+
 ## 0.22.1  - Released on 2024-11-27
 * Improve Request typing
 
