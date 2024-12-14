@@ -3,12 +3,8 @@ from collections import defaultdict
 from collections.abc import Callable, Iterator
 from gettext import GNUTranslations
 from io import BufferedReader
-from typing import TYPE_CHECKING
 
 from fastlife.shared_utils.resolver import resolve_path
-
-if TYPE_CHECKING:
-    from fastlife import Request  # coverage: ignore
 
 LocaleName = str
 Domain = str
@@ -177,8 +173,8 @@ class LocalizerFactory:
         root_path = resolve_path(path)
         self._translations.load(root_path)
 
-    def __call__(self, request: "Request") -> Localizer:
+    def __call__(self, locale_name: LocaleName) -> Localizer:
         """Create the translation context for the given request."""
-        if request.locale_name not in self._translations:
+        if locale_name not in self._translations:
             return self.null_localizer
-        return self._translations.get(request.locale_name)
+        return self._translations.get(locale_name)
