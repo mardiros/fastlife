@@ -11,6 +11,44 @@ Domain = str
 CONTEXT_ENCODING = "%s\x04%s"
 
 
+class TranslatableString(str):
+    """
+    Create a string made for translation associated to a domain.
+    This class is instanciated by the
+    :class:`fastlife.service.translations.TranslatableStringFactory` class.
+    """
+
+    __slots__ = ("domain",)
+
+    def __new__(cls, msgid: str, domain: str) -> "TranslatableString":
+        self = str.__new__(cls, msgid)
+        self.domain = domain  # type: ignore
+        return self
+
+
+class TranslatableStringFactory:
+    """Create a catalog of string associated to a domain."""
+
+    def __init__(self, domain: str):
+        self.domain = domain
+
+    def __call__(self, msgid: str) -> str:
+        """
+        Use to generate the translatable string.
+
+        usually:
+
+        ```python
+        _ = TranslatableStringFactory("mydomain")
+        mymessage = _("translatable")
+        ```
+
+        Note that the string is associated to mydomain, so the babel extraction has
+        to be initialized with that particular domain.
+        """
+        return TranslatableString(msgid, self.domain)
+
+
 def find_mo_files(root_path: str) -> Iterator[tuple[LocaleName, Domain, pathlib.Path]]:
     """
     Find .mo files in a locales directory.
@@ -64,7 +102,10 @@ class Localizer:
         return self.gettext(message, mapping)
 
     def gettext(self, message: str, mapping: dict[str, str] | None = None) -> str:
-        ret = self.global_translations.gettext(message)
+        if isinstance(message, TranslatableString):
+            ret = self.translations[message.domain].gettext(message)  # type: ignore
+        else:
+            ret = self.global_translations.gettext(message)
         if mapping:
             ret = ret.format(**mapping)
         return ret

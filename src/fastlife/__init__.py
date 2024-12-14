@@ -48,6 +48,7 @@ from .service.security_policy import (
     AbstractSecurityPolicy,
     InsecurePolicy,
 )
+from .service.translations import TranslatableStringFactory
 from .settings import Settings
 
 __all__ = [
@@ -97,4 +98,5 @@ __all__ = [
     "JinjaXTemplate",
     # i18n
     "Localizer",
+    "TranslatableStringFactory",
 ]
