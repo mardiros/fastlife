@@ -473,7 +473,7 @@ class GenericConfigurator(Generic[TRegistry]):
         * `gettext`, `ngettext`, `dgettext`, `dngettext`, `pgettext`, `dpgettext`,
         `npgettext`, `dnpgettext` methods are installed for i18n purpose.
         """
-        lczr = request.registry.localizer(request)
+        lczr = request.registry.localizer(request.locale_name)
         custom_globals = {}
         for key, (val, evaluate) in self._renderer_globals.items():
             if evaluate and callable(val):

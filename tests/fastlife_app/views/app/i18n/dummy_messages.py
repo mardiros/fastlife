@@ -5,7 +5,11 @@ from typing import Annotated
 
 from fastapi import Path, Response
 
-from fastlife import Localizer, view_config
+from fastlife import Localizer, TranslatableStringFactory, view_config
+
+_ = TranslatableStringFactory(domain="fastlife_test")
+lazy_dog = _("lazy dog")
+quick_brown_fox = _("quick brown fox")
 
 
 @view_config("hello-i18n", "/{locale}/dummy-messages", methods=["GET"])
@@ -16,8 +20,8 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                 "gettext": lczr.gettext(
                     "The {jumper} jumps over a {jumpee}",
                     mapping={
-                        "jumper": lczr.gettext("quick brown fox"),
-                        "jumpee": lczr.gettext("lazy dog"),
+                        "jumper": lczr.gettext(quick_brown_fox),
+                        "jumpee": lczr.gettext(lazy_dog),
                     },
                 ),
                 "__call__": lczr(  # the same string is extracted
@@ -25,8 +29,8 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                     # in a simpler way
                     "The {jumper} jumps over a {jumpee}",
                     mapping={
-                        "jumper": lczr.gettext("quick brown fox"),
-                        "jumpee": lczr.gettext("lazy dog"),
+                        "jumper": lczr.gettext(quick_brown_fox),
+                        "jumpee": lczr.gettext(lazy_dog),
                     },
                 ),
                 "ngettext_0": lczr.ngettext(
@@ -34,7 +38,7 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                     "{num} quick brown foxes jumps over a {jumpee}",
                     0,
                     mapping={
-                        "jumpee": lczr.gettext("lazy dog"),
+                        "jumpee": lczr.gettext(lazy_dog),
                     },
                 ),
                 "ngettext_1": lczr.ngettext(
@@ -42,7 +46,7 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                     "{num} quick brown foxes jumps over a {jumpee}",
                     1,
                     mapping={
-                        "jumpee": lczr.gettext("lazy dog"),
+                        "jumpee": lczr.gettext(lazy_dog),
                     },
                 ),
                 "ngettext_2": lczr.ngettext(
@@ -50,7 +54,7 @@ async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Resp
                     "{num} quick brown foxes jumps over a {jumpee}",
                     2,
                     mapping={
-                        "jumpee": lczr.gettext("lazy dog"),
+                        "jumpee": lczr.gettext(lazy_dog),
                     },
                 ),
                 "dgettext": lczr.dgettext(
