@@ -22,7 +22,7 @@ class GenericRegistry(Generic[TSettings]):
     It is initialized by the configurator and accessed by the `fastlife.Registry`.
     """
 
-    settings: Settings
+    settings: TSettings
     """Application settings."""
     renderers: Mapping[str, "AbstractTemplateRendererFactory"]
     """Registered template engine."""
@@ -31,7 +31,7 @@ class GenericRegistry(Generic[TSettings]):
     localizer: "LocalizerFactory"
     """Used to localized message."""
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: TSettings) -> None:
         from fastlife.service.locale_negociator import default_negociator
         from fastlife.service.translations import LocalizerFactory
 
