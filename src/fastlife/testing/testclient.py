@@ -126,7 +126,7 @@ class WebTestClient:
 
     @property
     def session(self) -> MutableMapping[str, Any]:
-        """Session shared between the server and the client."""
+        """Server session stored in a cookies."""
         return Session(self)
 
     def request(
