@@ -1,3 +1,7 @@
+## 0.23.1  - Released on 2025-01-14
+* Fix typing issue
+* Update docs
+
 ## 0.23.0  - Released on 2024-12-04
 * Update Request type.
   * Breaking changes: Request[TUser, TRegistry] -> Request[TRegistry, TIdentity, TClaimedIdentity].
