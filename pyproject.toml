@@ -12,7 +12,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Internet :: WWW/HTTP",
 ]
-version = "0.23.1"
+version = "0.24.0"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi[standard] >=0.115.0,<1",

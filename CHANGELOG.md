@@ -1,3 +1,6 @@
+## 0.24.0  - Released on 2025-01-17
+* Add a way to hook the lifespan to the app
+
 ## 0.23.1  - Released on 2025-01-14
 * Fix typing issue
 * Update docs
