@@ -191,6 +191,7 @@ class GenericConfigurator(Generic[TRegistry]):
             dependencies=[Depends(check_csrf())],
             docs_url=self.api_swagger_ui_url,
             redoc_url=self.api_redoc_url,
+            lifespan=self.registry.lifespan,
             openapi_tags=[tag.model_dump(by_alias=True) for tag in self.tags.values()]
             if self.tags
             else None,

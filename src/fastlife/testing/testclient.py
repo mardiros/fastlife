@@ -1,7 +1,7 @@
 """Testing your application."""
 
 from collections.abc import Mapping, MutableMapping
-from typing import Any, Literal
+from typing import Any, Literal, Self
 from urllib.parse import urlencode
 
 import bs4
@@ -208,3 +208,10 @@ class WebTestClient:
             headers={"Content-Type": "application/x-www-form-urlencoded", **headers},
             max_redirects=int(follow_redirects) * 10,
         )
+
+    def __enter__(self) -> Self:
+        self.testclient.__enter__()
+        return self
+
+    def __exit__(self, *args: Any, **kwargs: Any) -> None:
+        self.testclient.__exit__()

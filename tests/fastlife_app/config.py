@@ -1,10 +1,12 @@
-from typing import Annotated
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from typing import Annotated, Any
 
-from fastapi import Depends
+from fastapi import Depends, FastAPI
 
 from fastlife import (
-    DefaultRegistry,
     GenericConfigurator,
+    GenericRegistry,
     GenericRequest,
     Settings,
     get_request,
@@ -19,12 +21,20 @@ class MySettings(Settings):
     uow: str = "tests.fastlife_app.adapters.inmemory_uow:UnitOfWork"
 
 
-class MyRegistry(DefaultRegistry):
+class MyRegistry(GenericRegistry[MySettings]):
     uow: AbstractUnitOfWork
+    running: bool = False
 
     def __init__(self, settings: MySettings) -> None:
         super().__init__(settings)
         self.uow = resolve(settings.uow)(settings)
+
+    @asynccontextmanager
+    async def lifespan(self, app: FastAPI) -> AsyncIterator[Any]:
+        MyRegistry.running = True
+        async with super().lifespan(app) as x:
+            yield x
+        MyRegistry.running = False
 
 
 MyConfigurator = GenericConfigurator[MyRegistry]
