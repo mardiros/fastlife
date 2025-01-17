@@ -29,5 +29,5 @@ def uow(configurator: MyConfigurator) -> AbstractUnitOfWork:
 
 
 @pytest.fixture
-def client(app: FastAPI, settings: MySettings):
+def client(app: FastAPI, settings: MySettings) -> WebTestClient:
     return WebTestClient(app, settings=settings)

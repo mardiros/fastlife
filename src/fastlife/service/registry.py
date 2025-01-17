@@ -51,6 +51,15 @@ class GenericRegistry(Generic[TSettings]):
 
     @asynccontextmanager
     async def lifespan(self, app: FastAPI) -> AsyncIterator[Any]:
+        """
+        hook to override the lifespan of the starlette app.
+
+        The [lifespan](https://asgi.readthedocs.io/en/latest/specs/lifespan.html)
+        is used to initialized and dispose the application state.
+
+        In fastlife the application state is the registry, it has to be overriden
+        to add an implementation.
+        """
         yield
 
 
