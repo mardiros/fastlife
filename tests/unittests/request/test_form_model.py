@@ -43,9 +43,9 @@ def test_field_error():
     assert editform.model.model_dump() == {
         "professor": {"firstname": "Haruto", "lastname": "Watanabe", "age": 80}
     }
-    assert (
-        editform.is_valid
-    ), "A pydandict model passed in the edit form is always considered valid"
+    assert editform.is_valid, (
+        "A pydandict model passed in the edit form is always considered valid"
+    )
 
 
 @pytest.mark.parametrize(

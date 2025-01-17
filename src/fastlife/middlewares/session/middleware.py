@@ -72,7 +72,7 @@ class SessionMiddleware(AbstractMiddleware):
                     headers = MutableHeaders(scope=message)
                     expires = "expires=Thu, 01 Jan 1970 00:00:00 GMT; "
                     header_value = (
-                        f"{self.cookie_name}=; " f"{expires}{self.security_flags}"
+                        f"{self.cookie_name}=; {expires}{self.security_flags}"
                     )
                     headers.append("set-cookie", header_value)
             await send(message)

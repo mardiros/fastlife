@@ -109,7 +109,7 @@ class WebForm:
             raise ValueError(f'"{fieldname}" does not exists')
         field = self._formfields[fieldname]
         if field.node_name != "select":
-            raise ValueError(f"{fieldname} is a {field!r}, " "use set() instead")
+            raise ValueError(f"{fieldname} is a {field!r}, use set() instead")
 
         for option in field.by_node_name("option"):
             if option.text == value.strip():

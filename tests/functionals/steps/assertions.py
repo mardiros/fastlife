@@ -39,6 +39,6 @@ def assert_json_contains_set(context: Context, value: str, field: str):
     assert context.response is not None
     actual_json = context.response.json()
     expected = ast.literal_eval(value)
-    assert (
-        set(actual_json[field]) == expected
-    ), f'{{"{field}": {expected} }} != {{"{field}": {set(actual_json[field])}}}'
+    assert set(actual_json[field]) == expected, (
+        f'{{"{field}": {expected} }} != {{"{field}": {set(actual_json[field])}}}'
+    )
