@@ -1,5 +1,8 @@
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Generic, TypeVar
+from collections.abc import AsyncIterator, Mapping
+from contextlib import asynccontextmanager
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
+
+from fastapi import FastAPI
 
 if TYPE_CHECKING:
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
@@ -45,6 +48,10 @@ class GenericRegistry(Generic[TSettings]):
             if template.endswith(key):
                 return val
         raise RuntimeError(f"No renderer registered for template {template}")
+
+    @asynccontextmanager
+    async def lifespan(self, app: FastAPI) -> AsyncIterator[Any]:
+        yield
 
 
 DefaultRegistry = GenericRegistry[Settings]
