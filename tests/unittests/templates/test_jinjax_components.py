@@ -85,10 +85,11 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Button>Go</Button>""",
             """<button name="action" type="submit" value="submit"
-            class="bg-primary-600 px-5 py-2.5 font-semibold rounded-lg text-center
-            text-sm text-white hover:bg-primary-700 hover:bg-primary-200
-            focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600
-            dark:focus:ring-primary-800 dark:hover:bg-primary-700"
+            class="bg-primary-600 px-5 py-2.5 font-semibold rounded-lg
+            text-center text-sm text-white hover:bg-primary-700
+            hover:bg-primary-200 focus:outline-hidden
+            focus:ring-4 focus:ring-primary-300
+            dark:bg-primary-600 dark:focus:ring-primary-800 dark:hover:bg-primary-700"
             >Go</button>""",
             id="button",
         ),
@@ -175,7 +176,7 @@ def test_render_Button(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Checkbox id="foo-bar" name="foo" :checked="true" />""",
             """<input type="checkbox" id="foo-bar" name="foo" checked
-            class="bg-neutral-100 border-neutral-300 h-4 rounded text-primary-600
+            class="bg-neutral-100 border-neutral-300 h-4 rounded-sm text-primary-600
             w-4 dark:bg-neutral-700 dark:border-neutral-600 dark:focus:ring-primary-600
             dark:ring-offset-neutral-800 focus:ring-2 focus:ring-primary-500"/>""",
             id="checkbox-checked",
