@@ -114,7 +114,7 @@ black: fmt
 
 release major_minor_patch: test && changelog
     uvx --with=pdm,pdm-bump --python-preference system pdm bump {{major_minor_patch}}
-    uv sync --frozen --group dev --group uwsgi
+    uv sync --frozen --group dev
 
 changelog:
     uv run python scripts/write_changelog.py
