@@ -2,7 +2,7 @@
 authors = [{ name = "Guillaume Gauvrit", email = "guillaume@gauvr.it" }]
 description = "High-level web framework"
 name = "fastlifeweb"
-license = { text = "MIT License" }
+license = { text = "MIT" }
 readme = "README.md"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -11,6 +11,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Internet :: WWW/HTTP",
+    "Typing :: Typed",
 ]
 version = "0.24.0"
 requires-python = ">=3.11"
