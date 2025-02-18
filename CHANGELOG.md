@@ -1,3 +1,6 @@
+## 0.25.0  - Released on 2025-02-18
+* Migrate CSS to tailwincss 4
+
 ## 0.24.0  - Released on 2025-01-17
 * Add a way to hook the lifespan to the app
 

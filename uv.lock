@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version < '3.13'",
@@ -292,7 +293,7 @@ standard = [
 
 [[package]]
 name = "fastlifeweb"
-version = "0.24.0"
+version = "0.25.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
@@ -362,6 +363,7 @@ requires-dist = [
     { name = "sphinx-autodoc2", marker = "extra == 'docs'", specifier = ">=0.5.0,<1" },
     { name = "venusian", specifier = ">=3.0.0,<4" },
 ]
+provides-extras = ["testing", "docs"]
 
 [package.metadata.requires-dev]
 dev = [
