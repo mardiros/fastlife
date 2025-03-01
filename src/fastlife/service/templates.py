@@ -56,6 +56,7 @@ class AbstractTemplateRenderer(abc.ABC):
         resp.set_cookie(
             request.csrf_token.name,
             request.csrf_token.value,
+            httponly=True,
             secure=request.url.scheme == "https",
             samesite="strict",
             max_age=60 * 15,
