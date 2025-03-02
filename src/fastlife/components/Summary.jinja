@@ -11,7 +11,7 @@
   open: Annotated[bool, "Open or collapse the content of the details."] = True
 #}
 
-<summary id="{{id}}" :class="attrs.class or SUMMARY_CLASS"
+<summary id="{{id}}" class="{{attrs.class or SUMMARY_CLASS}}"
   style="list-style: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;"
   onclick="document.getElementById('{{id}}-icon').classList.toggle('rotate-90')">
   <icons.ChevronRight :id="id + '-icon'"
