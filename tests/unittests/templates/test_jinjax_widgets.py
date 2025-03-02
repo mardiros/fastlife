@@ -10,6 +10,7 @@ from fastlife.adapters.jinjax.widgets.boolean import BooleanWidget
 from fastlife.adapters.jinjax.widgets.checklist import Checkable, ChecklistWidget
 from fastlife.adapters.jinjax.widgets.dropdown import DropDownWidget
 from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
+from fastlife.adapters.jinjax.widgets.mfa_code import MFACodeWidget
 from fastlife.adapters.jinjax.widgets.model import ModelWidget
 from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
 from fastlife.adapters.jinjax.widgets.text import TextareaWidget, TextWidget
@@ -133,6 +134,46 @@ def test_render_text_removable(
     result = text.to_html(renderer)
     html = soup(result)
     assert html.find("button", attrs={"type": "button"})
+
+
+def test_render_mfa_code(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    text = MFACodeWidget(name="foo", title="Foo", token="x", hint="This is foobar")
+    result = text.to_html(renderer)
+    html = soup(result)
+    assert html.find(
+        "input",
+        attrs={
+            "id": "foo-x",
+            "type": "text",
+            "name": "foo",
+            "inputmode": "numeric",
+            "autocomplete": "one-time-code",
+            "autofocus": True,
+        },
+    )
+    hint = html.find("span")
+    assert hint
+    assert hint.text == "This is foobar"
+
+
+def test_render_mfa_code_no_focus(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    text = MFACodeWidget(name="foo", title="Foo", token="x", autofocus=False)
+    result = text.to_html(renderer)
+    html = soup(result)
+    assert html.find(
+        "input",
+        attrs={
+            "id": "foo-x",
+            "type": "text",
+            "name": "foo",
+            "inputmode": "numeric",
+            "autocomplete": "one-time-code",
+        },
+    )
 
 
 @pytest.mark.parametrize(
