@@ -44,4 +44,5 @@ class EmailStrBuilder(BaseWidgetBuilder[Builtins]):
             token=self.factory.token,
             value=str(value),
             error=form_errors.get(field_name),
+            autocomplete="email",
         )

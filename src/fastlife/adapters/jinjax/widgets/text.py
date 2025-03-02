@@ -18,7 +18,8 @@ class TextWidget(Widget[Builtins]):
         <Label :for="id">{{title}}</Label>
         <pydantic_form.Error :text="error" />
         <Input :name="name" :value="value" :type="input_type" :id="id"
-          :aria-label="aria_label" :placeholder="placeholder" />
+          :aria-label="aria_label" :placeholder="placeholder"
+         :autocomplete="autocomplete" />
         <pydantic_form.Hint :text="hint" />
       </div>
     </pydantic_form.Widget>
@@ -26,6 +27,7 @@ class TextWidget(Widget[Builtins]):
 
     input_type: str = Field(default="text")
     placeholder: str | None = Field(default=None)
+    autocomplete: str | None = Field(default=None)
 
 
 class PasswordWidget(Widget[SecretStr]):

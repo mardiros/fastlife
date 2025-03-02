@@ -145,7 +145,12 @@ def test_render_template(
     )
     assert html.find(
         "input",
-        attrs={"id": "payload-email-tkt", "name": "payload.email", "type": "email"},
+        attrs={
+            "id": "payload-email-tkt",
+            "name": "payload.email",
+            "type": "email",
+            "autocomplete": "email",
+        },
     )
     assert html.find(
         "div", attrs={"id": "payload-description-tkt", "contenteditable": True}
