@@ -24,6 +24,9 @@ test: lint typecheck unittest functest
 
 buildcss:
     uv run tailwindcss \
+      -i src/fastlife/assets/source.css \
+      -o src/fastlife/assets/dist.css
+    uv run tailwindcss \
         -i tests/fastlife_app/assets/styles/main.css \
         -o tests/fastlife_app/static/css/main.css
 
@@ -112,7 +115,7 @@ fmt:
 black: fmt
     echo "$(tput setaf 3)Warning: Use 'just fmt' instead$(tput setaf 7)"
 
-release major_minor_patch: test && changelog
+release major_minor_patch: buildcss test && changelog
     uvx --with=pdm,pdm-bump --python-preference system pdm bump {{major_minor_patch}}
     uv sync --frozen --group dev
 
