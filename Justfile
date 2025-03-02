@@ -6,9 +6,10 @@ export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
 export CLICOLOR_FORCE := "1"
 
 install:
-    uv sync --group dev --group doc
+    uv sync --group dev
 
 doc:
+    uv sync --group dev --group doc
     cd docs && uv run make html
     xdg-open docs/build/html/index.html
 

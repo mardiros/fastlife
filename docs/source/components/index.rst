@@ -26,6 +26,7 @@ fastlife comes with a set of compoments:
    Label
    Option
    P
+   Password
    Radio
    Select
    Summary
