@@ -6,5 +6,5 @@ H4
     html ``<h4>`` node.
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.H4_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.H4_CLASS`.
     :param content: child node.

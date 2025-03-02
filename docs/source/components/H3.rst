@@ -6,5 +6,5 @@ H3
     html ``<h3>`` node.
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.H3_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.H3_CLASS`.
     :param content: child node.

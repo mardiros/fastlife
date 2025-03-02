@@ -12,6 +12,6 @@ Radio
     :param checked: Tick the radio button
     :param disabled: Mark the radio button as disabled
     :param onclick: execute some javascript while clicking
-    :param div_class: css class for the div node, defaults to :attr:`fastlife.templates.constants.Constants.RADIO_DIV_CLASS`
-    :param class: css class for the input node, defaults to :attr:`fastlife.templates.constants.Constants.RADIO_INPUT_CLASS`
-    :param label_class: css class for the label node, defaults to :attr:`fastlife.templates.constants.Constants.RADIO_LABEL_CLASS`
+    :param div_class: css class for the div node, defaults to :attr:`fastlife.template_globals.Globals.RADIO_DIV_CLASS`
+    :param class: css class for the input node, defaults to :attr:`fastlife.template_globals.Globals.RADIO_INPUT_CLASS`
+    :param label_class: css class for the label node, defaults to :attr:`fastlife.template_globals.Globals.RADIO_LABEL_CLASS`

@@ -18,7 +18,7 @@
   class_: Annotated[
     str | None,
     "css class for the node, defaults to "
-    ":attr:`fastlife.templates.constants.Constants.FORM_CLASS`"
+    ":attr:`fastlife.template_globals.Globals.FORM_CLASS`"
   ] = None,
   method: Annotated[Literal["get", "post"] | None, "Http method used"] = None,
   action: Annotated[str | None, "url where the form will be submitted"] = None,

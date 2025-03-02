@@ -7,7 +7,7 @@ Password
 
     :param name: submitted name in the form
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.INPUT_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.INPUT_CLASS`.
     :param aria_label: aria-label
     :param placeholder: brief hint to the user as to what kind of information is expected in the field.
     :param autocomplete: Define autocomplete mode

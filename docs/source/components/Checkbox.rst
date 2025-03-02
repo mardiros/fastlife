@@ -7,6 +7,6 @@ Checkbox
 
     :param name: Name of the checkbox
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.CHECKBOX_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.CHECKBOX_CLASS`.
     :param value: http submitted value if the checkbox is checked
     :param checked: Initialized the checkbox as ticked

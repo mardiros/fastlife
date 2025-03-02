@@ -6,5 +6,5 @@ Th
     html ``<th>`` node.
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.TH_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.TH_CLASS`.
     :param content: child node.

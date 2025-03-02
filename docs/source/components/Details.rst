@@ -17,6 +17,6 @@ Details
       </Details>
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.DETAILS_CLASS`.
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.DETAILS_CLASS`.
     :param open: open/close state.
     :param content: child node.

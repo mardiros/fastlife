@@ -16,7 +16,7 @@ Form
       </Form>
 
     :param id: unique identifier of the element.
-    :param class: css class for the node, defaults to :attr:`fastlife.templates.constants.Constants.FORM_CLASS`
+    :param class: css class for the node, defaults to :attr:`fastlife.template_globals.Globals.FORM_CLASS`
     :param method: Http method used
     :param action: url where the form will be submitted
     :param hx_target: target the element for swapping than the one issuing the AJAX request.

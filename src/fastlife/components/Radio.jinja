@@ -12,17 +12,17 @@
   div_class: Annotated[
     str | None,
     "css class for the div node, defaults to "
-    ":attr:`fastlife.templates.constants.Constants.RADIO_DIV_CLASS`"
+    ":attr:`fastlife.template_globals.Globals.RADIO_DIV_CLASS`"
   ] = None,
   class_: Annotated[
     str | None,
     "css class for the input node, defaults to "
-    ":attr:`fastlife.templates.constants.Constants.RADIO_INPUT_CLASS`"
+    ":attr:`fastlife.template_globals.Globals.RADIO_INPUT_CLASS`"
   ] = None,
   label_class: Annotated[
     str | None,
     "css class for the label node, defaults to "
-    ":attr:`fastlife.templates.constants.Constants.RADIO_LABEL_CLASS`"
+    ":attr:`fastlife.template_globals.Globals.RADIO_LABEL_CLASS`"
   ] = None,
 #}
 <div class="{{ div_class or RADIO_DIV_CLASS }}">
