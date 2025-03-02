@@ -1,3 +1,11 @@
+## 0.25.1  - Released on 2025-03-02
+* Update fews JinjaX components
+  * New attributes on Input
+  * Add Password component for passwords
+  * Make Error and Fatal Errors class configurable
+* Update pydantic_form widgets for password
+* Add a widget for MFACode
+
 ## 0.25.0  - Released on 2025-02-18
 * Migrate CSS to tailwincss 4
 
