@@ -12,3 +12,6 @@ indent_size = 4
 
 [*.rst]
 indent_size = 3
+
+[*.jinja]
+insert_final_newline = false

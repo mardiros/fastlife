@@ -1,5 +1,11 @@
 {# doc display an error for a field. #}
-{# def text: Annotated[str | None, "error message"] #}
+{# def
+  text: Annotated[str | None, "error message"],
+  class_: Annotated[
+    str | None,
+    "css class for the node, defaults to :attr:`fastlife.template_globals.Globals.ERROR_CLASS`."
+  ] = None,
+#}
 {%- if text -%}
-<span class="mt-2 text-sm text-danger-500 dark:text-danger-400">{{text}}</span>
+<span class="{{attrs.class or ERROR_CLASS }}">{{ text }}</span>
 {%- endif -%}
