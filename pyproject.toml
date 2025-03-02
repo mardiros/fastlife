@@ -35,7 +35,7 @@ Issues = "https://github.com/mardiros/fastlife/issues"
 Changelog = "https://mardiros.github.io/fastlife/user/changelog.html"
 
 [tool.pdm.build]
-includes = ["src", "CHANGELOG.md", "tailwind.config.js"]
+includes = ["src", "CHANGELOG.md"]
 excludes = ["tests"]
 
 [project.optional-dependencies]
