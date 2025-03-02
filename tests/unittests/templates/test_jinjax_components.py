@@ -402,11 +402,11 @@ def test_render_Hidden(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Input name="key" value="val"/>""",
             """<input name="key" value="val" type="text" class="bg-neutral-50 block
-            border border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
-            w-full dark:bg-neutral-700 dark:border-neutral-600
-            dark:focus:border-primary-500 dark:focus:ring-primary-500
-            dark:placeholder-neutral-400 dark:text-white focus:border-primary-500
-            focus:ring-primary-500" />""",
+                border border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
+                w-full dark:bg-neutral-700 dark:border-neutral-600
+                dark:focus:border-primary-500 dark:focus:ring-primary-500
+                dark:placeholder-neutral-400 dark:text-white focus:border-primary-500
+                focus:ring-primary-500" />""",
             id="Input",
         ),
         pytest.param(
@@ -419,9 +419,63 @@ def test_render_Hidden(node: bs4.PageElement, expected: bs4.PageElement):
             """<input name="key" value="" type="text" inputmode="tel" class="x" />""",
             id="Input-inputmode",
         ),
+        pytest.param(
+            """<Input name="key" value="" class="x"
+                autocomplete="new-password" />""",
+            """<input name="key" value="" type="text"
+                autocomplete="new-password" class="x" />""",
+            id="Input-autocomplete",
+        ),
+        pytest.param(
+            """<Input name="key" value="" class="x" :autofocus="true" />""",
+            """<input name="key" value="" type="text" class="x" autofocus/>""",
+            id="Input-autofocus",
+        ),
     ],
 )
 def test_render_Input(node: bs4.PageElement, expected: bs4.PageElement):
+    assert node == expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """<Password name="key" />""",
+            """<input name="key" type="password" class="bg-neutral-50 block
+                border border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
+                w-full dark:bg-neutral-700 dark:border-neutral-600
+                dark:focus:border-primary-500 dark:focus:ring-primary-500
+                dark:placeholder-neutral-400 dark:text-white focus:border-primary-500
+                focus:ring-primary-500" />""",
+            id="Password",
+        ),
+        pytest.param(
+            """<Password id="k" name="key" type="password" class="x" />""",
+            """<input id="k" name="key" type="password" class="x" />""",
+            id="Password-id-css",
+        ),
+        pytest.param(
+            """<Password name="pin" class="x" inputmode="tel"
+                minlength="8" minlength="42" pattern="[a-zA-Z0-9]+"/>""",
+            """<input name="pin" type="password" inputmode="tel"
+                minlength="8" minlength="42" pattern="[a-zA-Z0-9]+" class="x" />""",
+            id="Input-attrs",
+        ),
+        pytest.param(
+            """<Password name="key" class="x" autocomplete="new-password" />""",
+            """<input name="key" type="password"
+                autocomplete="new-password" class="x" />""",
+            id="Input-autocomplete",
+        ),
+        pytest.param(
+            """<Password name="key" class="x" :autofocus="true" />""",
+            """<input name="key" type="password" class="x" autofocus/>""",
+            id="Input-autofocus",
+        ),
+    ],
+)
+def test_render_Password(node: bs4.PageElement, expected: bs4.PageElement):
     assert node == expected
 
 

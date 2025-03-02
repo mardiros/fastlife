@@ -52,6 +52,7 @@ class DummyModel(BaseModel):
     flavor: Flavor = Field()
     score: Score = Field()
     passphrase: SecretStr = Field()
+    newpass: Annotated[SecretStr, "new-password"] = Field()
     email: EmailStr = Field()
     vegan: bool = Field()
     tags: list[str] = Field()
@@ -130,11 +131,26 @@ def test_render_template(
             "id": "payload-passphrase-tkt",
             "name": "payload.passphrase",
             "type": "password",
+            "autocomplete": "current-password",
         },
     )
     assert html.find(
         "input",
-        attrs={"id": "payload-email-tkt", "name": "payload.email", "type": "email"},
+        attrs={
+            "id": "payload-newpass-tkt",
+            "name": "payload.newpass",
+            "type": "password",
+            "autocomplete": "new-password",
+        },
+    )
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-email-tkt",
+            "name": "payload.email",
+            "type": "email",
+            "autocomplete": "email",
+        },
     )
     assert html.find(
         "div", attrs={"id": "payload-description-tkt", "contenteditable": True}
