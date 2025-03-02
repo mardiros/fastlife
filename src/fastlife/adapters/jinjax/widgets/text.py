@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 
 from fastlife.domain.model.types import Builtins
 
@@ -26,6 +26,31 @@ class TextWidget(Widget[Builtins]):
 
     input_type: str = Field(default="text")
     placeholder: str | None = Field(default=None)
+
+
+class PasswordWidget(Widget[SecretStr]):
+    """
+    Widget for text like field (email, ...).
+    """
+
+    template = """
+    <pydantic_form.Widget :widget_id="id" :removable="removable">
+      <div class="pt-4">
+        <Label :for="id">{{title}}</Label>
+        <pydantic_form.Error :text="error" />
+        <Password :name="name" :type="input_type" :id="id"
+          autocomplete={{
+            {False: 'current-password', True: 'new-password'}[new_password]
+          }}
+          :aria-label="aria_label" :placeholder="placeholder" />
+        <pydantic_form.Hint :text="hint" />
+      </div>
+    </pydantic_form.Widget>
+    """
+
+    input_type: str = Field(default="password")
+    placeholder: str | None = Field(default=None)
+    new_password: bool = Field(default=False)
 
 
 class TextareaWidget(Widget[Sequence[str]]):

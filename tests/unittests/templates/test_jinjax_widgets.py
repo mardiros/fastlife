@@ -13,7 +13,11 @@ from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
 from fastlife.adapters.jinjax.widgets.mfa_code import MFACodeWidget
 from fastlife.adapters.jinjax.widgets.model import ModelWidget
 from fastlife.adapters.jinjax.widgets.sequence import SequenceWidget
-from fastlife.adapters.jinjax.widgets.text import TextareaWidget, TextWidget
+from fastlife.adapters.jinjax.widgets.text import (
+    PasswordWidget,
+    TextareaWidget,
+    TextWidget,
+)
 from fastlife.adapters.jinjax.widgets.union import UnionWidget
 from fastlife.domain.model.types import Builtins
 from fastlife.service.templates import AbstractTemplateRenderer
@@ -134,6 +138,26 @@ def test_render_text_removable(
     result = text.to_html(renderer)
     html = soup(result)
     assert html.find("button", attrs={"type": "button"})
+
+
+def test_render_password(
+    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    text = PasswordWidget(name="foo", title="Foo", token="x", hint="This is foobar")
+    result = text.to_html(renderer)
+    html = soup(result)
+    assert html.find(
+        "input",
+        attrs={
+            "id": "foo-x",
+            "type": "password",
+            "name": "foo",
+            "autocomplete": "current-password",
+        },
+    )
+    hint = html.find("span")
+    assert hint
+    assert hint.text == "This is foobar"
 
 
 def test_render_mfa_code(
