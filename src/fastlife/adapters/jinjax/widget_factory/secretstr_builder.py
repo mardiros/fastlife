@@ -8,7 +8,7 @@ from pydantic.fields import FieldInfo
 
 from fastlife.adapters.jinjax.widget_factory.base import BaseWidgetBuilder
 from fastlife.adapters.jinjax.widgets.base import Widget
-from fastlife.adapters.jinjax.widgets.text import TextWidget
+from fastlife.adapters.jinjax.widgets.text import PasswordWidget
 
 
 class SecretStrBuilder(BaseWidgetBuilder[SecretStr]):
@@ -29,9 +29,8 @@ class SecretStrBuilder(BaseWidgetBuilder[SecretStr]):
         removable: bool,
     ) -> Widget[SecretStr]:
         """Build the widget."""
-        return TextWidget(
+        return PasswordWidget(
             name=field_name,
-            input_type="password",
             placeholder=str(field.examples[0]) if field and field.examples else None,
             removable=removable,
             title=field.title or "" if field else "",
@@ -42,6 +41,6 @@ class SecretStrBuilder(BaseWidgetBuilder[SecretStr]):
                 else None
             ),
             token=self.factory.token,
-            value=value.get_secret_value() if value else "",
             error=form_errors.get(field_name),
+            new_password="new-password" in field.metadata if field else False,
         )
