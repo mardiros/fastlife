@@ -40,7 +40,7 @@
   autofocus: Annotated[bool, "Five the focus"] = False,
 #}
 
-<input name="{{name}}" value="{{value}}" type="{{type}}"
+<input name="{{name}}" value="{{value|default('')}}" type="{{type}}"
   {%- if id %} id="{{id}}" {%- endif %}
   {%- if aria_label %} aria-label="{{aria_label}}" {%- endif %}
   {%- if placeholder %} placeholder="{{placeholder}}" {%- endif %}
