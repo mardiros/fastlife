@@ -323,3 +323,14 @@ class Globals(BaseModel):
 
     TH_CLASS: str = "px-4 py-2 font-medium border-b dark:border-neutral-500"
     """Default css class for {jinjax:component}`Th`."""
+
+    FATAL_ERROR_CLASS: str = (
+        "flex items-center bg-red-50 border border-red-400 text-red-700"
+    )
+    """Default css class for {jinjax:component}`pydantic_form.FatalError`."""
+
+    FATAL_ERROR_ICON_CLASS: str = "m-3 w-16 h-16 fill-orange-500"
+    """Default css class for {jinjax:component}`pydantic_form.FatalError` icon."""
+
+    FATAL_ERROR_TEXT_CLASS: str = "sm:inline text-xl"
+    """Default css class for {jinjax:component}`pydantic_form.FatalError` text."""
