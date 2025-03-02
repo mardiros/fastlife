@@ -21,7 +21,23 @@
         "none", "text", "decimal", "numeric", "tel", "search", "email", "url"
       ] | None,
       "Define a virtual keyboard layout"
-  ] = None
+  ] = None,
+  autocomplete: Annotated[
+    Literal[
+      "on", "off",
+      "name", "username", "current-password", "new-password", "one-time-code",
+      "email", "tel", "organization", "street-address",
+      "address-line1", "address-line2", "address-line3",
+      "postal-code", "country", "country-name",
+      "cc-name", "cc-number", "cc-exp", "cc-csc",
+      "tel-country-code", "tel-national", "tel-area-code",
+      "tel-local", "tel-extension",
+      "bday", "bday-day", "bday-month", "bday-year",
+      "transaction-amount", "transaction-currency"
+    ] | None,
+    "Define autocomplete mode"
+  ] = None,
+  autofocus: Annotated[bool, "Five the focus"] = False,
 #}
 
 <input name="{{name}}" value="{{value}}" type="{{type}}"
@@ -29,4 +45,7 @@
   {%- if aria_label %} aria-label="{{aria_label}}" {%- endif %}
   {%- if placeholder %} placeholder="{{placeholder}}" {%- endif %}
   {%- if inputmode %} inputmode="{{inputmode}}" {%- endif %}
-  class="{{attrs.class or INPUT_CLASS}}" />
+  {%- if autocomplete %} autocomplete="{{autocomplete}}" {%- endif %}
+  class="{{attrs.class or INPUT_CLASS}}"
+  {%- if autofocus %} autofocus{% endif -%}
+/>

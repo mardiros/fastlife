@@ -402,11 +402,11 @@ def test_render_Hidden(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Input name="key" value="val"/>""",
             """<input name="key" value="val" type="text" class="bg-neutral-50 block
-            border border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
-            w-full dark:bg-neutral-700 dark:border-neutral-600
-            dark:focus:border-primary-500 dark:focus:ring-primary-500
-            dark:placeholder-neutral-400 dark:text-white focus:border-primary-500
-            focus:ring-primary-500" />""",
+                border border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
+                w-full dark:bg-neutral-700 dark:border-neutral-600
+                dark:focus:border-primary-500 dark:focus:ring-primary-500
+                dark:placeholder-neutral-400 dark:text-white focus:border-primary-500
+                focus:ring-primary-500" />""",
             id="Input",
         ),
         pytest.param(
@@ -418,6 +418,18 @@ def test_render_Hidden(node: bs4.PageElement, expected: bs4.PageElement):
             """<Input name="key" value="" class="x" inputmode="tel" />""",
             """<input name="key" value="" type="text" inputmode="tel" class="x" />""",
             id="Input-inputmode",
+        ),
+        pytest.param(
+            """<Input name="key" value="" class="x"
+                autocomplete="new-password" />""",
+            """<input name="key" value="" type="text"
+                autocomplete="new-password" class="x" />""",
+            id="Input-autocomplete",
+        ),
+        pytest.param(
+            """<Input name="key" value="" class="x" :autofocus="true" />""",
+            """<input name="key" value="" type="text" class="x" autofocus/>""",
+            id="Input-autofocus",
         ),
     ],
 )
