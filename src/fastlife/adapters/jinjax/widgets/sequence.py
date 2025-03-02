@@ -60,7 +60,7 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
 
     item_type: type[Any]
     wrapped_type: TypeWrapper | None = Field(default=None)
-    children_widgets: list[str] = Field(default_factory=list)
+    children_widgets: list[str] | None = Field(default=None)
 
     def build_item_type(self, route_prefix: str) -> TypeWrapper:
         return TypeWrapper(self.item_type, route_prefix, self.name, self.token)
