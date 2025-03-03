@@ -16,14 +16,14 @@ classifiers = [
 version = "0.25.1"
 requires-python = ">=3.11"
 dependencies = [
-  "fastapi[standard] >=0.115.0,<0.115.2",
+  "fastapi[standard] >=0.115.4,<0.116.0",
   "itsdangerous >=2.1.2,<3",
   "jinjax >=0.48,<0.49",
   "markupsafe >=2.1.3,<3",
   "multidict >=6.0.5,<7",
   "pydantic >=2.5.3,<3",
   "pydantic-settings >=2.0.3,<3",
-  "python-multipart >=0.0.9,<1",
+  "python-multipart >=0.0.13,<1",
   "venusian >=3.0.0,<4",
 ]
 

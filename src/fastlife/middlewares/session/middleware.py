@@ -17,8 +17,8 @@ class SessionMiddleware(AbstractMiddleware):
 
     def __init__(
         self,
-        *,
         app: ASGIApp,
+        *,
         cookie_name: str,
         secret_key: str,
         duration: timedelta,
