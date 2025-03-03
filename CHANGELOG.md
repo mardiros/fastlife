@@ -1,3 +1,6 @@
+## 0.25.2  - Released on 2025-03-03
+* Update deps and fix related bugs in JinjaX components.
+
 ## 0.25.1  - Released on 2025-03-02
 * Update fews JinjaX components
   * New attributes on Input
