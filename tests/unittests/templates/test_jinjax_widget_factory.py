@@ -320,7 +320,7 @@ def test_render_custom_list(
             {
                 "payload": {
                     "name": "asturia",
-                    "tempo": [1],
+                    "tempo": 1,
                 }
             },
         ),
@@ -331,7 +331,6 @@ def test_render_custom_list(
             "tempos": [Tempo(id=1, name="allegro"), Tempo(id=2, name="piano")],
         }
     )
-
     result = renderer.render_template(form)
 
     html = soup(result)

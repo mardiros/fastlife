@@ -8,6 +8,13 @@ export CLICOLOR_FORCE := "1"
 install:
     uv sync --group dev
 
+update:
+    uv sync --group dev
+
+upgrade:
+    uv sync --group dev --upgrade
+
+
 doc:
     uv sync --group dev --group doc
     cd docs && uv run make html

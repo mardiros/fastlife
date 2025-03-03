@@ -55,7 +55,7 @@ class PasswordWidget(Widget[SecretStr]):
     new_password: bool = Field(default=False)
 
 
-class TextareaWidget(Widget[Sequence[str]]):
+class TextareaWidget(Widget[str | Sequence[str]]):
     """
     Render a Textearea for a string or event a sequence of string.
 
@@ -84,11 +84,10 @@ class TextareaWidget(Widget[Sequence[str]]):
         <Label :for="id">{{title}}</Label>
         <pydantic_form.Error :text="error" />
         <Textarea :name="name" :id="id" :aria-label="aria_label">
-            {%- if v is string -%}
-            {{- v -}}}
+            {%- if value is string -%}
+            {{- value -}}
             {%- else -%}
-            {%- for v in value %}{{v}}
-    {% endfor -%}
+            {%- for v in value %}{{v}}{{"\n"}}{% endfor -%}
             {% endif %}
         </Textarea>
         <pydantic_form.Hint :text="hint" />

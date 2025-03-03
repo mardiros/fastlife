@@ -204,7 +204,7 @@ def test_render_mfa_code_no_focus(
     "value,expected",
     [
         pytest.param("foobar", "foobar", id="str"),
-        pytest.param(["foo", "bar"], "foo\nbar", id="sequence"),
+        pytest.param(["foo", "bar"], "foo\nbar\n", id="sequence"),
     ],
 )
 def test_render_textarea(
@@ -213,12 +213,12 @@ def test_render_textarea(
     value: str | Sequence[str],
     expected: str,
 ):
-    hid = TextareaWidget(name="foo", title="Foo", value=["foo", "bar"], token="x")
+    hid = TextareaWidget(name="foo", title="Foo", value=value, token="x")
     result = hid.to_html(renderer)
     html = soup(result)
     textarea = html.find("textarea", attrs={"id": "foo-x", "name": "foo"})
     assert textarea
-    assert textarea.text == "foo\nbar"
+    assert textarea.text == expected
 
 
 def test_render_model(

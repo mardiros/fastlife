@@ -14,7 +14,7 @@ class MyWidget(Widget[str]):
 
 
 class PetForm(BaseModel):
-    id: Annotated[UUID, CustomWidget(HiddenWidget)] = Field(default=uuid1)
+    id: Annotated[UUID, CustomWidget(HiddenWidget)] = Field(default_factory=uuid1)
     nick: Annotated[str, CustomWidget(MyWidget)] = Field(title="Pet's Name")
     description: Annotated[str, CustomWidget(TextareaWidget)] = Field(
         title="Pet's hobbies"
