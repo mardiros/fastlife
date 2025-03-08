@@ -13,6 +13,9 @@ def apiclient(app: FastAPI):
 def test_hello_i18n(client: WebTestClient):
     resp = client.get("/fr/hello")
     assert resp.html.h1.text == "Salut tout le monde !"
+    link = resp.html.by_text("Voir plus..")
+    assert link is not None
+    assert link.attrs["href"] == "http://testserver.local/fr/dummy-messages"
 
 
 def test_i18n_helpers(apiclient: TestClient):

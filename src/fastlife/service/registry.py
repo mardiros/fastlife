@@ -6,7 +6,7 @@ from fastapi import FastAPI
 
 if TYPE_CHECKING:
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
-    from fastlife.service.request_factory import RequestDecorator  # coverage: ignore
+    from fastlife.service.request_factory import RequestFactory  # coverage: ignore
     from fastlife.service.templates import (  # coverage: ignore
         AbstractTemplateRendererFactory,  # coverage: ignore
     )  # coverage: ignore
@@ -34,7 +34,7 @@ class GenericRegistry(Generic[TSettings]):
     """Used to fine the best language for the response."""
     localizer: "LocalizerFactory"
     """Used to localized message."""
-    request_factory: "RequestDecorator"
+    request_factory: "RequestFactory"
 
     def __init__(self, settings: TSettings) -> None:
         from fastlife.service.locale_negociator import default_negociator

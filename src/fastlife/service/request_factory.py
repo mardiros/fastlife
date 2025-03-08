@@ -6,16 +6,16 @@ from typing import Any
 from starlette.requests import Request as StarletteRequest
 
 from fastlife.domain.model.request import GenericRequest
-from fastlife.service.registry import GenericRegistry, TSettings
+from fastlife.service.registry import DefaultRegistry, TRegistry
 
-RequestDecorator = Callable[[StarletteRequest], GenericRequest[Any, Any, Any]]
+RequestFactory = Callable[[StarletteRequest], GenericRequest[Any, Any, Any]]
 """Transform the Startlette request object to the faslife version."""
 
-RequestFactory = Callable[[GenericRegistry[TSettings]], RequestDecorator]
+RequestFactoryBuilder = Callable[[TRegistry], RequestFactory]
 """Interface to implement to create a request factory"""
 
 
-def default_request_factory(registry: GenericRegistry[TSettings]) -> RequestDecorator:
+def default_request_factory(registry: DefaultRegistry) -> RequestFactory:
     """The default local negociator return the locale set in the conf."""
 
     def request(request: StarletteRequest) -> GenericRequest[Any, Any, Any]:

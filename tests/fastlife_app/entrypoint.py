@@ -15,6 +15,7 @@ def build_app():
     )
     conf.add_template_search_path("tests.fastlife_app:templates")
     conf.include(".adapters")
+    conf.include(".config")
     conf.include(".views", ignore=[".api", ".app.admin"])
     conf.include(".views.api", route_prefix="/api")
     conf.include(".views.app.admin", route_prefix="/admin")

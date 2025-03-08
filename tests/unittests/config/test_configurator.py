@@ -3,12 +3,17 @@ from typing import Any
 import pytest
 from fastapi import FastAPI
 
+from fastlife.adapters.fastapi.request import AnyRequest
 from fastlife.config.configurator import (
     ConfigurationError,
     Configurator,
     OpenApiTag,
     Settings,
 )
+from fastlife.domain.model.asgi import ASGIRequest
+from fastlife.domain.model.request import GenericRequest
+from fastlife.service.registry import DefaultRegistry
+from fastlife.service.request_factory import RequestFactory
 from fastlife.testing.testclient import WebTestClient
 from tests.fastlife_app.config import MySettings
 
@@ -70,6 +75,18 @@ def test_add_openapi_tag(conf: Configurator):
         conf.add_openapi_tag(OpenApiTag(name="foo", description="Foo's bar"))
 
     assert str(ctx.value) == "Tag foo can't be registered twice."
+
+
+def test_set_request_factory(conf: Configurator):
+    def request_factory(request: ASGIRequest) -> AnyRequest:
+        return GenericRequest(conf.registry, request)
+
+    def request_factory_builder(registry: DefaultRegistry) -> RequestFactory:
+        """The default local negociator return the locale set in the conf."""
+        return request_factory
+
+    conf.set_request_factory(request_factory_builder)
+    assert conf.registry.request_factory is request_factory
 
 
 @pytest.mark.parametrize("route", ["/f-string"])

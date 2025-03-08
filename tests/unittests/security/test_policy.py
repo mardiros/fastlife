@@ -4,15 +4,17 @@ from uuid import UUID
 import pytest
 from fastapi import Request as FastApiRequest
 
-from fastlife import Allowed, Denied, GenericRequest, HasPermission, Unauthenticated
-from tests.fastlife_app.config import MyRequest
+from fastlife import Allowed, Denied, HasPermission, Unauthenticated
+from tests.fastlife_app.config import I18nRequest, MyRequest
 from tests.fastlife_app.domain.model import AuthnToken
 from tests.fastlife_app.views.api.security import MyRegistry
 from tests.fastlife_app.views.app.admin.security import SecurityPolicy
 
 
 @pytest.fixture()
-def dummy_request(session: dict[str, Any], dummy_registry: MyRegistry) -> MyRequest:
+def dummy_request(
+    session: dict[str, Any], dummy_registry: MyRegistry
+) -> I18nRequest[Any, Any, Any]:
     scope: dict[str, Any] = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
@@ -22,7 +24,7 @@ def dummy_request(session: dict[str, Any], dummy_registry: MyRegistry) -> MyRequ
         "path": "/",
         "session": session,
     }
-    req = GenericRequest[Any, Any, Any](dummy_registry, FastApiRequest(scope))
+    req = I18nRequest[Any, Any, Any](dummy_registry, FastApiRequest(scope))
     return req
 
 
