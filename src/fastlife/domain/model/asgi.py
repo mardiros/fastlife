@@ -1,6 +1,14 @@
-from starlette.requests import Request as ASGIRequest
-from starlette.responses import Response as ASGIResponse
+"""ASGI types from Starlette."""
+
+from starlette.requests import Request
+from starlette.responses import Response
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+ASGIRequest = Request
+"""Starlette request class used as ASGI Protocol base HTTP Request representation."""
+
+ASGIResponse = Response
+"""Starlette request class used as ASGI Protocol base HTTP Response representation."""
 
 __all__ = [
     "ASGIApp",

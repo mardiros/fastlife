@@ -136,9 +136,9 @@ EOF
 Tailwind CSS can grab class names in python file too.
 All the [basic JinjaX compoments](#jinjax-components) classes of fastlife are
 actually in
-{class}`the Constant <fastlife.templating.renderer.constants.Constant` class
-that is completly replacable in the settings:
-{attr}`fastlife.config.settings.Settings.jinjax_global_catalog_class`
+[the Constant](#fastlife.templating.renderer.constants.Constant) class
+that is completly replacable in the setting
+[jinjax_global_catalog_class](#fastlife.settings.Settings.jinjax_global_catalog_class)
 
 ```python
 # content of the file src/myapp/contants.py

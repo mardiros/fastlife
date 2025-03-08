@@ -265,7 +265,7 @@ class GenericConfigurator(Generic[TRegistry]):
     def set_request_factory(
         self, request_factory: "RequestFactoryBuilder[TRegistry]"
     ) -> Self:
-        """Install a locale negociator for the app."""
+        """Install a request factory, to use a custom request classes."""
         self.registry.request_factory = request_factory(self.registry)
         return self
 

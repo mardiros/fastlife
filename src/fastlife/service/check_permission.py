@@ -1,4 +1,4 @@
-"""Security policy."""
+"""Security policy permission routine."""
 
 from collections.abc import Callable, Coroutine
 from typing import Any

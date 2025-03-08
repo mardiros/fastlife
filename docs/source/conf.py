@@ -52,6 +52,11 @@ extensions = [
 jinjax_doc_output_dir = "components"
 jinjax_template_search_path = "fastlife:components"
 
+autodoc2_module_all_regexes = [
+    r"fastlife\.domain\.model\.asgi",
+]
+
+
 autodoc2_packages = [
     {"path": "../../src/fastlife"},
     # {

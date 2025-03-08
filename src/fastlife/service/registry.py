@@ -1,3 +1,5 @@
+"""Application registry."""
+
 from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
