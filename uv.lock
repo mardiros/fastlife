@@ -287,7 +287,7 @@ standard = [
 
 [[package]]
 name = "fastlifeweb"
-version = "0.25.2"
+version = "0.26.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
