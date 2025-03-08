@@ -8,12 +8,10 @@ from fastlife.settings import Settings
 LocaleName = str
 """The LocaleName is a locale such as en, fr that will be consume for translations."""
 
-from fastlife.adapters.fastapi.request import GenericRequest  # coverage: ignore
+from fastlife.adapters.fastapi.request import GenericRequest
 
-LocaleNegociator = Callable[
-    [GenericRequest[Any, Any, Any]], LocaleName
-]  # coverage: ignore
-"""Interface to implement to negociate a locale"""  # coverage: ignore
+LocaleNegociator = Callable[[GenericRequest[Any, Any, Any]], LocaleName]
+"""Interface to implement to negociate a locale"""
 
 
 def default_negociator(settings: Settings) -> LocaleNegociator:
