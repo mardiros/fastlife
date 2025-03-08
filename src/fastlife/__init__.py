@@ -23,6 +23,7 @@ from .config import (
     resource_view,
     view_config,
 )
+from .domain.model.asgi import ASGIRequest, ASGIResponse
 from .domain.model.form import FormModel
 from .domain.model.request import GenericRequest
 from .domain.model.security_policy import (
@@ -36,6 +37,8 @@ from .domain.model.security_policy import (
     NoMFAAuthenticationState,
     PendingMFA,
     PreAuthenticated,
+    TClaimedIdentity,
+    TIdentity,
     Unauthenticated,
     Unauthorized,
 )
@@ -43,6 +46,7 @@ from .domain.model.template import JinjaXTemplate
 
 # from .request.form_data import model
 from .service.registry import DefaultRegistry, GenericRegistry, TRegistry, TSettings
+from .service.request_factory import RequestFactory
 from .service.security_policy import (
     AbstractNoMFASecurityPolicy,
     AbstractSecurityPolicy,
@@ -75,6 +79,10 @@ __all__ = [
     "AnyRequest",
     "Request",
     "get_request",
+    # Request Factory
+    "ASGIRequest",
+    "ASGIResponse",
+    "RequestFactory",
     # Response
     "Response",
     "RedirectResponse",
@@ -94,6 +102,8 @@ __all__ = [
     "Authenticated",
     "AuthenticationState",
     "NoMFAAuthenticationState",
+    "TClaimedIdentity",
+    "TIdentity",
     # Template
     "JinjaXTemplate",
     # i18n

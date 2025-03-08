@@ -2,8 +2,7 @@
 
 from typing import TYPE_CHECKING, Any, Generic
 
-from starlette.requests import Request as BaseRequest
-
+from fastlife.domain.model.asgi import ASGIRequest
 from fastlife.domain.model.csrf import CSRFToken, create_csrf_token
 from fastlife.domain.model.security_policy import TClaimedIdentity, TIdentity
 from fastlife.service.registry import TRegistry
@@ -15,7 +14,7 @@ if TYPE_CHECKING:
     )
 
 
-class GenericRequest(BaseRequest, Generic[TRegistry, TIdentity, TClaimedIdentity]):
+class GenericRequest(ASGIRequest, Generic[TRegistry, TIdentity, TClaimedIdentity]):
     """HTTP Request representation."""
 
     registry: TRegistry
@@ -30,7 +29,7 @@ class GenericRequest(BaseRequest, Generic[TRegistry, TIdentity, TClaimedIdentity
 
     renderer_globals: dict[str, Any]
 
-    def __init__(self, registry: TRegistry, request: BaseRequest) -> None:
+    def __init__(self, registry: TRegistry, request: ASGIRequest) -> None:
         super().__init__(request.scope, request.receive)
         self.registry = registry
         self.locale_name = registry.locale_negociator(self)

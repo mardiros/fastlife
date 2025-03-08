@@ -6,16 +6,18 @@ from fastapi import Depends, FastAPI
 from starlette.datastructures import URL
 
 from fastlife import (
+    ASGIRequest,
     GenericConfigurator,
     GenericRegistry,
     GenericRequest,
+    RequestFactory,
     Settings,
+    TClaimedIdentity,
+    TIdentity,
+    TRegistry,
     configure,
     get_request,
 )
-from fastlife.domain.model.security_policy import TClaimedIdentity, TIdentity
-from fastlife.service.registry import TRegistry
-from fastlife.service.request_factory import RequestFactory, StarletteRequest
 from fastlife.shared_utils.resolver import resolve
 from tests.fastlife_app.service.uow import AbstractUnitOfWork
 
@@ -55,7 +57,7 @@ MyRequest = Annotated[
 
 
 def request_factory(registry: MyRegistry) -> RequestFactory:
-    def request(request: StarletteRequest) -> GenericRequest[Any, Any, Any]:
+    def request(request: ASGIRequest) -> GenericRequest[Any, Any, Any]:
         return I18nRequest(registry, request)
 
     return request
