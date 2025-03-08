@@ -1,3 +1,5 @@
+"""Implement i18n."""
+
 import pathlib
 from collections import defaultdict
 from collections.abc import Callable, Iterator
@@ -15,7 +17,7 @@ class TranslatableString(str):
     """
     Create a string made for translation associated to a domain.
     This class is instanciated by the
-    :class:`fastlife.service.translations.TranslatableStringFactory` class.
+    {class}`fastlife.service.translations.TranslatableStringFactory` class.
     """
 
     __slots__ = ("domain",)
