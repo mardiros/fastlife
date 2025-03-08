@@ -4,8 +4,8 @@ from collections.abc import Callable, Coroutine
 from typing import TYPE_CHECKING, Any
 
 from fastapi.routing import APIRoute
-from starlette.requests import Request as StarletteRequest
-from starlette.responses import Response
+
+from fastlife.domain.model.asgi import ASGIRequest, ASGIResponse
 
 if TYPE_CHECKING:
     from fastlife.service.registry import DefaultRegistry  # coverage: ignore
@@ -32,13 +32,13 @@ class Route(APIRoute):
 
     def get_route_handler(
         self,
-    ) -> Callable[[StarletteRequest], Coroutine[Any, Any, Response]]:
+    ) -> Callable[[ASGIRequest], Coroutine[Any, Any, ASGIResponse]]:
         """
         Replace the request object by the fastlife request associated with the registry.
         """
         orig_route_handler = super().get_route_handler()
 
-        async def route_handler(request: StarletteRequest) -> Response:
+        async def route_handler(request: ASGIRequest) -> ASGIResponse:
             req = self._registry.request_factory(request)
             return await orig_route_handler(req)
 
