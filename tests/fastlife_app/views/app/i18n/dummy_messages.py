@@ -12,8 +12,8 @@ lazy_dog = _("lazy dog")
 quick_brown_fox = _("quick brown fox")
 
 
-@view_config("hello-i18n", "/{locale}/dummy-messages", methods=["GET"])
-async def hello_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Response:
+@view_config("more-i18n", "/{locale}/dummy-messages", methods=["GET"])
+async def more_i18n(locale: Annotated[str, Path(...)], lczr: Localizer) -> Response:
     return Response(
         json.dumps(
             {

@@ -44,12 +44,14 @@ from fastlife.shared_utils.resolver import (
 )
 
 if TYPE_CHECKING:
+    from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
+    from fastlife.service.request_factory import (
+        RequestFactoryBuilder,  # coverage: ignore
+    )
     from fastlife.service.security_policy import AbstractSecurityPolicy
     from fastlife.service.templates import (
         AbstractTemplateRendererFactory,  # coverage: ignore
     )
-
-from fastlife.service.locale_negociator import LocaleNegociator
 
 log = logging.getLogger(__name__)
 VENUSIAN_CATEGORY = "fastlife"
@@ -260,7 +262,14 @@ class GenericConfigurator(Generic[TRegistry]):
             self._route_prefix = old
         return self
 
-    def set_locale_negociator(self, locale_negociator: LocaleNegociator) -> Self:
+    def set_request_factory(
+        self, request_factory: "RequestFactoryBuilder[TRegistry]"
+    ) -> Self:
+        """Install a locale negociator for the app."""
+        self.registry.request_factory = request_factory(self.registry)
+        return self
+
+    def set_locale_negociator(self, locale_negociator: "LocaleNegociator") -> Self:
         """Install a locale negociator for the app."""
         self.registry.locale_negociator = locale_negociator
         return self
