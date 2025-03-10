@@ -66,20 +66,6 @@ wheels = [
 ]
 
 [[package]]
-name = "behave"
-version = "1.2.6"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "parse" },
-    { name = "parse-type" },
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c8/4b/d0a8c23b6c8985e5544ea96d27105a273ea22051317f850c2cdbf2029fe4/behave-1.2.6.tar.gz", hash = "sha256:b9662327aa53294c1351b0a9c369093ccec1d21026f050c3bd9b3e5cccf81a86", size = 701696 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a8/6c/ec9169548b6c4cb877aaa6773408ca08ae2a282805b958dbc163cb19822d/behave-1.2.6-py2.py3-none-any.whl", hash = "sha256:ebda1a6c9e5bfe95c5f9f0a2794e01c7098b3dde86c10a95d8621c5907ff6f1c", size = 136779 },
-]
-
-[[package]]
 name = "certifi"
 version = "2025.1.31"
 source = { registry = "https://pypi.org/simple" }
@@ -317,7 +303,6 @@ testing = [
 dev = [
     { name = "babel" },
     { name = "beautifulsoup4" },
-    { name = "behave" },
     { name = "email-validator" },
     { name = "heroicons" },
     { name = "httpx" },
@@ -329,7 +314,9 @@ dev = [
     { name = "pytest-cov" },
     { name = "pytest-playwright" },
     { name = "sphinx" },
+    { name = "tursu" },
     { name = "types-beautifulsoup4" },
+    { name = "uvicorn" },
 ]
 doc = [
     { name = "furo" },
@@ -363,7 +350,6 @@ provides-extras = ["testing", "docs"]
 dev = [
     { name = "babel", specifier = ">=2.16.0,<3" },
     { name = "beautifulsoup4", specifier = ">=4.12.2,<5" },
-    { name = "behave", specifier = ">=1.2.6,<2" },
     { name = "email-validator", specifier = ">=2.0.0.post2,<3" },
     { name = "heroicons", specifier = ">=2.7.0,<3" },
     { name = "httpx", specifier = ">=0.28.1,<0.29" },
@@ -371,11 +357,13 @@ dev = [
     { name = "mypy", specifier = ">=1.4.0,<2" },
     { name = "pytailwindcss", specifier = ">=0.2.0,<0.3" },
     { name = "pytest", specifier = ">=8.2.0,<9" },
-    { name = "pytest-asyncio", specifier = ">=0.21.0,<0.22" },
+    { name = "pytest-asyncio", specifier = ">=0.26.0" },
     { name = "pytest-cov", specifier = ">=4.1.0,<5" },
-    { name = "pytest-playwright", specifier = ">=0.4.3,<0.5" },
+    { name = "pytest-playwright", specifier = ">=0.7.0,<0.8" },
     { name = "sphinx", specifier = ">=7.0.1,<8" },
+    { name = "tursu", specifier = ">=0.15.1,<1" },
     { name = "types-beautifulsoup4", specifier = ">=4.12.0.6,<5" },
+    { name = "uvicorn", specifier = ">=0.34.0" },
 ]
 doc = [
     { name = "furo", specifier = ">=2024.5.6" },
@@ -398,6 +386,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/a0/e2/d351d69a9a9e4badb4a5be062c2d0e87bd9e6c23b5e57337fef14bef34c8/furo-2024.8.6.tar.gz", hash = "sha256:b63e4cee8abfc3136d3bc03a3d45a76a850bada4d6374d24c1716b0e01394a01", size = 1661506 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/27/48/e791a7ed487dbb9729ef32bb5d1af16693d8925f4366befef54119b2e576/furo-2024.8.6-py3-none-any.whl", hash = "sha256:6cd97c58b47813d3619e63e9081169880fbe331f0ca883c871ff1f3f11814f5c", size = 341333 },
+]
+
+[[package]]
+name = "gherkin-official"
+version = "32.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c4/56/1a5180b50527721aabfb6600a7cd4a1bffa9c3e94c480148e7d349245517/gherkin_official-32.0.0.tar.gz", hash = "sha256:e405cf41052e6828d69183bac424104eb06c5ea3a1ac3ba14ca3aee8f579cffa", size = 33828 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/93/32/d3d5e6a727c058859991bb530b076d0df29842930ce537edbbd5090f4f31/gherkin_official-32.0.0-py3-none-any.whl", hash = "sha256:ee863e9ec2fae344f182927c938bce2cdfdde5e6360883ada49fc84fa52a24dc", size = 38296 },
 ]
 
 [[package]]
@@ -818,28 +818,6 @@ wheels = [
 ]
 
 [[package]]
-name = "parse"
-version = "1.20.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4f/78/d9b09ba24bb36ef8b83b71be547e118d46214735b6dfb39e4bfde0e9b9dd/parse-1.20.2.tar.gz", hash = "sha256:b41d604d16503c79d81af5165155c0b20f6c8d6c559efa66b4b695c3e5a0a0ce", size = 29391 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/31/ba45bf0b2aa7898d81cbbfac0e88c267befb59ad91a19e36e1bc5578ddb1/parse-1.20.2-py2.py3-none-any.whl", hash = "sha256:967095588cb802add9177d0c0b6133b5ba33b1ea9007ca800e526f42a85af558", size = 20126 },
-]
-
-[[package]]
-name = "parse-type"
-version = "0.6.4"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "parse" },
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/17/e9/a3b2ae5f8a852542788ac1f1865dcea0c549cc40af243f42cabfa0acf24d/parse_type-0.6.4.tar.gz", hash = "sha256:5e1ec10440b000c3f818006033372939e693a9ec0176f446d9303e4db88489a6", size = 96480 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/b3/f6cc950042bfdbe98672e7c834d930f85920fb7d3359f59096e8d2799617/parse_type-0.6.4-py2.py3-none-any.whl", hash = "sha256:83d41144a82d6b8541127bf212dd76c7f01baff680b498ce8a4d052a7a5bce4c", size = 27442 },
-]
-
-[[package]]
 name = "playwright"
 version = "1.50.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1002,14 +980,14 @@ wheels = [
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.21.2"
+version = "0.26.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ae/53/57663d99acaac2fcdafdc697e52a9b1b7d6fcf36616281ff9768a44e7ff3/pytest_asyncio-0.21.2.tar.gz", hash = "sha256:d67738fc232b94b326b9d060750beb16e0074210b98dd8b58a5239fa2a154f45", size = 30656 }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/c4/453c52c659521066969523e87d85d54139bbd17b78f09532fb8eb8cdb58e/pytest_asyncio-0.26.0.tar.gz", hash = "sha256:c4df2a697648241ff39e7f0e4a73050b03f123f760673956cf0d72a4990e312f", size = 54156 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/ce/1e4b53c213dce25d6e8b163697fbce2d43799d76fa08eea6ad270451c370/pytest_asyncio-0.21.2-py3-none-any.whl", hash = "sha256:ab664c88bb7998f711d8039cacd4884da6430886ae8bbd4eded552ed2004f16b", size = 13368 },
+    { url = "https://files.pythonhosted.org/packages/20/7f/338843f449ace853647ace35870874f69a764d251872ed1b4de9f234822c/pytest_asyncio-0.26.0-py3-none-any.whl", hash = "sha256:7b51ed894f4fbea1340262bdae5135797ebbe21d8638978e35d31c6d19f72fb0", size = 19694 },
 ]
 
 [[package]]
@@ -1040,7 +1018,7 @@ wheels = [
 
 [[package]]
 name = "pytest-playwright"
-version = "0.4.4"
+version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "playwright" },
@@ -1048,9 +1026,9 @@ dependencies = [
     { name = "pytest-base-url" },
     { name = "python-slugify" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d8/a8/810ff67ec8ec14c3aa598936911130fb335acde9b7102b775ef639be90d5/pytest-playwright-0.4.4.tar.gz", hash = "sha256:5488db4cc49028491c5130af0a2bb6b1d0b222a202217f6d14491d4c9aa67ff9", size = 19917 }
+sdist = { url = "https://files.pythonhosted.org/packages/e3/47/38e292ad92134a00ea05e6fc4fc44577baaa38b0922ab7ea56312b7a6663/pytest_playwright-0.7.0.tar.gz", hash = "sha256:b3f2ea514bbead96d26376fac182f68dcd6571e7cb41680a89ff1673c05d60b6", size = 16666 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a1/85/323568cd7f139551bd9b9a776e67ffbd5164a254870d27c3645ecc47a7d8/pytest_playwright-0.4.4-py3-none-any.whl", hash = "sha256:df306f3a60a8631a3cfde1b95a2ed5a89203a3408dfa1154de049ca7de87c90b", size = 10668 },
+    { url = "https://files.pythonhosted.org/packages/d8/96/5f8a4545d783674f3de33f0ebc4db16cc76ce77a4c404d284f43f09125e3/pytest_playwright-0.7.0-py3-none-any.whl", hash = "sha256:2516d0871fa606634bfe32afbcc0342d68da2dbff97fe3459849e9c428486da2", size = 16618 },
 ]
 
 [[package]]
@@ -1167,15 +1145,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/58/15/8b3609fd3830ef7b27b655beb4b4e9c62313a4e8da8c676e142cc210d58e/shellingham-1.5.4.tar.gz", hash = "sha256:8dbca0739d487e5bd35ab3ca4b36e11c4078f3a234bfce294b0a0291363404de", size = 10310 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e0/f9/0595336914c5619e5f28a1fb793285925a8cd4b432c9da0a987836c7f822/shellingham-1.5.4-py2.py3-none-any.whl", hash = "sha256:7ecfff8f2fd72616f7481040475a65b2bf8af90a56c89140852d1120324e8686", size = 9755 },
-]
-
-[[package]]
-name = "six"
-version = "1.17.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/94/e7/b2c673351809dca68a0e064b6af791aa332cf192da575fd474ed7d6f16a2/six-1.17.0.tar.gz", hash = "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81", size = 34031 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", hash = "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", size = 11050 },
 ]
 
 [[package]]
@@ -1369,6 +1338,21 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5b/b9/1ed31d167be802da0fc95020d04cd27b7d7065cc6fbefdd2f9186f60d7bd/tomli-2.2.1-cp313-cp313-win32.whl", hash = "sha256:d3f5614314d758649ab2ab3a62d4f2004c825922f9e370b29416484086b264ec", size = 98724 },
     { url = "https://files.pythonhosted.org/packages/c7/32/b0963458706accd9afcfeb867c0f9175a741bf7b19cd424230714d722198/tomli-2.2.1-cp313-cp313-win_amd64.whl", hash = "sha256:a38aa0308e754b0e3c67e344754dff64999ff9b513e691d0e786265c93583c69", size = 109383 },
     { url = "https://files.pythonhosted.org/packages/6e/c2/61d3e0f47e2b74ef40a68b9e6ad5984f6241a942f7cd3bbfbdbd03861ea9/tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc", size = 14257 },
+]
+
+[[package]]
+name = "tursu"
+version = "0.15.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "gherkin-official" },
+    { name = "pydantic" },
+    { name = "pytest" },
+    { name = "venusian" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ba/9c/f2d05ff2a10a4cc4d820daeba16a2ff6ededce47872333910c2a6a60c9af/tursu-0.15.1.tar.gz", hash = "sha256:8b071d4e8f74942e7b38fc493654d03ad2d0cb16d5c749f4c9483cc48e296633", size = 29741 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fc/36/c861b579445460e2d808620a511bd042b3ef1dd5d36148307844dd2c1ef2/tursu-0.15.1-py3-none-any.whl", hash = "sha256:02634a7fc65a38667fc54b269002ce1c58693aaa31f9d0b7e7099027a286f589", size = 34145 },
 ]
 
 [[package]]

@@ -17,7 +17,7 @@ from tests.fastlife_app.config import MyRegistry, MySettings
 
 @pytest.fixture()
 def root_dir() -> Path:
-    return Path(__file__).parent.parent
+    return Path(__file__).parents[2]
 
 
 @pytest.fixture(autouse=True)

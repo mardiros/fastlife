@@ -48,7 +48,6 @@ docs = [
 dev = [
   "babel >=2.16.0,<3",
   "beautifulsoup4 >= 4.12.2,<5",
-  "behave >= 1.2.6,<2",
   "email-validator >= 2.0.0.post2,<3",
   "heroicons >= 2.7.0,<3",
   "httpx >= 0.28.1,<0.29",
@@ -56,11 +55,13 @@ dev = [
   "mypy >= 1.4.0,<2",
   "pytailwindcss >= 0.2.0,<0.3",
   "pytest >= 8.2.0,<9",
-  "pytest-asyncio >= 0.21.0,<0.22",
+  "pytest-asyncio >=0.26.0",
   "pytest-cov >= 4.1.0,<5",
-  "pytest-playwright >= 0.4.3,<0.5",
+  "pytest-playwright >= 0.7.0,<0.8",
   "sphinx >=7.0.1,<8",
+  "tursu>=0.15.1,<1",
   "types-beautifulsoup4 >= 4.12.0.6,<5",
+  "uvicorn>=0.34.0",
 ]
 doc = [
   "furo >=2024.5.6",
@@ -111,10 +112,20 @@ profile = "black"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+markers = [
+  "experiment: experiment with some context",
+  "dev: developper helpers to exclude from func tests.",
+  "wip: work in progress.",
+  "icons: show icons.",
+  "openapi: open api tests.",
+]
+
 filterwarnings = [
   "error",
-  'ignore:.*import python_multipart', # starlette
-  'ignore:.*Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning',  # venusian
+  'ignore:.*import python_multipart',                                                # starlette
+  'ignore:.*Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning', # venusian
+  'ignore:.*websockets.legacy is deprecated.*',                                      # uvicorn
+  'ignore:.*WebSocketServerProtocol.*',                                              # uvicorn
   'ignore:.*find_module\(\) is deprecated.*:DeprecationWarning',
   'ignore:.*FileFinder.find_loader\(\) is deprecated.*:DeprecationWarning',
   'ignore:.*Pydantic serializer warnings.*:UserWarning',

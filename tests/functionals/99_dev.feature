@@ -1,5 +1,6 @@
-Feature: Basic form
-  @dev
+@dev
+Feature: Development helpers
+  @experiment
   Scenario: Hello world
     Given anonymous user on "/autoform"
     And I wait
@@ -9,7 +10,6 @@ Feature: Basic form
     Given anonymous user on "/icons"
     And I wait
 
-  @dev
   @openapi
   Scenario: show openapi docs
     Given anonymous user on "/api/doc"
