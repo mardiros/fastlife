@@ -1,8 +1,3 @@
-import asyncio
-
-from hypercorn.asyncio import serve
-from hypercorn.config import Config
-
 from tests.fastlife_app.config import MyConfigurator, MySettings
 
 
@@ -24,16 +19,3 @@ def build_app():
 
 
 app = build_app()
-
-
-def main():
-    config = Config()
-    config.bind = ["0.0.0.0:8888", "[::1]:8888"]
-
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(serve(app, config))  # type: ignore
-
-
-if __name__ == "__main__":
-    main()
