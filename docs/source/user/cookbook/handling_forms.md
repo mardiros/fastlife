@@ -72,13 +72,11 @@ async def hello_world(
 EOF
 ```
 
-
 :::{tip}
 Usually, with jinjax, we have to declare the definition of the variables in templates,
 but using the JinjaXTemplate object, the definition is automatically creating with
 the attributes of the class. `person` in our example.
 :::
-
 
 Now, if you run the app and start a browser, you see the form with one field to the
 the nick name.
@@ -202,7 +200,7 @@ cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
 {# def person #}
 <html>
     <head>
-      <script src="https://unpkg.com/htmx.org@2.0.1" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
     </head>
     <body>
       <H1 id="hello-world">Hello {{ person.model.nick|default("World") }}!</H1>
