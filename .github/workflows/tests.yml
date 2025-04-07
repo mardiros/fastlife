@@ -40,7 +40,7 @@ jobs:
 
       - name: Run tests
         run: |
-          uv run pytest tests  --junitxml=junit/test-results-${{ matrix.python-version }}.xml --cov=fastlife --cov-report=xml --cov-report=html
+          uv run pytest tests/unittests  --junitxml=junit/test-results-${{ matrix.python-version }}.xml --cov=fastlife --cov-report=xml --cov-report=html
 
       - name: Upload pytest test results
         uses: actions/upload-artifact@v4
