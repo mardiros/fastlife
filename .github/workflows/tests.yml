@@ -2,20 +2,19 @@ name: tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   workflow_dispatch:
 
   workflow_call:
     secrets:
       CODECOV_TOKEN:
-        required: true  # Ensures CODECOV_TOKEN is required for this workflow
-
+        required: true # Ensures CODECOV_TOKEN is required for this workflow
 
 jobs:
-  CI:
+  unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -40,7 +39,7 @@ jobs:
 
       - name: Run tests
         run: |
-          uv run pytest tests  --junitxml=junit/test-results-${{ matrix.python-version }}.xml --cov=fastlife --cov-report=xml --cov-report=html
+          uv run pytest tests/unittests  --junitxml=junit/test-results-${{ matrix.python-version }}.xml --cov=fastlife --cov-report=xml --cov-report=html
 
       - name: Upload pytest test results
         uses: actions/upload-artifact@v4
@@ -60,3 +59,23 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
+
+  functional-tests:
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install the project
+        run: uv sync --group dev
+      - name: Ensure browsers are installed
+        run: uv run playwright install --with-deps --only-shell chromium
+      - name: Run functional tests
+        run: uv run pytest -m "not dev" --tracing=retain-on-failure -v tests/functionals
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-traces
+          path: test-results/

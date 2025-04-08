@@ -9,6 +9,8 @@ indent_size = 2
 [*.py]
 indent_size = 4
 
+[Justfile]
+indent_size = 4
 
 [*.rst]
 indent_size = 3

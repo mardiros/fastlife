@@ -1,8 +1,7 @@
-# type: ignore
 import time
 from typing import Any
 
-from behave import given, then, when
+from tursu import given, then, when
 
 
 @given("I wait")

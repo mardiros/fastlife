@@ -5,7 +5,7 @@ Feature: Pydantic Form Generation
     When I fill the field "nickname" with "Alice"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "nick": "Alice"
       }
@@ -16,7 +16,7 @@ Feature: Pydantic Form Generation
     When I fill the field "seconds" with "42"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "seconds": 42
       }
@@ -27,7 +27,7 @@ Feature: Pydantic Form Generation
     When I fill the field "fm station" with "103.3"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "fm": 103.3
       }
@@ -37,7 +37,7 @@ Feature: Pydantic Form Generation
   # #   Given anonymous user on "/form/datetimefield"
   # #   When I fill the field "rendez-vous" with "2024-01-02"
   # #   Then I see the json
-  # #     """
+  # #     """json
   # #     {"rdv": "2024-01-02T00:00:00Z"}
   # #     """
 
@@ -46,7 +46,7 @@ Feature: Pydantic Form Generation
     When I click on the "checkbox" "Accept contract"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "aggreed": true
       }
@@ -57,14 +57,17 @@ Feature: Pydantic Form Generation
     When I click on the "checkbox" "cooking"
     When I click on the "checkbox" "reading"
     And I click on the "button" "submit" with response info
-    Then I see the python set "{"reading", "cooking"}" in "hobbies"
+    Then I see the python set in "hobbies"
+      """python
+      {"reading", "cooking"}
+      """
 
   Scenario: Enum
     Given anonymous user on "/form/enumfield"
     When I select the option "female" of "Gender"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "gender": "female"
       }
@@ -75,8 +78,10 @@ Feature: Pydantic Form Generation
     When I click on the "checkbox" "lazy dog"
     When I click on the "checkbox" "crazy cat"
     And I click on the "button" "submit" with response info
-    Then I see the python set "{"dog", "cat"}" in "pets"
-
+    Then I see the python set in "pets"
+      """python
+      {"dog", "cat"}
+      """
   Scenario: Sequence[str]
     Given anonymous user on "/form/string_sequence"
     When I click on the "button" "Add"
@@ -84,7 +89,8 @@ Feature: Pydantic Form Generation
     When I click on the "button" "Add"
     And I fill the field "1" with "bar"
     And I click on the "button" "submit" with response info
-      """
+    Then I see the json
+      """json
       {
         "aliases": [
           "foo",
@@ -100,7 +106,7 @@ Feature: Pydantic Form Generation
     And I fill the field "Age" with "16"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "professor": {
           "firstname": "John",
@@ -112,14 +118,14 @@ Feature: Pydantic Form Generation
 
   Scenario: Sequence[str] with custom widget
     Given anonymous user on "/form/string_sequence_widget"
-    When I fill the field "Aliases" with
+    When I fill the textarea "Aliases" with
       """
       foo
       bar
       """
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "aliases": [
           "foo",
@@ -133,7 +139,7 @@ Feature: Pydantic Form Generation
     When I fill the field "name" with "Bob"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "id": 42,
         "name": "Bob"
@@ -146,7 +152,7 @@ Feature: Pydantic Form Generation
     And I fill the field "nick" with "Buffy"
     And I click on the "button" "submit" with response info
     Then I see the json
-      """
+      """json
       {
         "pet": {"type": "dog", "nick": "Buffy"}
       }

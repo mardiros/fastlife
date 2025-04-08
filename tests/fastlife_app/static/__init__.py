@@ -17,3 +17,4 @@ async def favicon() -> Response:
 def includeme(config: Configurator):
     config.add_route("favicon", "/favicon.ico", favicon, methods=["GET"])
     config.add_static_route("/static/css", static_dir / "css", name="static")
+    config.add_static_route("/static/scripts", static_dir / "scripts", name="static")

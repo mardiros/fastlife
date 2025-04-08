@@ -2,7 +2,7 @@ package := 'fastlife'
 default_unittest_suite := 'tests/unittests'
 default_functest_suite := 'tests/functionals'
 
-export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
+# export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
 export CLICOLOR_FORCE := "1"
 
 install:
@@ -95,23 +95,23 @@ cov test_suite=default_unittest_suite:
 
 # start the playwright server in a docker container
 # to honnort PW_TEST_CONNECT_WS_ENDPOINT for functional tests
-playwrightserver:
-    docker run -p 3000:3000 --rm --init -it mcr.microsoft.com/playwright:v1.41.0-jammy /bin/sh -c "cd /home/pwuser && npx -y playwright@1.41.0 run-server --port 3000 --host 0.0.0.0"
+# playwrightserver:
+#     docker run -p 3000:3000 --rm --init -it mcr.microsoft.com/playwright:v1.41.0-jammy /bin/sh -c "cd /home/pwuser && npx -y playwright@1.41.0 run-server --port 3000 --host 0.0.0.0"
 
 functest test_suite=default_functest_suite:
-    uv run behave --tags=-dev --tags=-icons --no-capture {{test_suite}}
+    uv run pytest -m "not dev" --browser chromium  -sxv tests/functionals/
 
 wip:
-    uv run behave --tags=wip --no-capture tests/functionals/
+    uv run pytest -m "wip" --headed --browser chromium  -sxv tests/functionals/
 
 funcdevtest:
-    uv run behave --tags=dev --no-capture tests/functionals/
+    uv run pytest -m "experiment" --headed --browser chromium  -sxvvv tests/functionals/
 
 showicons:
-    uv run behave --tags=icons --no-capture tests/functionals/
+    uv run pytest -m "icons" --headed --browser chromium  -sxv tests/functionals/
 
 showopenapi:
-    uv run behave --tags=openapi --no-capture tests/functionals/
+    uv run pytest -m "openapi" --headed --browser chromium  -sxv tests/functionals/
 
 typecheck:
     uv run mypy src/ tests/

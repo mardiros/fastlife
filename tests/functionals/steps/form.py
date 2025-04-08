@@ -1,10 +1,8 @@
-# type: ignore
 import string
-from typing import Literal
+from typing import Any, Literal
 
-from behave import when
-
-from tests.functionals.context import Context
+from playwright.sync_api import Page
+from tursu import when
 
 Role = Literal[
     "alert",
@@ -93,46 +91,46 @@ Role = Literal[
 
 
 @when('I fill the field "{label}" with "{value}"')
-def fill_input(context: Context, label: str, value: str):
-    field = context.browser.get_by_label(label)
+def fill_input(page: Page, label: str, value: str):
+    field = page.get_by_label(label)
     field.fill(value)
 
 
-@when('I fill the field "{label}" with')
-def fill_textarea(context: Context, label: str):
-    field = context.browser.get_by_label(label)
-    field.fill(context.text)
+@when('I fill the textarea "{label}" with')
+def fill_textarea(page: Page, label: str, doc_string: str):
+    field = page.get_by_label(label)
+    field.fill(doc_string)
 
 
 @when('I select the option "{value}" of "{label}"')
-def select_option(context: Context, value: str, label: str):
-    field = context.browser.get_by_label(label)
+def select_option(page: Page, value: str, label: str):
+    field = page.get_by_label(label)
     field.select_option(value)
 
 
 @when('I fill the field having the placeholder "{placeholder}" with "{value}"')
-def fill_input_with_placeholder(context: Context, placeholder: str, value: str):
-    field = context.browser.get_by_placeholder(placeholder)
+def fill_input_with_placeholder(page: Page, placeholder: str, value: str):
+    field = page.get_by_placeholder(placeholder)
     field.fill(value)
 
 
 @when('I click on the {position} "{role}" "{name}"')
-def click_element_nth(context: Context, position: str, role: Role, name: str) -> None:
+def click_element_nth(page: Page, position: str, role: Role, name: str) -> None:
     nth = int("".join([x for x in position if x in string.digits])) - 1
-    element = context.browser.get_by_role(role, name=name).nth(nth)
+    element = page.get_by_role(role, name=name).nth(nth)
     element.click()
 
 
 @when('I click on the "{role}" "{name}"')
-def click_element(context: Context, role: Role, name: str) -> None:
-    element = context.browser.get_by_role(role, name=name)
+def click_element(page: Page, role: Role, name: str) -> None:
+    element = page.get_by_role(role, name=name)
     element.click()
 
 
 @when('I click on the "{role}" "{name}" with response info')
-def click_element_api(context: Context, role: Role, name: str) -> None:
-    element = context.browser.get_by_role(role, name=name)
+def click_element_api(page: Page, role: Role, name: str, response: Any) -> None:
+    element = page.get_by_role(role, name=name)
 
-    with context.browser.expect_response("**") as response_info:
+    with page.expect_response("**") as response_info:
         element.click()
-    context.response = response_info.value
+    response.set_response(response_info.value)
