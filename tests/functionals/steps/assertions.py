@@ -6,7 +6,7 @@ from tursu import then
 from tests.functionals.steps.form import Any
 
 
-@then('I see the text "{text}"')
+@then('the user see the text "{text}"')
 def assert_text(page: Page, text: str):
     loc = page.get_by_text(text)
     expect(loc).to_be_visible()
@@ -24,13 +24,13 @@ def assert_h1(page: Page, text: str):
     expect(loc).to_be_visible()
 
 
-@then("I see the json")
+@then("the user see the json")
 def assert_json(page: Page, response: Any, doc_string: Mapping[str, Any]):
     actual_json = response.get_response().json()
     assert actual_json == doc_string
 
 
-@then('I see the python set in "{field}"')
+@then('the user see the python set in "{field}"')
 def assert_json_contains_set(
     page: Page, response: Any, doc_string: set[str], field: str
 ):

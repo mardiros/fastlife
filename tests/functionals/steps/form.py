@@ -90,7 +90,7 @@ Role = Literal[
 ]
 
 
-@when('I fill the field "{label}" with "{value}"')
+@when('the user fill the field "{label}" with "{value}"')
 def fill_input(page: Page, label: str, value: str):
     field = page.get_by_label(label)
     field.fill(value)
@@ -108,26 +108,26 @@ def select_option(page: Page, value: str, label: str):
     field.select_option(value)
 
 
-@when('I fill the field having the placeholder "{placeholder}" with "{value}"')
+@when('the user fill the field having the placeholder "{placeholder}" with "{value}"')
 def fill_input_with_placeholder(page: Page, placeholder: str, value: str):
     field = page.get_by_placeholder(placeholder)
     field.fill(value)
 
 
-@when('I click on the {position} "{role}" "{name}"')
+@when('the user click on the {position} {role} "{name}"')
 def click_element_nth(page: Page, position: str, role: Role, name: str) -> None:
     nth = int("".join([x for x in position if x in string.digits])) - 1
     element = page.get_by_role(role, name=name).nth(nth)
     element.click()
 
 
-@when('I click on the "{role}" "{name}"')
+@when('the user click on the {role} "{name}"')
 def click_element(page: Page, role: Role, name: str) -> None:
     element = page.get_by_role(role, name=name)
     element.click()
 
 
-@when('I click on the "{role}" "{name}" with response info')
+@when('the user click on the {role} "{name}" with response info')
 def click_element_api(page: Page, role: Role, name: str, response: Any) -> None:
     element = page.get_by_role(role, name=name)
 
