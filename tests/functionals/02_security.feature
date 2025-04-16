@@ -1,3 +1,4 @@
+@asyncio
 Feature: Authentication/Authorization
 
   Scenario: Redirect to login page, view secured page, logout and redirect home

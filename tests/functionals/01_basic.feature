@@ -1,3 +1,4 @@
+@asyncio
 Feature: Basic form
 
   Scenario: Hello world
