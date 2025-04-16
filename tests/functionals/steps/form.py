@@ -1,7 +1,7 @@
 import string
 from typing import Any, Literal
 
-from playwright.sync_api import Page
+from playwright.async_api import Page
 from tursu import when
 
 Role = Literal[
@@ -91,46 +91,46 @@ Role = Literal[
 
 
 @when('the user fill the field "{label}" with "{value}"')
-def fill_input(page: Page, label: str, value: str):
+async def fill_input(page: Page, label: str, value: str):
     field = page.get_by_label(label)
-    field.fill(value)
+    await field.fill(value)
 
 
 @when('I fill the textarea "{label}" with')
-def fill_textarea(page: Page, label: str, doc_string: str):
+async def fill_textarea(page: Page, label: str, doc_string: str):
     field = page.get_by_label(label)
-    field.fill(doc_string)
+    await field.fill(doc_string)
 
 
 @when('I select the option "{value}" of "{label}"')
-def select_option(page: Page, value: str, label: str):
+async def select_option(page: Page, value: str, label: str):
     field = page.get_by_label(label)
-    field.select_option(value)
+    await field.select_option(value)
 
 
 @when('the user fill the field having the placeholder "{placeholder}" with "{value}"')
-def fill_input_with_placeholder(page: Page, placeholder: str, value: str):
+async def fill_input_with_placeholder(page: Page, placeholder: str, value: str):
     field = page.get_by_placeholder(placeholder)
-    field.fill(value)
+    await field.fill(value)
 
 
 @when('the user click on the {position} {role} "{name}"')
-def click_element_nth(page: Page, position: str, role: Role, name: str) -> None:
+async def click_element_nth(page: Page, position: str, role: Role, name: str) -> None:
     nth = int("".join([x for x in position if x in string.digits])) - 1
     element = page.get_by_role(role, name=name).nth(nth)
-    element.click()
+    await element.click()
 
 
 @when('the user click on the {role} "{name}"')
-def click_element(page: Page, role: Role, name: str) -> None:
+async def click_element(page: Page, role: Role, name: str) -> None:
     element = page.get_by_role(role, name=name)
-    element.click()
+    await element.click()
 
 
 @when('the user click on the {role} "{name}" with response info')
-def click_element_api(page: Page, role: Role, name: str, response: Any) -> None:
+async def click_element_api(page: Page, role: Role, name: str, response: Any) -> None:
     element = page.get_by_role(role, name=name)
 
-    with page.expect_response("**") as response_info:
-        element.click()
+    async with page.expect_response("**") as response_info:
+        await element.click()
     response.set_response(response_info.value)

@@ -312,7 +312,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
-    { name = "pytest-playwright" },
+    { name = "pytest-playwright-asyncio" },
     { name = "sphinx" },
     { name = "tursu" },
     { name = "types-beautifulsoup4" },
@@ -359,11 +359,11 @@ dev = [
     { name = "pytest", specifier = ">=8.2.0,<9" },
     { name = "pytest-asyncio", specifier = ">=0.26.0" },
     { name = "pytest-cov", specifier = ">=4.1.0,<5" },
-    { name = "pytest-playwright", specifier = ">=0.7.0,<0.8" },
+    { name = "pytest-playwright-asyncio", specifier = ">=0.7.0,<0.8" },
     { name = "sphinx", specifier = ">=7.0.1,<8" },
-    { name = "tursu", specifier = ">=0.15.1,<1" },
+    { name = "tursu", specifier = ">=0.16.0,<1" },
     { name = "types-beautifulsoup4", specifier = ">=4.12.0.6,<5" },
-    { name = "uvicorn", specifier = ">=0.34.0" },
+    { name = "uvicorn", specifier = ">=0.34.0,<1.0" },
 ]
 doc = [
     { name = "furo", specifier = ">=2024.5.6" },
@@ -1017,18 +1017,19 @@ wheels = [
 ]
 
 [[package]]
-name = "pytest-playwright"
+name = "pytest-playwright-asyncio"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "playwright" },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "pytest-base-url" },
     { name = "python-slugify" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e3/47/38e292ad92134a00ea05e6fc4fc44577baaa38b0922ab7ea56312b7a6663/pytest_playwright-0.7.0.tar.gz", hash = "sha256:b3f2ea514bbead96d26376fac182f68dcd6571e7cb41680a89ff1673c05d60b6", size = 16666 }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/88/2f61cdaa81552795ff43420b5869af17585bc55432b44ef1aa882251890e/pytest_playwright_asyncio-0.7.0.tar.gz", hash = "sha256:bf811e2164a74cc743394a327b68ee71f3f924b1ea3e29220499c8d7b03f6af1", size = 16706 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d8/96/5f8a4545d783674f3de33f0ebc4db16cc76ce77a4c404d284f43f09125e3/pytest_playwright-0.7.0-py3-none-any.whl", hash = "sha256:2516d0871fa606634bfe32afbcc0342d68da2dbff97fe3459849e9c428486da2", size = 16618 },
+    { url = "https://files.pythonhosted.org/packages/bf/22/9fb8eb62fbc0cfb7c608c4f04b0ee5a4188b05cdead119adc031c0d96593/pytest_playwright_asyncio-0.7.0-py3-none-any.whl", hash = "sha256:f0a41b7f2967f7f514bd499026555eca0b3be6423f78831b86587def8fc50572", size = 16835 },
 ]
 
 [[package]]
@@ -1342,7 +1343,7 @@ wheels = [
 
 [[package]]
 name = "tursu"
-version = "0.15.1"
+version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "gherkin-official" },
@@ -1350,9 +1351,9 @@ dependencies = [
     { name = "pytest" },
     { name = "venusian" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ba/9c/f2d05ff2a10a4cc4d820daeba16a2ff6ededce47872333910c2a6a60c9af/tursu-0.15.1.tar.gz", hash = "sha256:8b071d4e8f74942e7b38fc493654d03ad2d0cb16d5c749f4c9483cc48e296633", size = 29741 }
+sdist = { url = "https://files.pythonhosted.org/packages/e8/45/0db75c1f1cce38706514e8b830c00d1bcc48eec0294be07aeafabdf149ab/tursu-0.16.0.tar.gz", hash = "sha256:9c7dd0d7d9fdf310a28004d4898dec6186a3ef727af5ac9474516e75a515cf28", size = 30606 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fc/36/c861b579445460e2d808620a511bd042b3ef1dd5d36148307844dd2c1ef2/tursu-0.15.1-py3-none-any.whl", hash = "sha256:02634a7fc65a38667fc54b269002ce1c58693aaa31f9d0b7e7099027a286f589", size = 34145 },
+    { url = "https://files.pythonhosted.org/packages/8d/6b/5b590d41e83bdf3aef3815d962b3b35b23bbb917f19761f9abf54a18aecb/tursu-0.16.0-py3-none-any.whl", hash = "sha256:acde70541943d92fdcebd359b55512c5a75d2f091605f2ed5fea007560b20845", size = 34751 },
 ]
 
 [[package]]

@@ -1,3 +1,4 @@
+@asyncio
 Feature: Pydantic Form Generation
 
   Scenario: Textfield

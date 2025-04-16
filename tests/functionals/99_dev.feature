@@ -1,4 +1,5 @@
 @dev
+@asyncio
 Feature: Development helpers
   @experiment
   Scenario: Hello world
