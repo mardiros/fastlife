@@ -90,44 +90,44 @@ Role = Literal[
 ]
 
 
-@when('the user fill the field "{label}" with "{value}"')
+@when('the user fills the field "{label}" with "{value}"')
 async def fill_input(page: Page, label: str, value: str):
     field = page.get_by_label(label)
     await field.fill(value)
 
 
-@when('I fill the textarea "{label}" with')
+@when('the user fills the textarea "{label}" with')
 async def fill_textarea(page: Page, label: str, doc_string: str):
     field = page.get_by_label(label)
     await field.fill(doc_string)
 
 
-@when('I select the option "{value}" of "{label}"')
+@when('the user selects the option "{value}" of "{label}"')
 async def select_option(page: Page, value: str, label: str):
     field = page.get_by_label(label)
     await field.select_option(value)
 
 
-@when('the user fill the field having the placeholder "{placeholder}" with "{value}"')
+@when('the user fills the field having the placeholder "{placeholder}" with "{value}"')
 async def fill_input_with_placeholder(page: Page, placeholder: str, value: str):
     field = page.get_by_placeholder(placeholder)
     await field.fill(value)
 
 
-@when('the user click on the {position} {role} "{name}"')
+@when('the user clicks on the {position} {role} "{name}"')
 async def click_element_nth(page: Page, position: str, role: Role, name: str) -> None:
     nth = int("".join([x for x in position if x in string.digits])) - 1
     element = page.get_by_role(role, name=name).nth(nth)
     await element.click()
 
 
-@when('the user click on the {role} "{name}"')
+@when('the user clicks on the {role} "{name}"')
 async def click_element(page: Page, role: Role, name: str) -> None:
     element = page.get_by_role(role, name=name)
     await element.click()
 
 
-@when('the user click on the {role} "{name}" with response info')
+@when('the user clicks on the {role} "{name}" with response info')
 async def click_element_api(page: Page, role: Role, name: str, response: Any) -> None:
     element = page.get_by_role(role, name=name)
 
