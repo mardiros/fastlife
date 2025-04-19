@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, overload
 
 import bs4
 
@@ -121,17 +121,51 @@ class Element:
         assert not isinstance(resp, bs4.NavigableString)
         return Element(self._client, resp) if resp else None
 
+    @overload
     def by_node_name(
-        self, node_name: str, *, attrs: dict[str, str] | None = None
-    ) -> list["Element"]:
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+        multiple: Literal[False],
+    ) -> "Element": ...
+
+    @overload
+    def by_node_name(
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+        multiple: Literal[True],
+    ) -> list["Element"]: ...
+
+    @overload
+    def by_node_name(
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+    ) -> list["Element"]: ...
+
+    def by_node_name(
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+        multiple: bool = True,
+    ) -> "list[Element] | Element":
         """
         Return the list of elements with the given node_name.
 
         An optional set of attributes may given and must match if passed.
         """
-        return [
+        ret = [
             Element(self._client, e) for e in self._tag.find_all(node_name, attrs or {})
         ]
+        if not multiple:
+            assert len(ret) == 1
+            return ret[0]
+        return ret
 
     def __repr__(self) -> str:
         return f"<{self.node_name}>"

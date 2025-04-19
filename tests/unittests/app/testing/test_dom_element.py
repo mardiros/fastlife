@@ -218,7 +218,7 @@ def test_by_label_text_not_found(element: Element):
         """,
     ],
 )
-def test_by_node_name(element: Element):
+def test_by_node_name_multiple(element: Element):
     target = element.by_node_name("label")
     assert len(target) == 2
     assert target[0].attrs["for"] == "my-target"
@@ -227,6 +227,29 @@ def test_by_node_name(element: Element):
     target = element.by_node_name("label", attrs={"for": "could-it-be"})
     assert len(target) == 1
     assert target[0].text == "another target"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button id='btn' type='button'>X</button></form>",
+    ],
+)
+def test_by_node_name_unique(element: Element):
+    button = element.by_node_name("button", multiple=False)
+    assert button.attrs["id"] == "btn"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button>X</button><button>Y</button></form>",
+        "<form action='/'></form>",
+    ],
+)
+def test_by_node_name_unique_raises(element: Element):
+    with pytest.raises(AssertionError):
+        element.by_node_name("button", multiple=False)
 
 
 @pytest.mark.parametrize(
