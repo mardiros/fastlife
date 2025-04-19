@@ -79,9 +79,11 @@ class WebResponse:
             self._form = WebForm(self._client, self._origin, form)
         return self._form
 
-    def by_text(self, text: str, *, node_name: str | None = None) -> Element | None:
+    def by_text(
+        self, text: str, *, node_name: str | None = None, position: int | None = None
+    ) -> Element | None:
         """Search a dom element by its text."""
-        return self.html.by_text(text, node_name=node_name)
+        return self.html.by_text(text, node_name=node_name, position=position)
 
     def by_label_text(self, text: str) -> Element | None:
         """Search a dom element by its associated label text."""

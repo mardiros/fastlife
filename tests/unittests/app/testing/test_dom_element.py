@@ -136,13 +136,58 @@ def test_hx_target_in_parent(element: Element):
     "html",
     [
         "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2>iii</h2></div>",
-        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><p>ii-a</p></div>",
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><p>lorem ipsum</p></div>",
     ],
 )
 def test_by_text(element: Element):
     h3 = element.by_text("ii-a")
     assert h3 is not None
     assert h3.node_name == "h3"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2>iii</h2></div>",
+    ],
+)
+def test_by_text_is_none(element: Element):
+    h3 = element.by_text("iv")
+    assert h3 is None
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2>ii</h2></div>",
+    ],
+)
+def test_by_text_is_many(element: Element):
+    with pytest.raises(AssertionError):
+        element.by_text("ii")
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2 id='me'>ii</h2></div>",
+    ],
+)
+def test_by_text_is_many_with_position(element: Element):
+    el = element.by_text("ii", position=2)
+    assert el
+    assert el.attrs["id"] == "me"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2 id='me'>ii</h2></div>",
+    ],
+)
+def test_by_text_is_many_not_enough_position(element: Element):
+    with pytest.raises(AssertionError):
+        element.by_text("ii")
 
 
 @pytest.mark.parametrize(
@@ -218,7 +263,7 @@ def test_by_label_text_not_found(element: Element):
         """,
     ],
 )
-def test_by_node_name(element: Element):
+def test_by_node_name_multiple(element: Element):
     target = element.by_node_name("label")
     assert len(target) == 2
     assert target[0].attrs["for"] == "my-target"
@@ -227,6 +272,66 @@ def test_by_node_name(element: Element):
     target = element.by_node_name("label", attrs={"for": "could-it-be"})
     assert len(target) == 1
     assert target[0].text == "another target"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button id='btn' type='button'>X</button></form>",
+    ],
+)
+def test_by_node_name_unique(element: Element):
+    button = element.by_node_name("button", multiple=False)
+    assert button.attrs["id"] == "btn"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button>X</button><button>Y</button></form>",
+        "<form action='/'></form>",
+    ],
+)
+def test_by_node_name_unique_raises(element: Element):
+    with pytest.raises(AssertionError):
+        element.by_node_name("button", multiple=False)
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'>"
+        "<button id='btn' type='button'>X</button><button>Y<button></form>",
+    ],
+)
+def test_by_id(element: Element):
+    button = element.by_id("btn")
+    assert button
+    assert button.attrs["id"] == "btn"
+    assert button.attrs["type"] == "button"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button>X</button><button>Y<button></form>",
+    ],
+)
+def test_by_id_missing(element: Element):
+    button = element.by_id("btn")
+    assert button is None
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button id='btn'>X</button><button id='btn'>Y<button></form>",
+    ],
+)
+def test_by_id_multiple(element: Element):
+    with pytest.raises(AssertionError) as ctx:
+        element.by_id("btn")
+    assert str(ctx.value) == ""
 
 
 @pytest.mark.parametrize(

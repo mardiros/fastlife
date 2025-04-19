@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, overload
 
 import bs4
 
@@ -82,10 +82,19 @@ class Element:
             el = el.parent
         return None
 
-    def by_text(self, text: str, *, node_name: str | None = None) -> "Element | None":
+    def by_text(
+        self, text: str, *, node_name: str | None = None, position: int | None = None
+    ) -> "Element | None":
         """Find the first element that match the text."""
         nodes = self.iter_all_by_text(text, node_name=node_name)
-        return next(nodes, None)
+        ret = list(nodes)
+        if not ret:
+            return None
+        if position is None:
+            assert len(ret) == 1, f"Should have 1 element, got {len(ret)} in {self}"
+        else:
+            assert len(ret) > position, "Not enough element found"
+        return ret[position or 0]
 
     def iter_all_by_text(
         self, text: str, *, node_name: str | None = None
@@ -121,17 +130,60 @@ class Element:
         assert not isinstance(resp, bs4.NavigableString)
         return Element(self._client, resp) if resp else None
 
+    def by_id(self, id: str) -> "Element | None":
+        """Find the element having the given id."""
+        resp = self._tag.find_all(id=id)
+        assert not isinstance(resp, bs4.NavigableString)
+        if not resp:
+            return None
+        assert len(resp) == 1
+        return Element(self._client, resp[0]) if resp else None
+
+    @overload
     def by_node_name(
-        self, node_name: str, *, attrs: dict[str, str] | None = None
-    ) -> list["Element"]:
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+        multiple: Literal[False],
+    ) -> "Element": ...
+
+    @overload
+    def by_node_name(
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+        multiple: Literal[True],
+    ) -> "list[Element]": ...
+
+    @overload
+    def by_node_name(
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+    ) -> "list[Element]": ...
+
+    def by_node_name(
+        self,
+        node_name: str,
+        *,
+        attrs: dict[str, str] | None = None,
+        multiple: bool = True,
+    ) -> "list[Element] | Element":
         """
         Return the list of elements with the given node_name.
 
         An optional set of attributes may given and must match if passed.
         """
-        return [
+        ret = [
             Element(self._client, e) for e in self._tag.find_all(node_name, attrs or {})
         ]
+        if not multiple:
+            assert len(ret) == 1
+            return ret[0]
+        return ret
 
     def __repr__(self) -> str:
         return f"<{self.node_name}>"
