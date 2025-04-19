@@ -184,7 +184,7 @@ def test_by_text(client: WebTestClient):
             content="<html><body><p id='here'>foo<p><b id='there'>foo<b></body></html>",
         ),
     )
-    assert wr.by_text("foo").attrs["id"] == "here"  # type: ignore
+    assert wr.by_text("foo", position=0).attrs["id"] == "here"  # type: ignore
     assert wr.by_text("foo", node_name="b").attrs["id"] == "there"  # type: ignore
     assert wr.by_text("bar") is None
 

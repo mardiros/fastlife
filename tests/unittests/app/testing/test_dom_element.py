@@ -136,13 +136,58 @@ def test_hx_target_in_parent(element: Element):
     "html",
     [
         "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2>iii</h2></div>",
-        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><p>ii-a</p></div>",
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><p>lorem ipsum</p></div>",
     ],
 )
 def test_by_text(element: Element):
     h3 = element.by_text("ii-a")
     assert h3 is not None
     assert h3.node_name == "h3"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2>iii</h2></div>",
+    ],
+)
+def test_by_text_is_none(element: Element):
+    h3 = element.by_text("iv")
+    assert h3 is None
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2>ii</h2></div>",
+    ],
+)
+def test_by_text_is_many(element: Element):
+    with pytest.raises(AssertionError):
+        element.by_text("ii")
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2 id='me'>ii</h2></div>",
+    ],
+)
+def test_by_text_is_many_with_position(element: Element):
+    el = element.by_text("ii", position=2)
+    assert el
+    assert el.attrs["id"] == "me"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<div><h1>I am the one</h1><h2>ii</h2><h3>ii-a</h3><h2 id='me'>ii</h2></div>",
+    ],
+)
+def test_by_text_is_many_not_enough_position(element: Element):
+    with pytest.raises(AssertionError):
+        element.by_text("ii")
 
 
 @pytest.mark.parametrize(
