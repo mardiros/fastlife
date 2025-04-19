@@ -253,6 +253,43 @@ def test_by_node_name_unique_raises(element: Element):
 
 
 @pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'>"
+        "<button id='btn' type='button'>X</button><button>Y<button></form>",
+    ],
+)
+def test_by_id(element: Element):
+    button = element.by_id("btn")
+    assert button
+    assert button.attrs["id"] == "btn"
+    assert button.attrs["type"] == "button"
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button>X</button><button>Y<button></form>",
+    ],
+)
+def test_by_id_missing(element: Element):
+    button = element.by_id("btn")
+    assert button is None
+
+
+@pytest.mark.parametrize(
+    "html",
+    [
+        "<form action='/'><button id='btn'>X</button><button id='btn'>Y<button></form>",
+    ],
+)
+def test_by_id_multiple(element: Element):
+    with pytest.raises(AssertionError) as ctx:
+        element.by_id("btn")
+    assert str(ctx.value) == ""
+
+
+@pytest.mark.parametrize(
     "html,expected",
     [
         ("<div><h1>I am the one</h1></div>", "<div>"),

@@ -85,7 +85,7 @@ unittest test_suite=default_unittest_suite:
     uv run pytest -sxv {{test_suite}}
 
 lf:
-    uv run pytest -sxvvv --lf
+    uv run pytest -sxvvv --lf -m "not dev"
 
 cov test_suite=default_unittest_suite:
     rm -f .coverage

@@ -121,6 +121,15 @@ class Element:
         assert not isinstance(resp, bs4.NavigableString)
         return Element(self._client, resp) if resp else None
 
+    def by_id(self, id: str) -> "Element | None":
+        """Find the element having the given id."""
+        resp = self._tag.find_all(id=id)
+        assert not isinstance(resp, bs4.NavigableString)
+        if not resp:
+            return None
+        assert len(resp) == 1
+        return Element(self._client, resp[0]) if resp else None
+
     @overload
     def by_node_name(
         self,
