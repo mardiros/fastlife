@@ -13,5 +13,5 @@
   <p> {{ ngettext("{num} orange", "{num} oranges", orange_count) }}</p>
   <p> {{ ngettext("banana!", "bananas!", banana_count) }}</p>
 
-  <A :href="{{request.localized_url_for('more-i18n')}}">{{ _("See more...") }}</A>
+  <A :href="{{request.url_path_for('more-i18n')}}">{{ _("See more...") }}</A>
 </Layout>

@@ -59,4 +59,4 @@ async def logout(
 ) -> RedirectResponse:
     assert request.security_policy
     await request.security_policy.forget()
-    return RedirectResponse(request.url_for("home"), status_code=302)
+    return RedirectResponse(request.url_for("home"))

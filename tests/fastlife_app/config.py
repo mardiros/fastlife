@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager
 from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI
-from starlette.datastructures import URL
 
 from fastlife import (
     ASGIRequest,
@@ -48,8 +47,8 @@ MyConfigurator = GenericConfigurator[MyRegistry]
 
 
 class I18nRequest(GenericRequest[TRegistry, TIdentity, TClaimedIdentity]):
-    def localized_url_for(self, name: str, /, **path_params: Any) -> URL:
-        return self.url_for(name, locale=self.locale_name, **path_params)
+    def url_path_for(self, name: str, /, **path_params: Any) -> str:
+        return super().url_path_for(name, locale=self.locale_name, **path_params)
 
 
 MyRequest = Annotated[
