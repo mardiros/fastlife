@@ -158,9 +158,14 @@ class WebTestClient:
                 method = "GET"
                 headers = None
                 content = None
+            url = resp.headers.get("location")
+            if "HX-Redirect" in resp.headers:
+                # Redirection requested to the browser from an AJAX request.
+                url = resp.headers["HX-Redirect"]
+            assert url, "Redirect response without a redirection"
             return self.request(
                 method=method,
-                url=resp.headers["location"],
+                url=url,
                 content=content,
                 headers=headers,
                 max_redirects=max_redirects - 1,

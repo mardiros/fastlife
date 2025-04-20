@@ -1,9 +1,15 @@
 from typing import Annotated
 
-from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, SecretStr
 
-from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
+from fastlife import (
+    FormModel,
+    JinjaXTemplate,
+    RedirectResponse,
+    Request,
+    form_model,
+    view_config,
+)
 from tests.fastlife_app.config import MyRequest
 
 
@@ -13,7 +19,17 @@ class LoginForm(BaseModel):
 
 
 class LoginTemplate(JinjaXTemplate):
-    template = """<Login :model="model" />"""
+    template = """
+    <Layout>
+      <H2>Let's authenticate</H2>
+      <div class="max-w-(--breakpoint-lg) mx-auto px-5 bg-white min-h-sceen">
+        <Form hx-post>
+          {{ pydantic_form(model=model) }}
+          <Button aria-label="login">Login</Button>
+        </Form>
+      </div>
+    </Layout>
+    """
     model: FormModel[LoginForm]
 
 
@@ -28,7 +44,7 @@ async def login(
             loginform.model.username, loginform.model.password.get_secret_value()
         ):
             await request.security_policy.pre_remember(user)
-            return RedirectResponse(request.url_for("secured_page"), status_code=303)
+            return RedirectResponse(request.url_for("secured_page"), hx_redirect=True)
         else:
             if loginform.model.username == "root":
                 loginform.set_fatal_error("Something went wrong")
