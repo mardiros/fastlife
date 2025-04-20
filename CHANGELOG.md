@@ -1,3 +1,7 @@
+## 0.26.2  - Released on 2025-04-20
+* Add a RedirectResponse class that is htmx friendly and P/R/G pattern friendly.
+* Fix documentation generation.
+
 ## 0.26.1  - Released on 2025-04-20
 * Add new helpers for the webtestclient element.
 
