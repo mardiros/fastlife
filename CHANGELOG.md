@@ -1,3 +1,6 @@
+## 0.26.1  - Released on 2025-04-20
+* Add new helpers for the webtestclient element.
+
 ## 0.26.0  - Released on 2025-03-08
 * Add a new method to the configuration to customize the request class.
   See [Configurator.set_request_factory](#fastlife.config.configurator.GenericConfigurator.set_request_factory)
