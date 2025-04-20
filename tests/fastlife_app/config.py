@@ -19,6 +19,7 @@ from fastlife import (
     get_request,
 )
 from fastlife.shared_utils.resolver import resolve
+from tests.fastlife_app.domain.model import AuthnToken, UserAccount
 from tests.fastlife_app.service.uow import AbstractUnitOfWork
 
 
@@ -52,7 +53,7 @@ class I18nRequest(GenericRequest[TRegistry, TIdentity, TClaimedIdentity]):
 
 
 MyRequest = Annotated[
-    I18nRequest[TRegistry, TIdentity, TClaimedIdentity], Depends(get_request)
+    I18nRequest[MyRegistry, AuthnToken, UserAccount], Depends(get_request)
 ]
 
 

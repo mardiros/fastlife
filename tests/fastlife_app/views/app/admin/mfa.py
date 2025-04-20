@@ -22,7 +22,17 @@ class MfaForm(BaseModel):
 
 
 class LoginTemplate(JinjaXTemplate):
-    template = """<Login title="second factor" :model="model" />"""
+    template = """
+    <Layout>
+      <H2>second factor</H2>
+      <div class="max-w-(--breakpoint-lg) mx-auto px-5 bg-white min-h-sceen">
+        <Form hx-post>
+          {{ pydantic_form(model=model) }}
+          <Button aria-label="login">Login</Button>
+        </Form>
+      </div>
+    </Layout>
+    """
     model: FormModel[MfaForm]
 
 

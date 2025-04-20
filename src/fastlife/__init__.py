@@ -2,8 +2,6 @@ from importlib import metadata
 
 __version__ = metadata.version("fastlifeweb")
 
-from fastapi import Response
-from fastapi.responses import RedirectResponse
 
 from .adapters.fastapi.form import form_model
 from .adapters.fastapi.localizer import Localizer
@@ -26,6 +24,7 @@ from .config import (
 from .domain.model.asgi import ASGIRequest, ASGIResponse
 from .domain.model.form import FormModel
 from .domain.model.request import GenericRequest
+from .domain.model.response import RedirectResponse, Response
 from .domain.model.security_policy import (
     Allowed,
     Anonymous,
