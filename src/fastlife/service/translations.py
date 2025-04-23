@@ -5,6 +5,7 @@ from collections import defaultdict
 from collections.abc import Callable, Iterator
 from gettext import GNUTranslations
 from io import BufferedReader
+from typing import Any
 
 from fastlife.shared_utils.resolver import resolve_path
 
@@ -100,10 +101,10 @@ class Localizer:
         self.translations[domain].merge(trans)
         self.global_translations.merge(trans)
 
-    def __call__(self, message: str, mapping: dict[str, str] | None = None) -> str:
-        return self.gettext(message, mapping)
+    def __call__(self, message: str, /, **mapping: Any) -> str:
+        return self.gettext(message, **mapping)
 
-    def gettext(self, message: str, mapping: dict[str, str] | None = None) -> str:
+    def gettext(self, message: str, /, **mapping: Any) -> str:
         if isinstance(message, TranslatableString):
             ret = self.translations[message.domain].gettext(message)  # type: ignore
         else:
@@ -112,16 +113,12 @@ class Localizer:
             ret = ret.format(**mapping)
         return ret
 
-    def ngettext(
-        self, singular: str, plural: str, n: int, mapping: dict[str, str] | None = None
-    ) -> str:
+    def ngettext(self, singular: str, plural: str, n: int, /, **mapping: Any) -> str:
         ret = self.global_translations.ngettext(singular, plural, n)
-        mapping_num = {"num": n, **(mapping or {})}
+        mapping_num = {"num": n, **mapping}
         return ret.format(**mapping_num)
 
-    def dgettext(
-        self, domain: str, message: str, mapping: dict[str, str] | None = None
-    ) -> str:
+    def dgettext(self, domain: str, message: str, /, **mapping: Any) -> str:
         ret = self.translations[domain].gettext(message)
         if mapping:
             ret = ret.format(**mapping)
@@ -133,15 +130,14 @@ class Localizer:
         singular: str,
         plural: str,
         n: int,
-        mapping: dict[str, str] | None = None,
+        /,
+        **mapping: Any,
     ) -> str:
         ret = self.translations[domain].ngettext(singular, plural, n)
-        mapping_num = {"num": n, **(mapping or {})}
+        mapping_num = {"num": n, **mapping}
         return ret.format(**mapping_num)
 
-    def pgettext(
-        self, context: str, message: str, mapping: dict[str, str] | None = None
-    ) -> str:
+    def pgettext(self, context: str, message: str, /, **mapping: Any) -> str:
         ret = self.global_translations.pgettext(context, message)
         if mapping:
             ret = ret.format(**mapping)
@@ -152,7 +148,8 @@ class Localizer:
         domain: str,
         context: str,
         message: str,
-        mapping: dict[str, str] | None = None,
+        /,
+        **mapping: Any,
     ) -> str:
         ret = self.translations[domain].pgettext(context, message)
         if mapping:
@@ -165,10 +162,11 @@ class Localizer:
         singular: str,
         plural: str,
         n: int,
-        mapping: dict[str, str] | None = None,
+        /,
+        **mapping: Any,
     ) -> str:
         ret = self.global_translations.npgettext(context, singular, plural, n)
-        mapping_num = {"num": n, **(mapping or {})}
+        mapping_num = {"num": n, **mapping}
         return ret.format(**mapping_num)
 
     def dnpgettext(
@@ -178,10 +176,11 @@ class Localizer:
         singular: str,
         plural: str,
         n: int,
-        mapping: dict[str, str] | None = None,
+        /,
+        **mapping: Any,
     ) -> str:
         ret = self.translations[domain].npgettext(context, singular, plural, n)
-        mapping_num = {"num": n, **(mapping or {})}
+        mapping_num = {"num": n, **mapping}
         return ret.format(**mapping_num)
 
 
