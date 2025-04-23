@@ -69,3 +69,13 @@ class GenericRequest(ASGIRequest, Generic[TRegistry, TIdentity, TClaimedIdentity
             )
 
         return await self.security_policy.has_permission(permission)
+
+    def url_path_for(self, name: str, /, **path_params: Any) -> str:
+        """
+        Return the url pathinfo for the given route and route parameters.
+
+        :param name: the name of the route
+        :param path_params: parameters for the route.
+        """
+        url_path_provider: Any = self.scope.get("router") or self.scope.get("app")
+        return url_path_provider.url_path_for(name, **path_params)
