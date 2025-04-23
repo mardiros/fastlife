@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-08 09:26+0100\n"
+"POT-Creation-Date: 2025-04-23 07:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,11 @@ msgid ""
 "\n"
 "      How are you today ?\n"
 "    "
+msgstr ""
+
+#: tests/fastlife_app/templates/i18n/Hello.jinja:11
+#, python-brace-format
+msgid "Remember that {yolo}."
 msgstr ""
 
 #: tests/fastlife_app/templates/i18n/Hello.jinja:12
@@ -65,56 +70,56 @@ msgstr ""
 msgid "The {jumper} jumps over a {jumpee}"
 msgstr ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:37
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:33
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:39
 #: tests/fastlife_app/views/app/i18n/dummy_messages.py:45
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:53
 #, python-brace-format
 msgid "The quick brown fox jumps over a {jumpee}"
 msgid_plural "{num} quick brown foxes jumps over a {jumpee}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:61
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:51
 #, python-brace-format
 msgid "Invalid {field}"
 msgstr ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:64
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:73
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:82
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:91
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:98
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:105
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:113
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:121
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:131
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:141
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:151
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:53
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:60
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:67
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:74
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:79
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:84
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:90
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:96
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:104
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:112
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:120
 msgid "email address"
 msgstr ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:68
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:77
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:86
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:56
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:63
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:70
 #, python-brace-format
 msgid "{num} entry in {field}"
 msgid_plural "{num} entries in {field}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:95
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:77
 msgctxt "verb_fish"
 msgid "fish"
 msgstr ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:102
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:82
 msgctxt "noun_fish"
 msgid "fish"
 msgstr ""
 
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:155
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:161
-#: tests/fastlife_app/views/app/i18n/dummy_messages.py:167
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:123
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:129
+#: tests/fastlife_app/views/app/i18n/dummy_messages.py:135
 #, python-brace-format
 msgctxt "crayon"
 msgid "{} pen"

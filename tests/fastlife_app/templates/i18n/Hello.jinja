@@ -8,7 +8,7 @@
       How are you today ?
     {% endtrans %}
   </p>
-  <p> {{ yolo }} </p>
+  <p> {{ gettext("Remember that {yolo}.", yolo=yolo) }} </p>
   <p> {{ ngettext("{num} apple", "{num} apples", apple_count) }}</p>
   <p> {{ ngettext("{num} orange", "{num} oranges", orange_count) }}</p>
   <p> {{ ngettext("banana!", "bananas!", banana_count) }}</p>

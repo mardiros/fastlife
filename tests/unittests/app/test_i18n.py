@@ -13,6 +13,7 @@ def apiclient(app: FastAPI):
 def test_hello_i18n(client: WebTestClient):
     resp = client.get("/fr/hello")
     assert resp.html.h1.text == "Salut tout le monde !"
+    assert resp.html.by_text("Souviens toi que t'as qu'une seule vie.")
     link = resp.html.by_text("Voir plus..")
     assert link is not None
     assert link.attrs["href"] == "/fr/dummy-messages"
