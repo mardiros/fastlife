@@ -23,7 +23,7 @@ class UnionWidget(Widget[TWidget]):
       <div id="{{id}}">
         <Details>
           <Summary :id="id + '-union-summary'">
-            <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+            <H3 :class="H3_SUMMARY_CLASS">{{ gettext(title) }}</H3>
             <pydantic_form.Error :text="error" />
           </Summary>
           <div hx-sync="this" id="{{id}}-child">
@@ -37,7 +37,7 @@ class UnionWidget(Widget[TWidget]):
                 :hx-vals="typ.params|tojson"
                 :id="typ.id"
                 onclick={{ "document.getElementById('" + id + "-remove-btn').hidden=false" }}
-              :class="SECONDARY_BUTTON_CLASS">{{typ.title}}</Button>
+              :class="SECONDARY_BUTTON_CLASS">{{ gettext(typ.title) }}</Button>
             {% endfor %}
             {% endif %}
           </div>

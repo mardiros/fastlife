@@ -17,12 +17,12 @@ class DropDownWidget(Widget[str]):
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <div class="pt-4">
-        <Label :for="id">{{title}}</Label>
+        <Label :for="id">{{ gettext(title) }}</Label>
         <Select :name="name" :id="id">
           {%- for opt in options -%}
           <Option :value="opt.value" id={{id + "-" + opt.value.replace(" ", " -")}}
             :selected="value==opt.value">
-            {{- opt.text -}}
+            {{- gettext(opt.text) -}}
           </Option>
           {%- endfor -%}
         </Select>

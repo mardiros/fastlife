@@ -55,7 +55,7 @@ class Widget(JinjaXTemplate, Generic[T]):
     aria_label: str | None = Field(default=None)
     "Non visible text alternative."
     token: str = Field(default="")
-    "unique token to ensure id are unique in the DOM."
+    "Unique token to ensure id are unique in the DOM."
     removable: bool = Field(default=False)
     "Indicate that the widget is removable from the dom."
 

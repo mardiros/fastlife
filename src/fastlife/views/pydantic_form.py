@@ -31,6 +31,11 @@ async def show_widget(
         field = FieldInfo(title=title)
     # FIXME: .jinja should not be hardcoded
     renderer = cast(JinjaxRenderer, request.registry.get_renderer(".jinja")(request))
+    lczr = request.registry.localizer(request.locale_name)
+    renderer.globals = {
+        "request": request,
+        **lczr.as_dict(),
+    }
     data = renderer.pydantic_form_field(
         model=model_cls,  # type: ignore
         name=name,

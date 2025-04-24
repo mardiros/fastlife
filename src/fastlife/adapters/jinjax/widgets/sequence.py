@@ -14,7 +14,7 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <Details :id="id">
         <Summary :id="id + '-summary'">
-          <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+          <H3 :class="H3_SUMMARY_CLASS">{{ gettext(title) }}</H3>
           <pydantic_form.Error :text="error" />
         </Summary>
         <div>

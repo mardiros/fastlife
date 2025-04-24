@@ -17,7 +17,7 @@ class ModelWidget(Widget[Sequence[TWidget]]):
         {% if nested %}
         <Details>
         <Summary :id="id + '-summary'">
-            <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+            <H3 :class="H3_SUMMARY_CLASS">{{ gettext(title) }}</H3>
             <pydantic_form.Error :text="error" />
         </Summary>
         <div>

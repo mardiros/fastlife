@@ -42,8 +42,8 @@
 
 <input name="{{name}}" value="{{value|default('')}}" type="{{type}}"
   {%- if id %} id="{{id}}" {%- endif %}
-  {%- if aria_label %} aria-label="{{aria_label}}" {%- endif %}
-  {%- if placeholder %} placeholder="{{placeholder}}" {%- endif %}
+  {%- if aria_label %} aria-label="{{ gettext(aria_label) }}" {%- endif %}
+  {%- if placeholder %} placeholder="{{ gettext(placeholder) }}" {%- endif %}
   {%- if inputmode %} inputmode="{{inputmode}}" {%- endif %}
   {%- if autocomplete %} autocomplete="{{autocomplete}}" {%- endif %}
   class="{{attrs.class or INPUT_CLASS}}"

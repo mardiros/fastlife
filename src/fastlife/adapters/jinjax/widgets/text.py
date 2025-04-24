@@ -15,7 +15,7 @@ class TextWidget(Widget[Builtins]):
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <div class="pt-4">
-        <Label :for="id">{{title}}</Label>
+        <Label :for="id">{{ gettext(title) }}</Label>
         <pydantic_form.Error :text="error" />
         <Input :name="name" :value="value" :type="input_type" :id="id"
           :aria-label="aria_label" :placeholder="placeholder"
@@ -26,19 +26,22 @@ class TextWidget(Widget[Builtins]):
     """
 
     input_type: str = Field(default="text")
+    """type attribute for the Input component."""
     placeholder: str | None = Field(default=None)
+    """placeholder attribute for the Input component."""
     autocomplete: str | None = Field(default=None)
+    """autocomplete attribute for the Input component."""
 
 
 class PasswordWidget(Widget[SecretStr]):
     """
-    Widget for text like field (email, ...).
+    Widget for password fields.
     """
 
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <div class="pt-4">
-        <Label :for="id">{{title}}</Label>
+        <Label :for="id">{{ gettext(title) }}</Label>
         <pydantic_form.Error :text="error" />
         <Password :name="name" :type="input_type" :id="id"
           autocomplete={{
@@ -51,8 +54,13 @@ class PasswordWidget(Widget[SecretStr]):
     """
 
     input_type: str = Field(default="password")
+    """type attribute for the Input component."""
     placeholder: str | None = Field(default=None)
+    """placeholder attribute for the Input component."""
     new_password: bool = Field(default=False)
+    """
+    Adapt autocomplete behavior for browsers to hint existing or generate password.
+    """
 
 
 class TextareaWidget(Widget[str | Sequence[str]]):
@@ -81,7 +89,7 @@ class TextareaWidget(Widget[str | Sequence[str]]):
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <div class="pt-4">
-        <Label :for="id">{{title}}</Label>
+        <Label :for="id">{{ gettext(title) }}</Label>
         <pydantic_form.Error :text="error" />
         <Textarea :name="name" :id="id" :aria-label="aria_label">
             {%- if value is string -%}
@@ -94,5 +102,3 @@ class TextareaWidget(Widget[str | Sequence[str]]):
       </div>
     </pydantic_form.Widget>
     """
-
-    placeholder: str = Field(default="")

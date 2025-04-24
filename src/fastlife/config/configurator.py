@@ -493,14 +493,7 @@ class GenericConfigurator(Generic[TRegistry]):
             custom_globals[key] = val
         return {
             "request": request,
-            "gettext": lczr.gettext,
-            "ngettext": lczr.ngettext,
-            "dgettext": lczr.dgettext,
-            "dngettext": lczr.dngettext,
-            "pgettext": lczr.pgettext,
-            "dpgettext": lczr.dpgettext,
-            "npgettext": lczr.npgettext,
-            "dnpgettext": lczr.dnpgettext,
+            **lczr.as_dict(),
             **custom_globals,
             **request.renderer_globals,
         }

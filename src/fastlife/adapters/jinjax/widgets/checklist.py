@@ -40,7 +40,7 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
       <div class="pt-4">
         <Details>
           <Summary :id="id + '-summary'">
-            <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
+            <H3 :class="H3_SUMMARY_CLASS">{{ gettext(title) }}</H3>
             <pydantic_form.Error :text="error" />
           </Summary>
           <div>
@@ -52,7 +52,7 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
                     :checked="value.checked" />
                 <Label :for="value.id"
                     class="ms-2 text-base text-neutral-900 dark:text-white">
-                    {{- value.label -}}
+                    {{- gettext(value.label) -}}
                 </Label>
                 <pydantic_form.Error :text="value.error" />
             </div>

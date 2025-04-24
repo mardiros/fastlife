@@ -11,7 +11,7 @@ class MFACodeWidget(Widget[str]):
     template = """
     <pydantic_form.Widget :widget_id="id" :removable="removable">
       <div class="pt-4">
-        <Label :for="id">{{title}}</Label>
+        <Label :for="id">{{ gettext(title) }}</Label>
         <pydantic_form.Error :text="error" />
         <Input :name="name" type="text" :id="id" inputmode="numeric"
             autocomplete="one-time-code" :autofocus="autofocus"

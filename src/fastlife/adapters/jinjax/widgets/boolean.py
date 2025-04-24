@@ -16,7 +16,7 @@ class BooleanWidget(Widget[bool]):
         <div class="flex items-center">
          <Checkbox :name="name" :id="id" :checked="value" value="1" />
          <Label :for="id" class="ms-2 text-base text-neutral-900 dark:text-white">
-            {{title|safe}}
+            {{ gettext(title)|safe }}
           </Label>
         </div>
        <pydantic_form.Error :text="error" />
