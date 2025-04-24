@@ -1,3 +1,6 @@
+## 0.27.0  - Released on 2025-04-24
+* Add i18n support on pydantic form.
+
 ## 0.26.2  - Released on 2025-04-20
 * Add a RedirectResponse class that is htmx friendly and P/R/G pattern friendly.
 * Fix documentation generation.
