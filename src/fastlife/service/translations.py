@@ -2,7 +2,7 @@
 
 import pathlib
 from collections import defaultdict
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Mapping
 from gettext import GNUTranslations
 from io import BufferedReader
 from typing import Any
@@ -100,6 +100,19 @@ class Localizer:
         trans = GNUTranslations(file)
         self.translations[domain].merge(trans)
         self.global_translations.merge(trans)
+
+    def as_dict(self) -> Mapping[str, Callable[..., str]]:
+        return {
+            "_": self.gettext,
+            "gettext": self.gettext,
+            "ngettext": self.ngettext,
+            "dgettext": self.dgettext,
+            "dngettext": self.dngettext,
+            "pgettext": self.pgettext,
+            "dpgettext": self.dpgettext,
+            "npgettext": self.npgettext,
+            "dnpgettext": self.dnpgettext,
+        }
 
     def __call__(self, message: str, /, **mapping: Any) -> str:
         return self.gettext(message, **mapping)

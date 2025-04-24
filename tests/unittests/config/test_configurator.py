@@ -141,6 +141,7 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
         "dngettext": lczr.dngettext,
         "dnpgettext": lczr.dnpgettext,
         "dpgettext": lczr.dpgettext,
+        "_": lczr.gettext,
         "gettext": lczr.gettext,
         "ngettext": lczr.ngettext,
         "npgettext": lczr.npgettext,
