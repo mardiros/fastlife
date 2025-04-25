@@ -39,7 +39,7 @@ to maintain and scale your project.
 
 ## Tests
 
-Fastlife come with [a test client](https://mardiros.github.io/fastlife/develop/fastlife/fastlife.testing.testclient.html) that can interact with html inside unit tests.
+Fastlife comes with [a test client](https://mardiros.github.io/fastlife/develop/fastlife/fastlife.testing.testclient.html) that can interact with html inside unit tests.
 
 
 ## Try it
