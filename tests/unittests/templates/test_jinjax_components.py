@@ -85,7 +85,7 @@ def test_render_A(node: bs4.PageElement, expected: bs4.PageElement):
         pytest.param(
             """<Button>Go</Button>""",
             """<button name="action" type="submit" value="submit"
-            class="bg-primary-600 px-5 py-2.5 font-semibold rounded-lg
+            class="appearance-none bg-primary-600 px-5 py-2.5 font-semibold rounded-lg
             text-center text-sm text-white hover:bg-primary-700
             hover:bg-primary-200 focus:outline-hidden
             focus:ring-4 focus:ring-primary-300

@@ -29,6 +29,7 @@ class Globals(BaseModel):
     """Default css class for {jinjax:component}`A`."""
 
     BUTTON_CLASS: str = space_join(
+        "appearance-none",
         "bg-primary-600",
         "px-5",
         "py-2.5",
@@ -52,6 +53,7 @@ class Globals(BaseModel):
     """Default css class for {jinjax:component}`Details`."""
 
     SECONDARY_BUTTON_CLASS: str = space_join(
+        "appearance-none",
         "bg-neutral-300",
         "px-5",
         "py-2.5",
@@ -79,6 +81,7 @@ class Globals(BaseModel):
     """
 
     ICON_BUTTON_CLASS: str = space_join(
+        "appearance-none",
         "bg-white",
         "p-1",
         "rounded-xs",
