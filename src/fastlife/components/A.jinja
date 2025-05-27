@@ -20,13 +20,17 @@
     "specify how the response will be swapped in relative to the target of an AJAX request."
   ] = "innerHTML show:body:top",
   hx_push_url: Annotated[bool, "replace the browser url with the link."] = True,
+  hx_get: Annotated[
+    str | None,
+    "Override the target link only for htmx request for component rendering. href will be used if None."
+  ] = None,
   disable_htmx: Annotated[bool, "do not add any `hx-*` attibute to the link."] = False
 #}
 
 <a href="{{href}}"
   {%- if id %} id="{{ id }}" {%- endif %}
   {%- if not disable_htmx %}
-    hx-get="{{ href }}"
+    hx-get="{{ hx_get or href }}"
     hx-target="{{ hx_target }}"
     hx-swap="{{ hx_swap }}"
     {%- if hx_push_url %} hx-push-url="true" {%- endif %}

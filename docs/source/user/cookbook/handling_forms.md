@@ -172,7 +172,7 @@ a full control of the rendering. We just need to inherits a class from
 from typing import Annotated
 from uuid import UUID, uuid1
 
-from fastlife.adapters.jinjax.widgets.base import Widget
+from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
 from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
 from fastlife.adapters.jinjax.widgets.text import TextareaWidget
 from pydantic import BaseModel, Field
@@ -190,6 +190,7 @@ class PetForm(BaseModel):
     favorite_toy: str = Field(title="Favorite Toy")
     magic_power: bool = Field(title="Has Magic Power")
 ```
+
 
 ## Do some HTMX.
 
