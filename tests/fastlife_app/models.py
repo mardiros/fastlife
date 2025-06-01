@@ -7,7 +7,7 @@ from fastlife.adapters.jinjax.widgets.base import Widget
 
 
 class Person(BaseModel):
-    nick: str
+    nick: str = Field(default="")
 
 
 class Permission(BaseModel):

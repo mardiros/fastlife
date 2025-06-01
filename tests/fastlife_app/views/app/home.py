@@ -1,11 +1,18 @@
 from typing import Annotated
 
-from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
+from fastlife import (
+    FormModel,
+    JinjaXTemplate,
+    Request,
+    XTemplate,
+    form_model,
+    view_config,
+)
 from tests.fastlife_app.models import Account, Group, Person
 
 
-class HelloWorld(JinjaXTemplate):
-    template = """<HelloWorld :person="person" />"""
+class HelloWorld(XTemplate):
+    template = """<HelloWorld person={person} />"""
     person: Person
 
 
