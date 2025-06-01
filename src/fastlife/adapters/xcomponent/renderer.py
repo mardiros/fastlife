@@ -8,6 +8,7 @@ More template engine can be registered using the configurator method
 from typing import Any
 
 from fastlife import Request
+from fastlife.config import Configurator, configure
 from fastlife.domain.model.template import InlineTemplate
 from fastlife.service.templates import (
     AbstractTemplateRenderer,
@@ -69,3 +70,8 @@ class XRendererFactory(AbstractTemplateRendererFactory):
         :return: The renderer object that will process that request.
         """
         return XTemplateRenderer(globals=self.globals, request=request)
+
+
+@configure
+def includeme(conf: Configurator) -> None:
+    conf.add_renderer("x", XRendererFactory(conf.registry.settings))

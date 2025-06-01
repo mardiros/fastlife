@@ -185,12 +185,7 @@ class GenericConfigurator(Generic[TRegistry]):
             ),
         )
 
-        self.add_renderer(
-            "x",
-            resolve("fastlife.adapters.xcomponent.renderer:XRendererFactory")(
-                self.registry.settings
-            ),
-        )
+        self.include("fastlife.adapters.xcomponent")
 
         app = FastAPI(
             title=self.api_title,
