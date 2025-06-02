@@ -305,3 +305,51 @@ def Label(
         {children}
     </label>
     """
+
+
+@catalog.component
+def Option(
+    children: XNode,
+    globals: Mapping[str, str],
+    value: str,
+    id: str | None = None,
+    selected: bool = False,
+) -> str:
+    """
+    Produce ``<option>`` node.
+
+    :param value: posted value after submitted the selected value
+    :param id: unique identifier of the element
+    :param selected: Used to select the option while rendering the form
+    """
+    return """
+    <option value={value} id={id} selected={selected}>
+        {children}
+    </option>
+    """
+
+
+@catalog.component
+def Select(
+    children: XNode,
+    globals: Mapping[str, str],
+    name: str,
+    id: str | None = None,
+    class_: str | None = None,
+    multiple: bool = False,
+) -> str:
+    """
+    Create html ``<select>`` node.
+
+    :param name: name of the submitted
+    :param id: unique identifier of the element
+    :param class_: css class for the node, defaults to
+                  :attr:`fastlife.template_globals.Globals.SELECT_CLASS`
+    :param multiple: Mark as multiple
+    """
+    return """
+    <select name={name} id={id} class={class_ or globals.SELECT_CLASS}
+            multiple={multiple}>
+        {children}
+    </select>
+    """

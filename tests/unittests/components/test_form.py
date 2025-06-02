@@ -270,3 +270,52 @@ def test_render_Password(soup_rendered: PageElement, soup_expected: PageElement)
 )
 def test_render_Label(soup_rendered: PageElement, soup_expected: PageElement):
     assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """<Option value="y">yoyo</Option>""",
+            """<option value="y">yoyo</option>""",
+            id="option",
+        ),
+        pytest.param(
+            """<Option value="y" selected={true}>yoyo</Option>""",
+            """<option value="y" selected>yoyo</option>""",
+            id="option-selected",
+        ),
+    ],
+)
+def test_render_Option(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """<Select name="n" id="i">X</Select>""",
+            """<select name="n" id="i" class="bg-neutral-50 block border
+            border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
+            w-full focus:border-primary-500 focus:ring-primary-500
+            dark:bg-neutral-700 dark:border-neutral-600
+            dark:focus:border-primary-500
+            dark:focus:ring-primary-500 dark:placeholder-neutral-400
+            dark:text-white">X</select>""",
+            id="select",
+        ),
+        pytest.param(
+            """<Select name="n" id="i" class="slct">X</Select>""",
+            """<select name="n" id="i" class="slct">X</select>""",
+            id="select-css",
+        ),
+        pytest.param(
+            """<Select name="n" id="i" class="slct" multiple>X</Select>""",
+            """<select name="n" id="i" class="slct" multiple>X</select>""",
+            id="select-multiple",
+        ),
+    ],
+)
+def test_render_Select(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected
