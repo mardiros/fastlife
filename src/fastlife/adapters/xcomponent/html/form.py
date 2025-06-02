@@ -107,7 +107,7 @@ def Input(
         inputmode={inputmode}
         autocomplete={autocomplete}
         class={class_ or globals.INPUT_CLASS}
-        autofocus
+        autofocus={autofocus}
     />
     """
 
@@ -138,7 +138,7 @@ def Button(
     hx_target: str | None = None,
     hx_swap: str | None = None,
     hx_select: str | None = None,
-    hx_after_request: str = "",
+    hx_on_after_request: str | None = None,
     hx_vals: str | None = None,
     hx_confirm: str | None = None,
     hx_get: str | None = None,
@@ -160,7 +160,7 @@ def Button(
         hx-swap={hx_swap}
         hx-select={hx_select}
         onclick={onclick}
-        hx-on::after-request={hx_after_request}
+        hx-on::after-request={hx_on_after_request}
         hx-vals={hx_vals}
         hx-confirm={hx_confirm}
         hx-get={hx_get}
@@ -183,4 +183,35 @@ def Button(
         >
         {children}
     </button>
+    """
+
+
+@catalog.component
+def Checkbox(
+    name: str,
+    globals: Mapping[str, str],
+    id: str | None = None,
+    class_: str | None = None,
+    value: str | None = None,
+    checked: bool = False,
+) -> str:
+    """
+    Create html ``<input type="checkbox" />`` node.
+
+    :param name: Name of the checkbox
+    :param id: unique identifier of the element
+    :param class_: css class for the node, defaults to
+                  :attr:`fastlife.template_globals.Globals.CHECKBOX_CLASS`
+    :param value: http submitted value if the checkbox is checked
+    :param checked: Initialized the checkbox as ticked
+    """
+    return """
+        <input
+            name={name}
+            type="checkbox"
+            id={id}
+            value={value}
+            class={class_ or globals.CHECKBOX_CLASS }
+            checked={checked}
+            />
     """

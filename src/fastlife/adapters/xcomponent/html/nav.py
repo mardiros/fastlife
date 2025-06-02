@@ -1,3 +1,5 @@
+"""Navigation component."""
+
 from collections.abc import Mapping
 
 from xcomponent import XNode
@@ -18,6 +20,7 @@ def A(
     hx_push_url: bool = True,
     hx_get: str | None = None,
     hx_disable: bool | None = None,
+    hx_disabled_elt: str | None = None,
 ) -> str:
     """
     Create html ``<a>`` node with htmx support by default.
@@ -26,16 +29,18 @@ def A(
     """
 
     return """
-        <A
+        <a
             href={href}
             id={id}
+            hx-disable={hx_disable}
+            hx-disabled-elt={hx_disabled_elt}
             hx-get={hx_get or href}
             hx-target={hx_target}
             hx-swap={hx_swap}
             hx-push-url={hx_push_url}
-            hx-select={x_select}
+            hx-select={hx_select}
             class={class_ or globals.A_CLASS}
         >
             {children}
-        </A>
+        </a>
     """

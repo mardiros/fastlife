@@ -1,3 +1,5 @@
+"""Titles"""
+
 from collections.abc import Mapping
 
 from xcomponent import XNode

@@ -1,4 +1,3 @@
-
 from xcomponent import Catalog
 
 catalog = Catalog()
