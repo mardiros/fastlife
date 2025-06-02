@@ -249,3 +249,24 @@ def test_render_Input(soup_rendered: PageElement, soup_expected: PageElement):
 )
 def test_render_Password(soup_rendered: PageElement, soup_expected: PageElement):
     assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """<Label for="y">yoyo</Label>""",
+            """<label class="block font-bold mb-2 text-base text-neutral-900
+                             dark:text-white"
+                        for="y">yoyo</label>""",
+            id="label",
+        ),
+        pytest.param(
+            """<Label class="foo" for="bar">barbar</Label>""",
+            """<label class="foo" for="bar">barbar</label>""",
+            id="label-class",
+        ),
+    ],
+)
+def test_render_Label(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected

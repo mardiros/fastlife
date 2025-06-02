@@ -282,3 +282,26 @@ def Password(
         readonly={readonly}
     />
     """
+
+
+@catalog.component
+def Label(
+    children: XNode,
+    globals: Mapping[str, str],
+    for_: str | None = None,
+    id: str | None = None,
+    class_: str | None = None,
+) -> str:
+    """
+    Produce ``<label>`` node.
+
+    :param for_: unique identifier of the target element.
+    :param id: unique identifier of the element.
+    :param class_: css class for the node, defaults to
+                  :attr:`fastlife.template_globals.Globals.LABEL_CLASS`.
+    """
+    return """
+    <label for={for_} class={class_ or globals.LABEL_CLASS} id={id}>
+        {children}
+    </label>
+    """
