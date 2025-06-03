@@ -319,3 +319,33 @@ def test_render_Option(soup_rendered: PageElement, soup_expected: PageElement):
 )
 def test_render_Select(soup_rendered: PageElement, soup_expected: PageElement):
     assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """<Radio label="lbl" id="radio-id" name="radio-name" value="val" />""",
+            """<div class="flex items-center mb-4"><input type="radio"
+            name="radio-name" value="val" id="radio-id" class="bg-neutral-100
+            border-neutral-300 w-4 h-4 text-primary-600 focus:ring-2
+            focus:ring-primary-500 dark:bg-neutral-700 dark:border-neutral-600
+            dark:focus:ring-primary-600 dark:ring-offset-neutral-800"><label
+            for="radio-id" class="ms-2 text-sm font-medium text-neutral-900
+            dark:text-neutral-300">lbl</label></div>
+            """,
+            id="radio",
+        ),
+        pytest.param(
+            """<Radio label="lbl" id="radio-id" name="radio-name" value="val"
+            class="radio" label-class="lbl" div-class="d" />""",
+            """<div class="d"><input type="radio" name="radio-name" value="val"
+            id="radio-id" class="radio"><label for="radio-id"
+            class="lbl">lbl</label></div>
+            """,
+            id="radio-css",
+        ),
+    ],
+)
+def test_render_Radio(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected
