@@ -1,3 +1,4 @@
+import re
 from collections.abc import Iterator, Mapping
 from typing import Any
 
@@ -61,5 +62,6 @@ def soup_rendered(
 
 @pytest.fixture()
 def soup_expected(expected_string: str) -> bs4.PageElement:
+    expected_string = re.sub(r">\s+<", "><", expected_string).strip()
     expected_soup = bs4.BeautifulSoup(expected_string.strip(), features="html.parser")
     return next(expected_soup.children)  # type: ignore
