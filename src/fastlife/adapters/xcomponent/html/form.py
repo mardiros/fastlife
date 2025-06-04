@@ -8,6 +8,8 @@ from fastlife.adapters.xcomponent.catalog import catalog
 
 @catalog.component
 def Form(
+    children: XNode,
+    globals: Mapping[str, str],
     id: str | None = None,
     class_: str | None = None,
     method: Literal["get", "post"] | None = None,
@@ -398,4 +400,38 @@ def Radio(
             {label}
         </Label>
     </div>
+    """
+
+
+@catalog.component
+def Textarea(
+    children: XNode,
+    globals: Mapping[str, str],
+    name: str,
+    id: str | None = None,
+    class_: str | None = None,
+    aria_label: str | None = None,
+    placeholder: str | None = None,
+) -> str:
+    """
+    html ``<textarea>`` node.
+
+    :param name: name of the submitted
+    :param id: unique identifier of the element
+    :param class_: css class for the node, defaults to
+                   :attr:`fastlife.template_globals.Globals.INPUT_CLASS`
+    :param aria_label: aria-label
+    :param placeholder: brief hint to the user as to what kind of information
+                        is expected in the field
+    """
+
+    return """
+    <textarea
+        name={name}
+        id={id}
+        aria-label={aria_label}
+        placeholder={placeholder}
+        class={class_ or globals.INPUT_CLASS}>
+        {children}
+    </textarea>
     """

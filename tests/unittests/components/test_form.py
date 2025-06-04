@@ -334,7 +334,7 @@ def test_render_Select(soup_rendered: PageElement, soup_expected: PageElement):
             for="radio-id" class="ms-2 text-sm font-medium text-neutral-900
             dark:text-neutral-300">lbl</label></div>
             """,
-            id="radio",
+            id="default",
         ),
         pytest.param(
             """<Radio label="lbl" id="radio-id" name="radio-name" value="val"
@@ -343,9 +343,47 @@ def test_render_Select(soup_rendered: PageElement, soup_expected: PageElement):
             id="radio-id" class="radio"><label for="radio-id"
             class="lbl">lbl</label></div>
             """,
-            id="radio-css",
+            id="css",
         ),
     ],
 )
 def test_render_Radio(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """
+            <Textarea name="text">
+                The quick brown fox jumps over the lazy dog
+            </Textarea>""",
+            """
+            <textarea name="text" class="bg-neutral-50 block border
+            border-neutral-300 p-2.5 rounded-lg text-base text-neutral-900
+            w-full dark:bg-neutral-700 dark:border-neutral-600
+            dark:focus:border-primary-500 dark:focus:ring-primary-500
+            dark:placeholder-neutral-400 dark:text-white focus:border-primary-500
+            focus:ring-primary-500">
+                The quick brown fox jumps over the lazy dog
+            </textarea>
+            """,
+            id="default",
+        ),
+        pytest.param(
+            """
+            <Textarea name="text" id="texta" class="texty">
+                The quick brown fox jumps over the lazy dog
+            </Textarea>""",
+            """
+            <textarea name="text" id="texta" class="texty">
+                The quick brown fox jumps over the lazy dog
+            </textarea>
+            """,
+            id="css",
+        ),
+    ],
+)
+def test_render_Textarea(soup_rendered: PageElement, soup_expected: PageElement):
     assert soup_rendered == soup_expected
