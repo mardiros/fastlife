@@ -19,6 +19,7 @@ def configurator() -> Configurator:
     # load the components
     cfg = Configurator(Settings())
     cfg.include("fastlife.adapters.xcomponent.html")
+    cfg.include("fastlife.adapters.xcomponent.icons")
     return cfg
 
 
@@ -52,6 +53,7 @@ def soup_rendered(
     template_string: str, globals: Mapping[str, str]
 ) -> Iterator[bs4.PageElement]:
     rendered = catalog.render(template_string.strip(), globals=globals)
+    rendered = re.sub(r">\s+<", "><", rendered).strip()
     soup = bs4.BeautifulSoup(rendered, "html.parser")
     try:
         yield next(soup.children)  # type: ignore

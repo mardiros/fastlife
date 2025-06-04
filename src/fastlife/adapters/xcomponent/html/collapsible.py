@@ -14,7 +14,7 @@ def Details(
     id: str | None = None,
     class_: str | None = None,
     open: bool = True,
-):
+) -> str:
     """
     Produce a ``<details>`` html node in order to create a collapsible box.
 
@@ -48,7 +48,7 @@ def Summary(
     id: str | None = None,
     class_: str | None = None,
     open: bool = True,
-):
+) -> str:
     """
     Create html ``<summary>`` node for the
     :func:`fastlife.adapters.xcomponent.html.collapsible.Details` component.
@@ -62,7 +62,7 @@ def Summary(
     <summary id={id} class={class_ or globals.SUMMARY_CLASS}
       style="list-style: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;"
       onclick={"document.getElementById('" + id + "-icon').classList.toggle('rotate-90')"}>
-      <ChevronRightIcon id={id + '-icon'}
+      <Icon name="chevron-right" id={id + '-icon'}
         class={
             if open {
                 "w-8 h-8 transform transition-transform duration-300 rotate-90"
