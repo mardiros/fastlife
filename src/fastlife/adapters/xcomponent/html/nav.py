@@ -26,6 +26,20 @@ def A(
     Create html ``<a>`` node with htmx support by default.
     The `hx-get` parameter is set with the href directly unless the
     `disabled-htmx` attribute has been set.
+
+    :param href: Target link.
+    :param id: Unique identifier of the element.
+    :param class_: CSS class for the node, defaults to
+        :attr:`fastlife.template_globals.Globals.A_CLASS`.
+    :param hx_target: Target the element for swapping than the one issuing
+        the AJAX request.
+    :param hx_select: Select the content swapped from the response of the AJAX request.
+    :param hx_swap: Specify how the response will be swapped in relative to the target
+        of an AJAX request.
+    :param hx_push_url: Replace the browser URL with the link.
+    :param hx_get: Override the target link only for htmx request for component
+        rendering. href will be used if None.
+    :param disable_htmx: Do not add any `hx-*` attribute to the link.
     """
 
     return """
