@@ -67,7 +67,6 @@ def load_icon(
             r"(<path[^>]*?)/>",
             rf"\1><title>{html.escape(title)}</title></path>",
             icon,
-            count=1,
         )
     return icon
 
