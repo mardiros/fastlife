@@ -1,12 +1,12 @@
 import textwrap
+from collections.abc import Iterator
 from pathlib import Path
 from typing import IO
-from collections.abc import Iterator
-
-from sphinx.application import Sphinx
 from zipfile import ZipFile
 
-from fastlife.adapters.xcomponent.icons.icons import icon_path, Icon
+from sphinx.application import Sphinx
+
+from fastlife.adapters.xcomponent.icons.icons import Icon, icon_path
 
 
 def intro():
