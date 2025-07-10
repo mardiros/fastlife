@@ -36,7 +36,7 @@ def test_is_complex_type(typ: type[Any], expected: bool):
         pytest.param(str | int, True, id="str|int"),
         pytest.param(Union[str, int], True, id="Union[str, int]"),  # noqa: UP007
         pytest.param(str | None, True, id="str|None"),
-        pytest.param(Optional[str], True, id="Optional[str]"),  # noqa: UP007
+        pytest.param(Optional[str], True, id="Optional[str]"),  # noqa: UP045
         pytest.param(DummyModel, False, id="DummyModel"),
         pytest.param(DummyModel | None, True, id="DummyModel|None"),
         pytest.param(DummyModel | str, True, id="DummyModel|str"),

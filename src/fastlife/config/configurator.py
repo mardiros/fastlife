@@ -368,7 +368,7 @@ class GenericConfigurator(Generic[TRegistry]):
         deprecated: bool | None = None,
         methods: list[str] | None = None,
         operation_id: str | None = None,
-        # response_model: Any = Default(None),
+        response_model: Any = None,
         response_model_include: IncEx | None = None,
         response_model_exclude: IncEx | None = None,
         response_model_by_alias: bool = True,
@@ -433,7 +433,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self._current_router.add_api_route(
             path,
             endpoint,
-            # response_model=response_model,
+            response_model=response_model,
             status_code=status_code,
             tags=tags,
             dependencies=dependencies,
