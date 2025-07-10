@@ -1,3 +1,6 @@
+## 0.27.1  - Released on 2025-07-10
+* Add response_model to @resource_view in order to document views that use StreamResponse.
+
 ## 0.27.0  - Released on 2025-04-24
 * Add i18n support on pydantic form.
 
