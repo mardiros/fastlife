@@ -185,6 +185,8 @@ class GenericConfigurator(Generic[TRegistry]):
             ),
         )
 
+        self.include("fastlife.adapters.xcomponent")
+
         app = FastAPI(
             title=self.api_title,
             version=self.api_version,

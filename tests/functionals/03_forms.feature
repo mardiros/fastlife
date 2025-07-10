@@ -83,6 +83,7 @@ Feature: Pydantic Form Generation
       """python
       {"dog", "cat"}
       """
+
   Scenario: Sequence[str]
     Given anonymous user on "/form/string_sequence"
     When the user clicks on the button "Add"

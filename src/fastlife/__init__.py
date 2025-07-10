@@ -41,7 +41,7 @@ from .domain.model.security_policy import (
     Unauthenticated,
     Unauthorized,
 )
-from .domain.model.template import JinjaXTemplate
+from .domain.model.template import JinjaXTemplate, XTemplate
 
 # from .request.form_data import model
 from .service.registry import DefaultRegistry, GenericRegistry, TRegistry, TSettings
@@ -105,6 +105,7 @@ __all__ = [
     "TIdentity",
     # Template
     "JinjaXTemplate",
+    "XTemplate",
     # i18n
     "Localizer",
     "TranslatableStringFactory",

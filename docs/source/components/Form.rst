@@ -10,7 +10,7 @@ Form
 
     ::
 
-      <Form :hx-post="true">
+      <Form hx-post>
         <Input name="name" placeholder="Bob" />
         <Button>Submit</Button>
       </Form>
