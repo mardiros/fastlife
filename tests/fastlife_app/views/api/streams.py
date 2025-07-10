@@ -32,7 +32,8 @@ class Streams:
         permission="streams:read",
         summary="API For streams",
         description="Stream dummies.",
-        response_description="foo collection",
+        response_description="dummies collection",
+        response_model=list[Dummy],
     )
     async def collection_get(self, response: Response) -> StreamingResponse:
         def gen_resp() -> Iterable[str]:

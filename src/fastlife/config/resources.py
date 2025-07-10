@@ -99,6 +99,7 @@ def resource(
                     response_description=endpoint.response_description,
                     deprecated=endpoint.deprecated,
                     operation_id=endpoint.operation_id,
+                    response_model=endpoint.response_model,
                     response_model_include=endpoint.response_model_include,
                     response_model_exclude=endpoint.response_model_exclude,
                     response_model_by_alias=endpoint.response_model_by_alias,
@@ -146,6 +147,7 @@ def resource_view(
     deprecated: bool | None = None,
     methods: list[str] | None = None,
     operation_id: str | None = None,
+    response_model: type[Any] | None = None,
     response_model_include: IncEx | None = None,
     response_model_exclude: IncEx | None = None,
     response_model_by_alias: bool = True,
@@ -155,7 +157,7 @@ def resource_view(
     include_in_schema: bool = True,
     openapi_extra: dict[str, Any] | None = None,
 ) -> Callable[..., Any]:
-    """ "
+    """
     Decorator to use on a method of a class decorated with {func}`resource` in order
     to add OpenAPI information.
 
@@ -177,8 +179,11 @@ def resource_view(
     :param include_in_schema: Expose or not the route in the OpenAPI schema and
     documentation.
 
-    :param response_model_include: customize fields list to include in repsonse.
-    :param response_model_exclude: customize fields list to exclude in repsonse.
+    :param response_model: class used for the api documentation for streaming response.
+        It may also be used to validate data in case the view return dict.
+        See [FastAPI doc](https://fastapi.tiangolo.com/tutorial/response-model/).
+    :param response_model_include: customize fields list to include in response.
+    :param response_model_exclude: customize fields list to exclude in response.
     :param response_model_by_alias: serialize fields by alias or by name if False.
     :param response_model_exclude_unset: exclude fields that are not explicitly
         set in response.
@@ -197,6 +202,7 @@ def resource_view(
         fn.deprecated = deprecated
         fn.methods = methods
         fn.operation_id = operation_id
+        fn.response_model = response_model
         fn.response_model_include = response_model_include
         fn.response_model_exclude = response_model_exclude
         fn.response_model_by_alias = response_model_by_alias
