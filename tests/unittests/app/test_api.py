@@ -42,6 +42,11 @@ def test_resource_config_crud(apiclient: TestClient):
     assert foos.json() == {"name": "bobby"}
 
 
+def test_get_streams(apiclient: TestClient):
+    dummies = apiclient.get("/api/streams")
+    assert dummies.json() == [{"name": "Peter"}, {"name": "Bonnie"}, {"name": "Bob"}]
+
+
 def test_401(app: FastAPI):
     apiclient = TestClient(app, headers={})
     resp = apiclient.get("/api/foos")
@@ -89,4 +94,5 @@ def test_openapi(apiclient: TestClient):
         "/api",
         "/api/foos",
         "/api/foos/{name}",
+        "/api/streams",
     }

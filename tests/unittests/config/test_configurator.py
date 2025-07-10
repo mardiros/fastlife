@@ -102,13 +102,19 @@ def test_add_renderer(conf: Configurator, settings: MySettings, route: str):
 def test_all_registered_permissions(conf: Configurator):
     assert conf.all_registered_permissions == []
     conf.include("tests.fastlife_app.views.api")
-    assert conf.all_registered_permissions == ["foos:delete", "foos:read", "foos:write"]
+    assert conf.all_registered_permissions == [
+        "foos:delete",
+        "foos:read",
+        "foos:write",
+        "streams:read",
+    ]
     conf.include("tests.fastlife_app.views", ignore=".api")
     assert conf.all_registered_permissions == [
         "admin",
         "foos:delete",
         "foos:read",
         "foos:write",
+        "streams:read",
     ]
 
 
