@@ -132,6 +132,7 @@ filterwarnings = [
   'ignore:.*find_module\(\) is deprecated.*:DeprecationWarning',
   'ignore:.*FileFinder.find_loader\(\) is deprecated.*:DeprecationWarning',
   'ignore:.*Pydantic serializer warnings.*:UserWarning',
+  'ignore:.*__get_pydantic_core_schema__.*:DeprecationWarning',
 ]
 testpaths = ["tests"]
 
