@@ -18,7 +18,7 @@ class ModelWidget(Widget[Sequence[TWidget]]):
           if nested {
             <Details>
               <Summary id={id + '-summary'}>
-                <H3 class={H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
+                <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
                 <Error text={error} />
               </Summary>
               <div>

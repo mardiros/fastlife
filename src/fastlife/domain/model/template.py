@@ -33,4 +33,4 @@ class JinjaXTemplate(InlineTemplate):
 class XTemplate(InlineTemplate):
     """Template that render XComponent"""
 
-    renderer = ".x"
+    renderer = ".xcomponent"

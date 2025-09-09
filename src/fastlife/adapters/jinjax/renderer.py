@@ -17,6 +17,7 @@ from fastlife import Request
 from fastlife.adapters.fastapi.form import FormModel
 from fastlife.adapters.fastapi.localizer import get_localizer
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
+from fastlife.config import Configurator, configure
 from fastlife.domain.model.template import InlineTemplate
 
 if TYPE_CHECKING:
@@ -162,3 +163,8 @@ class JinjaxEngine(AbstractTemplateRendererFactory):
             self.catalog,
             request,
         )
+
+
+@configure
+def includeme(conf: Configurator) -> None:
+    conf.add_renderer("jinjax", JinjaxEngine(conf.registry.settings))

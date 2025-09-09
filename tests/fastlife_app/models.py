@@ -3,7 +3,7 @@ from typing import Annotated, Any, Literal
 
 from pydantic import BaseModel, Field, SecretStr, field_validator
 
-from fastlife.adapters.jinjax.widgets.base import Widget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.base import Widget
 
 
 class Person(BaseModel):
@@ -38,26 +38,28 @@ class Group(BaseModel):
 
 class GroupsChoice(Widget[Any]):
     template = """
-    <pydantic_form.Widget :widget_id="id" :removable="removable">
-      <Details :id="id">
-        <Summary :id="id + '-summary'">
-          <H3 :class="H3_SUMMARY_CLASS">{{title}}</H3>
-          <pydantic_form.Error :text="error" />
+    <Widget widget_id={id} removable={removable}>
+      <Details id={id}>
+        <Summary id={id + '-summary'}>
+          <H3 class={globals.H3_SUMMARY_CLASS}>{title}</H3>
+          <Error text={error} />
         </Summary>
         <div>
-          {% for group in all_groups %}
-          <div class="flex items-center">
-            <Checkbox :id="group.id" :name={{name + '[]' }} :value="group.name"
-              :checked="value and group.name in value" />
-            <Label class="ms-2 text-base text-neutral-900 dark:text-white"
-                :for="group.id">
-                {{group.name}}
-            </Label>
-          </div>
-          {% endfor %}
+          {
+            for group in all_groups {
+              <div class="flex items-center">
+                <Checkbox id={group.id} name={name + '[]' } value={group.name}
+                  checked="FIXME value and group.name in value" />
+                <Label class="ms-2 text-base text-neutral-900 dark:text-white"
+                  for={group.id}>
+                  {group.name}
+                </Label>
+              </div>
+            }
+          }
         </div>
       </Details>
-    </pydantic_form.Widget>
+    </Widget>
     """
 
 
