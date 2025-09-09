@@ -18,16 +18,15 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
           <Error text={error} />
         </Summary>
         <div>
-          { let fnGetName = "get" + id.replace("-", "_") }
           <script>
-            function {fnGetName} () {'{'}
-              {'const el = document.getElementById(' + id + '-content");'}
-              {'const len = el.dataset.length;'}
-              {'el.dataset.length = parseInt(len) + 1;'}
-              {'return ' + wrapped_type.name + '.' + len + ';'}
-            {'}'}
+            // this function should be added once.
+            function getName(name, id) {
+              const el = document.getElementById(id + '-content');
+              const len = el.dataset.length;
+              el.dataset.length = parseInt(len) + 1;
+              return name + '.' + len;
+            }
           </script>
-
           <div id={id + "-content"} class="m-4"
             data-length={children_widgets|length|string}>
             { let container_id = id + "-children-container" }
@@ -43,9 +42,8 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
           <div>
             { let container_id = "#" + id + "-children-container" }
             { let add_id = id + "-add" }
-            { let vals = 'js:{"name": '
-                + fnGetName
-                + '(), "token": "'
+            { let vals = 'js:{"name": getName("' + wrapped_type.name + '", "' + id + '")'
+                + ', "token": "'
                 + wrapped_type.token + '", "removable": true}'
             }
             <Button type="button"
