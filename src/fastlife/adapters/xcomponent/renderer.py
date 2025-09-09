@@ -99,7 +99,6 @@ class XTemplateRenderer(AbstractTemplateRenderer):
         :return: The template rendering result.
         """
         params = template.model_dump()
-        print(template.template)
         return catalog.render(
             template.template,
             globals=self.globals,

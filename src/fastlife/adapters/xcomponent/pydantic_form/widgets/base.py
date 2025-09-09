@@ -136,5 +136,5 @@ class TypeWrapper:
     @property
     def url(self) -> str:
         """Url to fetch the widget."""
-        ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}?renderer=xcomponent"
+        ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}?format=xcomponent"
         return ret

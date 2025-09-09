@@ -19,7 +19,7 @@ async def show_widget(
     title: str | None = Query(None),
     name: str | None = Query(None),
     token: str | None = Query(None),
-    renderer: Literal["jinjax", "xcomponent"] = Query("jinjax"),
+    format: Literal["jinjax", "xcomponent"] = Query("jinjax"),
     removable: bool = Query(False),
 ) -> Response:
     """
@@ -30,12 +30,9 @@ async def show_widget(
     if title:
         field = FieldInfo(title=title)
 
-    rndr = request.registry.get_renderer(f".{renderer}")(request)
+    rndr = request.registry.get_renderer(f".{format}")(request)
     lczr = request.registry.localizer(request.locale_name)
-    rndr.globals = {
-        "request": request,
-        **lczr.as_dict(),
-    }
+    rndr.globals.update({"request": request, **lczr.as_dict()})
     data = rndr.pydantic_form_field(
         model=model_cls,  # type: ignore
         name=name,
