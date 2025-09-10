@@ -3,9 +3,9 @@ Widget for field of type Enum or Literal.
 """
 
 from collections.abc import Sequence
-from typing import TypedDict
 
 from pydantic import Field, field_validator
+from typing_extensions import TypedDict
 
 from fastlife.adapters.xcomponent.catalog import catalog
 
