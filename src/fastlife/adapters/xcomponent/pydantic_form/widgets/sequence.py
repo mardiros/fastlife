@@ -28,7 +28,7 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
             }
           </script>
           <div id={id + "-content"} class="m-4"
-            data-length={children_widgets|length|string}>
+            data-length={len(children_widgets)}>
             { let container_id = id + "-children-container" }
             <div id={container_id}>
               {
@@ -38,7 +38,6 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
               }
             </div>
           </div>
-
           <div>
             { let container_id = "#" + id + "-children-container" }
             { let add_id = id + "-add" }
