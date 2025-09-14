@@ -11,8 +11,8 @@ class MFACodeWidget(Widget[str]):
     template = """
     <Widget widget_id={id} removable={removable}>
       <div class="pt-4">
-        <Label for={id}>{{ globals.gettext(title) }}</Label>
-        <Error text={error} />
+        <Label for={id}>{ globals.gettext(title) }</Label>
+        <OptionalErrorText text={error} />
         <Input name={name} id={id} inputmode="numeric"
             autocomplete="one-time-code" autofocus={autofocus}
             aria-label={aria_label} placeholder={placeholder} />

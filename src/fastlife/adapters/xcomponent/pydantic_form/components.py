@@ -4,7 +4,7 @@ from fastlife.adapters.xcomponent.catalog import catalog
 
 
 @catalog.component
-def FormText(
+def ErrorText(
     text: str,
     class_: str,
 ) -> str:
@@ -16,7 +16,7 @@ def FormText(
         :attr:`fastlife.template_globals.Globals.ERROR_CLASS`.
     """
     return """
-        <span class={class_}>{text}</span>
+        <span class={class_ or globals.ERROR_CLASS}>{text}</span>
     """
 
 
@@ -34,8 +34,10 @@ def OptionalErrorText(
     """
     return """
     <>
-        if text {
-            <ErrorText text={text} class={class_} />
+        {
+            if text {
+                <ErrorText text={text} class={class_} />
+            }
         }
     </>
     """

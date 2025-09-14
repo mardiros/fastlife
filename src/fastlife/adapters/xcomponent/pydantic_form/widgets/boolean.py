@@ -19,7 +19,7 @@ class BooleanWidget(Widget[bool]):
             {globals.gettext(title)}
           </Label>
         </div>
-       <Error text={error} />
+       <OptionalErrorText text={error} />
       </div>
     </Widget>
     """

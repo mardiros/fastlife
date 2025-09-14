@@ -42,7 +42,7 @@ class GroupsChoice(Widget[Any]):
       <Details id={id}>
         <Summary id={id + '-summary'}>
           <H3 class={globals.H3_SUMMARY_CLASS}>{title}</H3>
-          <Error text={error} />
+          <OptionalErrorText text={error} />
         </Summary>
         <div>
           {

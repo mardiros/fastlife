@@ -15,7 +15,7 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
       <Details id={id}>
         <Summary id={id + '-summary'}>
           <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
-          <Error text={error} />
+          <OptionalErrorText text={error} />
         </Summary>
         <div>
           <script>

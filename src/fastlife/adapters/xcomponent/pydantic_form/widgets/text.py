@@ -23,7 +23,7 @@ class TextWidget(Widget[Builtins]):
     <Widget widget_id={id} removable={removable}>
       <div class="pt-4">
         <Label for={id}>{globals.gettext(title)}</Label>
-        <Error text={error} />
+        <OptionalErrorText text={error} />
         <Input name={name} value={value} type={input_type} id={id}
           aria-label={aria_label} placeholder={placeholder}
          autocomplete={autocomplete} />
@@ -49,7 +49,7 @@ class PasswordWidget(Widget[SecretStr]):
     <Widget widget_id={id} removable={removable}>
       <div class="pt-4">
         <Label for={id}>{globals.gettext(title)}</Label>
-        <Error text={error} />
+        <OptionalErrorText text={error} />
         <Password name={name} type={input_type} id={id}
           autocomplete={
             if new_password {
@@ -102,15 +102,15 @@ class TextareaWidget(Widget[str | Sequence[str]]):
     <Widget widget_id={id} removable={removable}>
       <div class="pt-4">
         <Label for={id}>{globals.gettext(title)}</Label>
-        <Error text={error} />
+        <OptionalErrorText text={error} />
         <Textarea name={name} id={id} aria-label={aria_label}>
             {
               if is_str(value) {
-                {value}
+                value
               }
               else {
                 for v in value {
-                  {v}{"\n"}
+                  v + "\n"
                 }
               }
             }

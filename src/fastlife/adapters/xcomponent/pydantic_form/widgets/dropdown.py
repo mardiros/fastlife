@@ -25,7 +25,7 @@ def DropDownWidgetOption(id: str, opt: Option) -> str:
     <Option
         value={opt.value}
         id={id + "-" + opt.value.replace(" ", " -")}
-        selected={value==opt.value}
+        selected={value and value == opt.value}
         >
       {globals.gettext(opt.text)}
     </Option>
@@ -44,11 +44,11 @@ class DropDownWidget(Widget[str]):
         <Select name={name} id={id}>
           {
             for opt in options  {
-              <DropDownWidgetOption id={id} opt={opt} />
+              <DropDownWidgetOption id={id} opt={opt} value={value}/>
             }
           }
         </Select>
-        <Error text={error} />
+        <OptionalErrorText text={error} />
         <Hint text={hint} />
       </div>
     </Widget>

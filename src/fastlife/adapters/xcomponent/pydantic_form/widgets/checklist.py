@@ -44,7 +44,7 @@ def PydanticFormChecklistItem(value: Checkable, globals: Any) -> str:
             class="ms-2 text-base text-neutral-900 dark:text-white">
             {globals.gettext(value.label)}
         </Label>
-        <Error text={value.error} />
+        <OptionalErrorText text={value.error} />
     </div>
     """
 
@@ -60,7 +60,7 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
         <Details>
           <Summary id={id + '-summary'}>
             <H3 class={globals.H3_SUMMARY_CLASS}>{globals.gettext(title)}</H3>
-            <Error text={error} />
+            <OptionalErrorText text={error} />
           </Summary>
           <div>
             {

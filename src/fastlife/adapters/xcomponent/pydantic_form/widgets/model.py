@@ -19,7 +19,7 @@ class ModelWidget(Widget[Sequence[TWidget]]):
             <Details>
               <Summary id={id + '-summary'}>
                 <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
-                <Error text={error} />
+                <OptionalErrorText text={error} />
               </Summary>
               <div>
                 {

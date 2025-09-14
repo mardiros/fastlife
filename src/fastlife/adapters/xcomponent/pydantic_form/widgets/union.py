@@ -24,7 +24,7 @@ class UnionWidget(Widget[TWidget]):
         <Details>
           <Summary id={id + '-union-summary'}>
             <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
-            <Error text={error} />
+            <OptionalErrorText text={error} />
           </Summary>
           <div hx-sync="this" id="{{id}}-child">
             {
