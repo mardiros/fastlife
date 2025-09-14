@@ -15,7 +15,7 @@ from fastlife.adapters.xcomponent.catalog import catalog
 def icon_path() -> Path:
     spec = util.find_spec("heroicons")
     if spec is None or spec.origin is None:
-        raise ValueError("Install heroicons first")
+        raise ValueError("Install heroicons first")  # coverage: ignore
     return Path(spec.origin).parent
 
 

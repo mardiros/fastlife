@@ -4,6 +4,7 @@ from fastapi import Request as FastApiRequest
 
 from fastlife import Configurator, GenericRequest, Settings
 from fastlife.adapters.xcomponent.renderer import XRendererFactory
+from fastlife.service.templates import AbstractTemplateRenderer
 from tests.fastlife_app.config import MyRegistry
 
 Request = GenericRequest[MyRegistry, None, None]
@@ -37,7 +38,7 @@ def x_renderer(settings: Settings):
 @pytest.fixture()
 async def renderer(
     conf: Configurator, x_renderer: XRendererFactory, dummy_request: Request
-):
+) -> AbstractTemplateRenderer:
     globs = await conf._build_renderer_globals(dummy_request)  # type: ignore
     ret = x_renderer(dummy_request)
     ret.globals.update(globs)
