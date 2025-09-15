@@ -8,7 +8,7 @@ from pydantic import BaseModel, EmailStr, Field, SecretStr
 from fastlife.adapters.jinjax.renderer import JinjaxRenderer
 from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
 from fastlife.domain.model.form import FormModel
-from tests.unittests.templates.test_jinjax_components import JinjaXTemplate
+from fastlife.domain.model.template import JinjaXTemplate
 
 
 class MyWidget(Widget[str]):
