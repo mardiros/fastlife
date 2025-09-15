@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Any, get_origin
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
-from fastlife.adapters.xcomponent.catalog import catalog
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
@@ -28,16 +27,6 @@ from .sequence_builder import SequenceBuilder
 from .set_builder import SetBuilder
 from .simpletype_builder import SimpleTypeBuilder
 from .union_builder import UnionBuilder
-
-
-@catalog.component
-def FatalError(message: str | None, class_: str | None, text_class: str | None) -> str:
-    return """
-    <div class={class_ or globals.FATAL_ERROR_CLASS} role="alert">
-      <Icon name="fire" class={globals.FATAL_ERROR_ICON_CLASS} />
-      <span class={text_class or globals.FATAL_ERROR_TEXT_CLASS}>{message}</span>
-    </div>
-    """
 
 
 class OptionalFatalError(XTemplate):
@@ -98,17 +87,21 @@ class WidgetFactory:
         """
         ret = Markup()
         if model.fatal_error:
-            ret += self.renderer.render_template(
-                OptionalFatalError(message=model.fatal_error)
+            ret += Markup(
+                self.renderer.render_template(
+                    OptionalFatalError(message=model.fatal_error)
+                )
             )
-        ret += self.get_widget(
-            model.model.__class__,
-            model.form_data,
-            model.errors,
-            prefix=model.prefix,
-            removable=removable,
-            field=field,
-        ).to_html(self.renderer)
+        ret += Markup(
+            self.get_widget(
+                model.model.__class__,
+                model.form_data,
+                model.errors,
+                prefix=model.prefix,
+                removable=removable,
+                field=field,
+            ).to_html(self.renderer)
+        )
         return ret
 
     def get_widget(

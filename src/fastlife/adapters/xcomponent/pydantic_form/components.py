@@ -63,7 +63,7 @@ def FatalError(
     <>
     {
       if message {
-        <div class="{class_ or globals.FATAL_ERROR_CLASS}}" role="alert">
+        <div class={class_ or globals.FATAL_ERROR_CLASS} role="alert">
           <Icon name="fire" class={icon_class or globals.FATAL_ERROR_ICON_CLASS} />
           <span class={text_class or globals.FATAL_ERROR_TEXT_CLASS}>{message}</span>
         </div>
