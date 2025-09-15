@@ -49,6 +49,7 @@ class DummyOptional(BaseModel):
 
 
 class DummyModel(BaseModel):
+    category: Literal["dummy"] = Field()
     name: str = Field()
     description: Annotated[str, CustomWidget(MyWidget)] = Field(min_length=2)
     private: str = Field(exclude=True)
@@ -176,6 +177,15 @@ def test_render_template(
     assert score_option
     assert score_option.text.strip() == "2"
 
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-category-tkt",
+            "name": "payload.category",
+            "type": "hidden",
+            "value": "dummy",
+        },
+    )
     assert html.find(
         "input",
         attrs={"id": "payload-vegan-tkt", "name": "payload.vegan", "type": "checkbox"},
