@@ -104,7 +104,7 @@ def main():
             )
         )
 
-    icons_wall = root_dir / "tests" / "fastlife_app" / "templates" / "IconsWall.jinja"
+    icons_wall = root_dir / "tests" / "fastlife_app" / "adapter" /"jinjax" / "IconsWall.jinja"
     icons_wall.unlink(missing_ok=True)
     icons_wall.parent.mkdir(exist_ok=True)
     with open(icons_wall, "w") as fw:
