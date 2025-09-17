@@ -12,7 +12,7 @@ from tests.fastlife_app.models import Person
 class HelloInline(InlineTemplate):
     template = """
     <Layout>
-      <H1>Hello {{ person.nick|default("World") }}!</H1>
+      <H1>Hello {{ person.nick or "World" }}!</H1>
       <Form :method="method">
         <Input name="person.nick"
             label="Name"

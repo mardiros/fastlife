@@ -1,11 +1,17 @@
 from typing import Annotated
 
-from fastlife import FormModel, JinjaXTemplate, Request, form_model, view_config
+from fastlife import (
+    FormModel,
+    Request,
+    XTemplate,
+    form_model,
+    view_config,
+)
 from tests.fastlife_app.models import Account, Group, Person
 
 
-class HelloWorld(JinjaXTemplate):
-    template = """<HelloWorld :person="person" />"""
+class HelloWorld(XTemplate):
+    template = """<HelloWorld person={person} />"""
     person: Person
 
 
@@ -16,12 +22,12 @@ async def hello_world(
     return HelloWorld(person=person.model)
 
 
-class AutoForm(JinjaXTemplate):
+class AutoForm(XTemplate):
     template = """
     <Layout>
       <div class="max-w-screen-lg mx-auto px-5 bg-white min-h-sceen">
         <Form hx-post="">
-          {{ pydantic_form(model=model) }}
+          { globals.pydantic_form(model=model) }
           <Button>Submit</Button>
         </Form>
       </div>

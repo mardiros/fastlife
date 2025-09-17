@@ -23,7 +23,7 @@ class UnionWidget(Widget[TWidget]):
       <div id="{{id}}">
         <Details>
           <Summary :id="id + '-union-summary'">
-            <H3 :class="H3_SUMMARY_CLASS">{{ gettext(title) }}</H3>
+            <H3 :class="H3_SUMMARY_CLASS">{ globals.gettext(title) }</H3>
             <pydantic_form.Error :text="error" />
           </Summary>
           <div hx-sync="this" id="{{id}}-child">

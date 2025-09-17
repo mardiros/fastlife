@@ -4,13 +4,12 @@ Views for pydantic form.
 Pydantic form generate form that may contains fields that requires some ajax query.
 """
 
-from typing import cast
+from typing import Literal
 
 from fastapi import Query
 from pydantic.fields import FieldInfo
 
 from fastlife import Configurator, Request, Response, configure
-from fastlife.adapters.jinjax.renderer import JinjaxRenderer
 from fastlife.shared_utils.resolver import resolve_extended
 
 
@@ -20,6 +19,7 @@ async def show_widget(
     title: str | None = Query(None),
     name: str | None = Query(None),
     token: str | None = Query(None),
+    format: Literal["jinjax", "xcomponent"] = Query("jinjax"),
     removable: bool = Query(False),
 ) -> Response:
     """
@@ -29,14 +29,11 @@ async def show_widget(
     field = None
     if title:
         field = FieldInfo(title=title)
-    # FIXME: .jinja should not be hardcoded
-    renderer = cast(JinjaxRenderer, request.registry.get_renderer(".jinja")(request))
+
+    rndr = request.registry.get_renderer(f".{format}")(request)
     lczr = request.registry.localizer(request.locale_name)
-    renderer.globals = {
-        "request": request,
-        **lczr.as_dict(),
-    }
-    data = renderer.pydantic_form_field(
+    rndr.globals.update({"request": request, **lczr.as_dict()})
+    data = rndr.pydantic_form_field(
         model=model_cls,  # type: ignore
         name=name,
         token=token,

@@ -28,3 +28,9 @@ class JinjaXTemplate(InlineTemplate):
     """Template that render JinjaX"""
 
     renderer = ".jinja"
+
+
+class XTemplate(InlineTemplate):
+    """Template that render XComponent"""
+
+    renderer = ".xcomponent"

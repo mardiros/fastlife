@@ -1,72 +1,80 @@
-import re
+import textwrap
+from collections.abc import Iterator
 from pathlib import Path
 from typing import IO
+from zipfile import ZipFile
 
 from sphinx.application import Sphinx
 
-from fastlife.adapters.jinjax.jinjax_ext.inspectable_catalog import InspectableCatalog
-from fastlife.adapters.jinjax.renderer import build_searchpath
+from fastlife.adapters.xcomponent.icons.icons import Icon, icon_path
 
 
-def write_icons(fw: IO[str], catalog: InspectableCatalog):
-    includes = [re.compile(r"^icons\.[a-zA-Z0-9]+$")]
-    for component in catalog.iter_components(includes=includes):
-        name = component.name
-        fw.write(
+def intro():
+    return """
+    <p>
+        Fastlife comes with a set of icons that comes from
+        <a href="https://heroicons.com/">heroicons</a>
+        (MIT License - Copyright (c) Tailwind Labs, Inc.).
+
+        You must install the extra dependency heroicons.
+    </p>
+    <p>
+        Available icons, click to copy.
+    </p>
+
+    <script>
+        function copyText(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = '<Icon name="' + text + '" />';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+    </script>
+    """
+
+
+def iter_zip(mode: str = "solid") -> Iterator[str]:
+    iconzip = icon_path() / "heroicons.zip"
+    with ZipFile(iconzip, "r") as zip_ref:
+        file_list = zip_ref.namelist()
+        for filepath in file_list:
+            if filepath.startswith(f"{mode}/"):
+                name = filepath.split("/", 1)[1].rsplit(".", 1)[0]
+                yield name
+
+
+def write_icons(file: IO[str]):
+    for name in iter_zip():
+        out = (
             '<div class="flex flex-col items-center text-center cursor-pointer" '
-            f"onclick=\"copyText('&lt;{name} /&gt;')\">"
+            f"onclick=\"copyText('{name}')\">\n"
         )
-        fw.write(f'<{name} class="w-16 h-16" title="{name}" />\n')
-        fw.write(
-            component.build_docstring()
-        )
-        fw.write("\n</div>\n")
-
-
-def write_jinja(app: Sphinx, catalog: InspectableCatalog, outdir: Path) -> None:
-    outdir.mkdir(parents=True, exist_ok=True)
-    icons_wall: Path = outdir / "IconsWall.jinja"
-    icons_wall.unlink(missing_ok=True)
-    with open(icons_wall, "w") as fw:
-        fw.write("<Layout>\n")
-
-        fw.write('<div class="grid grid-cols-2 gap-4 p-6">\n')
-        write_icons(fw, catalog)
-        fw.write("</div>\n")
-        fw.write("</Layout>\n")
+        out += Icon(name, class_="w-16 h-16", title=name).replace("\n", "    \n")
+        out += f'<div>&lt;Icon name="{name}" /&gt;</div>'
+        out += "</div>\n"
+        file.write(textwrap.indent(out, prefix="    "))
 
 
 def generate_page(app: Sphinx) -> None:
-    catalog = InspectableCatalog(auto_reload=False)
-
-    outdir = Path(app.srcdir) / app.config.icon_wall_output_dir
-
-    for path in build_searchpath(f"fastlife:components,{outdir}"):
-        catalog.add_folder(path)
-
-    write_jinja(app, catalog, outdir)
-    icons_wall = catalog.render("IconsWall")  # type: ignore
-    outfile: Path = outdir / "icons.rst"
-    with open(outfile, "w") as wf:
+    outdir: Path = Path(app.srcdir) / app.config.icon_wall_output_dir  # type: ignore
+    with open(outdir / "icons.rst", "w") as wf:
         wf.write("Icons\n")
         wf.write("-----\n")
         wf.write(".. raw:: html\n\n")
-        lines = iter(icons_wall.split("\n"))
-        while True:
-            try:
-                line = next(lines)
-            except StopIteration:
-                break
-
-            if line.startswith(".. "):
-                wf.write(f"{line}\n")
-                line = next(lines)
-                while len(line) == 0 or line.startswith("    "):
-                    line = next(lines)
-
-                wf.write(".. raw:: html\n\n")
-
-            wf.write(f"    {line}\n")
+        wf.write(intro())
+        wf.write("    <style>\n")
+        wf.write(
+            textwrap.indent(
+                (outdir / "iconwall.css").read_text(),
+                prefix="    ",
+            )
+        )
+        wf.write("    </style>\n")
+        wf.write('    <div class="grid grid-cols-2 gap-4 p-6">')
+        write_icons(wf)
+        wf.write("    </div>")
 
 
 def setup(app: Sphinx) -> None:

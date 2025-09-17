@@ -4,6 +4,8 @@ default_functest_suite := 'tests/functionals'
 
 # export PW_TEST_CONNECT_WS_ENDPOINT := "ws://127.0.0.1:3000"
 export CLICOLOR_FORCE := "1"
+export RUST_BACKTRACE := "1"
+export RUST_LOG := "xcore=warn"
 
 install:
     uv sync --group dev
