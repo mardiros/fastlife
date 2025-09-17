@@ -191,7 +191,6 @@ class PetForm(BaseModel):
     magic_power: bool = Field(title="Has Magic Power")
 ```
 
-
 ## Do some HTMX.
 
 We can update the form to do the hello in {term}`HTMX`
