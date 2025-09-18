@@ -167,4 +167,6 @@ class JinjaxEngine(AbstractTemplateRendererFactory):
 
 @configure
 def includeme(conf: Configurator) -> None:
-    conf.add_renderer("jinjax", JinjaxEngine(conf.registry.settings))
+    conf.add_renderer(
+        conf.registry.settings.jinjax_file_ext, JinjaxEngine(conf.registry.settings)
+    )

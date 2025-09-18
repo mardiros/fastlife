@@ -19,7 +19,7 @@ async def show_widget(
     title: str | None = Query(None),
     name: str | None = Query(None),
     token: str | None = Query(None),
-    format: Literal["jinjax", "xcomponent"] = Query("jinjax"),
+    format: Literal["jinjax", "xcomponent"] | str = Query("jinjax"),
     removable: bool = Query(False),
 ) -> Response:
     """
@@ -30,6 +30,9 @@ async def show_widget(
     if title:
         field = FieldInfo(title=title)
 
+    if format == "jinjax":
+        # XXX
+        format = request.registry.settings.jinjax_file_ext
     rndr = request.registry.get_renderer(f".{format}")(request)
     lczr = request.registry.localizer(request.locale_name)
     rndr.globals.update({"request": request, **lczr.as_dict()})
