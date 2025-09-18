@@ -10,7 +10,7 @@ FastAPI
 
 HTMX
   HTMX is a javascript library that extend HTML to do
-  [https://htmx.org/essays/hypermedia-driven-applications/](hypermedia driven applications).
+  [hypermedia driven applications](https://htmx.org/essays/hypermedia-driven-applications/).
   Fastlife is a web framework made for this kind of architecture arround HTMX.
 
   Website: https://htmx.org/
