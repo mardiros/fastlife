@@ -11,7 +11,7 @@ to process the request, otherwise an exception
 The cookie named is configurabllefia the settings
 :attr:`fastlife.config.settings.Settings.csrf_token_name`
 
-While using the `<Form/>` JinjaX tag, the csrf token is always sent.
+While using the `<Form/>` from XComponent or JinjaX, the csrf token is always sent.
 
 The cookie is always set when you render any template. At the moment, there is
 no way to prevent to set the cookie in the request.

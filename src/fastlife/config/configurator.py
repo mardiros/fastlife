@@ -178,15 +178,11 @@ class GenericConfigurator(Generic[TRegistry]):
 
         # register our main template renderer at then end, to ensure that
         # if settings have been manipulated, everything is taken into account.
-        self.add_renderer(
-            self.registry.settings.jinjax_file_ext,
-            resolve("fastlife.adapters.jinjax.renderer:JinjaxEngine")(
-                self.registry.settings
-            ),
-        )
-
-        self.include("fastlife.adapters.jinjax")
-        self.include("fastlife.adapters.xcomponent")
+        for optional_adapter in ("jinjax", "xcomponent"):
+            try:
+                self.include(f"fastlife.adapters.{optional_adapter}")
+            except ImportError:
+                pass
 
         app = FastAPI(
             title=self.api_title,

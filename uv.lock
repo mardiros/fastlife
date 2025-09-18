@@ -340,14 +340,12 @@ source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "itsdangerous" },
-    { name = "jinjax" },
     { name = "markupsafe" },
     { name = "multidict" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "python-multipart" },
     { name = "venusian" },
-    { name = "xcomponent" },
 ]
 
 [package.optional-dependencies]
@@ -358,8 +356,14 @@ docs = [
     { name = "sphinx" },
     { name = "sphinx-autodoc2" },
 ]
+jinjax = [
+    { name = "jinjax" },
+]
 testing = [
     { name = "beautifulsoup4" },
+]
+xcomponent = [
+    { name = "xcomponent" },
 ]
 
 [package.dev-dependencies]
@@ -370,6 +374,7 @@ dev = [
     { name = "heroicons" },
     { name = "httpx" },
     { name = "hypercorn" },
+    { name = "jinjax" },
     { name = "mypy" },
     { name = "pytailwindcss" },
     { name = "pytest" },
@@ -380,6 +385,7 @@ dev = [
     { name = "tursu" },
     { name = "types-beautifulsoup4" },
     { name = "uvicorn" },
+    { name = "xcomponent" },
 ]
 doc = [
     { name = "furo" },
@@ -395,7 +401,7 @@ requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.4,<0.116.0" },
     { name = "furo", marker = "extra == 'docs'", specifier = ">=2024.5.6" },
     { name = "itsdangerous", specifier = ">=2.1.2,<3" },
-    { name = "jinjax", specifier = ">=0.48,<0.49" },
+    { name = "jinjax", marker = "extra == 'jinjax'", specifier = ">=0.48,<0.49" },
     { name = "linkify-it-py", marker = "extra == 'docs'", specifier = ">=2.0.3,<3" },
     { name = "markupsafe", specifier = ">=2.1.3,<3" },
     { name = "multidict", specifier = ">=6.0.5,<7" },
@@ -406,9 +412,9 @@ requires-dist = [
     { name = "sphinx", marker = "extra == 'docs'", specifier = ">=7.0.1,<8" },
     { name = "sphinx-autodoc2", marker = "extra == 'docs'", specifier = ">=0.5.0,<1" },
     { name = "venusian", specifier = ">=3.0.0,<4" },
-    { name = "xcomponent", specifier = ">=0.6.6" },
+    { name = "xcomponent", marker = "extra == 'xcomponent'", specifier = ">=0.6.6,<0.7" },
 ]
-provides-extras = ["testing", "docs"]
+provides-extras = ["jinjax", "xcomponent", "testing", "docs"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -418,6 +424,7 @@ dev = [
     { name = "heroicons", specifier = ">=2.7.0,<3" },
     { name = "httpx", specifier = ">=0.28.1,<0.29" },
     { name = "hypercorn", specifier = ">=0.14.4,<0.15" },
+    { name = "jinjax", specifier = ">=0.48,<0.49" },
     { name = "mypy", specifier = ">=1.4.0,<2" },
     { name = "pytailwindcss", specifier = ">=0.2.0,<0.3" },
     { name = "pytest", specifier = ">=8.2.0,<9" },
@@ -428,6 +435,7 @@ dev = [
     { name = "tursu", specifier = ">=0.16.0,<1" },
     { name = "types-beautifulsoup4", specifier = ">=4.12.0.6,<5" },
     { name = "uvicorn", specifier = ">=0.34.0,<1.0" },
+    { name = "xcomponent", specifier = ">=0.6.6,<0.7" },
 ]
 doc = [
     { name = "furo", specifier = ">=2024.5.6" },
