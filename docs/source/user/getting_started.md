@@ -134,10 +134,11 @@ writing test for web pages.
 
 ````{note}
 
-  This module required the extra `testing` installable via the command
+  This module required the extra `testing` installable via the command.
+  Since the example use jinjax, it has to be installed too.
 
   ```bash
-  pip install fastlifeweb[testing]
+  pip install fastlifeweb[jinjax,testing]
 
 ````
 

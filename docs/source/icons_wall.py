@@ -17,6 +17,12 @@ def intro():
         (MIT License - Copyright (c) Tailwind Labs, Inc.).
 
         You must install the extra dependency heroicons.
+
+        <strong>This version is for the XComponent template engine.</strong>
+        <br>
+        <em>For JinjaX, the doc does not build the icon wall, icons are generated
+        templates, such as &lt;icons.ArrowsUpDown&gt;, available from the components
+        directory.</em>
     </p>
     <p>
         Available icons, click to copy.
