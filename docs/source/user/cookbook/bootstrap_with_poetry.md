@@ -26,10 +26,10 @@ path = ".venv"
 EOF
 ```
 
-Now we can add the `fastlifeweb` package.
+Now we can add the `fastlifeweb` package with `jinjax` template rendering engine.
 
 ```bash
-poetry add fastlifeweb
+poetry add fastlifeweb[jinjax]
 ```
 
 

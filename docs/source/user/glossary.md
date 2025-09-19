@@ -10,7 +10,7 @@ FastAPI
 
 HTMX
   HTMX is a javascript library that extend HTML to do
-  [https://htmx.org/essays/hypermedia-driven-applications/](hypermedia driven applications).
+  [hypermedia driven applications](https://htmx.org/essays/hypermedia-driven-applications/).
   Fastlife is a web framework made for this kind of architecture arround HTMX.
 
   Website: https://htmx.org/
@@ -18,6 +18,11 @@ HTMX
 Jinjax
   JinjaX is a template engine for made for clarity.
   It is an extension of the Jinja2 template engine.
+  Fastlife includes a Jinjax 0.48 compatible version.
+  The template has changed many time its component attribute syntax,
+  from JSX to VueJS and now for more recent version, double curly brace.
+
+  The support of this template engine will be discontinued in favor of {term}`XComponent`
 
   Website: https://jinjax.scaletti.dev/
 
@@ -84,4 +89,10 @@ Tailwind CSS
 Widget
   A widget in fastlife refer to a {term}`JinjaX` compoment made for handling data input
   in a form for a {term}`Pydantic` field.
+
+XComponent
+  A template engine created for the fastlife framework that embed template inside python
+  code.
+
+  Website: https://mardiros.github.io/xcomponent/
 ```
