@@ -1,3 +1,11 @@
+## 0.28.0  - Released on 2025-09-19
+* Introduce new template engine xcomponent that will replace jinjax.
+* At the moment, the template engine has to be installed as an extra
+  dependencie, none of them will be installed by default.
+  install fastlifeweb[jinjax] insted of fastlife for the compatibility.
+  The new template engine, xcomponent, has to be installed as
+  fastlifeweb[xcomponent].
+
 ## 0.27.1  - Released on 2025-07-10
 * Add response_model to @resource_view in order to document views that use StreamResponse.
 
