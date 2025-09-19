@@ -180,7 +180,10 @@ class GenericConfigurator(Generic[TRegistry]):
         # if settings have been manipulated, everything is taken into account.
         for optional_adapter in ("jinjax", "xcomponent"):
             try:
-                self.include(f"fastlife.adapters.{optional_adapter}")
+                self.include(
+                    f"fastlife.adapters.{optional_adapter}",
+                    ignore="fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
+                )
             except ImportError:
                 pass
 
