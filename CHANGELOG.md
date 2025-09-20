@@ -1,3 +1,6 @@
+## 0.28.3  - Released on 2025-09-20
+* Install jinjax to build the doc.
+
 ## 0.28.2  - Released on 2025-09-20
 * Fix github action to build the doc.
 
