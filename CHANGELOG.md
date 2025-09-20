@@ -1,3 +1,6 @@
+## 0.28.2  - Released on 2025-09-20
+* Fix github action to build the doc.
+
 ## 0.28.1  - Released on 2025-09-20
 * Fix jinjax dependencies.
 * Fix documentation generation.

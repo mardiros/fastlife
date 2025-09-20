@@ -335,7 +335,7 @@ wheels = [
 
 [[package]]
 name = "fastlifeweb"
-version = "0.28.1"
+version = "0.28.2"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
@@ -355,6 +355,7 @@ docs = [
     { name = "myst-parser" },
     { name = "sphinx" },
     { name = "sphinx-autodoc2" },
+    { name = "xcomponent" },
 ]
 jinjax = [
     { name = "jinjax" },
@@ -413,6 +414,7 @@ requires-dist = [
     { name = "sphinx", marker = "extra == 'docs'", specifier = ">=7.0.1,<8" },
     { name = "sphinx-autodoc2", marker = "extra == 'docs'", specifier = ">=0.5.0,<1" },
     { name = "venusian", specifier = ">=3.0.0,<4" },
+    { name = "xcomponent", marker = "extra == 'docs'", specifier = ">=0.6.6,<0.7" },
     { name = "xcomponent", marker = "extra == 'xcomponent'", specifier = ">=0.6.6,<0.7" },
 ]
 provides-extras = ["jinjax", "xcomponent", "testing", "docs"]
