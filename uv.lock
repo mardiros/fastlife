@@ -335,7 +335,7 @@ wheels = [
 
 [[package]]
 name = "fastlifeweb"
-version = "0.28.3"
+version = "0.28.4"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
@@ -351,6 +351,7 @@ dependencies = [
 [package.optional-dependencies]
 docs = [
     { name = "furo" },
+    { name = "heroicons" },
     { name = "jinjax" },
     { name = "linkify-it-py" },
     { name = "myst-parser" },
@@ -391,6 +392,7 @@ dev = [
 ]
 doc = [
     { name = "furo" },
+    { name = "heroicons" },
     { name = "jinjax" },
     { name = "linkify-it-py" },
     { name = "myst-parser" },
@@ -404,6 +406,7 @@ requires-dist = [
     { name = "beautifulsoup4", marker = "extra == 'testing'" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.4,<0.116.0" },
     { name = "furo", marker = "extra == 'docs'", specifier = ">=2024.5.6" },
+    { name = "heroicons", marker = "extra == 'docs'", specifier = ">=2.7.0,<3" },
     { name = "itsdangerous", specifier = ">=2.1.2,<3" },
     { name = "jinjax", marker = "extra == 'docs'", specifier = ">=0.48,<0.49" },
     { name = "jinjax", marker = "extra == 'jinjax'", specifier = ">=0.48,<0.49" },
@@ -445,6 +448,7 @@ dev = [
 ]
 doc = [
     { name = "furo", specifier = ">=2024.5.6" },
+    { name = "heroicons", specifier = ">=2.7.0,<3" },
     { name = "jinjax", specifier = ">=0.48,<0.49" },
     { name = "linkify-it-py", specifier = ">=2.0.3,<3" },
     { name = "myst-parser", specifier = ">=4.0.0,<5" },

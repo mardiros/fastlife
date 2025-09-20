@@ -1,3 +1,6 @@
+## 0.28.4  - Released on 2025-09-20
+* Install heroicon to build the doc.
+
 ## 0.28.3  - Released on 2025-09-20
 * Install jinjax to build the doc.
 
