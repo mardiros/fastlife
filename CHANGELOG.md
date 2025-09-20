@@ -1,17 +1,4 @@
 ## 0.28.4  - Released on 2025-09-20
-* Install heroicon to build the doc.
-
-## 0.28.3  - Released on 2025-09-20
-* Install jinjax to build the doc.
-
-## 0.28.2  - Released on 2025-09-20
-* Fix github action to build the doc.
-
-## 0.28.1  - Released on 2025-09-20
-* Fix jinjax dependencies.
-* Fix documentation generation.
-
-## 0.28.0  - Released on 2025-09-19
 * Introduce new template engine xcomponent that will replace jinjax.
 * At the moment, the template engine has to be installed as an extra
   dependencie, none of them will be installed by default.
