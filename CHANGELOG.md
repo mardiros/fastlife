@@ -1,3 +1,7 @@
+## 0.28.1  - Released on 2025-09-20
+* Fix jinjax dependencies.
+* Fix documentation generation.
+
 ## 0.28.0  - Released on 2025-09-19
 * Introduce new template engine xcomponent that will replace jinjax.
 * At the moment, the template engine has to be installed as an extra
