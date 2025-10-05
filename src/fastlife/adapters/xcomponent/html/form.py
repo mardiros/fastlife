@@ -170,7 +170,12 @@ def Button(
         hx-put={hx_put}
         hx-patch={hx_patch}
         hx-delete={hx_delete}
-        hx-push-url={hx_push_url}
+        hx-push-url={
+            if isbool(hx_push_url) {
+                if hx_push_url { "true" } else { false }
+            }
+            else { hx_push_url }
+        }
         hx-params={hx_params}
         aria-label={aria_label}
         class={
