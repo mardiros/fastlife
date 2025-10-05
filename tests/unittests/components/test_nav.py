@@ -17,8 +17,8 @@ a_css = (
                class="{a_css}"
                href="/"
                hx-get="/"
+               hx-push-url="true"
                hx-swap="innerHTML show:body:top"
-               hx-push-url
                >text</a>
             """,
             id="default",
@@ -27,7 +27,7 @@ a_css = (
             """
             <A href='/js-disabled'
                hx-get="/load-it"
-               hx-push-url={false}
+               hx-push-url="/load-that"
                hx-swap='innerHTML'
                class='mine'>text</A>
             """,
@@ -36,6 +36,25 @@ a_css = (
                hx-get="/load-it"
                hx-target="#maincontent"
                class="mine"
+               hx-push-url="/load-that"
+               hx-swap="innerHTML"
+               >text</a>
+            """,
+            id="hx-push-url",
+        ),
+        pytest.param(
+            """
+            <A href='/js-disabled'
+               hx-get="/load-it"
+               hx-swap='innerHTML'
+               class='mine'>text</A>
+            """,
+            """
+            <a href='/js-disabled'
+               hx-get="/load-it"
+               hx-target="#maincontent"
+               class="mine"
+               hx-push-url="true"
                hx-swap="innerHTML"
                >text</a>
             """,
@@ -51,7 +70,7 @@ a_css = (
                hx-get="/"
                hx-swap="innerHTML show:body:top"
                hx-target="#maincontent"
-               hx-push-url
+               hx-push-url="true"
                >text</a>
             """,
             id="hx-disable",
@@ -65,7 +84,7 @@ a_css = (
                hx-get="/"
                hx-swap="innerHTML show:body:top"
                hx-target="#maincontent"
-               hx-push-url
+               hx-push-url="true"
                >text</a>""",
             id="hx-disable-elt",
         ),

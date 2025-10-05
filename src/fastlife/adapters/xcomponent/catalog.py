@@ -9,3 +9,8 @@ catalog = Catalog()
 @catalog.function(name="len")
 def length(iterable: Any) -> int:
     return len(iterable)
+
+
+@catalog.function
+def isbool(i: Any) -> bool:
+    return isinstance(i, bool)
