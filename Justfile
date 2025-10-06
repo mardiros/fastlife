@@ -11,10 +11,10 @@ install:
     uv sync --group dev
 
 update:
-    uv sync --group dev
+    uv sync --all-groups
 
 upgrade:
-    uv sync --group dev --upgrade
+    uv sync --all-groups --upgrade
 
 
 doc:
