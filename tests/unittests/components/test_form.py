@@ -62,6 +62,18 @@ button_css = (
             name="action" type="submit" value="submit" class="css">Go</button>""",
             id="button-hx-params",
         ),
+        pytest.param(
+            """<Button class="css" hx-push-url>Go</Button>""",
+            """<button hx-push-url="true" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-push-url",
+        ),
+        pytest.param(
+            """<Button class="css" hx-push-url="/retry">Go</Button>""",
+            """<button hx-push-url="/retry" name="action" type="submit"
+            value="submit" class="css">Go</button>""",
+            id="button-hx-push-url custom",
+        ),
     ],
 )
 def test_Button(soup_rendered: PageElement, soup_expected: PageElement):

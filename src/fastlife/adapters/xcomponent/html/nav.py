@@ -17,7 +17,7 @@ def A(
     hx_target: str = "#maincontent",
     hx_select: str | None = None,
     hx_swap: str = "innerHTML show:body:top",
-    hx_push_url: bool = True,
+    hx_push_url: bool | str = True,
     hx_get: str | None = None,
     hx_disable: bool | None = None,
     hx_disabled_elt: str | None = None,
@@ -39,7 +39,6 @@ def A(
     :param hx_push_url: Replace the browser URL with the link.
     :param hx_get: Override the target link only for htmx request for component
         rendering. href will be used if None.
-    :param disable_htmx: Do not add any `hx-*` attribute to the link.
     """
 
     return """
@@ -51,7 +50,12 @@ def A(
             hx-get={hx_get or href}
             hx-target={hx_target}
             hx-swap={hx_swap}
-            hx-push-url={hx_push_url}
+            hx-push-url={
+                if isbool(hx_push_url) {
+                    if hx_push_url { "true" } else { false }
+                }
+                else { hx_push_url }
+            }
             hx-select={hx_select}
             class={class_ or globals.A_CLASS}
         >
