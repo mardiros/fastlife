@@ -1,3 +1,6 @@
+## 0.28.5  - Released on 2025-10-06
+* Fix A hx-push-url fox xcomponent
+
 ## 0.28.4  - Released on 2025-09-20
 * Introduce new template engine xcomponent that will replace jinjax.
 * At the moment, the template engine has to be installed as an extra
