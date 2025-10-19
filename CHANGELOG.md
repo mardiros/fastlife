@@ -1,3 +1,7 @@
+## 0.28.6  - Released on 2025-10-19
+* Update xcomponent.
+* Fix links in doc.
+
 ## 0.28.5  - Released on 2025-10-06
 * Fix A hx-push-url fox xcomponent
 
