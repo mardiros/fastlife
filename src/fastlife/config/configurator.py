@@ -481,7 +481,7 @@ class GenericConfigurator(Generic[TRegistry]):
         * `request` is the {class}`current request <fastlife.request.request.Request>`
         * `authenticated_user` is used to access to the authenticated user if the
             security policy has been installed.
-        * `csrf_token` is used to build for {jinjax:component}`CsrfToken`.
+        * `csrf_token` is used to build {class}`fastlife.domain.model.csrf.CsrfToken`.
         * `gettext`, `ngettext`, `dgettext`, `dngettext`, `pgettext`, `dpgettext`,
         `npgettext`, `dnpgettext` methods are installed for i18n purpose.
         """
