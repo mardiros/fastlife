@@ -1,3 +1,6 @@
+## 0.28.7  - Released on 2025-10-19
+* Fix optional template engine.
+
 ## 0.28.6  - Released on 2025-10-19
 * Update xcomponent.
 * Fix links in doc.
