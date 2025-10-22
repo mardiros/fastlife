@@ -184,7 +184,7 @@ class GenericConfigurator(Generic[TRegistry]):
                     f"fastlife.adapters.{optional_adapter}",
                     ignore="fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
                 )
-            except ConfigurationError:
+            except (ModuleNotFoundError, ConfigurationError):
                 pass
 
         app = FastAPI(
