@@ -1,3 +1,6 @@
+## 0.28.8  - Released on 2025-10-22
+* Fix optional template engine bis.
+
 ## 0.28.7  - Released on 2025-10-19
 * Fix optional template engine.
 

@@ -335,7 +335,7 @@ wheels = [
 
 [[package]]
 name = "fastlifeweb"
-version = "0.28.7"
+version = "0.28.8"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
