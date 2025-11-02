@@ -27,6 +27,7 @@ from .sequence_builder import SequenceBuilder
 from .set_builder import SetBuilder
 from .simpletype_builder import SimpleTypeBuilder
 from .union_builder import UnionBuilder
+from .uuid_builder import UuidBuilder
 
 
 class OptionalFatalError(XTemplate):
@@ -67,6 +68,7 @@ class WidgetFactory:
             EnumBuilder(self),
             EmailStrBuilder(self),
             SecretStrBuilder(self),
+            UuidBuilder(self),
             # we keep simple types, str, int at the end
             SimpleTypeBuilder(self),
         ]
