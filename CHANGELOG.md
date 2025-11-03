@@ -1,3 +1,9 @@
+## 0.29.0  - Released on 2025-11-03
+* Change behavior on how UUID are rendered in pydantic form.
+  By default, they becomes hidden fields.
+* Update the doc for xcomponent usage, depracating jinjax that
+  is not up to date and has changed is attribute syntax again.
+
 ## 0.28.8  - Released on 2025-10-22
 * Fix optional template engine bis.
 
