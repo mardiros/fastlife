@@ -51,7 +51,7 @@ class FormModel(Generic[T]):
 
     @property
     def form_data(self) -> Mapping[str, Any]:
-        return {self.prefix: self.model.model_dump()}
+        return {self.prefix: self.model.model_dump(warnings="none")}
 
     @classmethod
     def from_payload(

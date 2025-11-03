@@ -415,7 +415,7 @@ requires-dist = [
     { name = "markupsafe", specifier = ">=2.1.3,<3" },
     { name = "multidict", specifier = ">=6.0.5,<7" },
     { name = "myst-parser", marker = "extra == 'docs'", specifier = ">=4.0.0,<5" },
-    { name = "pydantic", specifier = ">=2.5.3,<3" },
+    { name = "pydantic", specifier = ">=2.7.0,<3" },
     { name = "pydantic-settings", specifier = ">=2.0.3,<3" },
     { name = "python-multipart", specifier = ">=0.0.13,<1" },
     { name = "sphinx", marker = "extra == 'docs'", specifier = ">=7.0.1,<8" },
