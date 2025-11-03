@@ -1,3 +1,6 @@
+## 0.29.1  - Released on 2025-11-03
+* Don't emit UserWarning while building pydantic form data at editing.
+
 ## 0.29.0  - Released on 2025-11-03
 * Change behavior on how UUID are rendered in pydantic form.
   By default, they becomes hidden fields.
