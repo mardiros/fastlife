@@ -57,5 +57,5 @@ Under the wood, it's a FastAPI application made for writing API.
 The package is available on pypi with the name fastlifeweb.
 
 ```bash
-pip install fastlifeweb[xcomponent]
+pip install "fastlifeweb[xcomponent]"
 ```
