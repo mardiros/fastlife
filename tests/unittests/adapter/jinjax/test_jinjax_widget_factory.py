@@ -1,8 +1,10 @@
 from collections.abc import Callable, Sequence
 from enum import Enum, IntEnum
 from typing import Annotated, Any, Literal
+from uuid import UUID
 
 import bs4
+from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, SecretStr
 
 from fastlife.adapters.jinjax.renderer import JinjaxRenderer
@@ -45,6 +47,7 @@ class DummyOptional(BaseModel):
 
 
 class DummyModel(BaseModel):
+    identifier: UUID = Field(default=uuidgen(1))
     category: Literal["dummy"] = Field()
     name: str = Field()
     description: Annotated[str, CustomWidget(MyWidget)] = Field(min_length=2)
@@ -110,6 +113,16 @@ def test_render_template(
     )
     result = renderer.render_template(form)
     html = soup(result)
+
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-identifier-tkt",
+            "name": "payload.identifier",
+            "type": "hidden",
+            "value": str(uuidgen(1)),
+        },
+    )
 
     assert html.find(
         "input",
