@@ -53,6 +53,11 @@ fastapi dev hello_world.py
 
 ## hello world app with a template
 
+```{important}
+This documentation use the old/deprecated template engine JinjaX, and has to be rewritten.
+```
+
+
 ```{literalinclude} examples/hello_world_with_template.py
 
 ```
