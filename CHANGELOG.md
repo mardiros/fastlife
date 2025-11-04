@@ -1,3 +1,6 @@
+## 0.29.2  - Released on 2025-11-04
+* Fix enum serialization for pydantic form using xcomponent.
+
 ## 0.29.1  - Released on 2025-11-03
 * Don't emit UserWarning while building pydantic form data at editing.
 
