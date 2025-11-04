@@ -31,7 +31,7 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
         removable: bool,
     ) -> Widget[Enum]:
         """Build the widget."""
-        options = [(item.name, item.value) for item in field_type]  # type: ignore
+        options = [(str(item.value), item.value) for item in field_type]  # type: ignore
         return DropDownWidget(
             name=field_name,
             options=options,  # type: ignore

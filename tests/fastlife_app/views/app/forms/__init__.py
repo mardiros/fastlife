@@ -6,13 +6,28 @@ from pydantic import BaseModel
 from fastlife import view_config
 from fastlife.adapters.fastapi.form_data import MappingFormData
 from fastlife.adapters.fastapi.request import Request
+from fastlife.adapters.xcomponent.catalog import catalog
 from fastlife.domain.model.form import FormModel
-from fastlife.domain.model.template import JinjaXTemplate
+from fastlife.domain.model.template import XTemplate
 from fastlife.shared_utils.resolver import resolve
 
 
-class TestForm(JinjaXTemplate):
-    template = "<TestForm :model='model' />"
+@catalog.component
+def TestForm(model: BaseModel) -> str:
+    return """
+    <Layout>
+      <div class="max-w-(--breakpoint-lg) mx-auto px-5 bg-white min-h-sceen">
+        <Form method="post">
+          { globals.pydantic_form(model) }
+          <Button>Submit</Button>
+        </Form>
+      </div>
+    </Layout>
+    """
+
+
+class TestFormPage(XTemplate):
+    template = "<TestForm model={model} />"
     model: FormModel[Any]
 
 
@@ -21,7 +36,7 @@ async def testform(
     request: Request,
     type: Annotated[str, Path],
     data: MappingFormData,
-) -> TestForm | Response:
+) -> TestFormPage | Response:
     cls = resolve(f"tests.fastlife_app.views.app.forms.{type}:Form")
     if request.method == "POST":
         model = FormModel[BaseModel].from_payload(
@@ -33,4 +48,4 @@ async def testform(
     model = FormModel[Any].default(
         request.registry.settings.form_data_model_prefix, cls
     )
-    return TestForm(model=model)
+    return TestFormPage(model=model)

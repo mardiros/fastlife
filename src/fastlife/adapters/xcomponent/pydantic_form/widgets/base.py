@@ -1,7 +1,7 @@
 """Widget base class."""
 
+import json
 import secrets
-from collections.abc import Mapping
 from typing import Any, Generic, Self, TypeVar
 
 from markupsafe import Markup
@@ -129,12 +129,19 @@ class TypeWrapper:
         return f"{name}-{typ}-{self.token}"
 
     @property
-    def params(self) -> Mapping[str, str]:
+    def params(self) -> str:
         """Params for the widget to render."""
-        return {"name": self.name, "token": self.token, "title": self.title}
+        return json.dumps(
+            {
+                "name": self.name,
+                "token": self.token,
+                "title": self.title,
+                "format": "xcomponent",
+            }
+        )
 
     @property
     def url(self) -> str:
         """Url to fetch the widget."""
-        ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}?format=xcomponent"
+        ret = f"{self.route_prefix}/pydantic-form/widgets/{self.fullname}"
         return ret
