@@ -42,6 +42,7 @@ async def renderer(
     globs = await conf._build_renderer_globals(dummy_request)  # type: ignore
     ret = x_renderer(dummy_request)
     ret.globals.update(globs)
+    conf.include("fastlife.adapters.xcomponent")
     return ret
 
 

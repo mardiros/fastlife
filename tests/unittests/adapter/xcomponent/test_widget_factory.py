@@ -27,8 +27,8 @@ class MyWidget(Widget[str]):
 
 
 class Flavor(Enum):
-    vanilla = "Vanilla"
-    chocolate = "Chocolate"
+    VANILLA = "Vanilla"
+    CHOCOLATE = "Chocolate"
 
 
 class Score(IntEnum):
@@ -119,7 +119,6 @@ def test_render_template(
     )
     result = renderer.render_template(form)
     html = soup(result)
-
     assert html.find(
         "input",
         attrs={
@@ -179,14 +178,14 @@ def test_render_template(
 
     flavors = html.find("select", attrs={"id": "payload-flavor-tkt"})
     assert isinstance(flavors, bs4.Tag)
-    vanilla = flavors.find("option", attrs={"value": "vanilla"})
+    vanilla = flavors.find("option", attrs={"value": "Vanilla"})
     assert vanilla
     assert vanilla.text.strip() == "Vanilla"
-    assert flavors.find("option", attrs={"value": "chocolate"})
+    assert flavors.find("option", attrs={"value": "Chocolate"})
 
     scores = html.find("select", attrs={"id": "payload-score-tkt"})
     assert isinstance(scores, bs4.Tag)
-    score_option = scores.find("option", attrs={"value": "deux"})
+    score_option = scores.find("option", attrs={"value": "2"})
     assert score_option
     assert score_option.text.strip() == "2"
 
@@ -382,10 +381,10 @@ def test_render_set(
     assert html.find(
         "input",
         attrs={
-            "id": "payload-flavors-vanilla-tkt",
+            "id": "payload-flavors-VANILLA-tkt",
             "type": "checkbox",
             "name": "payload.flavors[]",
-            "value": "vanilla",
+            "value": "VANILLA",
         },
     )
 
@@ -407,7 +406,7 @@ def test_render_set_checked(
         model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
             "payload",
             MultiSet,
-            {"payload": {"flavors": ["vanilla"], "foobarz": ["foo"]}},
+            {"payload": {"flavors": ["VANILLA"], "foobarz": ["foo"]}},
         ),
         token="tkt",
     )
@@ -418,14 +417,13 @@ def test_render_set_checked(
     )
 
     result = renderer.render_template(form)
-
     html = soup(result)
     assert html.find(
         "input",
         attrs={
-            "id": "payload-flavors-vanilla-tkt",
+            "id": "payload-flavors-VANILLA-tkt",
             "name": "payload.flavors[]",
-            "value": "vanilla",
+            "value": "VANILLA",
             "type": "checkbox",
             "checked": True,
         },
