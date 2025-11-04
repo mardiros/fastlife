@@ -26,7 +26,7 @@ class UnionWidget(Widget[TWidget]):
             <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
             <OptionalErrorText text={error} />
           </Summary>
-          <div hx-sync="this" id="{{id}}-child">
+          <div hx-sync="this" id={"id" + child}>
             {
               if child {
                 child

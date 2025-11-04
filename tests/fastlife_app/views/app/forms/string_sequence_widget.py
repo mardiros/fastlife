@@ -3,8 +3,8 @@ from typing import Annotated, Any
 
 from pydantic import BaseModel, Field, field_validator
 
-from fastlife.adapters.jinjax.widgets.base import CustomWidget
-from fastlife.adapters.jinjax.widgets.text import TextareaWidget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.text import TextareaWidget
 
 
 class Form(BaseModel):

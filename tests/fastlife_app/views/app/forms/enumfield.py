@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 
 
 class Gender(enum.Enum):
-    male = "male"
-    female = "female"
+    MALE = "male"
+    FEMALE = "female"
 
 
 class Form(BaseModel):
