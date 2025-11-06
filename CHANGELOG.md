@@ -1,3 +1,6 @@
+## 0.29.3  - Released on 2025-11-06
+* Add aria-label to A XComponent tag.
+
 ## 0.29.2  - Released on 2025-11-04
 * Fix enum serialization for pydantic form using xcomponent.
 
