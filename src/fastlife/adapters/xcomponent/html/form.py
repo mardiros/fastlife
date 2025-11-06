@@ -104,8 +104,8 @@ def Input(
         name={name}
         value={value}
         id={id}
-        aria-label={ aria_label }
-        placeholder={ placeholder }
+        aria-label={aria_label}
+        placeholder={placeholder}
         inputmode={inputmode}
         autocomplete={autocomplete}
         class={class_ or globals.INPUT_CLASS}

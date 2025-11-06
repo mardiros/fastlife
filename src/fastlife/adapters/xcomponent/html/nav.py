@@ -13,6 +13,7 @@ def A(
     children: XNode,
     globals: Mapping[str, str],
     id: str | None = None,
+    aria_label: str | None = None,
     class_: str | None = None,
     hx_target: str = "#maincontent",
     hx_select: str | None = None,
@@ -29,6 +30,7 @@ def A(
 
     :param href: Target link.
     :param id: Unique identifier of the element.
+    :param aria_label: aria-label of the element.
     :param class_: CSS class for the node, defaults to
         :attr:`fastlife.template_globals.Globals.A_CLASS`.
     :param hx_target: Target the element for swapping than the one issuing
@@ -45,6 +47,7 @@ def A(
         <a
             href={href}
             id={id}
+            aria-label={aria_label}
             hx-disable={hx_disable}
             hx-disabled-elt={hx_disabled_elt}
             hx-get={hx_get or href}

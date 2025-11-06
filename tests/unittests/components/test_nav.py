@@ -25,6 +25,25 @@ a_css = (
         ),
         pytest.param(
             """
+            <A href='/'
+               aria-label="edit"
+               class="mine"
+               >text</A>
+            """,
+            """
+            <a aria-label="edit"
+                class="mine"
+                href="/"
+                hx-get="/"
+                hx-push-url="true"
+                hx-swap="innerHTML show:body:top"
+                hx-target="#maincontent"
+                >text</a>
+            """,
+            id="aria-label",
+        ),
+        pytest.param(
+            """
             <A href='/js-disabled'
                hx-get="/load-it"
                hx-push-url="/load-that"
