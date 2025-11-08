@@ -47,6 +47,18 @@ def test_text(element: Element, expected: str):
 
 
 @pytest.mark.parametrize(
+    "html,expected",
+    [
+        ("<p>paragraph</p>", "paragraph"),
+        ("<p> paragraph </p>", " paragraph "),
+        ("<textarea>\tparagraph\n</textarea>", "\tparagraph\n"),
+    ],
+)
+def test_raw_text(element: Element, expected: str):
+    assert element.raw_text == expected
+
+
+@pytest.mark.parametrize(
     "html",
     [
         "<div><h1>I am the one</h1></div>",
