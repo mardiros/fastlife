@@ -44,6 +44,6 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
                 else None
             ),
             token=self.factory.token,
-            value=str(value),
+            value=value.value if value else "",
             error=form_errors.get(field_name),
         )
