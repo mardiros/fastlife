@@ -27,10 +27,11 @@ class WebForm:
         self._formdata: MultiDict[str] = MultiDict()
         inputs = self._form.by_node_name("input")
         for input in inputs:
-            self._formfields[input.attrs["name"]] = input
+            fieldname = input.attrs["name"]
+            self._formfields[fieldname] = input
             if input.attrs.get("type") == "checkbox" and "checked" not in input.attrs:
                 continue
-            self._formdata.add(input.attrs["name"], input.attrs.get("value", ""))
+            self._formdata.add(fieldname, input.attrs.get("value", ""))
 
         selects = self._form.by_node_name("select")
         for select in selects:
@@ -55,7 +56,11 @@ class WebForm:
                             )
                             break
 
-        # field textearea...
+        textareas = self._form.by_node_name("textarea")
+        for textarea in textareas:
+            fieldname = textarea.attrs["name"]
+            self._formfields[fieldname] = textarea
+            self._formdata.add(fieldname, textarea.raw_text)
 
     def set(self, fieldname: str, value: str) -> Any:
         """

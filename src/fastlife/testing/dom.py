@@ -37,9 +37,17 @@ class Element:
         Return the text of the element, with text of childs element.
 
         Note that the text is stripped for convenience but inner text may contains
-        many spaces not manipulated here.
+        many spaces not manipulated here. To get the text without modification, use
+        the {meth}`raw_text <fastlife.testing.dom.Element.raw_text>` property instead.
         """
         return self._tag.text.strip()
+
+    @property
+    def raw_text(self) -> str:
+        """
+        Return the text of the element, with text of childs element.
+        """
+        return self._tag.text
 
     @property
     def h1(self) -> "Element":

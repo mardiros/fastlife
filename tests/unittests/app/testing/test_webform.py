@@ -31,6 +31,7 @@ from fastlife.testing.testclient import WebForm
                     <option>javascript</option>
                     <option>ruby</option>
                 </select>
+                <textarea name="notes">\nbla bla\n</textarea>
                 <input type="hidden" name="csrf" value="token">
             </form>
             """,
@@ -46,6 +47,7 @@ def test_default_value(webform: WebForm):
         "color": "red",
         "size": "s",
         "tempo": "piano",
+        "notes": "\nbla bla\n",
     }
 
 
