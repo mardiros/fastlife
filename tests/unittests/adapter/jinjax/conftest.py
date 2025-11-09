@@ -2,6 +2,7 @@ from pathlib import Path
 
 import bs4
 import pytest
+from fastapi import FastAPI
 from fastapi import Request as FastApiRequest
 
 from fastlife import Configurator, GenericRequest, Settings
@@ -26,8 +27,13 @@ def conf(settings: Settings) -> Configurator:
     return Configurator(settings)
 
 
+@pytest.fixture
+def app(conf: Configurator) -> FastAPI:
+    return conf.build_asgi_app()
+
+
 @pytest.fixture()
-def dummy_request(dummy_registry: MyRegistry) -> Request:
+def dummy_request(dummy_registry: MyRegistry, app: FastAPI) -> Request:
     scope = {
         "type": "http",
         "headers": [("user-agent", "Mozilla/5.0"), ("accept", "text/html")],
@@ -35,6 +41,7 @@ def dummy_request(dummy_registry: MyRegistry) -> Request:
         "scheme": "http",
         "server": ("testserver", 80),
         "path": "/",
+        "app": app,
     }
     req = Request(dummy_registry, FastApiRequest(scope))
     req.csrf_token.value = "CsRfT"

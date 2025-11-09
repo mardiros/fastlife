@@ -6,8 +6,10 @@ from typing import Any, cast
 from urllib.parse import urlencode
 
 import pytest
+from fastapi import FastAPI
 from fastapi.requests import Request as FastApiRequest
 
+from fastlife import Configurator
 from fastlife.adapters.fastapi.request import GenericRequest
 from fastlife.adapters.fastapi.routing.router import Router
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
@@ -26,9 +28,30 @@ def python_path(root_dir: Path) -> None:
 
 
 @pytest.fixture()
+def settings() -> MySettings:
+    return MySettings(
+        template_search_path="fastlife:components,tests.fastlife_app:templates",
+        session_secret_key="labamba",
+        domain_name="testserver.local",
+        session_cookie_domain="testserver.local",
+    )
+
+
+@pytest.fixture
+def conf(settings: MySettings) -> Configurator:
+    return Configurator(settings)
+
+
+@pytest.fixture
+def app(conf: Configurator) -> FastAPI:
+    return conf.build_asgi_app()
+
+
+@pytest.fixture()
 def dummy_request_param(
     dummy_registry: MyRegistry,
     params: Mapping[str, Any],
+    app: FastAPI,
 ) -> GenericRequest[Any, Any, MyRegistry]:
     scope = {
         "type": "http",
@@ -38,6 +61,7 @@ def dummy_request_param(
         "scheme": "http",
         "server": ("testserver", 80),
         "path": "/",
+        "app": app,
     }
     req_params: MutableMapping[str, Any] = params.get("request", {}).copy()
     if "querystring" in req_params:
@@ -60,16 +84,6 @@ def dummy_request_param(
     if body:
         req._body = body.encode("utf-8")  # type: ignore
     return req
-
-
-@pytest.fixture()
-def settings() -> MySettings:
-    return MySettings(
-        template_search_path="fastlife:components,tests.fastlife_app:templates",
-        session_secret_key="labamba",
-        domain_name="testserver.local",
-        session_cookie_domain="testserver.local",
-    )
 
 
 @pytest.fixture()

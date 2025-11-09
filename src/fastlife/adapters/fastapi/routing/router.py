@@ -18,5 +18,14 @@ class Router(APIRouter):
     """
 
     def __init__(self, **kwargs: Any) -> None:
+        self._renderer_globals: dict[str, tuple[Any, bool]] = {}
         kwargs["route_class"] = Route
         super().__init__(**kwargs)
+
+    def add_renderer_global(
+        self, name: str, value: Any, *, evaluate: bool = True
+    ) -> None:
+        self._renderer_globals[name] = value, evaluate
+
+    def get_renderer_globals(self) -> dict[str, tuple[Any, bool]]:
+        return self._renderer_globals
