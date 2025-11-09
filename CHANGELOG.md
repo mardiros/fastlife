@@ -1,3 +1,8 @@
+## 0.30.0  - Released on 2025-11-09
+* Add a parameter per_router for [Configurator.add_renderer_global](#fastlife.config.configurator.GenericConfigurator.add_renderer_global)
+* Add support of texteara for the web test client.
+* Fix pydantic form: post enum value of dropdownwidget not key.
+
 ## 0.29.3  - Released on 2025-11-06
 * Add aria-label to A XComponent tag.
 
