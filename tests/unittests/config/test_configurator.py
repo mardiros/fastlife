@@ -129,10 +129,14 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
     async def authenticated_user(request: Any):
         return "anonymous"
 
+    def per_router_var(request: Any):
+        return "splits"
+
     conf.add_renderer_global("foo", "bar")
     conf.add_renderer_global("synchronous_hook", get_synchronous_hook, evaluate=False)
     conf.add_renderer_global("sync_nfo", get_synchronous_info)
     conf.add_renderer_global("authenticated_user", authenticated_user)
+    conf.add_renderer_global("per_router", per_router_var, per_router=True)
 
     rglobals: Any = await conf._build_renderer_globals(  # type: ignore
         dummy_request_param
@@ -153,4 +157,26 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
         "npgettext": lczr.npgettext,
         "pgettext": lczr.pgettext,
         "request": dummy_request_param,
+    }
+
+    dummy_request_param.app.router = conf._current_router  # type: ignore
+    rglobals: Any = await conf._build_renderer_globals(  # type: ignore
+        dummy_request_param
+    )
+    assert rglobals == {
+        "foo": "bar",
+        "synchronous_hook": get_synchronous_hook,
+        "sync_nfo": "synchrounos",
+        "authenticated_user": "anonymous",
+        "dgettext": lczr.dgettext,
+        "dngettext": lczr.dngettext,
+        "dnpgettext": lczr.dnpgettext,
+        "dpgettext": lczr.dpgettext,
+        "_": lczr.gettext,
+        "gettext": lczr.gettext,
+        "ngettext": lczr.ngettext,
+        "npgettext": lczr.npgettext,
+        "pgettext": lczr.pgettext,
+        "request": dummy_request_param,
+        "per_router": "splits",
     }
