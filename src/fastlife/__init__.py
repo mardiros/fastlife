@@ -12,6 +12,7 @@ from .adapters.fastapi.request import (
     get_registry,
     get_request,
 )
+from .adapters.fastapi.websocket import WebSocket
 from .config import (
     Configurator,
     GenericConfigurator,
@@ -20,6 +21,7 @@ from .config import (
     resource,
     resource_view,
     view_config,
+    websocket_view,
 )
 from .domain.model.asgi import ASGIRequest, ASGIResponse
 from .domain.model.form import FormModel
@@ -62,6 +64,7 @@ __all__ = [
     "Settings",
     "configure",
     "view_config",
+    "websocket_view",
     "exception_handler",
     "resource",
     "resource_view",
@@ -85,6 +88,8 @@ __all__ = [
     # Response
     "Response",
     "RedirectResponse",
+    # Websockets
+    "WebSocket",
     # Security
     "AbstractSecurityPolicy",
     "AbstractNoMFASecurityPolicy",
