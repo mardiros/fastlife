@@ -1,3 +1,6 @@
+## 0.31.0  - Released on 2025-11-10
+* Add minimal supports of websocket.
+
 ## 0.30.0  - Released on 2025-11-09
 * Add a parameter per_router for [Configurator.add_renderer_global](#fastlife.config.configurator.GenericConfigurator.add_renderer_global)
 * Add support of texteara for the web test client.
