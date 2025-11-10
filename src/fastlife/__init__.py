@@ -12,7 +12,7 @@ from .adapters.fastapi.request import (
     get_registry,
     get_request,
 )
-from .adapters.fastapi.websocket import WebSocket
+from .adapters.fastapi.websocket import GenericWebSocket, WebSocket
 from .config import (
     Configurator,
     GenericConfigurator,
@@ -89,6 +89,7 @@ __all__ = [
     "Response",
     "RedirectResponse",
     # Websockets
+    "GenericWebSocket",
     "WebSocket",
     # Security
     "AbstractSecurityPolicy",
