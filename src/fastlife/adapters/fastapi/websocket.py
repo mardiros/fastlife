@@ -5,12 +5,11 @@ from fastapi import Depends
 from fastapi.websockets import WebSocket as BaseWebSocket
 from starlette.responses import Response
 
-from fastlife.service.registry import GenericRegistry, TSettings
-from fastlife.settings import Settings
+from fastlife.service.registry import DefaultRegistry, TRegistry
 
 
-class MyWebSocket(Generic[TSettings]):
-    registry: GenericRegistry[TSettings]
+class MyWebSocket(Generic[TRegistry]):
+    registry: TRegistry
 
     def __init__(self, socket: BaseWebSocket) -> None:
         self._sock = socket
@@ -61,7 +60,7 @@ def get_websocket(socket: BaseWebSocket) -> MyWebSocket[Any]:
     return MyWebSocket(socket)
 
 
-WebSocket = Annotated[MyWebSocket[TSettings], Depends(get_websocket)]
-GenericWebSocket = WebSocket[Settings]
+WebSocket = Annotated[MyWebSocket[TRegistry], Depends(get_websocket)]
+GenericWebSocket = WebSocket[DefaultRegistry]
 
 __all__ = ["WebSocket", "GenericWebSocket"]
