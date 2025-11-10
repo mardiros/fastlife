@@ -1,3 +1,6 @@
+## 0.31.1  - Released on 2025-11-10
+* Wrap the WebSocket and add a registry property accessible from the websocket object, as the request.
+
 ## 0.31.0  - Released on 2025-11-10
 * Add minimal supports of websocket.
 
