@@ -65,7 +65,7 @@ class ConfigurationError(Exception):
     """
 
 
-def rebuild_router(router: Router) -> Router:
+def rebuild_router(router: Router, extra_dependencies: Sequence[DependsType]) -> Router:
     """
     Fix the router.
 
@@ -79,15 +79,14 @@ def rebuild_router(router: Router) -> Router:
     :param router: the router to rebuild
     :return: a new router with fixed routes.
     """
-    if not router.dependencies:
-        return router
     _router = Router(prefix=router.prefix)
-    _router.dependencies = router.dependencies
+    _router.dependencies = [*extra_dependencies, *router.dependencies]
     route: Route
     for route in router.routes:  # type: ignore
         dependencies = [
             dep for dep in route.dependencies if dep not in _router.dependencies
         ]
+
         _router.add_api_route(
             path=route.path,
             endpoint=route.endpoint,
@@ -145,6 +144,7 @@ class GenericConfigurator(Generic[TRegistry]):
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
+        self._ws_routers: dict[str, Router] = defaultdict(Router)
         self._security_policies: dict[
             str, type[AbstractSecurityPolicy[Any, Any, TRegistry]]
         ] = {}
@@ -159,6 +159,10 @@ class GenericConfigurator(Generic[TRegistry]):
     @property
     def _current_router(self) -> Router:
         return self._routers[self._route_prefix]
+
+    @property
+    def _current_ws_router(self) -> Router:
+        return self._ws_routers[self._route_prefix]
 
     @property
     def all_registered_permissions(self) -> Sequence[str]:
@@ -192,7 +196,6 @@ class GenericConfigurator(Generic[TRegistry]):
             version=self.api_version,
             description=self.api_description,
             summary=self.api_summary,
-            dependencies=[Depends(check_csrf())],
             docs_url=self.api_swagger_ui_url,
             redoc_url=self.api_redoc_url,
             lifespan=self.registry.lifespan,
@@ -209,7 +212,12 @@ class GenericConfigurator(Generic[TRegistry]):
             app.add_exception_handler(status_code_or_exc, exception_handler)
 
         for prefix, router in self._routers.items():
-            app.include_router(rebuild_router(router), prefix=prefix)
+            app.include_router(
+                rebuild_router(router, [Depends(check_csrf())]), prefix=prefix
+            )
+
+        for prefix, router in self._ws_routers.items():
+            app.include_router(router, prefix=prefix)
 
         for route_path, directory, name in self.mounts:
             app.mount(route_path, StaticFiles(directory=directory), name=name)
@@ -459,6 +467,17 @@ class GenericConfigurator(Generic[TRegistry]):
             # generate_unique_id_function=generate_unique_id_function,
         )
         return self
+
+    def add_websocket_route(
+        self,
+        name: str,
+        path: str,
+        endpoint: Callable[..., Any],
+    ) -> None:
+        """
+        Register a websocket route.
+        """
+        self._current_ws_router.add_api_websocket_route(path, endpoint, name)
 
     def add_renderer_global(
         self,

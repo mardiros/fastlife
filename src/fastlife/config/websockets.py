@@ -26,28 +26,23 @@ import venusian
 from .configurator import VENUSIAN_CATEGORY, Configurator
 
 
-def view_config(
+def websocket_view(
     name: str,
     path: str,
-    *,
-    permission: str | None = None,
-    status_code: int | None = None,
-    methods: list[str] | None = None,
 ) -> Callable[..., Any]:
     """
-    A decorator function to register a view in the
+    A decorator function to register a websocket view in the
     {class}`Configurator <fastlife.config.configurator.GenericConfigurator>`
     while scaning a module using {func}`include
     <fastlife.config.configurator.GenericConfigurator.include>`.
+
+    Note that the current implementation does not support permission check using
+    the security policy.
 
     :param name: name of the route, used to build route from the helper
         {meth}`fastlife.request.request.Request.url_for` in order to create links.
     :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
         parameters.
-    :param permission: a permission to validate by the
-        {class}`Security Policy <fastlife.service.security_policy.AbstractSecurityPolicy>`.
-    :param status_code: customize response status code.
-    :param methods: restrict route to a list of http methods.
 
     :return: the configuration callback.
     """
@@ -62,13 +57,10 @@ def view_config(
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore
             config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
-            config.add_route(
+            config.add_websocket_route(
                 name=view_name,
                 path=path,
                 endpoint=ob,
-                permission=permission,
-                status_code=status_code,
-                methods=methods,
             )
 
         venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
