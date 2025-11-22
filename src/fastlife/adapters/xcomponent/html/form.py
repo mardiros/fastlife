@@ -417,6 +417,7 @@ def Textarea(
     class_: str | None = None,
     aria_label: str | None = None,
     placeholder: str | None = None,
+    readonly: bool = False,
 ) -> str:
     """
     html ``<textarea>`` node.
@@ -436,6 +437,7 @@ def Textarea(
         id={id}
         aria-label={aria_label}
         placeholder={placeholder}
+        readonly={readonly}
         class={class_ or globals.INPUT_CLASS}>
         {children}
     </textarea>
