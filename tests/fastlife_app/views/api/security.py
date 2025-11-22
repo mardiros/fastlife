@@ -9,7 +9,6 @@ from fastlife import (
     Allowed,
     Anonymous,
     Authenticated,
-    Configurator,
     Denied,
     Forbidden,
     GenericRequest,
@@ -18,7 +17,6 @@ from fastlife import (
     Request,
     Unauthenticated,
     Unauthorized,
-    configure,
     exception_handler,
     get_request,
 )
@@ -86,8 +84,3 @@ class OAuth2SecurityPolicy(AbstractNoMFASecurityPolicy[MyRegistry, TokenInfo]):
 
     async def forget(self) -> None:
         """Destroy the request session."""
-
-
-@configure
-def includeme(config: Configurator):
-    config.set_security_policy(OAuth2SecurityPolicy)

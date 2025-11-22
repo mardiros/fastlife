@@ -65,7 +65,8 @@ class GenericRequest(ASGIRequest, Generic[TRegistry, TIdentity, TClaimedIdentity
         if self.security_policy is None:
             raise RuntimeError(
                 f"Request {self.url.path} require a security policy, "
-                "explicit fastlife.service.security_policy.InsecurePolicy is required."
+                "at least explicit fastlife.service.security_policy.InsecurePolicy "
+                "is required."
             )
 
         return await self.security_policy.has_permission(permission)
