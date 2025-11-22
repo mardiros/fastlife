@@ -1,3 +1,9 @@
+## 0.32.0  - Released on 2025-11-22
+* API-Break, now the api views have their own router and requires its own security policy.
+  it has do be set using the [Configurator.set_api_security_policy](#fastlife.config.configurator.GenericConfigurator.set_api_security_policy).
+  The api route share the same router with the websocket and does not have any CSRF mechanism.
+* The Textarea and Input expose a readonly boolean attribute.
+
 ## 0.31.1  - Released on 2025-11-10
 * Wrap the WebSocket and add a registry property accessible from the websocket object, as the request.
 
