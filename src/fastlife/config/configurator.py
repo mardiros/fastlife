@@ -144,7 +144,7 @@ class GenericConfigurator(Generic[TRegistry]):
 
         self._route_prefix: str = ""
         self._routers: dict[str, Router] = defaultdict(Router)
-        self._ws_routers: dict[str, Router] = defaultdict(Router)
+        self._api_routers: dict[str, Router] = defaultdict(Router)
         self._security_policies: dict[
             str, type[AbstractSecurityPolicy[Any, Any, TRegistry]]
         ] = {}
@@ -161,8 +161,8 @@ class GenericConfigurator(Generic[TRegistry]):
         return self._routers[self._route_prefix]
 
     @property
-    def _current_ws_router(self) -> Router:
-        return self._ws_routers[self._route_prefix]
+    def _current_api_router(self) -> Router:
+        return self._api_routers[self._route_prefix]
 
     @property
     def all_registered_permissions(self) -> Sequence[str]:
@@ -216,7 +216,7 @@ class GenericConfigurator(Generic[TRegistry]):
                 rebuild_router(router, [Depends(check_csrf())]), prefix=prefix
             )
 
-        for prefix, router in self._ws_routers.items():
+        for prefix, router in self._api_routers.items():
             app.include_router(router, prefix=prefix)
 
         for route_path, directory, name in self.mounts:
@@ -341,6 +341,27 @@ class GenericConfigurator(Generic[TRegistry]):
         self.middlewares.append((middleware_class, options))
         return self
 
+    def set_api_security_policy(
+        self, security_policy: "type[AbstractSecurityPolicy[TRegistry, Any, Any]]"
+    ) -> Self:
+        """
+        Set a security policy for the application.
+
+        ```{important}
+        The security policy is **per route_prefix**.
+        It means that if the application is splitted via multiple
+        route_prefix using the {meth}`Configurator.include`, they
+        all have a distinct security policy. A secutity policy has
+        to be install by all of those include call.
+
+        :param security_policy: The security policy that will applied for the app
+            portion behind the route prefix.
+        ```
+        """
+        self._security_policies[self._route_prefix] = security_policy
+        self._current_api_router.dependencies.append(Depends(security_policy))
+        return self
+
     def set_security_policy(
         self, security_policy: "type[AbstractSecurityPolicy[TRegistry, Any, Any]]"
     ) -> Self:
@@ -440,7 +461,7 @@ class GenericConfigurator(Generic[TRegistry]):
             self._registered_permissions.add(permission)
             dependencies.append(Depends(check_permission(permission)))
 
-        self._current_router.add_api_route(
+        self._current_api_router.add_api_route(
             path,
             endpoint,
             response_model=response_model,
@@ -477,7 +498,7 @@ class GenericConfigurator(Generic[TRegistry]):
         """
         Register a websocket route.
         """
-        self._current_ws_router.add_api_websocket_route(path, endpoint, name)
+        self._current_api_router.add_api_websocket_route(path, endpoint, name)
 
     def add_renderer_global(
         self,

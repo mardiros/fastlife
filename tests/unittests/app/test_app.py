@@ -156,7 +156,7 @@ def test_permission_on_view_without_a_security_policy(client: WebTestClient):
         client.get("/permission-on-view")
     assert str(ctx.value) == (
         "Request /permission-on-view require a security policy, "
-        "explicit fastlife.service.security_policy.InsecurePolicy is required"
+        "at least explicit fastlife.service.security_policy.InsecurePolicy is required"
     )
 
 
@@ -165,7 +165,7 @@ def test_request_has_permission_without_a_security_policy(client: WebTestClient)
         client.get("/request-has-permission")
     assert str(ctx.value) == (
         "Request /request-has-permission require a security policy, "
-        "explicit fastlife.service.security_policy.InsecurePolicy is required."
+        "at least explicit fastlife.service.security_policy.InsecurePolicy is required."
     )
 
 
