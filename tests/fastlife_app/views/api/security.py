@@ -25,7 +25,7 @@ from tests.fastlife_app.domain.model import TokenInfo
 
 
 @exception_handler(Unauthorized)
-def unauthorized_view(request: Request, exc: Unauthorized):
+async def unauthorized_view(request: Request, exc: Unauthorized):
     raise HTTPException(
         status_code=exc.status_code,
         detail=exc.detail,
