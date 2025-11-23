@@ -1,3 +1,7 @@
+## 0.32.1  - Released on 2025-11-23
+* Remove the static instance of the registry, multiple app can run in the same process.
+* Fix the exception_handler request class. Use the request factory.
+
 ## 0.32.0  - Released on 2025-11-22
 * API-Break, now the api views have their own router and requires its own security policy.
   it has do be set using the [Configurator.set_api_security_policy](#fastlife.config.configurator.GenericConfigurator.set_api_security_policy).
