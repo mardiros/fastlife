@@ -18,7 +18,7 @@ from collections.abc import Callable, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Annotated, Any, Generic, Self, TypeVar
+from typing import TYPE_CHECKING, Annotated, Any, Coroutine, Generic, Self, TypeVar
 
 import venusian
 from fastapi import Depends, FastAPI, Response
@@ -610,7 +610,6 @@ class GenericConfigurator(Generic[TRegistry]):
                 )
 
             endpoint = render
-
         self._current_router.add_api_route(
             path,
             endpoint,
@@ -640,7 +639,10 @@ class GenericConfigurator(Generic[TRegistry]):
     def add_exception_handler(
         self,
         status_code_or_exc: int | type[Exception],
-        handler: Callable[..., "Response | InlineTemplate"],
+        handler: Callable[
+            ...,
+            "Response | InlineTemplate | Coroutine[Any, Any, Response | InlineTemplate]",
+        ],
         *,
         status_code: int = 500,
     ) -> Self:
@@ -657,6 +659,9 @@ class GenericConfigurator(Generic[TRegistry]):
             # incomplete request here.
             req = GenericRequest[DefaultRegistry, Any, Any](self.registry, request)
             resp = handler(req, exc)
+            if iscoroutine(resp):
+                resp = await resp
+
             if isinstance(resp, Response):
                 return resp
 
