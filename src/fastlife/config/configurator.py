@@ -27,7 +27,7 @@ from fastapi.params import Depends as DependsType
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
 
-from fastlife.adapters.fastapi.request import GenericRequest, Request
+from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
 from fastlife.adapters.fastapi.routing.router import Router
 from fastlife.config.openapiextra import OpenApiTag
@@ -187,8 +187,8 @@ class GenericConfigurator(Generic[TRegistry]):
                     f"fastlife.adapters.{optional_adapter}",
                     ignore="fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
                 )
-            except (ModuleNotFoundError, ConfigurationError):
-                pass
+            except (ModuleNotFoundError, ConfigurationError):  # coverage: ignore
+                pass  # coverage: ignore
 
         app = FastAPI(
             title=self.api_title,
@@ -656,7 +656,7 @@ class GenericConfigurator(Generic[TRegistry]):
             # class is wrong.
             # Until we store a security policy per rooter, we rebuild an
             # incomplete request here.
-            req = GenericRequest[DefaultRegistry, Any, Any](self.registry, request)
+            req = self.registry.request_factory(request)
             resp = handler(req, exc)
             if iscoroutine(resp):
                 resp = await resp
