@@ -4,13 +4,16 @@ from typing import TYPE_CHECKING, Any, Generic
 
 from fastlife.domain.model.asgi import ASGIRequest
 from fastlife.domain.model.csrf import CSRFToken, create_csrf_token
-from fastlife.domain.model.security_policy import TClaimedIdentity, TIdentity
+from fastlife.domain.model.security_policy import (
+    HasPermission,
+    TClaimedIdentity,
+    TIdentity,
+)
 from fastlife.service.registry import TRegistry
 
 if TYPE_CHECKING:
     from fastlife.service.security_policy import (  # coverage: ignore
         AbstractSecurityPolicy,
-        HasPermission,
     )
 
 
