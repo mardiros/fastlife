@@ -14,11 +14,11 @@ phase.
 import logging
 from asyncio import iscoroutine
 from collections import defaultdict
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Coroutine, Sequence
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import TYPE_CHECKING, Annotated, Any, Coroutine, Generic, Self, TypeVar
+from typing import TYPE_CHECKING, Annotated, Any, Generic, Self, TypeVar
 
 import venusian
 from fastapi import Depends, FastAPI, Response
@@ -128,7 +128,6 @@ class GenericConfigurator(Generic[TRegistry]):
         """
         registry_cls = resolve(settings.registry_class)
         self.registry = registry_cls(settings)
-        Route._registry = self.registry  # type: ignore
 
         self.middlewares: list[tuple[type[AbstractMiddleware], Any]] = []
         self.exception_handlers: list[tuple[int | type[Exception], Any]] = []
