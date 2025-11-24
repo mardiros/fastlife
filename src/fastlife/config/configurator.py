@@ -24,6 +24,7 @@ import venusian
 from fastapi import Depends, FastAPI, Response
 from fastapi import Request as BaseRequest
 from fastapi.params import Depends as DependsType
+from fastapi.routing import APIWebSocketRoute
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
 
@@ -87,6 +88,14 @@ def rebuild_router(router: Router, extra_dependencies: Sequence[DependsType]) ->
             dep for dep in route.dependencies if dep not in _router.dependencies
         ]
 
+        if isinstance(route, APIWebSocketRoute):
+            _router.add_api_websocket_route(
+                name=route.name,
+                path=route.path,
+                endpoint=route.endpoint,
+                dependencies=dependencies,
+            )
+            continue
         _router.add_api_route(
             path=route.path,
             endpoint=route.endpoint,
@@ -216,7 +225,7 @@ class GenericConfigurator(Generic[TRegistry]):
             )
 
         for prefix, router in self._api_routers.items():
-            app.include_router(router, prefix=prefix)
+            app.include_router(rebuild_router(router, []), prefix=prefix)
 
         for route_path, directory, name in self.mounts:
             app.mount(route_path, StaticFiles(directory=directory), name=name)
