@@ -1,3 +1,8 @@
+## 0.32.2  - Released on 2025-11-24
+* Fix security_policy injection for API router.
+  the router must be rebuild to ensure router dependencies exists
+  on all their routes.
+
 ## 0.32.1  - Released on 2025-11-23
 * Remove the static instance of the registry, multiple app can run in the same process.
 * Fix the exception_handler request class. Use the request factory.
