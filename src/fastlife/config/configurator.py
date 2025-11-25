@@ -27,6 +27,7 @@ from fastapi.params import Depends as DependsType
 from fastapi.routing import APIWebSocketRoute
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
+from xcomponent import Catalog, Component, Function
 
 from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
@@ -46,8 +47,6 @@ from fastlife.shared_utils.resolver import (
 )
 
 if TYPE_CHECKING:
-    from xcomponent import Catalog, Component, Function
-
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
     from fastlife.service.request_factory import (
         RequestFactoryBuilder,  # coverage: ignore
@@ -709,16 +708,16 @@ class GenericConfigurator(Generic[TRegistry]):
         )
         return self
 
-    def build_catalog(self) -> "Catalog":
+    def build_catalog(self) -> Catalog:
         """Build the xcomponent catalog."""
         return self._xcomponent_registry.build_catalog()
 
-    def register_xcomponent(self, name: str, component: "Component") -> Self:
+    def register_xcomponent(self, name: str, component: Component) -> Self:
         """Register a component."""
         self._xcomponent_registry.register_xcomponent(name, component)
         return self
 
-    def register_xfunction(self, name: str, func: "Function") -> Self:
+    def register_xfunction(self, name: str, func: Function) -> Self:
         self._xcomponent_registry.register_xfunction(name, func)
         return self
 

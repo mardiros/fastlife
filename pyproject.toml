@@ -24,6 +24,7 @@ dependencies = [
   "pydantic-settings >=2.0.3,<3",
   "python-multipart >=0.0.13,<1",
   "venusian >=3.0.0,<4",
+  "xcomponent >=0.9.0,<1",
 ]
 
 [project.urls]
@@ -35,7 +36,6 @@ Changelog = "https://mardiros.github.io/fastlife/user/changelog.html"
 
 [project.optional-dependencies]
 jinjax = ["jinjax >=0.48,<0.49"]
-xcomponent = ["xcomponent >=0.8.4,<1"]
 testing = ["beautifulsoup4"]
 docs = [
   "furo >=2024.5.6",
@@ -45,7 +45,6 @@ docs = [
   "myst-parser >=4.0.0,<5",
   "sphinx >=7.0.1,<8",
   "sphinx-autodoc2 >=0.5.0,<1",
-  "xcomponent >=0.8.4,<1",
 ]
 
 [dependency-groups]
@@ -68,7 +67,6 @@ dev = [
   "tursu >=0.16.0,<1",
   "types-beautifulsoup4 >=4.12.0.6,<5",
   "uvicorn >=0.34.0,<1.0",
-  "xcomponent >=0.8.4,<1",
 ]
 doc = [
   "furo >=2024.5.6",
@@ -78,7 +76,6 @@ doc = [
   "myst-parser >=4.0.0,<5",
   "sphinx >=7.0.1,<8",
   "sphinx-autodoc2 >=0.5.0,<1",
-  "xcomponent >=0.8.4,<1",
 ]
 
 [tool.uv]
