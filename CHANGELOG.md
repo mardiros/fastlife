@@ -1,3 +1,11 @@
+## 0.33.0  - Released on 2025-11-25
+* Refine the xcomponent api.
+  now component and function must be registered with the decorator @x_component and @x_function.
+* The catalog from fastlife.adapters.xcomponent.catalog has been removed, use the new decorator
+  instead.
+* Remove the extra xcomponent dependency, xcomponent is installed.
+* JinjaX is officially deprecated, still installable
+
 ## 0.32.2  - Released on 2025-11-24
 * Fix security_policy injection for API router.
   the router must be rebuild to ensure router dependencies exists
