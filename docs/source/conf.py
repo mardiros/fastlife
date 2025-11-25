@@ -44,13 +44,9 @@ release = version
 # ones.
 extensions = [
     "icons_wall",
-    "fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
     "myst_parser",
     "autodoc2",
 ]
-
-jinjax_doc_output_dir = "components"
-jinjax_template_search_path = "fastlife:components"
 
 autodoc2_module_all_regexes = [
     r"fastlife\.domain\.model\.asgi",
@@ -116,10 +112,6 @@ html_extra_path = []
 
 # -- Options for HTML output -------------------------------------------------
 
-# Add custom CSS file to the HTML output
-html_css_files = [
-    "jinjax_doc.css",  # Make sure this file exists in the '_static' directory
-]
 
 # -- Hack --------------------------------------------------------------------
 

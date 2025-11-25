@@ -36,9 +36,3 @@ release = version
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    "fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
-]
-
-jinjax_doc_output_dir = "components"
-jinjax_template_search_path = "fastlife_app:templates"
