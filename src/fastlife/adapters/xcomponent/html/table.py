@@ -4,10 +4,10 @@ from collections.abc import Mapping
 
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 
 
-@catalog.component
+@x_component()
 def Table(
     children: XNode,
     globals: Mapping[str, str],
@@ -28,7 +28,7 @@ def Table(
     """
 
 
-@catalog.component
+@x_component()
 def Thead(
     children: XNode,
     globals: Mapping[str, str],
@@ -48,7 +48,7 @@ def Thead(
     """
 
 
-@catalog.component
+@x_component()
 def Tbody(
     children: XNode,
     globals: Mapping[str, str],
@@ -68,7 +68,7 @@ def Tbody(
     """
 
 
-@catalog.component
+@x_component()
 def Tfoot(
     children: XNode,
     globals: Mapping[str, str],
@@ -88,7 +88,7 @@ def Tfoot(
     """
 
 
-@catalog.component
+@x_component()
 def Th(
     children: XNode,
     globals: Mapping[str, str],
@@ -109,7 +109,7 @@ def Th(
     """
 
 
-@catalog.component
+@x_component()
 def Td(
     children: XNode,
     globals: Mapping[str, str],

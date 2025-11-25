@@ -1,9 +1,9 @@
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 
 
-@catalog.component
+@x_component()
 def ErrorText(
     text: str,
     class_: str,
@@ -20,7 +20,7 @@ def ErrorText(
     """
 
 
-@catalog.component
+@x_component()
 def OptionalErrorText(
     text: str | None,
     class_: str | None = None,
@@ -43,7 +43,7 @@ def OptionalErrorText(
     """
 
 
-@catalog.component
+@x_component()
 def FatalError(
     message: str | None,
     class_: str | None = None,
@@ -73,7 +73,7 @@ def FatalError(
     """
 
 
-@catalog.component
+@x_component()
 def Hint(text: str | None) -> str:
     """
     Display a hint message for a field.
@@ -93,7 +93,7 @@ def Hint(text: str | None) -> str:
     """
 
 
-@catalog.component
+@x_component()
 def Widget(
     widget_id: str,
     removable: bool,

@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Literal
 from zipfile import ZipFile
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component, x_function
 
 
 @cache
@@ -34,7 +34,7 @@ def get_from_zip(
     return None
 
 
-@catalog.function
+@x_function()
 def load_icon(
     name: str,
     mode: str,
@@ -71,7 +71,7 @@ def load_icon(
     return icon
 
 
-@catalog.component
+@x_component()
 def Icon(
     name: str,
     mode: Literal["micro", "mini", "outline", "solid"] = "solid",

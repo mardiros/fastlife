@@ -4,10 +4,10 @@ from collections.abc import Mapping
 
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 
 
-@catalog.component
+@x_component()
 def A(
     href: str,
     children: XNode,
@@ -54,7 +54,7 @@ def A(
             hx-target={hx_target}
             hx-swap={hx_swap}
             hx-push-url={
-                if isbool(hx_push_url) {
+                if is_bool(hx_push_url) {
                     if hx_push_url { "true" } else { false }
                 }
                 else { hx_push_url }

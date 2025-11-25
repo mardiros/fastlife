@@ -1,10 +1,10 @@
 from typing import Literal
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 from tests.fastlife_app.models import Person
 
 
-@catalog.component
+@x_component()
 def HelloWorld(
     person: Person,
     method: Literal["get", "post"] = "post",

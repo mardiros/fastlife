@@ -4,10 +4,10 @@ from collections.abc import Mapping
 
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 
 
-@catalog.component
+@x_component()
 def Details(
     children: XNode,
     globals: Mapping[str, str],
@@ -41,7 +41,7 @@ def Details(
     """
 
 
-@catalog.component
+@x_component()
 def Summary(
     children: XNode,
     globals: Mapping[str, str],

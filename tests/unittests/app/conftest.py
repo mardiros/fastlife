@@ -10,6 +10,7 @@ from tests.fastlife_app.service.uow import AbstractUnitOfWork
 async def configurator(settings: MySettings) -> MyConfigurator:
     conf = MyConfigurator(settings=settings)
     conf.include("tests.fastlife_app.config")
+    conf.include("tests.fastlife_app.components")
     conf.include(
         "tests.fastlife_app.views", ignore=[".api", ".app.admin", ".app.insecure"]
     )
