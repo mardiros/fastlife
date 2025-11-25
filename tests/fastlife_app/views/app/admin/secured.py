@@ -6,9 +6,9 @@ from pydantic import Field
 from fastlife import (
     Authenticated,
     FormModel,
-    JinjaXTemplate,
     PendingMFA,
     Request,
+    XTemplate,
     form_model,
     view_config,
 )
@@ -31,10 +31,10 @@ async def authenticated_user(request: Request) -> UserAccount:
 User = Annotated[UserAccount, Depends(authenticated_user)]
 
 
-class Secured(JinjaXTemplate):
+class Secured(XTemplate):
     template = """
     <Layout>
-      <H1>Welcome back {{ authenticated_user.username }}!</H1>
+      <H1>Welcome back { globals.authenticated_user.username }!</H1>
       <A href="/admin/logout">logout</A>
 
       <H2>Say Hello too ?</H2>
@@ -48,13 +48,13 @@ class Secured(JinjaXTemplate):
     person: Person | None = Field(default=None)
 
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = """
     <Layout>
 
-      <H1>Hello {{ person.nick }}!</H1>
+      <H1>Hello {person.nick}!</H1>
 
-      <H2>{{ authenticated_user.username }}, Say Hello too ?</H2>
+      <H2>{globals.authenticated_user.username}, Say Hello too ?</H2>
       <Form  method="post">
         <Input name="payload.nick" label="Name" />
         <Button aria-label="submit">Submit</Button>

@@ -4,9 +4,9 @@ from pydantic import BaseModel, SecretStr
 
 from fastlife import (
     FormModel,
-    JinjaXTemplate,
     RedirectResponse,
     Request,
+    XTemplate,
     form_model,
     view_config,
 )
@@ -18,13 +18,13 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
-class LoginTemplate(JinjaXTemplate):
+class LoginTemplate(XTemplate):
     template = """
     <Layout>
       <H2>Let's authenticate</H2>
       <div class="max-w-(--breakpoint-lg) mx-auto px-5 bg-white min-h-sceen">
         <Form hx-post>
-          {{ pydantic_form(model=model) }}
+          {globals.pydantic_form(model=model)}
           <Button aria-label="login">Login</Button>
         </Form>
       </div>

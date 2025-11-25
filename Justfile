@@ -55,9 +55,23 @@ buildicons:
 
 compiletestlocales:
     uv run pybabel extract \
-        --output tests/fastlife_app/locales/fastlife_test.pot \
+        --keyword dpgettext:2c,3 --keyword dnpgettext:2c,3,4 \
+        --output tests/fastlife_app/locales/messages-py.pot \
         --mapping=tests/fastlife_app/locales/extraction.ini \
         .
+
+    uv run pybabel extract \
+        --keyword dpgettext:2c,3 --keyword dnpgettext:2c,3,4 \
+        --output tests/fastlife_app/locales/messages-xcomponent.pot \
+        --mapping=tests/fastlife_app/locales/extraction_xcomponent.ini \
+        .
+
+    msgcat tests/fastlife_app/locales/messages-py.pot \
+    tests/fastlife_app/locales/messages-xcomponent.pot \
+    -o tests/fastlife_app/locales/fastlife_test.pot
+
+    rm tests/fastlife_app/locales/messages-py.pot
+    rm tests/fastlife_app/locales/messages-xcomponent.pot
 
     uv run pybabel update \
         --domain fastlife_test \
@@ -68,18 +82,6 @@ compiletestlocales:
 
     uv run pybabel compile \
         --domain fastlife_test \
-        --directory tests/fastlife_app/locales
-
-
-    uv run pybabel update \
-        --domain form_error \
-        --input-file tests/fastlife_app/locales/form_error.pot \
-        --output-dir tests/fastlife_app/locales \
-        --previous \
-        tests/fastlife_app
-
-    uv run pybabel compile \
-        --domain form_error \
         --directory tests/fastlife_app/locales
 
 

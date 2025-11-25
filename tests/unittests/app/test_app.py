@@ -169,7 +169,7 @@ def test_request_has_permission_without_a_security_policy(client: WebTestClient)
     )
 
 
-def test_permission_on_view_wit_insecurity_policy(client: WebTestClient):
+def test_permission_on_view_with_insecure_policy(client: WebTestClient):
     resp = client.get("/insecure/permission-on-view")
     assert resp.html.h1.text == "Hello World!"
 
@@ -177,9 +177,3 @@ def test_permission_on_view_wit_insecurity_policy(client: WebTestClient):
 def test_request_has_permission_with_insecurity_policy(client: WebTestClient):
     resp = client.get("/insecure/request-has-permission")
     assert resp.html.h1.text == "Hello None!"
-
-
-def test_inline_renderer(client: WebTestClient):
-    resp = client.get("/inline/hello-world")
-    assert resp.status_code == 200
-    assert resp.html.h1.text == "Hello World!"
