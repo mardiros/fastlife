@@ -7,7 +7,7 @@ from starlette.status import HTTP_303_SEE_OTHER
 
 from fastlife import (
     FormModel,
-    JinjaXTemplate,
+    XTemplate,
     exception_handler,
     form_model,
     view_config,
@@ -21,13 +21,13 @@ class MfaForm(BaseModel):
     code: str
 
 
-class LoginTemplate(JinjaXTemplate):
+class LoginTemplate(XTemplate):
     template = """
     <Layout>
       <H2>second factor</H2>
       <div class="max-w-(--breakpoint-lg) mx-auto px-5 bg-white min-h-sceen">
         <Form hx-post>
-          {{ pydantic_form(model=model) }}
+          {globals.pydantic_form(model=model)}
           <Button aria-label="login">Login</Button>
         </Form>
       </div>

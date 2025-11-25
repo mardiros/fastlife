@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import Field
 
-from fastlife import JinjaXTemplate, Request, view_config
+from fastlife import Request, XTemplate, view_config
 from tests.fastlife_app.models import BaseModel
 
 
@@ -11,8 +11,8 @@ class Person(BaseModel):
     nick: str
 
 
-class HelloWorld(JinjaXTemplate):
-    template = "<HelloWorld :person='person'/>"
+class HelloWorld(XTemplate):
+    template = "<HelloWorld person={person}/>"
     person: Person | None = Field(default=None)
 
 

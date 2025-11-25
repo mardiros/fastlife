@@ -134,11 +134,11 @@ EOF
 
 :::{tip}
 Tailwind CSS can grab class names in python file too.
-All the [basic JinjaX compoments](#jinjax-components) classes of fastlife are
+All the basic X compoments classes of fastlife are
 actually in
-[the Constant](#fastlife.templating.renderer.constants.Constant) class
+[the Constant](#fastlife.template_globals.Globals) class
 that is completly replacable in the setting
-[jinjax_global_catalog_class](#fastlife.settings.Settings.jinjax_global_catalog_class)
+[xcomponent_global_catalog_class](#fastlife.settings.Settings.xcomponent_global_catalog_class)
 
 ```python
 # content of the file src/myapp/contants.py
@@ -148,7 +148,7 @@ class MyConstants(Constant):
 ```
 
 and then set the settings to
-`FASTLIFE_JINJAX_GLOBAL_CATALOG_CLASS="myapp.contants:MyConstants"`
+`FASTLIFE_Xcomponent_GLOBAL_CATALOG_CLASS="myapp.contants:MyConstants"`
 :::
 
 Fastlife use a set of 3 colors, primary, danger and neutral. You can add

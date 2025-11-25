@@ -1,7 +1,7 @@
-from fastlife import JinjaXTemplate, Request, view_config
+from fastlife import Request, XTemplate, view_config
 
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = "<HelloWorld/>"
 
 

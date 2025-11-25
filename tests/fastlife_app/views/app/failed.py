@@ -1,4 +1,24 @@
-from fastlife import JinjaXTemplate, Request, Response, exception_handler, view_config
+from fastlife import Request, Response, XTemplate, exception_handler, view_config
+from tests.fastlife_app.components.helloworld import x_component
+
+
+@x_component()
+def E500(message: str) -> str:
+    return """
+    <Layout>
+    <H2>Internal Server Error</H2>
+    <P>{message}</P>
+    </Layout>
+    """
+
+
+@x_component()
+def E422(message: str) -> str:
+    return """
+    <Layout>
+      <H2>{message}</H2>
+    </Layout>
+    """
 
 
 class MyGoodException(Exception):
@@ -20,13 +40,13 @@ class YourFault(Exception):
         self.message = message
 
 
-class Error500(JinjaXTemplate):
-    template = """<E500 :message="message" />"""
+class Error500(XTemplate):
+    template = """<E500 message={message} />"""
     message: str
 
 
-class Error422(JinjaXTemplate):
-    template = """<E422 :message="message" />"""
+class Error422(XTemplate):
+    template = """<E422 message={message} />"""
     message: str
 
 

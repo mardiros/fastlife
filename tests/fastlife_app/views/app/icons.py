@@ -1,8 +1,14 @@
-from fastlife import JinjaXTemplate, Request, view_config
+from fastlife import Request, XTemplate, view_config
 
 
-class IconsWall(JinjaXTemplate):
-    template = "<IconsWall/>"
+class IconsWall(XTemplate):
+    template = """
+    <Layout>
+    <Icon name="academic-cap" />
+    <Icon name="adjustments-horizontal" />
+    <Icon name="adjustments-vertical" />
+    </Layout>
+    """
 
 
 @view_config("icons", "/icons", methods=["GET"])

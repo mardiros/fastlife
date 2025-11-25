@@ -114,7 +114,7 @@ class XRendererFactory(AbstractTemplateRendererFactory):
     """
 
     def __init__(self, settings: "Settings", catalog: Catalog) -> None:
-        self.globals = resolve(settings.jinjax_global_catalog_class)().model_dump()
+        self.globals = resolve(settings.xcomponent_global_catalog_class)().model_dump()
         self.catalog = catalog
 
     def __call__(self, request: Request) -> AbstractTemplateRenderer:

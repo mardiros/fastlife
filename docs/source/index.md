@@ -18,7 +18,6 @@ user/glossary
 :caption: Developers Documentation:
 
 develop/fastlife/fastlife
-components/index
 iconswall/icons
 ```
 

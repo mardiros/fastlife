@@ -18,19 +18,9 @@ def test_find_mo_files():
             Path(root_path) / "en" / "LC_MESSAGES" / "fastlife_test.mo",
         ),
         (
-            "en",
-            "form_error",
-            Path(root_path) / "en" / "LC_MESSAGES" / "form_error.mo",
-        ),
-        (
             "fr",
             "fastlife_test",
             Path(root_path) / "fr" / "LC_MESSAGES" / "fastlife_test.mo",
-        ),
-        (
-            "fr",
-            "form_error",
-            Path(root_path) / "fr" / "LC_MESSAGES" / "form_error.mo",
         ),
     }
 

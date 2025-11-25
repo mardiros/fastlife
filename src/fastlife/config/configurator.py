@@ -197,10 +197,7 @@ class GenericConfigurator(Generic[TRegistry]):
         # and that all the components has been registered to the catalog.
         for optional_adapter in ("jinjax", "xcomponent"):
             try:
-                self.include(
-                    f"fastlife.adapters.{optional_adapter}",
-                    ignore="fastlife.adapters.jinjax.jinjax_ext.jinjax_doc",
-                )
+                self.include(f"fastlife.adapters.{optional_adapter}")
             except (ModuleNotFoundError, ConfigurationError):  # coverage: ignore
                 pass  # coverage: ignore
 

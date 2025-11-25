@@ -63,7 +63,7 @@ class Settings(BaseSettings):
 
     Set to true while developing, set false for production.
     """
-    jinjax_global_catalog_class: str = Field(
+    xcomponent_global_catalog_class: str = Field(
         default="fastlife.template_globals:Globals"
     )
     """
