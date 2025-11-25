@@ -24,10 +24,11 @@ class XComponentRegistry:
         self.functions = {}
 
     def register_xcomponent(self, name: str, component: Component) -> None:
-        """Register a component"""
+        """Register a xcomponent component to the application template engine."""
         self.components[name] = component
 
     def register_xfunction(self, name: str, func: Function) -> None:
+        """Register a xcomponent function to the application template engine."""
         self.functions[name] = func
 
     def build_catalog(self) -> Catalog:
@@ -41,6 +42,17 @@ class XComponentRegistry:
 
 
 def x_component(name: str | None = None) -> Callable[[Component], Component]:
+    """
+    Register a component to the XComponent catalog for the application.
+
+    It differ from from @catalog.component decorator of the xcomponent library,
+    in the way the catalog is created.
+    The fastlife configurator will register the component to a catalog during
+    the configuration.
+
+    :param name: override the name of the component, default is the python function
+        name.
+    """
     component_name = name
 
     def decorator(wrapped: Component) -> Component:
@@ -60,6 +72,16 @@ def x_component(name: str | None = None) -> Callable[[Component], Component]:
 
 
 def x_function(name: str | None = None) -> Callable[[Function], Function]:
+    """
+    Register a component to the XComponent function for the application.
+
+    It differ from from @catalog.function decorator of the xcomponent library,
+    in the way the catalog is created.
+    The fastlife configurator will register the function to a catalog during
+    the configuration.
+
+    :param name: override the name of the function, default is the python function name.
+    """
     function_name = name
 
     def decorator(wrapped: Function) -> Function:

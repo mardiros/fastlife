@@ -13,6 +13,7 @@ from .adapters.fastapi.request import (
     get_request,
 )
 from .adapters.fastapi.websocket import GenericWebSocket, WebSocket
+from .adapters.xcomponent.registry import x_component, x_function
 from .config import (
     Configurator,
     GenericConfigurator,
@@ -112,6 +113,8 @@ __all__ = [
     # Template
     "JinjaXTemplate",
     "XTemplate",
+    "x_component",
+    "x_function",
     # i18n
     "Localizer",
     "TranslatableStringFactory",
