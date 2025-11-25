@@ -31,6 +31,7 @@ from fastapi.types import IncEx
 from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
 from fastlife.adapters.fastapi.routing.router import Router
+from fastlife.adapters.xcomponent.registry import XComponentRegistry
 from fastlife.config.openapiextra import OpenApiTag
 from fastlife.domain.model.template import InlineTemplate
 from fastlife.middlewares.base import AbstractMiddleware
@@ -45,6 +46,8 @@ from fastlife.shared_utils.resolver import (
 )
 
 if TYPE_CHECKING:
+    from xcomponent import Catalog, Component, Function
+
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
     from fastlife.service.request_factory import (
         RequestFactoryBuilder,  # coverage: ignore
@@ -160,6 +163,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self._registered_permissions: set[str] = set()
 
         self._renderer_globals: dict[str, Any] = {}
+        self._xcomponent_registry = XComponentRegistry()
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
@@ -190,6 +194,7 @@ class GenericConfigurator(Generic[TRegistry]):
 
         # register our main template renderer at then end, to ensure that
         # if settings have been manipulated, everything is taken into account.
+        # and that all the components has been registered to the catalog.
         for optional_adapter in ("jinjax", "xcomponent"):
             try:
                 self.include(
@@ -705,6 +710,19 @@ class GenericConfigurator(Generic[TRegistry]):
         self.registry.settings.template_search_path = (
             f"{self.registry.settings.template_search_path},{path}"
         )
+        return self
+
+    def build_catalog(self) -> "Catalog":
+        """Build the xcomponent catalog."""
+        return self._xcomponent_registry.build_catalog()
+
+    def register_xcomponent(self, name: str, component: "Component") -> Self:
+        """Register a component."""
+        self._xcomponent_registry.register_xcomponent(name, component)
+        return self
+
+    def register_xfunction(self, name: str, func: "Function") -> Self:
+        self._xcomponent_registry.register_xfunction(name, func)
         return self
 
 

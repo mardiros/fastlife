@@ -6,13 +6,13 @@ from pydantic import BaseModel
 from fastlife import view_config
 from fastlife.adapters.fastapi.form_data import MappingFormData
 from fastlife.adapters.fastapi.request import Request
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
 from fastlife.shared_utils.resolver import resolve
 
 
-@catalog.component
+@x_component()
 def TestForm(model: BaseModel) -> str:
     return """
     <Layout>

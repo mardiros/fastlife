@@ -9,6 +9,7 @@ from typing import Any
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
+from xcomponent import Catalog
 
 from fastlife import Request
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.factory import (
@@ -24,8 +25,6 @@ from fastlife.service.templates import (
 from fastlife.settings import Settings
 from fastlife.shared_utils.resolver import resolve
 
-from .catalog import catalog
-
 
 class XTemplateRenderer(AbstractTemplateRenderer):
     """
@@ -36,8 +35,11 @@ class XTemplateRenderer(AbstractTemplateRenderer):
     request: Request
     """Associated request that needs a response."""
 
-    def __init__(self, globals: dict[str, Any], request: Request) -> None:
+    def __init__(
+        self, globals: dict[str, Any], request: Request, catalog: Catalog
+    ) -> None:
         self.request = request
+        self.catalog = catalog
         self.globals: dict[str, Any] = {**globals}
         self.globals["pydantic_form"] = self.pydantic_form
 
@@ -99,7 +101,7 @@ class XTemplateRenderer(AbstractTemplateRenderer):
         :return: The template rendering result.
         """
         params = template.model_dump()
-        return catalog.render(
+        return self.catalog.render(
             template.template,
             globals=self.globals,
             **params,
@@ -111,8 +113,9 @@ class XRendererFactory(AbstractTemplateRendererFactory):
     The template render factory.
     """
 
-    def __init__(self, settings: "Settings") -> None:
+    def __init__(self, settings: "Settings", catalog: Catalog) -> None:
         self.globals = resolve(settings.jinjax_global_catalog_class)().model_dump()
+        self.catalog = catalog
 
     def __call__(self, request: Request) -> AbstractTemplateRenderer:
         """
@@ -122,9 +125,23 @@ class XRendererFactory(AbstractTemplateRendererFactory):
         :param Request: the HTTP Request to process.
         :return: The renderer object that will process that request.
         """
-        return XTemplateRenderer(globals=self.globals, request=request)
+        return XTemplateRenderer(
+            globals=self.globals,
+            request=request,
+            catalog=self.catalog,
+        )
 
 
 @configure
 def includeme(conf: Configurator) -> None:
-    conf.add_renderer("xcomponent", XRendererFactory(conf.registry.settings))
+    conf.include(".functions")
+    conf.include(".html")
+    conf.include(".icons")
+    conf.include(".pydantic_form")
+    conf.add_renderer(
+        "xcomponent",
+        XRendererFactory(
+            conf.registry.settings,
+            conf.build_catalog(),
+        ),
+    )

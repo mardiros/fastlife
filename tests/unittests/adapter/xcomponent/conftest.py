@@ -2,6 +2,7 @@ import bs4
 import pytest
 from fastapi import FastAPI
 from fastapi import Request as FastApiRequest
+from xcomponent import Catalog
 
 from fastlife import Configurator, GenericRequest, Settings
 from fastlife.adapters.xcomponent.renderer import XRendererFactory
@@ -21,6 +22,11 @@ def app(conf: Configurator) -> FastAPI:
     return conf.build_asgi_app()
 
 
+@pytest.fixture
+def catalog(conf: Configurator, app: FastAPI) -> Catalog:
+    return conf.build_catalog()
+
+
 @pytest.fixture()
 def dummy_request(dummy_registry: MyRegistry, app: FastAPI) -> Request:
     scope = {
@@ -38,8 +44,8 @@ def dummy_request(dummy_registry: MyRegistry, app: FastAPI) -> Request:
 
 
 @pytest.fixture()
-def x_renderer(settings: Settings):
-    return XRendererFactory(settings)
+def x_renderer(settings: Settings, catalog: Catalog):
+    return XRendererFactory(settings, catalog)
 
 
 @pytest.fixture()

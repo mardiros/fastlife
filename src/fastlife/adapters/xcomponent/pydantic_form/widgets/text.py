@@ -1,17 +1,10 @@
 from collections.abc import Sequence
-from typing import Any
 
 from pydantic import Field, SecretStr
 
-from fastlife.adapters.xcomponent.catalog import catalog
 from fastlife.domain.model.types import Builtins
 
 from .base import Widget
-
-
-@catalog.function
-def is_str(value: Any) -> bool:
-    return isinstance(value, str)
 
 
 class TextWidget(Widget[Builtins]):

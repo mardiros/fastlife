@@ -5,9 +5,9 @@ from typing import Any
 import bs4
 import pytest
 from fastapi import Request as FastApiRequest
+from xcomponent import Catalog
 
 from fastlife.adapters.fastapi.routing.router import Router
-from fastlife.adapters.xcomponent.catalog import catalog
 from fastlife.config.configurator import Configurator
 from fastlife.domain.model.request import GenericRequest
 from fastlife.settings import Settings
@@ -18,9 +18,15 @@ from fastlife.shared_utils.resolver import resolve
 def configurator() -> Configurator:
     # load the components
     cfg = Configurator(Settings())
+    cfg.include("fastlife.adapters.xcomponent.functions")
     cfg.include("fastlife.adapters.xcomponent.html")
     cfg.include("fastlife.adapters.xcomponent.icons")
     return cfg
+
+
+@pytest.fixture(autouse=True, scope="session")
+def catalog(configurator: Configurator) -> Catalog:
+    return configurator.build_catalog()
 
 
 @pytest.fixture()
@@ -50,7 +56,9 @@ def globals(settings: Settings, dummy_request: Any) -> Mapping[str, str]:
 
 @pytest.fixture()
 def soup_rendered(
-    template_string: str, globals: Mapping[str, str]
+    template_string: str,
+    globals: Mapping[str, str],
+    catalog: Catalog,
 ) -> Iterator[bs4.PageElement]:
     rendered = catalog.render(template_string.strip(), globals=globals)
     rendered = re.sub(r">\s+<", "><", rendered).strip()

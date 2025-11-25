@@ -4,10 +4,10 @@ from collections.abc import Mapping
 
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 
 
-@catalog.component
+@x_component()
 def H1(
     children: XNode,
     globals: Mapping[str, str],
@@ -30,7 +30,7 @@ def H1(
     """
 
 
-@catalog.component
+@x_component()
 def H2(
     children: XNode,
     globals: Mapping[str, str],
@@ -53,7 +53,7 @@ def H2(
     """
 
 
-@catalog.component
+@x_component()
 def H3(
     children: XNode,
     globals: Mapping[str, str],
@@ -76,7 +76,7 @@ def H3(
     """
 
 
-@catalog.component
+@x_component()
 def H4(
     children: XNode,
     globals: Mapping[str, str],
@@ -99,7 +99,7 @@ def H4(
     """
 
 
-@catalog.component
+@x_component()
 def H5(
     children: XNode,
     globals: Mapping[str, str],
@@ -122,7 +122,7 @@ def H5(
     """
 
 
-@catalog.component
+@x_component()
 def H6(
     children: XNode,
     globals: Mapping[str, str],

@@ -1,9 +1,9 @@
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.catalog import catalog
+from fastlife.adapters.xcomponent.registry import x_component
 
 
-@catalog.component
+@x_component()
 def Layout(children: XNode):
     return """
     <>
