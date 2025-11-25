@@ -145,7 +145,7 @@ class JinjaxEngine(AbstractTemplateRendererFactory):
     """
 
     def __init__(self, settings: "Settings") -> None:
-        globals = resolve(settings.jinjax_global_catalog_class)().model_dump()
+        globals = resolve(settings.xcomponent_global_catalog_class)().model_dump()
 
         self.catalog = InspectableCatalog(
             use_cache=settings.jinjax_use_cache,

@@ -49,7 +49,7 @@ def dummy_request(
 
 @pytest.fixture()
 def globals(settings: Settings, dummy_request: Any) -> Mapping[str, str]:
-    globs = resolve(settings.jinjax_global_catalog_class)().model_dump()
+    globs = resolve(settings.xcomponent_global_catalog_class)().model_dump()
     globs["request"] = dummy_request
     return globs
 

@@ -23,11 +23,11 @@ a simple form in the page to say hello, has a classic example.
 The function
 :meth:`pydantic_form <fastlife.adapters.jinjax.renderer.JinjaxRenderer.pydantic_form>`
 invoked here will render the template content, but not the
-{jinjax:component}`Form` itself to let the choice on how the form behave.
+`Form` itself to let the choice on how the form behave.
 It also don't render submit buttons to give the control of it too.
 
 :::{tip}
-The {jinjax:component}`Form` will automatically inject a CSRF token and the
+The `Form` will automatically inject a CSRF token and the
 app always create a cookie to prevent CSRF attacks.
 :::
 
@@ -159,8 +159,8 @@ The recipe [add css stylesheet](#add-css-stylesheet) can fix the problem.
 ### Widgets per type
 
 Python builtin types and Pydantic models have their own widget. For example,
-boolean use {jinjax:component}`checkboxes <Checkbox>`, enum types use
-{jinjax:component}`select <Select>`.
+boolean use `checkboxes <Checkbox>`, enum types use
+`select <Select>`.
 
 It is also possible to create widgets and use an annotation in order to get
 a full control of the rendering. We just need to inherits a class from
