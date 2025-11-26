@@ -6,7 +6,14 @@ from zipfile import ZipFile
 
 from sphinx.application import Sphinx
 
+from fastlife import Configurator, Settings
 from fastlife.adapters.xcomponent.icons.icons import Icon, icon_path
+
+configurator = Configurator(Settings())
+configurator.include("fastlife.adapters.xcomponent.functions")
+configurator.include("fastlife.adapters.xcomponent.html")
+configurator.include("fastlife.adapters.xcomponent.icons")
+catalog = configurator.build_catalog()
 
 
 def intro():
@@ -57,7 +64,9 @@ def write_icons(file: IO[str]):
             '<div class="flex flex-col items-center text-center cursor-pointer" '
             f"onclick=\"copyText('{name}')\">\n"
         )
-        out += Icon(name, class_="w-16 h-16", title=name).replace("\n", "    \n")
+        out += catalog.render(
+            """<Icon name={name} class="w-16 h-16" title={name} />""", name=name
+        ).replace("\n", "    \n")
         out += f'<div>&lt;Icon name="{name}" /&gt;</div>'
         out += "</div>\n"
         file.write(textwrap.indent(out, prefix="    "))
