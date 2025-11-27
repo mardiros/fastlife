@@ -7,7 +7,7 @@ from zipfile import ZipFile
 from sphinx.application import Sphinx
 
 from fastlife import Configurator, Settings
-from fastlife.adapters.xcomponent.icons.icons import Icon, icon_path
+from fastlife.adapters.xcomponent.icons.icons import icon_path
 
 configurator = Configurator(Settings())
 configurator.include("fastlife.adapters.xcomponent.functions")
