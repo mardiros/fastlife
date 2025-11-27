@@ -34,6 +34,7 @@ def settings() -> MySettings:
         session_secret_key="labamba",
         domain_name="testserver.local",
         session_cookie_domain="testserver.local",
+        backend_tag_header_value="dummy-server",
     )
 
 
