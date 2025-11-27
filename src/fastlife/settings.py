@@ -104,3 +104,18 @@ class Settings(BaseSettings):
 
     decode_reverse_proxy_headers: bool = Field(default=True)
     """Ensure that the request object has information based on http proxy headers."""
+
+    backend_tag_header_value: str = Field(
+        default="", title="configure the XBackendTag middleware."
+    )
+    """
+    Configure a value per instance to get the which machine has been reached
+    by a load balancer.
+    """
+
+    backend_tag_header_name: str = Field(
+        default="x-backend-tag", title="configure the XBackendTag middleware."
+    )
+    """
+    HTTP Header for the {class}`fastlife.middlewares.backend_tag.XBackendTag`
+    """
