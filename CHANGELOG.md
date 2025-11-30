@@ -1,3 +1,6 @@
+## 0.33.1  - Released on 2025-11-30
+* Bump fastapi dependency.
+
 ## 0.33.0  - Released on 2025-11-25
 * Refine the xcomponent api.
   now component and function must be registered with the decorator @x_component and @x_function.
