@@ -515,7 +515,6 @@ class GenericConfigurator(Generic[TRegistry]):
         value: Any,
         *,
         evaluate: bool = True,
-        per_router: bool = False,
     ) -> None:
         """
         Add a rendering global value.
@@ -526,10 +525,7 @@ class GenericConfigurator(Generic[TRegistry]):
         :param evaluate: set to false if you want to inject helper methods in the
             template.
         """
-        if per_router:
-            self._current_router.add_renderer_global(name, value, evaluate=evaluate)
-        else:
-            self._renderer_globals[name] = value, evaluate
+        self._renderer_globals[name] = value, evaluate
 
     async def _build_renderer_globals(self, request: Request) -> dict[str, Any]:
         """
@@ -546,11 +542,6 @@ class GenericConfigurator(Generic[TRegistry]):
         custom_globals = {}
         renderer_globals: dict[str, Any] = {
             **self._renderer_globals,
-            **(
-                request.app.router.get_renderer_globals()
-                if hasattr(request.app.router, "get_renderer_globals")
-                else {}
-            ),
         }
         for key, (val, evaluate) in renderer_globals.items():
             if evaluate and callable(val):
