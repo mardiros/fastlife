@@ -226,3 +226,48 @@ def test_by_node_name(client: WebTestClient):
     assert len(nodes) == 2
     assert nodes[0].attrs["id"] == "target-1"
     assert nodes[1].attrs["id"] == "target-2"
+
+
+def test_by_aria_label(client: WebTestClient):
+    wr = WebResponse(
+        client,
+        origin="",
+        response=Response(
+            status_code=200,
+            content="""
+                <body>
+                    <a id="my-target" aria-label="pause">
+                        <svg><path d="M10 10 L90 10 L90 90 L10 90 Z"></svg>
+                    </a>
+                </body>
+            """,
+        ),
+    )
+    assert wr.by_aria_label("pause").attrs["id"] == "my-target"  # type: ignore
+
+
+def test_all_by_aria_label(client: WebTestClient):
+    wr = WebResponse(
+        client,
+        origin="",
+        response=Response(
+            status_code=200,
+            content="""
+                <ul>
+                    <li>
+                    <a id="my-target" aria-label="pause">
+                        <svg><path d="M10 10 L90 10 L90 90 L10 90 Z"></svg>
+                    </a>
+                    <li>
+                    <a id="my-target2" aria-label="pause">
+                        <svg><path d="M10 10 L90 10 L90 90 L10 90 Z"></svg>
+                    </a>
+                    </li>
+                </ul>
+            """,
+        ),
+    )
+    assert [el.attrs["id"] for el in wr.all_by_aria_label("pause")] == [
+        "my-target",
+        "my-target2",
+    ]
