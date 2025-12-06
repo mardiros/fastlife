@@ -1,10 +1,11 @@
 from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from markupsafe import Markup
 from pydantic import Field
 
-from fastlife.service.templates import AbstractTemplateRenderer
+if TYPE_CHECKING:
+    from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import TWidget, TypeWrapper, Widget
 

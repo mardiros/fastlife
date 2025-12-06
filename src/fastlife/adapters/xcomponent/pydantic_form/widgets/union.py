@@ -3,12 +3,13 @@ Widget for field of type Union.
 """
 
 from collections.abc import Sequence
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
 from markupsafe import Markup
 from pydantic import BaseModel, Field
 
-from fastlife.service.templates import AbstractTemplateRenderer
+if TYPE_CHECKING:
+    from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import TWidget, TypeWrapper, Widget
 

@@ -2,14 +2,16 @@
 
 import json
 import secrets
-from typing import Any, Generic, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar
 
 from markupsafe import Markup
 from pydantic import Field, model_validator
 
 from fastlife.domain.model.template import XTemplate
-from fastlife.service.templates import AbstractTemplateRenderer
 from fastlife.shared_utils.infer import is_union
+
+if TYPE_CHECKING:
+    from fastlife.service.templates import AbstractTemplateRenderer
 
 T = TypeVar("T")
 
@@ -68,7 +70,7 @@ class Widget(XTemplate, Generic[T]):
         )
         return self
 
-    def to_html(self, renderer: AbstractTemplateRenderer) -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
         """Return the html version."""
         return Markup(renderer.render_template(self))
 
@@ -84,6 +86,8 @@ TWidget = TypeVar("TWidget", bound=Widget[Any])
 
 
 class CustomWidget(Generic[TWidget]):
+    """Type to annotate a field in order to override its default assitated widget."""
+
     typ: type[Any]
 
     def __init__(self, typ: type[TWidget]) -> None:
