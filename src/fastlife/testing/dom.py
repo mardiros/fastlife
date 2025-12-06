@@ -193,6 +193,19 @@ class Element:
             return ret[0]
         return ret
 
+    def by_aria_label(self, aria_label: str) -> "Element | None":
+        """Return the element which have the given aria-label."""
+        resp = self._tag.find_all(attrs={"aria-label": aria_label})
+        assert not isinstance(resp, bs4.NavigableString)
+        assert len(resp) == 1
+        return Element(self._client, resp[0]) if resp else None
+
+    def all_by_aria_label(self, aria_label: str) -> "list[Element]":
+        """Return all the elements which have the given aria-label."""
+        resp = self._tag.find_all(attrs={"aria-label": aria_label})
+        assert not isinstance(resp, bs4.NavigableString)
+        return [Element(self._client, r) for r in resp]
+
     def __repr__(self) -> str:
         return f"<{self.node_name}>"
 

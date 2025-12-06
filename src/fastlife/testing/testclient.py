@@ -89,6 +89,14 @@ class WebResponse:
         """Search a dom element by its associated label text."""
         return self.html.by_label_text(text)
 
+    def by_aria_label(self, aria_label: str) -> "Element | None":
+        """Return the element which have the given aria-label."""
+        return self.html.by_aria_label(aria_label)
+
+    def all_by_aria_label(self, aria_label: str) -> "list[Element]":
+        """Return all the elements which have the given aria-label."""
+        return self.html.all_by_aria_label(aria_label)
+
     def by_node_name(
         self, node_name: str, *, attrs: dict[str, str] | None = None
     ) -> list[Element]:
