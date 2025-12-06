@@ -13,6 +13,23 @@ from .adapters.fastapi.request import (
     get_request,
 )
 from .adapters.fastapi.websocket import GenericWebSocket, WebSocket
+from .adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
+from .adapters.xcomponent.pydantic_form.widgets.boolean import BooleanWidget
+from .adapters.xcomponent.pydantic_form.widgets.checklist import ChecklistWidget
+from .adapters.xcomponent.pydantic_form.widgets.dropdown import (
+    DropDownWidget,
+    DropDownWidgetOption,
+)
+from .adapters.xcomponent.pydantic_form.widgets.hidden import HiddenWidget
+from .adapters.xcomponent.pydantic_form.widgets.mfa_code import MFACodeWidget
+from .adapters.xcomponent.pydantic_form.widgets.model import ModelWidget
+from .adapters.xcomponent.pydantic_form.widgets.sequence import SequenceWidget
+from .adapters.xcomponent.pydantic_form.widgets.text import (
+    PasswordWidget,
+    TextareaWidget,
+    TextWidget,
+)
+from .adapters.xcomponent.pydantic_form.widgets.union import UnionWidget
 from .adapters.xcomponent.registry import x_component, x_function
 from .config import (
     Configurator,
@@ -115,6 +132,21 @@ __all__ = [
     "XTemplate",
     "x_component",
     "x_function",
+    # Widgets
+    "CustomWidget",
+    "Widget",
+    "BooleanWidget",
+    "ChecklistWidget",
+    "DropDownWidget",
+    "DropDownWidgetOption",
+    "HiddenWidget",
+    "MFACodeWidget",
+    "ModelWidget",
+    "SequenceWidget",
+    "TextWidget",
+    "PasswordWidget",
+    "TextareaWidget",
+    "UnionWidget",
     # i18n
     "Localizer",
     "TranslatableStringFactory",
