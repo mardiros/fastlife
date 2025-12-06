@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from multidict import MultiDict
 
-from fastlife.testing.testclient import WebForm
+from fastlife.testing.form import WebForm
 
 
 @pytest.mark.parametrize(
@@ -40,15 +40,17 @@ from fastlife.testing.testclient import WebForm
     ],
 )
 def test_default_value(webform: WebForm):
-    assert webform._formdata == {  # type: ignore
-        "csrf": "token",
-        "firstname": "alice",
-        "lastname": "",
-        "color": "red",
-        "size": "s",
-        "tempo": "piano",
-        "notes": "\nbla bla\n",
-    }
+    assert webform.data == MultiDict(
+        {
+            "firstname": "alice",
+            "lastname": "",
+            "csrf": "token",
+            "color": "red",
+            "size": "s",
+            "tempo": "piano",
+            "notes": "\nbla bla\n",
+        }
+    )
 
 
 @pytest.mark.parametrize(
@@ -73,7 +75,7 @@ def test_set_input_value(webform: WebForm):
     webform.set("firstname", "bob")
     webform.set("lastname", "marley")
     webform.set("colors", "blue")
-    assert webform._formdata == MultiDict(  # type: ignore
+    assert webform.data == MultiDict(  # type: ignore
         [
             ("firstname", "bob"),
             ("lastname", "marley"),
@@ -119,7 +121,7 @@ def test_repr(webform: WebForm):
 def test_set_radio(webform: WebForm):
     webform.set("colors", "red")
     webform.set("colors", "blue")
-    assert webform._formdata == MultiDict([("colors", "blue")])  # type: ignore
+    assert webform.data == MultiDict([("colors", "blue")])  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -159,7 +161,7 @@ def test_set_radio_raise(webform: WebForm):
 )
 def test_unset_input_value(webform: WebForm):
     webform.unset("colors", "green")
-    assert webform._formdata == MultiDict(  # type: ignore
+    assert webform.data == MultiDict(  # type: ignore
         [
             ("colors", "red"),
         ]
@@ -265,12 +267,14 @@ def test_set_exception(webform: WebForm, expected: str):
 def test_select_value(webform: WebForm):
     webform.select("size", "medium")
     webform.select("tempo", "allegro")
-    assert webform._formdata == {  # type: ignore
-        "csrf": "token",
-        "size": "m",
-        "tempo": "allegro",
-        "foobar": "foo",
-    }
+    assert webform.data == MultiDict(
+        {
+            "csrf": "token",
+            "size": "m",
+            "tempo": "allegro",
+            "foobar": "foo",
+        }
+    )
 
 
 @pytest.mark.parametrize(
@@ -293,7 +297,7 @@ def test_select_value(webform: WebForm):
 def test_select_multiple_value(webform: WebForm):
     webform.select("tempo", "allegro")
     webform.select("tempo", "moderato")
-    assert webform._formdata == MultiDict(  # type: ignore
+    assert webform.data == MultiDict(
         [
             ("tempo", "allegro"),
             ("tempo", "moderato"),
@@ -319,7 +323,7 @@ def test_select_multiple_value(webform: WebForm):
     ],
 )
 def test_select_multiple_default_value(webform: WebForm):
-    assert webform._formdata == MultiDict(  # type: ignore
+    assert webform.data == MultiDict(
         [
             ("tempo", "allegro"),
             ("tempo", "moderato"),
@@ -379,7 +383,7 @@ def test_select_exception(webform: WebForm, expected: str):
 )
 def test_unselect_multiple_value(webform: WebForm):
     webform.unselect("tempo", "allegro")
-    assert webform._formdata == MultiDict(  # type: ignore
+    assert webform.data == MultiDict(
         [
             ("tempo", "moderato"),
         ]
@@ -475,10 +479,10 @@ def test_unselect_exception(webform: WebForm, expected: str):
     ],
 )
 def test_button_value(webform: WebForm, call_args: Any, expected: str):
-    assert webform._formdata == {}  # type: ignore
+    assert webform.data == {}
 
     webform.button(*call_args)
-    assert webform._formdata == expected  # type: ignore
+    assert webform.data == expected
 
 
 @pytest.mark.parametrize(
