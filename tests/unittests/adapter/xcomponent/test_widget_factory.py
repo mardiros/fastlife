@@ -378,13 +378,14 @@ def test_render_set(
 
     result = renderer.render_template(form)
     html = soup(result)
+
     assert html.find(
         "input",
         attrs={
-            "id": "payload-flavors-VANILLA-tkt",
+            "id": "payload-flavors-Vanilla-tkt",
             "type": "checkbox",
             "name": "payload.flavors[]",
-            "value": "VANILLA",
+            "value": "Vanilla",
         },
     )
 
@@ -406,7 +407,7 @@ def test_render_set_checked(
         model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
             "payload",
             MultiSet,
-            {"payload": {"flavors": ["VANILLA"], "foobarz": ["foo"]}},
+            {"payload": {"flavors": ["Vanilla"], "foobarz": ["foo"]}},
         ),
         token="tkt",
     )
@@ -421,9 +422,9 @@ def test_render_set_checked(
     assert html.find(
         "input",
         attrs={
-            "id": "payload-flavors-VANILLA-tkt",
+            "id": "payload-flavors-Vanilla-tkt",
             "name": "payload.flavors[]",
-            "value": "VANILLA",
+            "value": "Vanilla",
             "type": "checkbox",
             "checked": True,
         },

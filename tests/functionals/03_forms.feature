@@ -81,7 +81,7 @@ Feature: Pydantic Form Generation
     And the user clicks on the button "submit" with response info
     Then the user sees the python set in "pets"
       """python
-      {"dog", "cat"}
+      {"lazy dog","crazy cat"}
       """
 
   Scenario: Sequence[str]
