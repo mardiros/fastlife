@@ -58,8 +58,8 @@ class SetBuilder(BaseWidgetBuilder[set[Any]]):
             choices = [
                 Checkable(
                     label=e.value,
-                    value=e.name,
-                    checked=e.name in value if value else False,  # type: ignore
+                    value=e.value,
+                    checked=e in value if value else False,  # type: ignore
                     name=field_name,
                     token=self.factory.token,
                     error=form_errors.get(f"{field_name}-{e.name}"),
