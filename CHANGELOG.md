@@ -1,3 +1,10 @@
+## 0.34.0  - Released on 2025-12-06
+* Add more helpers on webtest client.
+  * client.form.data that expose the form data.
+  * by_arial_label that return a node by its aria-label attribute.
+  * all_by_aria_label that return a liste of nodes by their aria-label attribyte.
+* Expose the pydantic_form widgets in the public API.
+
 ## 0.33.3  - Released on 2025-12-06
 * Hotfix serialization/deserialization of set[enum] in pydantic_form using xcomponent.
 
