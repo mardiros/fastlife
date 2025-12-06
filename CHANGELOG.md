@@ -1,3 +1,6 @@
+## 0.33.3  - Released on 2025-12-06
+* Hotfix serialization/deserialization of set[enum] in pydantic_form using xcomponent.
+
 ## 0.33.2  - Released on 2025-12-05
 * Remoce the per_router global that can't works.
 
