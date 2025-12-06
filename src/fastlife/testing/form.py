@@ -201,6 +201,10 @@ class WebForm:
             follow_redirects=follow_redirects,
         )
 
+    @property
+    def data(self) -> MultiDict[str]:
+        return self._formdata
+
     def __contains__(self, key: str) -> bool:
         """Test if a field exists in the form."""
         return key in self._formdata
