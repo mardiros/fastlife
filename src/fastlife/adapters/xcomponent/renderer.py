@@ -100,7 +100,9 @@ class XTemplateRenderer(AbstractTemplateRenderer):
         :param template: the template to render.
         :return: The template rendering result.
         """
-        params = template.model_dump()
+        params = {
+            k: getattr(template, k) for k in template.__class__.model_fields.keys()
+        }
         return self.catalog.render(
             template.template,
             globals=self.globals,
