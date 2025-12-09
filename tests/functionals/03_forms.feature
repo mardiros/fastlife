@@ -53,6 +53,17 @@ Feature: Pydantic Form Generation
       }
       """
 
+  Scenario: IPAddress
+    Given anonymous user on "/form/ipaddressfield"
+    When the user fills the field "Address" with "10.0.0.1"
+    And the user clicks on the button "submit" with response info
+    Then the user sees the json
+      """json
+      {
+        "address": "10.0.0.1"
+      }
+      """
+
   Scenario: Set[Literal]
     Given anonymous user on "/form/literalsfield"
     When the user clicks on the checkbox "cooking"

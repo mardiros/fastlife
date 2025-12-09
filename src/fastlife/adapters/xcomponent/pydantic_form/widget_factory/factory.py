@@ -20,6 +20,7 @@ from .base import BaseWidgetBuilder
 from .bool_builder import BoolBuilder
 from .emailstr_builder import EmailStrBuilder
 from .enum_builder import EnumBuilder
+from .ipaddr_builder import IpAddrBuilder
 from .literal_builder import LiteralBuilder
 from .model_builder import ModelBuilder
 from .secretstr_builder import SecretStrBuilder
@@ -69,6 +70,7 @@ class WidgetFactory:
             EmailStrBuilder(self),
             SecretStrBuilder(self),
             UuidBuilder(self),
+            IpAddrBuilder(self),
             # we keep simple types, str, int at the end
             SimpleTypeBuilder(self),
         ]

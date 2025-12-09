@@ -5,7 +5,7 @@ from uuid import UUID
 
 import bs4
 from lastuuid.dummies import uuidgen
-from pydantic import BaseModel, EmailStr, Field, SecretStr
+from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
 
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.domain.model.form import FormModel
@@ -66,6 +66,7 @@ class DummyModel(BaseModel):
     tags: list[str] = Field()
     foo: Foo = Field()
     foobar: Foo | Bar = Field()
+    address: IPvAnyAddress = Field()
 
 
 class Tempo(BaseModel):
@@ -131,7 +132,21 @@ def test_render_template(
 
     assert html.find(
         "input",
-        attrs={"id": "payload-name-tkt", "name": "payload.name", "type": "text"},
+        attrs={
+            "id": "payload-name-tkt",
+            "name": "payload.name",
+            "type": "text",
+            "value": "",
+        },
+    )
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-address-tkt",
+            "name": "payload.address",
+            "type": "text",
+            "value": "",
+        },
     )
     assert (
         html.find(
@@ -140,6 +155,7 @@ def test_render_template(
                 "id": "payload-private-tkt",
                 "name": "payload.private",
                 "type": "text",
+                "value": "",
             },
         )
         is None
@@ -265,6 +281,7 @@ def test_render_template_values(
                     "vegan": True,
                     "tags": ["blue", "green"],
                     "foobar": {"foo": "totally"},
+                    "address": "192.168.3.4",
                 }
             },
         ),
@@ -280,6 +297,16 @@ def test_render_template_values(
             "name": "payload.name",
             "type": "text",
             "value": "bernard",
+        },
+    )
+
+    assert html.find(
+        "input",
+        attrs={
+            "id": "payload-address-tkt",
+            "name": "payload.address",
+            "type": "text",
+            "value": "192.168.3.4",
         },
     )
 

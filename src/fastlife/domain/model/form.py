@@ -58,7 +58,8 @@ class FormModel(Generic[T]):
         cls, prefix: str, pydantic_type: type[T], data: Mapping[str, Any]
     ) -> "FormModel[T]":
         try:
-            ret = cls(prefix, pydantic_type(**data.get(prefix, {})), {}, True)
+            ptyp = pydantic_type(**data.get(prefix, {}))
+            ret = cls(prefix, ptyp, {}, True)
             return ret
         except ValidationError as exc:
             errors: dict[str, str] = {}

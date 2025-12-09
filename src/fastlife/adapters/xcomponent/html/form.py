@@ -57,6 +57,7 @@ def Input(
     class_: str | None = None,
     aria_label: str | None = None,
     placeholder: str | None = None,
+    pattern: str | None = None,
     inputmode: Literal[
         "none", "text", "decimal", "numeric", "tel", "search", "email", "url"
     ]
@@ -106,6 +107,7 @@ def Input(
         id={id}
         aria-label={aria_label}
         placeholder={placeholder}
+        pattern={pattern}
         inputmode={inputmode}
         autocomplete={autocomplete}
         class={class_ or globals.INPUT_CLASS}
