@@ -1,3 +1,9 @@
+## 0.35.0  - Released on 2025-12-09
+* Don't cast the pydantic template variable to dict, use direct values in order
+  to keep properies available on complex models.
+* Implement a widget for ip address field for pydantic_form.
+* Add a str xcomponent function.
+
 ## 0.34.0  - Released on 2025-12-06
 * Add more helpers on webtest client.
   * client.form.data that expose the form data.
