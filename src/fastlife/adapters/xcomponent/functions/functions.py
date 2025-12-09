@@ -16,3 +16,11 @@ def is_bool(i: Any) -> bool:
 @x_function()
 def is_str(value: Any) -> bool:
     return isinstance(value, str)
+
+
+@x_function(name="str")
+def to_string(value: Any) -> str:
+    """convert a value to a string, the None value is displayed as an empty string."""
+    if value is None:
+        return ""
+    return str(value)
