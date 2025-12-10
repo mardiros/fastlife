@@ -14,7 +14,8 @@ async def assert_text(page: Page, text: str):
 
 @then("the user sees the json")
 async def assert_json(page: Page, response: Any, doc_string: Mapping[str, Any]):
-    actual_json = await (await response.get_response()).json()
+    resp = await response.get_response()
+    actual_json = await resp.json()
     assert actual_json == doc_string
 
 

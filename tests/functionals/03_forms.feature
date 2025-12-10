@@ -23,6 +23,16 @@ Feature: Pydantic Form Generation
       }
       """
 
+  Scenario: integer optional
+    Given anonymous user on "/form/intfield"
+    When the user clicks on the button "submit" with response info
+    Then the user sees the json
+      """json
+      {
+        "seconds": null
+      }
+      """
+
   Scenario: float
     Given anonymous user on "/form/floatfield"
     When the user fills the field "fm station" with "103.3"
