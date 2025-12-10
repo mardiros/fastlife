@@ -32,6 +32,14 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
     ) -> Widget[Enum]:
         """Build the widget."""
         options = [(str(item.value), item.value) for item in field_type]  # type: ignore
+        if isinstance(value, str):
+            # if the form was invalid, we rebuild the enum with a model
+            # that has not been validate, so we rebuild the type here.
+            try:
+                value = field_type(value)
+            except ValueError:
+                # we are neither supposed to failed nor responsible to report the error
+                value = None
         return DropDownWidget(
             name=field_name,
             options=options,  # type: ignore

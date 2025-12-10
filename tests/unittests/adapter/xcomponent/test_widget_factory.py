@@ -1,9 +1,11 @@
 from collections.abc import Callable, Sequence
+from decimal import Decimal
 from enum import Enum, IntEnum
 from typing import Annotated, Any, Literal
 from uuid import UUID
 
 import bs4
+import pytest
 from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
 
@@ -74,6 +76,17 @@ class Tempo(BaseModel):
     name: str = Field()
 
 
+class Currency(str, Enum):
+    EUR = "EUR"
+    USD = "USD"
+    GBP = "GBP"
+
+
+class Price(BaseModel):
+    amount: Decimal
+    currency: Currency
+
+
 class CustomSelect(Widget[Any]):
     template = """
     <Select name={name} id={id} multiple>
@@ -106,6 +119,17 @@ class DummyForm(XTemplate):
     </Form>
     """
     model: FormModel[DummyModel | Banger | MultiSet | DummyOptional]
+    token: str
+
+
+class PriceForm(XTemplate):
+    template = """
+    <Form>
+      { globals.pydantic_form(model=model, token=token) }
+      <Button>Submit</Button>
+    </Form>
+    """
+    model: FormModel[Price]
     token: str
 
 
@@ -490,3 +514,60 @@ def test_render_optional(
             "value": "",
         },
     )
+
+
+@pytest.mark.parametrize(
+    "amount,currency,expected",
+    [
+        pytest.param(
+            "-",
+            "EUR",
+            {
+                "id": "x-currency-tkt-EUR",
+                "value": "EUR",
+                "selected": "",
+            },
+            id="valid-currency-form-invalid",
+        ),
+        pytest.param(
+            "-",
+            "TWD",
+            {
+                "id": "x-currency-tkt-EUR",
+                "value": "EUR",
+            },
+            id="valid-currency-form-invalid",
+        ),
+        pytest.param(
+            "42.10",
+            "EUR",
+            {
+                "id": "x-currency-tkt-EUR",
+                "value": "EUR",
+                "selected": "",
+            },
+            id="valid-currency-form-valid",
+        ),
+    ],
+)
+def test_render_invalid_payload(
+    renderer: AbstractTemplateRenderer,
+    amount: str,
+    currency: str,
+    expected: dict[str, str],
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    invalid_price = Price.model_construct(
+        amount=amount,
+        currency=currency,
+    )
+    model = FormModel[Price].default("x", Price)
+    model.edit(invalid_price)
+    form = PriceForm(
+        model=model,
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    assert html.find("option", attrs=expected)
