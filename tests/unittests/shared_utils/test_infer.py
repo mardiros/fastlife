@@ -1,10 +1,9 @@
-from collections.abc import Mapping
 from typing import Any, NewType, Union
 from uuid import UUID
 
 import pytest
 
-from fastlife.shared_utils.infer import is_union
+from fastlife.shared_utils.infer import is_newtype, is_union
 
 UserId = NewType("UserId", UUID)
 
@@ -24,3 +23,14 @@ UserId = NewType("UserId", UUID)
 )
 def test_is_union(type: type[Any], expected: bool):
     assert is_union(type) is expected
+
+
+@pytest.mark.parametrize(
+    "type,expected",
+    [
+        pytest.param(UUID, False, id="false"),
+        pytest.param(UserId, True, id="true"),
+    ],
+)
+def test_is_newtype(type: type[Any], expected: bool):
+    assert is_newtype(type) is expected

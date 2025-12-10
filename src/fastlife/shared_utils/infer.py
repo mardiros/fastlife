@@ -31,7 +31,7 @@ def is_union(typ: type[Any]) -> bool:
     return False
 
 
-def is_newtype(typ: type[Any]):
+def is_newtype(typ: type[Any]) -> bool:
     """Check tha a type is a typing.NewType"""
     return callable(typ) and hasattr(typ, "__supertype__")
 
