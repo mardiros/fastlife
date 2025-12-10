@@ -31,6 +31,11 @@ def is_union(typ: type[Any]) -> bool:
     return False
 
 
+def is_newtype(typ: type[Any]):
+    """Check tha a type is a typing.NewType"""
+    return callable(typ) and hasattr(typ, "__supertype__")
+
+
 def is_inline_template_returned(endpoint: Callable[..., Any]) -> bool:
     """Test if a view, the endpoint return a template."""
     signature = inspect.signature(endpoint)
