@@ -43,6 +43,6 @@ class IpAddrBuilder(BaseWidgetBuilder[IPvAnyAddress]):
                 else None
             ),
             token=self.factory.token,
-            value=value,
+            value=value or None,
             error=form_errors.get(field_name),
         )
