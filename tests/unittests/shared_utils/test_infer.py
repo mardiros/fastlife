@@ -1,25 +1,26 @@
 from collections.abc import Mapping
-from typing import Any, Union
+from typing import Any, NewType, Union
+from uuid import UUID
 
 import pytest
 
 from fastlife.shared_utils.infer import is_union
 
+UserId = NewType("UserId", UUID)
+
 
 @pytest.mark.parametrize(
-    "params",
+    "type,expected",
     [
-        pytest.param({"type": int, "expected": False}, id="int"),
-        pytest.param({"type": str, "expected": False}, id="str"),
-        pytest.param({"type": int | str, "expected": True}, id="int | str"),
+        pytest.param(int, False, id="int"),
+        pytest.param(str, False, id="str"),
+        pytest.param(int | str, True, id="int | str"),
         pytest.param(
-            {
-                "type": Union[int, str],  # noqa: UP007
-                "expected": True,
-            },
+            Union[int, str],  # noqa: UP007
+            True,
             id="Union[int, str]",
         ),
     ],
 )
-def test_is_union(params: Mapping[str, Any]):
-    assert is_union(params["type"]) is params["expected"]
+def test_is_union(type: type[Any], expected: bool):
+    assert is_union(type) is expected
