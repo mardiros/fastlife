@@ -1,3 +1,8 @@
+## 0.35.1  - Released on 2025-12-11
+* Fix rendering form for Enum in case the data are invalid.
+* Fix rendering form while using typing.NewType.
+* Tests how to render optional integer.
+
 ## 0.35.0  - Released on 2025-12-09
 * Don't cast the pydantic template variable to dict, use direct values in order
   to keep properies available on complex models.
