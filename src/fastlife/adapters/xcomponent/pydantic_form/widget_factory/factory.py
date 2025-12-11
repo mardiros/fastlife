@@ -12,6 +12,7 @@ from pydantic.fields import FieldInfo
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
+from fastlife.shared_utils.infer import is_newtype
 
 if TYPE_CHECKING:
     from fastlife.service.templates import AbstractTemplateRenderer
@@ -177,6 +178,8 @@ class WidgetFactory:
                     )
                     return ret
 
+        if is_newtype(typ):
+            typ = typ = typ.__supertype__
         type_origin = get_origin(typ)
         for builder in self.builders:
             if builder.accept(typ, type_origin):

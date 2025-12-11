@@ -1,7 +1,7 @@
 from collections.abc import Callable, Sequence
 from decimal import Decimal
 from enum import Enum, IntEnum
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, Literal, NewType
 from uuid import UUID
 
 import bs4
@@ -13,6 +13,12 @@ from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
 from fastlife.service.templates import AbstractTemplateRenderer
+
+UserId = NewType("UserId", UUID)
+
+
+class User(BaseModel):
+    user_id: UserId = Field(title="User Id")
 
 
 class MyWidget(Widget[str]):
@@ -130,6 +136,17 @@ class PriceForm(XTemplate):
     </Form>
     """
     model: FormModel[Price]
+    token: str
+
+
+class UserForm(XTemplate):
+    template = """
+    <Form>
+      { globals.pydantic_form(model=model, token=token) }
+      <Button>Submit</Button>
+    </Form>
+    """
+    model: FormModel[User]
     token: str
 
 
@@ -571,3 +588,21 @@ def test_render_invalid_payload(
     result = renderer.render_template(form)
     html = soup(result)
     assert html.find("option", attrs=expected)
+
+
+def test_render_new_type(
+    renderer: AbstractTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    new_user = User.model_construct()
+
+    model = FormModel[User].default("x", User)
+    model.edit(new_user)
+    form = UserForm(
+        model=model,
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    assert html.find("input", attrs={"name": "x.user_id", "type": "hidden"})
