@@ -1,3 +1,6 @@
+## 0.36.0  - Released on 2025-12-20
+* Upgrade XComponent to add support of namespaced components.
+
 ## 0.35.1  - Released on 2025-12-11
 * Fix rendering form for Enum in case the data are invalid.
 * Fix rendering form while using typing.NewType.
