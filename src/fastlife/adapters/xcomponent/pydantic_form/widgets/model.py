@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 from markupsafe import Markup
 from pydantic import Field
 
+from fastlife.domain.model.template import XTemplate
+
 if TYPE_CHECKING:
     from fastlife.service.templates import AbstractTemplateRenderer
 
@@ -45,7 +47,7 @@ class ModelWidget(Widget[Sequence[TWidget]]):
     nested: bool = Field(default=False)
     children_widgets: list[str] | None = Field(default=None)
 
-    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer[XTemplate]") -> Markup:
         """Return the html version."""
         self.children_widgets = [child.to_html(renderer) for child in self.value or []]
         return Markup(renderer.render_template(self))

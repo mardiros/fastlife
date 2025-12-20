@@ -53,7 +53,9 @@ class WidgetFactory:
     :param token: reuse a token.
     """
 
-    def __init__(self, renderer: "AbstractTemplateRenderer", token: str | None = None):
+    def __init__(
+        self, renderer: "AbstractTemplateRenderer[XTemplate]", token: str | None = None
+    ):
         self.renderer = renderer
         self.token = token or secrets.token_urlsafe(4).replace("_", "-")
         self.builders: list[BaseWidgetBuilder[Any]] = [

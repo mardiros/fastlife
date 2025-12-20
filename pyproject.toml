@@ -24,7 +24,7 @@ dependencies = [
   "pydantic-settings >=2.0.3,<3",
   "python-multipart >=0.0.13,<1",
   "venusian >=3.0.0,<4",
-  "xcomponent >=0.9.0,<1",
+  "xcomponent >=0.10.0,<1",
 ]
 
 [project.urls]
@@ -97,7 +97,7 @@ disallow_any_generics = true
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = ["behave", "venusian", "docutils"]
+module = ["venusian", "docutils"]
 ignore_missing_imports = true
 
 [tool.ruff]

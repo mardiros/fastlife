@@ -11,13 +11,12 @@ from markupsafe import Markup
 from pydantic.fields import FieldInfo
 from xcomponent import Catalog
 
-from fastlife import Request
+from fastlife import Request, XTemplate
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.factory import (
     WidgetFactory,
 )
 from fastlife.config import Configurator, configure
 from fastlife.domain.model.form import FormModel
-from fastlife.domain.model.template import InlineTemplate
 from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
@@ -26,7 +25,7 @@ from fastlife.settings import Settings
 from fastlife.shared_utils.resolver import resolve
 
 
-class XTemplateRenderer(AbstractTemplateRenderer):
+class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
     """
     An object that will be initialized by an AbstractTemplateRendererFactory,
     passing the request to process.
@@ -93,7 +92,7 @@ class XTemplateRenderer(AbstractTemplateRenderer):
         """Used to buid pydantic form widget that do ajax requests."""
         return self.request.registry.settings.fastlife_route_prefix
 
-    def render_template(self, template: InlineTemplate) -> str:
+    def render_template(self, template: XTemplate) -> str:
         """
         Render an inline template.
 
@@ -105,12 +104,13 @@ class XTemplateRenderer(AbstractTemplateRenderer):
         }
         return self.catalog.render(
             template.template,
+            use=template.use,
             globals=self.globals,
             **params,
         )
 
 
-class XRendererFactory(AbstractTemplateRendererFactory):
+class XRendererFactory(AbstractTemplateRendererFactory[XTemplate]):
     """
     The template render factory.
     """
@@ -119,7 +119,7 @@ class XRendererFactory(AbstractTemplateRendererFactory):
         self.globals = resolve(settings.xcomponent_global_catalog_class)().model_dump()
         self.catalog = catalog
 
-    def __call__(self, request: Request) -> AbstractTemplateRenderer:
+    def __call__(self, request: Request) -> AbstractTemplateRenderer[XTemplate]:
         """
         While processing an HTTP Request, a renderer object is created giving
         isolated context per request.
