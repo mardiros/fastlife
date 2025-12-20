@@ -703,9 +703,11 @@ class GenericConfigurator(Generic[TRegistry]):
         """Build the xcomponent catalog."""
         return self._xcomponent_registry.build_catalog()
 
-    def register_xcomponent(self, name: str, component: Component) -> Self:
+    def register_xcomponent(
+        self, name: str, component: Component, use: dict[str, Catalog] | None = None
+    ) -> Self:
         """Register a component."""
-        self._xcomponent_registry.register_xcomponent(name, component)
+        self._xcomponent_registry.register_xcomponent(name, component, use or {})
         return self
 
     def register_xfunction(self, name: str, func: Function) -> Self:

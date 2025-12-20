@@ -1,4 +1,4 @@
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 
 import venusian
 from xcomponent import Catalog
@@ -15,7 +15,7 @@ class XComponentRegistry:
     venusian.
     """
 
-    components: dict[str, Component]
+    components: dict[str, tuple[Component, dict[str, Catalog]]]
 
     functions: dict[str, Function]
 
@@ -23,9 +23,11 @@ class XComponentRegistry:
         self.components = {}
         self.functions = {}
 
-    def register_xcomponent(self, name: str, component: Component) -> None:
+    def register_xcomponent(
+        self, name: str, component: Component, use: dict[str, Catalog]
+    ) -> None:
         """Register a xcomponent component to the application template engine."""
-        self.components[name] = component
+        self.components[name] = (component, use)
 
     def register_xfunction(self, name: str, func: Function) -> None:
         """Register a xcomponent function to the application template engine."""
@@ -33,15 +35,17 @@ class XComponentRegistry:
 
     def build_catalog(self) -> Catalog:
         catalog = Catalog()
-        for name, component in self.components.items():
-            catalog.component(name)(component)
+        for name, (component, use) in self.components.items():
+            catalog.component(name, use)(component)
 
         for name, function in self.functions.items():
             catalog.function(name)(function)
         return catalog
 
 
-def x_component(name: str | None = None) -> Callable[[Component], Component]:
+def x_component(
+    name: str | None = None, use: Mapping[str, Catalog] | None = None
+) -> Callable[[Component], Component]:
     """
     Register a component to the XComponent catalog for the application.
 
@@ -52,6 +56,7 @@ def x_component(name: str | None = None) -> Callable[[Component], Component]:
 
     :param name: override the name of the component, default is the python function
         name.
+    :param use: import a catalog as a namespace components.
     """
     component_name = name
 
@@ -63,7 +68,9 @@ def x_component(name: str | None = None) -> Callable[[Component], Component]:
         ) -> None:
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore
-            scanner.fastlife.register_xcomponent(component_name or name, ob)  # type: ignore
+            scanner.fastlife.register_xcomponent(  # type: ignore
+                component_name or name, ob, use or {}
+            )
 
         venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
         return wrapped
