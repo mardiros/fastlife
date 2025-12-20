@@ -4,6 +4,7 @@ from typing import Any
 from markupsafe import Markup
 from pydantic import Field
 
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import TWidget, TypeWrapper, Widget
@@ -65,7 +66,7 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
     def build_item_type(self, route_prefix: str) -> TypeWrapper:
         return TypeWrapper(self.item_type, route_prefix, self.name, self.token)
 
-    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer[JinjaXTemplate]") -> Markup:
         """Return the html version."""
         self.wrapped_type = self.build_item_type(renderer.route_prefix)
         self.children_widgets = [

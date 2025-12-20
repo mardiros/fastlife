@@ -18,7 +18,7 @@ from fastlife.adapters.fastapi.form import FormModel
 from fastlife.adapters.fastapi.localizer import get_localizer
 from fastlife.adapters.jinjax.widget_factory.factory import WidgetFactory
 from fastlife.config import Configurator, configure
-from fastlife.domain.model.template import InlineTemplate
+from fastlife.domain.model.template import InlineTemplate, JinjaXTemplate
 
 if TYPE_CHECKING:
     from fastlife.settings import Settings  # coverage: ignore
@@ -56,7 +56,7 @@ def build_searchpath(template_search_path: str) -> Sequence[str]:
     return searchpath
 
 
-class JinjaxRenderer(AbstractTemplateRenderer):
+class JinjaxRenderer(AbstractTemplateRenderer[JinjaXTemplate]):
     """Render templates using JinjaX."""
 
     def __init__(
@@ -137,7 +137,7 @@ class JinjaxRenderer(AbstractTemplateRenderer):
         )
 
 
-class JinjaxEngine(AbstractTemplateRendererFactory):
+class JinjaxEngine(AbstractTemplateRendererFactory[JinjaXTemplate]):
     """
     The default template renderer factory. Based on JinjaX.
 
@@ -157,7 +157,7 @@ class JinjaxEngine(AbstractTemplateRendererFactory):
         for path in build_searchpath(settings.template_search_path):
             self.catalog.add_folder(path)
 
-    def __call__(self, request: Request) -> AbstractTemplateRenderer:
+    def __call__(self, request: Request) -> AbstractTemplateRenderer[JinjaXTemplate]:
         """Build the renderer to render request for template."""
         return JinjaxRenderer(
             self.catalog,

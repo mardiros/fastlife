@@ -1,9 +1,9 @@
-from fastlife.domain.model.template import InlineTemplate
+from fastlife import XTemplate
 from fastlife.service.templates import AbstractTemplateRenderer
 
 
-def test_icon(renderer: AbstractTemplateRenderer):
-    class MyIcon(InlineTemplate):
+def test_icon(renderer: AbstractTemplateRenderer[XTemplate]):
+    class MyIcon(XTemplate):
         template = "<Icon name='fire'/>"
 
     assert renderer.render_template(MyIcon()).startswith(
@@ -11,8 +11,8 @@ def test_icon(renderer: AbstractTemplateRenderer):
     )
 
 
-def test_icon_missing(renderer: AbstractTemplateRenderer):
-    class MyIcon(InlineTemplate):
+def test_icon_missing(renderer: AbstractTemplateRenderer[XTemplate]):
+    class MyIcon(XTemplate):
         template = "<Icon name='does not exists'/>"
 
     assert renderer.render_template(MyIcon()) == ""

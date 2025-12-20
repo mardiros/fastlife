@@ -30,7 +30,7 @@ class GenericRegistry(Generic[TSettings]):
 
     settings: TSettings
     """Application settings."""
-    renderers: Mapping[str, "AbstractTemplateRendererFactory"]
+    renderers: Mapping[str, "AbstractTemplateRendererFactory[Any]"]
     """Registered template engine."""
     locale_negociator: "LocaleNegociator"
     """Used to fine the best language for the response."""
@@ -49,7 +49,7 @@ class GenericRegistry(Generic[TSettings]):
         self.localizer = LocalizerFactory()
         self.request_factory = default_request_factory(self)
 
-    def get_renderer(self, template: str) -> "AbstractTemplateRendererFactory":
+    def get_renderer(self, template: str) -> "AbstractTemplateRendererFactory[Any]":
         for key, val in self.renderers.items():
             if template.endswith(key):
                 return val

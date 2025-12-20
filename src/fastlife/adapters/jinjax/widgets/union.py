@@ -8,6 +8,7 @@ from typing import Union
 from markupsafe import Markup
 from pydantic import BaseModel, Field
 
+from fastlife.domain.model.template import JinjaXTemplate
 from fastlife.service.templates import AbstractTemplateRenderer
 
 from .base import TWidget, TypeWrapper, Widget
@@ -64,7 +65,7 @@ class UnionWidget(Widget[TWidget]):
             for typ in self.children_types
         ]
 
-    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer[JinjaXTemplate]") -> Markup:
         """Return the html version."""
         self.child = Markup(self.value.to_html(renderer)) if self.value else ""
         self.types = self.build_types(renderer.route_prefix)

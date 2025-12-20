@@ -14,7 +14,7 @@ More template engine can be registered using the configurator method
 
 import abc
 from collections.abc import Mapping
-from typing import Any
+from typing import Any, Generic, TypeVar
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
@@ -23,8 +23,10 @@ from fastlife import Request, Response
 from fastlife.adapters.fastapi.form import FormModel
 from fastlife.domain.model.template import InlineTemplate
 
+TInlineTemplate = TypeVar("TInlineTemplate", bound=InlineTemplate)
 
-class AbstractTemplateRenderer(abc.ABC):
+
+class AbstractTemplateRenderer(abc.ABC, Generic[TInlineTemplate]):
     """
     An object that will be initialized by an AbstractTemplateRendererFactory,
     passing the request to process.
@@ -49,7 +51,7 @@ class AbstractTemplateRenderer(abc.ABC):
         status_code: int = 200,
         content_type: str = "text/html",
         globals: Mapping[str, Any] | None = None,
-        params: InlineTemplate,
+        params: TInlineTemplate,
     ) -> Response:
         """
         Render the template and build the HTTP Response.
@@ -72,7 +74,7 @@ class AbstractTemplateRenderer(abc.ABC):
         return resp
 
     @abc.abstractmethod
-    def render_template(self, template: InlineTemplate) -> str:
+    def render_template(self, template: TInlineTemplate) -> str:
         """
         Render an inline template.
 
@@ -115,13 +117,13 @@ class AbstractTemplateRenderer(abc.ABC):
         """
 
 
-class AbstractTemplateRendererFactory(abc.ABC):
+class AbstractTemplateRendererFactory(abc.ABC, Generic[TInlineTemplate]):
     """
     The template render factory.
     """
 
     @abc.abstractmethod
-    def __call__(self, request: Request) -> AbstractTemplateRenderer:
+    def __call__(self, request: Request) -> AbstractTemplateRenderer[TInlineTemplate]:
         """
         While processing an HTTP Request, a renderer object is created giving
         isolated context per request.

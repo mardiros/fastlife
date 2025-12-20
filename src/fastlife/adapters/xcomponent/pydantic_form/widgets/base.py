@@ -70,7 +70,7 @@ class Widget(XTemplate, Generic[T]):
         )
         return self
 
-    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer[XTemplate]") -> Markup:
         """Return the html version."""
         return Markup(renderer.render_template(self))
 

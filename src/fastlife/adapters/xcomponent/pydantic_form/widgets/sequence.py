@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING, Any
 from markupsafe import Markup
 from pydantic import Field
 
+from fastlife.domain.model.template import XTemplate
+
 if TYPE_CHECKING:
     from fastlife.service.templates import AbstractTemplateRenderer
 
@@ -66,7 +68,7 @@ class SequenceWidget(Widget[Sequence[TWidget]]):
     def build_item_type(self, route_prefix: str) -> TypeWrapper:
         return TypeWrapper(self.item_type, route_prefix, self.name, self.token)
 
-    def to_html(self, renderer: "AbstractTemplateRenderer") -> Markup:
+    def to_html(self, renderer: "AbstractTemplateRenderer[XTemplate]") -> Markup:
         """Return the html version."""
         self.wrapped_type = self.build_item_type(renderer.route_prefix)
         self.children_widgets = [

@@ -676,7 +676,7 @@ class GenericConfigurator(Generic[TRegistry]):
         return self
 
     def add_renderer(
-        self, file_ext: str, renderer: "AbstractTemplateRendererFactory"
+        self, file_ext: str, renderer: "AbstractTemplateRendererFactory[Any]"
     ) -> Self:
         """
         Add a render for a given file extension.
