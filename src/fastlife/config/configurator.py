@@ -687,7 +687,7 @@ class GenericConfigurator(Generic[TRegistry]):
         # we don't want to expose the renderer publicly as mutable
         if not hasattr(renderer, "template_type"):
             raise RuntimeError(
-                f"Renderer {renderer} does not declate T in "
+                f"Renderer {renderer.__class__.__qualname__} does not declate T in "
                 "AbstractTemplateRendererFactory[T] type annotations."
             )
         self.registry.renderers[renderer.template_type] = renderer  # type: ignore
