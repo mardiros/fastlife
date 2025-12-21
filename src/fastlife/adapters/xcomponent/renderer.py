@@ -33,12 +33,13 @@ class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
 
     request: Request
     """Associated request that needs a response."""
+    ns_catalog: dict[str, Catalog]
 
     def __init__(
-        self, globals: dict[str, Any], request: Request, catalog: Catalog
+        self, globals: dict[str, Any], request: Request, ns_catalog: dict[str, Catalog]
     ) -> None:
         self.request = request
-        self.catalog = catalog
+        self.ns_catalog = ns_catalog
         self.globals: dict[str, Any] = {**globals}
         self.globals["pydantic_form"] = self.pydantic_form
 
@@ -102,9 +103,8 @@ class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
         params = {
             k: getattr(template, k) for k in template.__class__.model_fields.keys()
         }
-        return self.catalog.render(
+        return self.ns_catalog[template.namespace].render(
             template.template,
-            use=template.use,
             globals=self.globals,
             **params,
         )
@@ -115,9 +115,9 @@ class XRendererFactory(AbstractTemplateRendererFactory[XTemplate]):
     The template render factory.
     """
 
-    def __init__(self, settings: "Settings", catalog: Catalog) -> None:
+    def __init__(self, settings: "Settings", ns_catalog: dict[str, Catalog]) -> None:
         self.globals = resolve(settings.xcomponent_global_catalog_class)().model_dump()
-        self.catalog = catalog
+        self.ns_catalog = ns_catalog
 
     def __call__(self, request: Request) -> AbstractTemplateRenderer[XTemplate]:
         """
@@ -130,7 +130,7 @@ class XRendererFactory(AbstractTemplateRendererFactory[XTemplate]):
         return XTemplateRenderer(
             globals=self.globals,
             request=request,
-            catalog=self.catalog,
+            ns_catalog=self.ns_catalog,
         )
 
 
@@ -144,6 +144,6 @@ def includeme(conf: Configurator) -> None:
         "xcomponent",
         XRendererFactory(
             conf.registry.settings,
-            conf.build_catalog(),
+            conf.build_catalogs(),
         ),
     )

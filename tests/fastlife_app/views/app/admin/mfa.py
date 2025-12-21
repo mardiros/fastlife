@@ -6,8 +6,9 @@ from pydantic import BaseModel
 from starlette.status import HTTP_303_SEE_OTHER
 
 from fastlife import (
+    CustomWidget,
     FormModel,
-    XTemplate,
+    MFACodeWidget,
     exception_handler,
     form_model,
     view_config,
@@ -16,12 +17,14 @@ from fastlife.domain.model.security_policy import MFARequired
 from tests.fastlife_app.config import MyRequest
 from tests.fastlife_app.domain.model import AuthnToken
 
+from .xcomponents import XSigninTemplate
+
 
 class MfaForm(BaseModel):
-    code: str
+    code: Annotated[str, CustomWidget[MFACodeWidget]]
 
 
-class LoginTemplate(XTemplate):
+class MFATemplate(XSigninTemplate):
     template = """
     <Layout>
       <H2>second factor</H2>
@@ -40,7 +43,7 @@ class LoginTemplate(XTemplate):
 async def mfa(
     request: MyRequest,
     loginform: Annotated[FormModel[MfaForm], form_model(MfaForm)],
-) -> LoginTemplate | RedirectResponse:
+) -> MFATemplate | RedirectResponse:
     assert request.security_policy
     if loginform.is_valid:
         uow = request.registry.uow
@@ -65,7 +68,7 @@ async def mfa(
 
         else:
             loginform.add_error("code", "Invalid code.")
-    return LoginTemplate(model=loginform)
+    return MFATemplate(model=loginform)
 
 
 @exception_handler(MFARequired)

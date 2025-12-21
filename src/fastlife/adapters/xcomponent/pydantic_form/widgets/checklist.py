@@ -7,7 +7,7 @@ from typing import Any, Self
 
 from pydantic import BaseModel, Field, model_validator
 
-from fastlife.adapters.xcomponent.registry import x_component
+from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS, x_component
 
 from .base import Widget
 
@@ -32,7 +32,7 @@ class Checkable(BaseModel):
         return self
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def PydanticFormChecklistItem(value: Checkable, globals: Any) -> str:
     return """
     <div class="flex items-center mb-4">

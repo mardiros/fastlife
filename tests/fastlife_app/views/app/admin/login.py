@@ -6,11 +6,12 @@ from fastlife import (
     FormModel,
     RedirectResponse,
     Request,
-    XTemplate,
     form_model,
     view_config,
 )
 from tests.fastlife_app.config import MyRequest
+
+from .xcomponents import XSigninTemplate
 
 
 class LoginForm(BaseModel):
@@ -18,7 +19,7 @@ class LoginForm(BaseModel):
     password: SecretStr
 
 
-class LoginTemplate(XTemplate):
+class LoginTemplate(XSigninTemplate):
     template = """
     <Layout>
       <H2>Let's authenticate</H2>

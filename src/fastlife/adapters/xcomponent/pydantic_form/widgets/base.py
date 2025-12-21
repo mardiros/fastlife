@@ -2,11 +2,12 @@
 
 import json
 import secrets
-from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Self, TypeVar
 
 from markupsafe import Markup
 from pydantic import Field, model_validator
 
+from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS
 from fastlife.domain.model.template import XTemplate
 from fastlife.shared_utils.infer import is_union
 
@@ -39,6 +40,8 @@ class Widget(XTemplate, Generic[T]):
     :param removable: display a button to remove the widget for optional fields.
     :param token: token used to get unique id on the form.
     """
+
+    namespace: ClassVar[str] = PYDANTICFORM_CATALOG_NS
 
     name: str
     "variable name, nested variables have dots."

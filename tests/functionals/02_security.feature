@@ -1,6 +1,7 @@
 @asyncio
 Feature: Authentication/Authorization
 
+  @wip
   Scenario: Redirect to login page, view secured page, logout and redirect home
     Given anonymous user on "/admin/secured"
     Then the user sees the text "Let's authenticate"

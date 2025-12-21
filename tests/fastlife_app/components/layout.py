@@ -5,7 +5,7 @@ from fastlife.adapters.xcomponent.registry import x_component
 layout_catalog = Catalog()
 
 
-@layout_catalog.component
+@x_component(namespace="layout")
 def Head():
     return """
     <head>
@@ -17,7 +17,7 @@ def Head():
     """
 
 
-@layout_catalog.component
+@x_component(namespace="layout")
 def Body():
     return """
     <body>
@@ -31,7 +31,7 @@ def Body():
     """
 
 
-@x_component(use={"layout": layout_catalog})
+@x_component()
 def Layout(children: XNode):
     return """
     <>
