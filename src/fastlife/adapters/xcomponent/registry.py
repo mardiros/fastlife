@@ -68,7 +68,7 @@ class XComponentRegistry:
 
             # we copy all the builtins components to all namespaces
             for name, component in self.components.get(BUILTINS_CATALOG_NS, {}).items():
-                ctlg.component(name, use=catalogs)(component)
+                ctlg.component(name, use={})(component)
 
             for name, component in components.items():
                 ctlg.component(name, use=catalogs)(component)
