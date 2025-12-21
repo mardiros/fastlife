@@ -369,9 +369,6 @@ docs = [
     { name = "sphinx" },
     { name = "sphinx-autodoc2" },
 ]
-jinjax = [
-    { name = "jinjax" },
-]
 testing = [
     { name = "beautifulsoup4" },
 ]
@@ -415,7 +412,6 @@ requires-dist = [
     { name = "heroicons", marker = "extra == 'docs'", specifier = ">=2.7.0,<3" },
     { name = "itsdangerous", specifier = ">=2.1.2,<3" },
     { name = "jinjax", marker = "extra == 'docs'", specifier = ">=0.48,<0.49" },
-    { name = "jinjax", marker = "extra == 'jinjax'", specifier = ">=0.48,<0.49" },
     { name = "linkify-it-py", marker = "extra == 'docs'", specifier = ">=2.0.3,<3" },
     { name = "markupsafe", specifier = ">=2.1.3,<3" },
     { name = "multidict", specifier = ">=6.0.5,<7" },
@@ -428,7 +424,7 @@ requires-dist = [
     { name = "venusian", specifier = ">=3.0.0,<4" },
     { name = "xcomponent", specifier = ">=0.10.1,<1" },
 ]
-provides-extras = ["jinjax", "testing", "docs"]
+provides-extras = ["testing", "docs"]
 
 [package.metadata.requires-dev]
 dev = [

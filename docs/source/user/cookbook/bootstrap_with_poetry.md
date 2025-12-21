@@ -26,10 +26,10 @@ path = ".venv"
 EOF
 ```
 
-Now we can add the `fastlifeweb` package with `jinjax` template rendering engine.
+Now we can add the `fastlifeweb` package.
 
 ```bash
-poetry add fastlifeweb[jinjax]
+poetry add fastlifeweb
 ```
 
 
@@ -117,9 +117,9 @@ can be relative from the module.
 
 ```bash
 cat << 'EOF' >  src/myapp/views.py
-from fastlife import JinjaXTemplate, view_config
+from fastlife import XTemplate, view_config
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = """
     <html>
         <body>
@@ -136,11 +136,11 @@ EOF
 
 
 The view here hello_world return a template HelloWorld which is going to be
-rendered by the JinjaX template engine.
+rendered by the XComponent template engine.
 
 The `H1` here is a component from the fastlife component library which
-will render a `<h1>` in HTML. In {term}`JinjaX`, the template engined used,
-by convention, `PascalCase` tag are Jinjax component and lowercase are simple HTML.
+will render a `<h1>` in HTML. In {term}`XComponent`, the template engined used,
+by convention, `PascalCase` tag are XComponent component and lowercase are simple HTML.
 
 
 ### Testing

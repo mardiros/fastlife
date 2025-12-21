@@ -6,7 +6,7 @@ There is a set of {term}`widgets <widget>` available and that is completly
 overridable using an annotation.
 
 :::{admonition} wip
-This section describe pydantic_form using JinjaX directly.
+This section describe pydantic_form using XComponent directly.
 
 There is no abstraction made to use a pydantic_form using another template engine
 at the moment until it is stabilized.
@@ -21,7 +21,7 @@ To starts handling form, we will use the helloworld example from the
 a simple form in the page to say hello, has a classic example.
 
 The function
-:meth:`pydantic_form <fastlife.adapters.jinjax.renderer.JinjaxRenderer.pydantic_form>`
+:meth:`pydantic_form <fastlife.adapters.xcomponent.renderer.XRendererFactory.pydantic_form>`
 invoked here will render the template content, but not the
 `Form` itself to let the choice on how the form behave.
 It also don't render submit buttons to give the control of it too.
@@ -48,11 +48,23 @@ class Person(BaseModel):
     nick: str
 
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = """
     <html>
         <body>
-          <H1>Hello {{ person.model.nick|default("World") }}!</H1>
+          <H1>Hello {
+              if person {
+                  if person.nick {
+                      <>{person.nick}</>
+                  }
+                  else {
+                      <>World</>
+                  }
+              }
+              else {
+                  <>World</>
+              }
+          }!</H1>
           <Form method="post">
             {{ pydantic_form(person) }}
             <Button>Submit</Button>
@@ -73,9 +85,7 @@ EOF
 ```
 
 :::{tip}
-Usually, with jinjax, we have to declare the definition of the variables in templates,
-but using the JinjaXTemplate object, the definition is automatically creating with
-the attributes of the class. `person` in our example.
+XComponent and statement should be updated to fix the and keyword to optimize evaluation.
 :::
 
 Now, if you run the app and start a browser, you see the form with one field to the
@@ -127,11 +137,23 @@ class Person(BaseModel):
     )
 
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = """
     <html>
         <body>
-          <H1>Hello {{ person.model.nick|default("World") }}!</H1>
+          <H1>Hello {
+              if person {
+                  if person.nick {
+                      <>{person.nick}</>
+                  }
+                  else {
+                      <>World</>
+                  }
+              }
+              else {
+                  <>World</>
+              }
+          }!</H1>
           <Form method="post">
             {{ pydantic_form(person) }}
             <Button>Submit</Button>
@@ -172,9 +194,9 @@ a full control of the rendering. We just need to inherits a class from
 from typing import Annotated
 from uuid import UUID, uuid1
 
-from fastlife.adapters.jinjax.widgets.base import CustomWidget, Widget
-from fastlife.adapters.jinjax.widgets.hidden import HiddenWidget
-from fastlife.adapters.jinjax.widgets.text import TextareaWidget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.hidden import HiddenWidget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.text import TextareaWidget
 from pydantic import BaseModel, Field
 
 
@@ -203,9 +225,8 @@ cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
     <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
     </head>
     <body>
-      <H1 id="hello-world">Hello {{ person.model.nick|default("World") }}!</H1>
-      <Form hx-post="{{ request.url_for('hx-hello')}}" hx-target="#hello-world">
-        {{ pydantic_form(person) }}
+      <Form hx-post="{globals.request.url_for('hx-hello')}" hx-target="#hello-world">
+        {pydantic_form(person)}
         <Button>Submit</Button>
       </Form>
     </body>
@@ -222,7 +243,7 @@ lets add this view.
 cat << 'EOF' > src/myapp/views.py
 from typing import Annotated
 
-from fastlife import view_config, Response
+from fastlife import view_config, Response, XTemplate
 from pydantic import BaseModel, Field
 from fastlife.request.form import FormModel, form_model
 
@@ -233,13 +254,12 @@ class Person(BaseModel):
     )
 
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = """
     <html>
         <body>
-          <H1>Hello {{ person.model.nick|default("World") }}!</H1>
           <Form method="post">
-            {{ pydantic_form(person) }}
+            {pydantic_form(person)}
             <Button>Submit</Button>
           </Form>
         </body>
@@ -248,7 +268,7 @@ class HelloWorld(JinjaXTemplate):
     person: FormModel[Person]
 
 
-@view_config("home", "/", methods=["GET"], template="HelloWorld.jinja")
+@view_config("home", "/", methods=["GET"])
 async def hello_world(
     person: Annotated[FormModel[Person], form_model(Person, "person")],
 ) -> HelloWorld:
