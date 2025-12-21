@@ -86,8 +86,11 @@ class FormModel(Generic[T]):
                             raise NotImplementedError from exc  # coverage: ignore
 
                     else:
-                        # it is an integer and it part of the list
-                        loc = f"{loc}.{part}"
+                        # this line was used by jinjax but no test requires it using
+                        # xcomponent pydantic_form helper
+                        # loc = f"{loc}.{part}"
+                        # raising to get the use case back later ?
+                        raise NotImplementedError from exc  # coverage: ignore
 
                 if loc in errors:
                     errors[loc] = f"{errors[loc]}, {error['msg']}"
