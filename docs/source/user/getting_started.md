@@ -69,7 +69,7 @@ the "separation of concern".
 
 The second reason is that it encore typing. While inlining template in the code,
 we can add parameters to the returned object too, an instance of a
-{class}`fastlife.domain.model.templates.JinjaXTemplate` is a self complete object
+{class}`fastlife.XTemplate` is a self complete object
 ready to be rendered.
 
 Don't be afraid, we have written html node here, for the introduction, but,
@@ -140,10 +140,9 @@ writing test for web pages.
 ````{note}
 
   This module required the extra `testing` installable via the command.
-  Since the example use jinjax, it has to be installed too.
 
   ```bash
-  pip install fastlifeweb[jinjax,testing]
+  pip install fastlifeweb[testing]
 
 ````
 

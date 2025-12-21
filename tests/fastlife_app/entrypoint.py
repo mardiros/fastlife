@@ -2,12 +2,7 @@ from tests.fastlife_app.config import MyConfigurator, MySettings
 
 
 def build_app():
-    conf = MyConfigurator(
-        MySettings(
-            session_secret_key="supasickret",
-            jinjax_auto_reload=True,
-        )
-    )
+    conf = MyConfigurator(MySettings(session_secret_key="supasickret"))
     conf.add_template_search_path("tests.fastlife_app:templates")
     conf.include(".adapters")
     conf.include(".config")

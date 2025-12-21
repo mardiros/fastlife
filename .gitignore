@@ -11,6 +11,5 @@ docs/source/develop/
 junit
 htmlcov
 coverage.xml
-tests/unittests/adapter/jinjax/doc/docs/components
 docs/source/iconswall/IconsWall.jinja
 docs/source/iconswall/icons.rst

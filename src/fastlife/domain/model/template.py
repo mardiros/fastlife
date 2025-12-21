@@ -24,10 +24,6 @@ class InlineTemplate(BaseModel):
     """The template string to render."""
 
 
-class JinjaXTemplate(InlineTemplate):
-    """Template that render JinjaX"""
-
-
 class XTemplate(InlineTemplate):
     """Template that render XComponent"""
 

@@ -1,4 +1,5 @@
 (add-css-stylesheet)=
+
 # Add CSS stylesheet
 
 To add CSS stylesheet, we have many choices, and know, we can split the works in
@@ -192,7 +193,6 @@ Yes you can, in that case to a static dir in the static dir in order
 to not serve any `.py` file to avoid any security issue.
 :::
 
-
 To serve the css, we have to load the static route in the app, we will update
 the application entrypoint.
 
@@ -210,8 +210,6 @@ def build_app():
 app = build_app()
 EOF
 ```
-
-
 
 Now the css ared served here.
 
@@ -248,25 +246,8 @@ cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
 EOF
 ```
 
-:::{tip} Using {# css component.css #} ?
-
-JinjaX can load a [per component css](https://jinjax.scaletti.dev/guide/css-and-js/#/)
-using the `{# css component.css #}` syntax.
-
-In that case, the `{{ catalog.render_assets() }}` has to be added to the layout
-
-```html
-<head>
-  <meta charset="utf-8" />
-  <title>{{ html_title }}</title>
-  <link href="/static/css/main.css" rel="stylesheet" />
-  {{ catalog.render_assets() }}  {# load the css of all components rendered below #}
-</head>
-```
-
 fastlife does not use this feature in its component.
 :::
-
 
 ### Testing
 
@@ -275,7 +256,6 @@ We can observe that the Hello World style is applyied by running the app.
 ```bash
 poetry run fastapi dev src/myapp/entrypoint.py
 ```
-
 
 ### Before you go
 

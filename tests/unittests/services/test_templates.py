@@ -3,11 +3,11 @@
 from typing import Any
 
 from fastlife import Configurator, Request
+from fastlife.domain.model.template import InlineTemplate
 from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )
-from tests.unittests.adapter.jinjax.test_inline import InlineTemplate
 from tests.unittests.conftest import pytest
 
 

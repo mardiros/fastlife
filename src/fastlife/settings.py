@@ -46,18 +46,6 @@ class Settings(BaseSettings):
     The default locale
     """
 
-    jinjax_use_cache: bool = Field(default=True)
-    """
-    JinjaX (the default template engine) setting use_cache.
-
-    Could be disabled while developping, leave value true for production.
-    """
-    jinjax_auto_reload: bool = Field(default=False)
-    """
-    JinjaX (the default template engine) setting auto_reload.
-
-    Set to true while developing, set false for production.
-    """
     xcomponent_global_catalog_class: str = Field(
         default="fastlife.template_globals:Globals"
     )

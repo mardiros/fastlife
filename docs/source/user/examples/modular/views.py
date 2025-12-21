@@ -1,12 +1,12 @@
 # views.py
 from pathlib import Path
 
-from fastlife import Configurator, JinjaXTemplate, configure, view_config
+from fastlife import Configurator, XTemplate, configure, view_config
 
 templates_dir = Path(__file__).parent
 
 
-class HelloWorld(JinjaXTemplate):
+class HelloWorld(XTemplate):
     template = "<Layout>Hello World</Layout>"
 
 
