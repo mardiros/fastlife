@@ -1,6 +1,5 @@
 """Render template using templates containing python f-string like format."""
 
-from pathlib import Path
 from typing import Any
 
 from markupsafe import Markup
@@ -13,8 +12,6 @@ from fastlife.service.templates import (
     AbstractTemplateRenderer,
     AbstractTemplateRendererFactory,
 )
-
-templates = Path(__file__).parent / "templates"
 
 
 class FString(InlineTemplate):
