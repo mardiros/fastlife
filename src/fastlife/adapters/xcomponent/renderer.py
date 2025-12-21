@@ -105,7 +105,6 @@ class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
         }
         return self.ns_catalog[template.catalog].render(
             template.template,
-            use=template.use,
             globals=self.globals,
             **params,
         )

@@ -1,11 +1,9 @@
 """Inline templates."""
 
-from collections.abc import Mapping
 from typing import ClassVar
 
 from pydantic import BaseModel
 from pydantic.config import ConfigDict
-from xcomponent import Catalog
 
 from fastlife.adapters.xcomponent.registry import DEFAULT_CATALOG_NS
 
@@ -36,9 +34,6 @@ class JinjaXTemplate(InlineTemplate):
 
 class XTemplate(InlineTemplate):
     """Template that render XComponent"""
-
-    use: ClassVar[Mapping[str, Catalog] | None] = None
-    """Extra template from foreign catalog to use as namespace components."""
 
     catalog: ClassVar[str] = DEFAULT_CATALOG_NS
     renderer: ClassVar[str] = ".xcomponent"
