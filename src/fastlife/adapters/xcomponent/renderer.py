@@ -88,11 +88,6 @@ class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
             .to_html(self)
         )
 
-    @property
-    def route_prefix(self) -> str:
-        """Used to buid pydantic form widget that do ajax requests."""
-        return self.request.registry.settings.fastlife_route_prefix
-
     def render_template(self, template: XTemplate) -> str:
         """
         Render an inline template.
