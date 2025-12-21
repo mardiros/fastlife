@@ -3,7 +3,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi import Request as FastApiRequest
 
-from fastlife import Configurator, GenericRequest, Settings
+from fastlife import Configurator, GenericRequest, Settings, XTemplate
 from fastlife.adapters.xcomponent.registry import NSCatalog
 from fastlife.adapters.xcomponent.renderer import XRendererFactory
 from fastlife.service.templates import AbstractTemplateRenderer
@@ -51,7 +51,7 @@ def x_renderer(settings: Settings, catalogs: NSCatalog):
 @pytest.fixture()
 async def renderer(
     conf: Configurator, x_renderer: XRendererFactory, dummy_request: Request
-) -> AbstractTemplateRenderer:
+) -> AbstractTemplateRenderer[XTemplate]:
     globs = await conf._build_renderer_globals(dummy_request)  # type: ignore
     ret = x_renderer(dummy_request)
     ret.globals.update(globs)
