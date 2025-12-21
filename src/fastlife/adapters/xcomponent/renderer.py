@@ -103,7 +103,7 @@ class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
         params = {
             k: getattr(template, k) for k in template.__class__.model_fields.keys()
         }
-        return self.ns_catalog[template.catalog].render(
+        return self.ns_catalog[template.namespace].render(
             template.template,
             globals=self.globals,
             **params,

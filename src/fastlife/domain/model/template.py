@@ -35,5 +35,5 @@ class JinjaXTemplate(InlineTemplate):
 class XTemplate(InlineTemplate):
     """Template that render XComponent"""
 
-    catalog: ClassVar[str] = DEFAULT_CATALOG_NS
+    namespace: ClassVar[str] = DEFAULT_CATALOG_NS
     renderer: ClassVar[str] = ".xcomponent"
