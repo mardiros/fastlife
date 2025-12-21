@@ -604,10 +604,9 @@ class GenericConfigurator(Generic[TRegistry]):
                 if isinstance(resp, Response):
                     return resp
 
-                template = resp.renderer
                 globs = await self._build_renderer_globals(request)
-                return request.registry.get_renderer(template)(request).render(
-                    template,
+                return request.registry.get_renderer(resp)(request).render(
+                    resp.template,
                     params=resp,
                     globals=globs,
                 )
@@ -668,7 +667,7 @@ class GenericConfigurator(Generic[TRegistry]):
             if isinstance(resp, Response):
                 return resp
 
-            return req.registry.get_renderer(resp.renderer)(req).render(
+            return req.registry.get_renderer(resp)(req).render(
                 resp.template,
                 params=resp,
                 status_code=status_code,
@@ -678,9 +677,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self.exception_handlers.append((status_code_or_exc, exception_handler))
         return self
 
-    def add_renderer(
-        self, file_ext: str, renderer: "AbstractTemplateRendererFactory[Any]"
-    ) -> Self:
+    def add_renderer(self, renderer: "AbstractTemplateRendererFactory[Any]") -> Self:
         """
         Add a render for a given file extension.
 
@@ -688,7 +685,12 @@ class GenericConfigurator(Generic[TRegistry]):
         :param renderer: the renderer that will render the template.
         """
         # we don't want to expose the renderer publicly as mutable
-        self.registry.renderers[f".{file_ext.lstrip('.')}"] = renderer  # type: ignore
+        if not hasattr(renderer, "template_type"):
+            raise RuntimeError(
+                f"Renderer {renderer.__class__.__qualname__} does not declate T in "
+                "AbstractTemplateRendererFactory[T] type annotations."
+            )
+        self.registry.renderers[renderer.template_type] = renderer  # type: ignore
         return self
 
     def add_template_search_path(self, path: str | Path) -> Self:

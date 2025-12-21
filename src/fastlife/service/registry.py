@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     )  # coverage: ignore
     from fastlife.service.translations import LocalizerFactory  # coverage: ignore
 
+from fastlife.domain.model.template import InlineTemplate
 from fastlife.settings import Settings
 
 TSettings = TypeVar("TSettings", bound=Settings, covariant=True)
@@ -30,7 +31,7 @@ class GenericRegistry(Generic[TSettings]):
 
     settings: TSettings
     """Application settings."""
-    renderers: Mapping[str, "AbstractTemplateRendererFactory[Any]"]
+    renderers: Mapping[type[InlineTemplate], "AbstractTemplateRendererFactory[Any]"]
     """Registered template engine."""
     locale_negociator: "LocaleNegociator"
     """Used to fine the best language for the response."""
@@ -49,11 +50,15 @@ class GenericRegistry(Generic[TSettings]):
         self.localizer = LocalizerFactory()
         self.request_factory = default_request_factory(self)
 
-    def get_renderer(self, template: str) -> "AbstractTemplateRendererFactory[Any]":
-        for key, val in self.renderers.items():
-            if template.endswith(key):
-                return val
-        raise RuntimeError(f"No renderer registered for template {template}")
+    def get_renderer(
+        self, template: InlineTemplate
+    ) -> "AbstractTemplateRendererFactory[Any]":
+        for cls in template.__class__.__mro__:
+            if cls in self.renderers:
+                return self.renderers[cls]
+        raise RuntimeError(
+            f"No renderer registered for template {template.__class__.__qualname__}"
+        )
 
     @asynccontextmanager
     async def lifespan(self, app: FastAPI) -> AsyncIterator[Any]:

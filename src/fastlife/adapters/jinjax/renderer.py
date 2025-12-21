@@ -149,7 +149,7 @@ class JinjaxEngine(AbstractTemplateRendererFactory[JinjaXTemplate]):
 
         self.catalog = InspectableCatalog(
             use_cache=settings.jinjax_use_cache,
-            file_ext=settings.jinjax_file_ext,
+            file_ext="jinja",
             auto_reload=settings.jinjax_auto_reload,
             globals=globals,
         )
@@ -167,6 +167,4 @@ class JinjaxEngine(AbstractTemplateRendererFactory[JinjaXTemplate]):
 
 @configure
 def includeme(conf: Configurator) -> None:
-    conf.add_renderer(
-        conf.registry.settings.jinjax_file_ext, JinjaxEngine(conf.registry.settings)
-    )
+    conf.add_renderer(JinjaxEngine(conf.registry.settings))
