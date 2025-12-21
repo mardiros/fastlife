@@ -1,3 +1,16 @@
+## 0.37.0  - Released on 2025-12-21
+* Refactor XComponent namespace to keep it simple.
+  * drop use, declare namespaces in the x_component decorator.
+  * generate multiple namespaces by default:
+    * app, a defaut namespace to keep the application components.
+    * pydantic_form, components used while rendering forms.
+    * builtins, store all builtings and **copy** them to every namespaces
+      to get them globals.
+* Remove JinjaX definitely.
+  * Since JinjaX syntax has changed, stop supporting in and focus to XComponent only.
+  * Remove all `jinjax_` settings.
+* Refactor how renderer are handled, remove extension since only inline template are use.
+
 ## 0.36.0  - Released on 2025-12-20
 * Upgrade XComponent to add support of namespaced components.
 
