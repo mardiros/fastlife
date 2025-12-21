@@ -32,7 +32,7 @@ from xcomponent import Catalog, Component, Function
 from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
 from fastlife.adapters.fastapi.routing.router import Router
-from fastlife.adapters.xcomponent.registry import XComponentRegistry
+from fastlife.adapters.xcomponent.registry import DEFAULT_CATALOG_NS, XComponentRegistry
 from fastlife.config.openapiextra import OpenApiTag
 from fastlife.domain.model.template import InlineTemplate
 from fastlife.middlewares.base import AbstractMiddleware
@@ -699,15 +699,24 @@ class GenericConfigurator(Generic[TRegistry]):
         )
         return self
 
+    def build_catalogs(self) -> dict[str, Catalog]:
+        """Build the xcomponent catalogs."""
+        return self._xcomponent_registry.build_catalogs()
+
     def build_catalog(self) -> Catalog:
-        """Build the xcomponent catalog."""
-        return self._xcomponent_registry.build_catalog()
+        """Build and return the builtins xcomponent catalog."""
+        return self._xcomponent_registry.build_catalogs()[DEFAULT_CATALOG_NS]
 
     def register_xcomponent(
-        self, name: str, component: Component, use: dict[str, Catalog] | None = None
+        self,
+        name: str,
+        component: Component,
+        namespace: str = DEFAULT_CATALOG_NS,
     ) -> Self:
         """Register a component."""
-        self._xcomponent_registry.register_xcomponent(name, component, use or {})
+        self._xcomponent_registry.register_xcomponent(
+            name, component, namespace=namespace
+        )
         return self
 
     def register_xfunction(self, name: str, func: Function) -> Self:

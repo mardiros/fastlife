@@ -1,10 +1,17 @@
-from collections.abc import Callable, Mapping
+from collections import defaultdict
+from collections.abc import Callable
 
 import venusian
 from xcomponent import Catalog
 from xcomponent.service.catalog import Component, Function
 
 VENUSIAN_CATEGORY = "fastlife"  # copy/pasta from configurator
+DEFAULT_CATALOG_NS = "builtins"
+
+NSCatalog = dict[str, Catalog]
+
+CatalogDict = dict[str, Component]
+NSCatalogDict = dict[str, CatalogDict]
 
 
 class XComponentRegistry:
@@ -15,36 +22,46 @@ class XComponentRegistry:
     venusian.
     """
 
-    components: dict[str, tuple[Component, dict[str, Catalog]]]
+    components: NSCatalogDict
 
     functions: dict[str, Function]
 
     def __init__(self) -> None:
-        self.components = {}
+        self.components = defaultdict(dict)
         self.functions = {}
 
     def register_xcomponent(
-        self, name: str, component: Component, use: dict[str, Catalog]
+        self,
+        name: str,
+        component: Component,
+        *,
+        namespace: str,
     ) -> None:
         """Register a xcomponent component to the application template engine."""
-        self.components[name] = (component, use)
+        self.components[namespace][name] = component
 
     def register_xfunction(self, name: str, func: Function) -> None:
         """Register a xcomponent function to the application template engine."""
         self.functions[name] = func
 
-    def build_catalog(self) -> Catalog:
-        catalog = Catalog()
-        for name, (component, use) in self.components.items():
-            catalog.component(name, use)(component)
+    def build_catalogs(self) -> NSCatalog:
+        catalogs: NSCatalog = {ns: Catalog() for ns in self.components.keys()}
 
+        for ns, components in self.components.items():
+            ctlg = catalogs[ns]
+            for name, component in components.items():
+                ctlg.component(name, catalogs)(component)
+            catalogs[ns] = ctlg
+
+        catalog: Catalog = catalogs.get(DEFAULT_CATALOG_NS) or Catalog()
         for name, function in self.functions.items():
             catalog.function(name)(function)
-        return catalog
+        return catalogs
 
 
 def x_component(
-    name: str | None = None, use: Mapping[str, Catalog] | None = None
+    namespace: str = DEFAULT_CATALOG_NS,
+    name: str | None = None,
 ) -> Callable[[Component], Component]:
     """
     Register a component to the XComponent catalog for the application.
@@ -69,7 +86,9 @@ def x_component(
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore
             scanner.fastlife.register_xcomponent(  # type: ignore
-                component_name or name, ob, use or {}
+                component_name or name,
+                ob,
+                namespace=namespace,
             )
 
         venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore

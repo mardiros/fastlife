@@ -2,9 +2,9 @@ import bs4
 import pytest
 from fastapi import FastAPI
 from fastapi import Request as FastApiRequest
-from xcomponent import Catalog
 
 from fastlife import Configurator, GenericRequest, Settings
+from fastlife.adapters.xcomponent.registry import NSCatalog
 from fastlife.adapters.xcomponent.renderer import XRendererFactory
 from fastlife.service.templates import AbstractTemplateRenderer
 from tests.fastlife_app.config import MyRegistry
@@ -23,8 +23,8 @@ def app(conf: Configurator) -> FastAPI:
 
 
 @pytest.fixture
-def catalog(conf: Configurator, app: FastAPI) -> Catalog:
-    return conf.build_catalog()
+def catalogs(conf: Configurator, app: FastAPI) -> NSCatalog:
+    return conf.build_catalogs()
 
 
 @pytest.fixture()
@@ -44,8 +44,8 @@ def dummy_request(dummy_registry: MyRegistry, app: FastAPI) -> Request:
 
 
 @pytest.fixture()
-def x_renderer(settings: Settings, catalog: Catalog):
-    return XRendererFactory(settings, catalog)
+def x_renderer(settings: Settings, catalogs: NSCatalog):
+    return XRendererFactory(settings, catalogs)
 
 
 @pytest.fixture()

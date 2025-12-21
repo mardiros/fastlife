@@ -7,6 +7,8 @@ from pydantic import BaseModel
 from pydantic.config import ConfigDict
 from xcomponent import Catalog
 
+from fastlife.adapters.xcomponent.registry import DEFAULT_CATALOG_NS
+
 
 class InlineTemplate(BaseModel):
     """
@@ -38,4 +40,5 @@ class XTemplate(InlineTemplate):
     use: ClassVar[Mapping[str, Catalog] | None] = None
     """Extra template from foreign catalog to use as namespace components."""
 
-    renderer = ".xcomponent"
+    catalog: ClassVar[str] = DEFAULT_CATALOG_NS
+    renderer: ClassVar[str] = ".xcomponent"
