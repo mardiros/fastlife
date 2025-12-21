@@ -14,10 +14,11 @@ More template engine can be registered using the configurator method
 
 import abc
 from collections.abc import Mapping
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, TypeVar, get_args
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
+from pydantic.v1.typing import get_origin
 
 from fastlife import Request, Response
 from fastlife.adapters.fastapi.form import FormModel
@@ -121,6 +122,14 @@ class AbstractTemplateRendererFactory(abc.ABC, Generic[TInlineTemplate]):
     """
     The template render factory.
     """
+
+    template_type: type[TInlineTemplate]
+
+    def __init_subclass__(cls) -> None:
+        super().__init_subclass__()
+        for base in cls.__orig_bases__:  # type: ignore
+            if get_origin(base) is AbstractTemplateRendererFactory:  # type: ignore
+                (cls.template_type,) = get_args(base)
 
     @abc.abstractmethod
     def __call__(self, request: Request) -> AbstractTemplateRenderer[TInlineTemplate]:

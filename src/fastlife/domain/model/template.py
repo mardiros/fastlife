@@ -22,18 +22,13 @@ class InlineTemplate(BaseModel):
 
     template: ClassVar[str]
     """The template string to render."""
-    renderer: ClassVar[str]
-    """Template render engine to use."""
 
 
 class JinjaXTemplate(InlineTemplate):
     """Template that render JinjaX"""
-
-    renderer = ".jinja"
 
 
 class XTemplate(InlineTemplate):
     """Template that render XComponent"""
 
     namespace: ClassVar[str] = DEFAULT_CATALOG_NS
-    renderer: ClassVar[str] = ".xcomponent"

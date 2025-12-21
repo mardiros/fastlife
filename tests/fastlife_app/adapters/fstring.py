@@ -17,7 +17,11 @@ from fastlife.service.templates import (
 templates = Path(__file__).parent / "templates"
 
 
-class FStringTemplateRenderer(AbstractTemplateRenderer):
+class FString(InlineTemplate):
+    """Render Fstring"""
+
+
+class FStringTemplateRenderer(AbstractTemplateRenderer[FString]):
     def render_template(self, template: InlineTemplate) -> str:
         return template.template.format(**template.model_dump())
 
@@ -38,11 +42,11 @@ class FStringTemplateRenderer(AbstractTemplateRenderer):
         raise NotImplementedError
 
 
-class FStringTemplateRendererFactory(AbstractTemplateRendererFactory):
-    def __call__(self, request: Request) -> AbstractTemplateRenderer:
+class FStringTemplateRendererFactory(AbstractTemplateRendererFactory[FString]):
+    def __call__(self, request: Request) -> AbstractTemplateRenderer[FString]:
         return FStringTemplateRenderer(request)
 
 
 @configure
 def includeme(conf: Configurator) -> None:
-    conf.add_renderer(".fstring", FStringTemplateRendererFactory())
+    conf.add_renderer(FStringTemplateRendererFactory())

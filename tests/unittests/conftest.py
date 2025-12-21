@@ -13,7 +13,6 @@ from fastlife import Configurator
 from fastlife.adapters.fastapi.request import GenericRequest
 from fastlife.adapters.fastapi.routing.router import Router
 from fastlife.middlewares.session.serializer import AbsractSessionSerializer
-from fastlife.shared_utils.resolver import resolve
 from tests.fastlife_app.config import MyRegistry, MySettings
 
 
@@ -90,9 +89,6 @@ def dummy_request_param(
 @pytest.fixture()
 def dummy_registry(settings: MySettings) -> MyRegistry:
     ret = MyRegistry(settings)
-    ret.renderers[f".{settings.jinjax_file_ext}"] = resolve(  # type: ignore
-        "fastlife.adapters.jinjax.renderer:JinjaxEngine"
-    )(settings)
     return ret
 
 

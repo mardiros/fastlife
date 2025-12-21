@@ -46,11 +46,6 @@ class Settings(BaseSettings):
     The default locale
     """
 
-    jinjax_file_ext: str = Field(default="jinja")
-    """
-    JinjaX file extention.
-    """
-
     jinjax_use_cache: bool = Field(default=True)
     """
     JinjaX (the default template engine) setting use_cache.

@@ -141,7 +141,6 @@ def includeme(conf: Configurator) -> None:
     conf.include(".icons")
     conf.include(".pydantic_form")
     conf.add_renderer(
-        "xcomponent",
         XRendererFactory(
             conf.registry.settings,
             conf.build_catalogs(),

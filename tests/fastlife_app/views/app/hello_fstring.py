@@ -2,11 +2,11 @@
 
 from fastlife import view_config
 from fastlife.domain.model.template import InlineTemplate
+from tests.fastlife_app.adapters.fstring import FString
 
 
-class HelloInline(InlineTemplate):
+class HelloInline(FString):
     template = "Hello {name}!\n"
-    renderer = ".fstring"
     name: str
 
 
