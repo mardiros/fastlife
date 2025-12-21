@@ -9,14 +9,7 @@ from typing import Literal
 from fastapi import Query
 from pydantic.fields import FieldInfo
 
-from fastlife import (
-    Configurator,
-    JinjaXTemplate,
-    Request,
-    Response,
-    XTemplate,
-    configure,
-)
+from fastlife import Configurator, Request, Response, XTemplate, configure
 from fastlife.domain.model.template import InlineTemplate
 from fastlife.shared_utils.resolver import resolve_extended
 
@@ -39,8 +32,6 @@ async def show_widget(
         field = FieldInfo(title=title)
 
     template: InlineTemplate = XTemplate()
-    if format == "jinjax":
-        template = JinjaXTemplate()
 
     rndr = request.registry.get_renderer(template)(request)
     lczr = request.registry.localizer(request.locale_name)
