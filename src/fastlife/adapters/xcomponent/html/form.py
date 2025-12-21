@@ -3,10 +3,10 @@ from typing import Literal
 
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.registry import x_component
+from fastlife.adapters.xcomponent.registry import BUILTINS_CATALOG_NS, x_component
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Form(
     children: XNode,
     globals: Mapping[str, str],
@@ -38,7 +38,7 @@ def Form(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def CsrfToken(globals: dict[str, str]) -> str:
     return """
         <Hidden
@@ -48,7 +48,7 @@ def CsrfToken(globals: dict[str, str]) -> str:
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Input(
     name: str,
     value: str = "",
@@ -116,7 +116,7 @@ def Input(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Hidden(
     name: str,
     value: str,
@@ -127,7 +127,7 @@ def Hidden(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Button(
     children: XNode,
     globals: Mapping[str, str],
@@ -195,7 +195,7 @@ def Button(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Checkbox(
     name: str,
     globals: Mapping[str, str],
@@ -226,7 +226,7 @@ def Checkbox(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Password(
     name: str,
     globals: Mapping[str, str],
@@ -293,7 +293,7 @@ def Password(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Label(
     children: XNode,
     globals: Mapping[str, str],
@@ -316,7 +316,7 @@ def Label(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Option(
     children: XNode,
     globals: Mapping[str, str],
@@ -338,7 +338,7 @@ def Option(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Select(
     children: XNode,
     globals: Mapping[str, str],
@@ -364,7 +364,7 @@ def Select(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Radio(
     globals: Mapping[str, str],
     label: str,
@@ -410,7 +410,7 @@ def Radio(
     """
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Textarea(
     children: XNode,
     globals: Mapping[str, str],

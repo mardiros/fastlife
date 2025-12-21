@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from pydantic import Field, field_validator
 from typing_extensions import TypedDict
 
-from fastlife.adapters.xcomponent.registry import x_component
+from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS, x_component
 
 from .base import Widget
 
@@ -19,7 +19,7 @@ class Option(TypedDict):
     text: OptionItem
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def DropDownWidgetOption(id: str, opt: Option) -> str:
     return """
     <Option

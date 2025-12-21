@@ -4,10 +4,10 @@ from collections.abc import Mapping
 
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.registry import x_component
+from fastlife.adapters.xcomponent.registry import BUILTINS_CATALOG_NS, x_component
 
 
-@x_component()
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def P(
     children: XNode,
     globals: Mapping[str, str],

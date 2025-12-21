@@ -26,7 +26,7 @@ def configurator() -> Configurator:
 
 @pytest.fixture(autouse=True, scope="session")
 def catalog(configurator: Configurator) -> Catalog:
-    return configurator.build_catalog()
+    return configurator.build_catalogs()["app"]
 
 
 @pytest.fixture()

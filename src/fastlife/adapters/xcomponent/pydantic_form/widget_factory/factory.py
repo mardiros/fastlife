@@ -10,6 +10,7 @@ from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
+from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
 from fastlife.shared_utils.infer import is_newtype
@@ -33,6 +34,7 @@ from .uuid_builder import UuidBuilder
 
 
 class OptionalFatalError(XTemplate):
+    namespace = PYDANTICFORM_CATALOG_NS
     template = """
     <>
       {

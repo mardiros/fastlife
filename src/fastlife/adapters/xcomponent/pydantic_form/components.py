@@ -1,9 +1,9 @@
 from xcomponent import XNode
 
-from fastlife.adapters.xcomponent.registry import x_component
+from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS, x_component
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def ErrorText(
     text: str,
     class_: str,
@@ -20,7 +20,7 @@ def ErrorText(
     """
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def OptionalErrorText(
     text: str | None,
     class_: str | None = None,
@@ -43,7 +43,7 @@ def OptionalErrorText(
     """
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def FatalError(
     message: str | None,
     class_: str | None = None,
@@ -73,7 +73,7 @@ def FatalError(
     """
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def Hint(text: str | None) -> str:
     """
     Display a hint message for a field.
@@ -93,7 +93,7 @@ def Hint(text: str | None) -> str:
     """
 
 
-@x_component()
+@x_component(namespace=PYDANTICFORM_CATALOG_NS)
 def Widget(
     widget_id: str,
     removable: bool,

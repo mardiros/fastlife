@@ -6,7 +6,9 @@ from xcomponent import Catalog
 from xcomponent.service.catalog import Component, Function
 
 VENUSIAN_CATEGORY = "fastlife"  # copy/pasta from configurator
-DEFAULT_CATALOG_NS = "builtins"
+DEFAULT_CATALOG_NS = "app"
+BUILTINS_CATALOG_NS = "builtins"
+PYDANTICFORM_CATALOG_NS = "pydantic_form"
 
 NSCatalog = dict[str, Catalog]
 
@@ -28,6 +30,7 @@ class XComponentRegistry:
 
     def __init__(self) -> None:
         self.components = defaultdict(dict)
+        self.components[DEFAULT_CATALOG_NS] = {}  # ensure the app namespace exists
         self.functions = {}
 
     def register_xcomponent(
@@ -48,24 +51,23 @@ class XComponentRegistry:
         catalogs: NSCatalog = {ns: Catalog() for ns in self.components.keys()}
 
         # we ensure we have a builtin catalog
-        builtin_catalog: Catalog = catalogs.get(DEFAULT_CATALOG_NS) or Catalog()
-        for name, component in self.components.get(DEFAULT_CATALOG_NS, {}).items():
+        builtin_catalog: Catalog = catalogs.get(BUILTINS_CATALOG_NS) or Catalog()
+        for name, component in self.components.get(BUILTINS_CATALOG_NS, {}).items():
             # we don't backref the builtins components to other namespace
             builtin_catalog.component(name, use=catalogs)(component)
-        catalogs[DEFAULT_CATALOG_NS] = builtin_catalog
+        catalogs[BUILTINS_CATALOG_NS] = builtin_catalog
 
         for name, function in self.functions.items():
             builtin_catalog.function(name)(function)
 
         for ns, components in self.components.items():
-
-            if ns == DEFAULT_CATALOG_NS:  # the default ns is process first and appart.
+            if ns == BUILTINS_CATALOG_NS:  # the default ns is process first and appart.
                 continue
 
             ctlg = catalogs[ns]
 
             # we copy all the builtins components to all namespaces
-            for name, component in self.components.get(DEFAULT_CATALOG_NS, {}).items():
+            for name, component in self.components.get(BUILTINS_CATALOG_NS, {}).items():
                 ctlg.component(name, use=catalogs)(component)
 
             for name, component in components.items():
