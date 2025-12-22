@@ -18,11 +18,11 @@ HTMX
 Jinjax
   JinjaX is a template engine for made for clarity.
   It is an extension of the Jinja2 template engine.
-  Fastlife includes a Jinjax 0.48 compatible version.
+  Fastlife used to comes with Jinjax.
   The template has changed many time its component attribute syntax,
   from JSX to VueJS and now for more recent version, double curly brace.
 
-  The support of this template engine will be discontinued in favor of {term}`XComponent`
+  The support of this template engine has been discontinued in favor of {term}`XComponent`
 
   Website: https://jinjax.scaletti.dev/
 

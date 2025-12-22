@@ -1,10 +1,6 @@
 # file hello_world_with_template.py
 
-from pathlib import Path
-
 from fastlife import Configurator, Settings, XTemplate
-
-templates_dir = Path(__file__).parent / "templates"
 
 
 class HelloWorld(XTemplate):

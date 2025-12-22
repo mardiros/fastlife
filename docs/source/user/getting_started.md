@@ -77,14 +77,6 @@ it is also encouraged to build a set of library component with pure template,
 such as a Layout component to set the template to somethinf like
 `<Layout>Hello World</Layout>`.
 
-```{note}
-The {meth}`fastlife.config.configurator.GenericConfigurator.add_template_search_path`
-method is here to register your components library.
-
-The most concerning can develop and register their own template engine using the
-{meth}`fastlife.config.configurator.GenericConfigurator.add_renderer`.
-```
-
 ## modular approach
 
 A maintainable application over time is an application that encourage modularity.
