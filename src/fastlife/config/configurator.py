@@ -693,17 +693,6 @@ class GenericConfigurator(Generic[TRegistry]):
         self.registry.renderers[renderer.template_type] = renderer  # type: ignore
         return self
 
-    def add_template_search_path(self, path: str | Path) -> Self:
-        """
-        Add a template search path directly from the code.
-
-        :param path: template path.
-        """
-        self.registry.settings.template_search_path = (
-            f"{self.registry.settings.template_search_path},{path}"
-        )
-        return self
-
     def build_catalogs(self) -> dict[str, Catalog]:
         """Build the xcomponent catalogs."""
         return self._xcomponent_registry.build_catalogs()

@@ -29,7 +29,6 @@ def python_path(root_dir: Path) -> None:
 @pytest.fixture()
 def settings() -> MySettings:
     return MySettings(
-        template_search_path="fastlife:components,tests.fastlife_app:templates",
         session_secret_key="labamba",
         domain_name="testserver.local",
         session_cookie_domain="testserver.local",
