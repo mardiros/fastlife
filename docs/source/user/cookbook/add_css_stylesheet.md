@@ -202,7 +202,6 @@ from fastlife import Configurator, Settings
 
 def build_app():
     config = Configurator(Settings())
-    config.add_template_search_path("myapp:templates")
     config.include(".views")
     config.include(".static")
     return config.build_asgi_app()
@@ -217,37 +216,25 @@ We can adapt our HelloWorld template in order to inherits from a shared page lay
 
 Lets write a Layout component, that will load the CSS.
 
-```bash
-cat << 'EOF' > src/myapp/templates/Layout.jinja
-{# def
-    html_title: Annotated[str, "Title page in the html tab"]
-#}
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>{{ html_title }}</title>
-  <link href="/static/css/main.css" rel="stylesheet" />
-</head>
-<body>
-    {{- content -}}
-</body>
-</html>
-EOF
+```python
+@x_component()
+def Layout(children: XNode, title: str = "Hello World") -> str:
+    return """
+    <>
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <title>{title}</title>
+                <link href="/static/css/main.css" rel="stylesheet" />
+            </head>
+            <body>
+                {children}
+            </body>
+        </html>
+    </>
+    """
 ```
-
-Now its time to replace our HelloWorld template.
-
-```bash
-cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
-<Layout html_title="Hello World">
-    <H1>Hello World!</H1>
-</Layout>
-EOF
-```
-
-fastlife does not use this feature in its component.
-:::
 
 ### Testing
 

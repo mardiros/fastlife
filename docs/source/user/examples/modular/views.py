@@ -1,9 +1,29 @@
 # views.py
 from pathlib import Path
 
-from fastlife import Configurator, XTemplate, configure, view_config
+from xcomponent import XNode
+
+from fastlife import XTemplate, view_config, x_component
 
 templates_dir = Path(__file__).parent
+
+
+@x_component()
+def Layout(children: XNode, title: str = "Hello World") -> str:
+    return """
+    <>
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <title>{title}</title>
+            </head>
+            <body>
+                {children}
+            </body>
+        </html>
+    </>
+    """
 
 
 class HelloWorld(XTemplate):
@@ -13,8 +33,3 @@ class HelloWorld(XTemplate):
 @view_config("hello_world", "/")
 async def hello_world() -> HelloWorld:
     return HelloWorld()
-
-
-@configure
-def includeme(config: Configurator):
-    config.add_template_search_path(templates_dir)
