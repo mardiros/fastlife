@@ -1,3 +1,8 @@
+## 0.37.1  - Released on 2025-12-22
+* Continue removing jinjax, the template_search_path has been removed,
+  which is also an api break.
+* Upgrade xcomponent and its integration.
+
 ## 0.37.0  - Released on 2025-12-21
 * Refactor XComponent namespace to keep it simple.
   * drop use, declare namespaces in the x_component decorator.
