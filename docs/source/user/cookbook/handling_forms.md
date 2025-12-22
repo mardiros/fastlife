@@ -53,16 +53,11 @@ class HelloWorld(XTemplate):
     <html>
         <body>
           <H1>Hello {
-              if person {
-                  if person.nick {
-                      <>{person.nick}</>
-                  }
-                  else {
-                      <>World</>
-                  }
+              if person and person.nick {
+                <>{person.nick}</>
               }
               else {
-                  <>World</>
+                <>World</>
               }
           }!</H1>
           <Form method="post">
@@ -142,16 +137,11 @@ class HelloWorld(XTemplate):
     <html>
         <body>
           <H1>Hello {
-              if person {
-                  if person.nick {
-                      <>{person.nick}</>
-                  }
-                  else {
-                      <>World</>
-                  }
+              if person and person.nick {
+                <>{person.nick}</>
               }
               else {
-                  <>World</>
+                <>World</>
               }
           }!</H1>
           <Form method="post">
