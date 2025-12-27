@@ -1,12 +1,8 @@
 """
 Base class to of the template renderer.
 
-Fastlife comes with two rendering engines:
-{class}`fastlife.adapters.jinjax.renderer.JinjaxEngine`,
-and {class}`fastlife.adapters.xcomponent.renderer.XRendererFactory`,
-they have to be installed using python packaging extra syntax for your tool,
-fastlifeweb[jinjax] or fastlifeweb[xcomponent] since those engine are not
-installed by default.
+Fastlife comes with the one rendering engine
+{class}`fastlife.adapters.xcomponent.renderer.XRendererFactory`.
 
 More template engine can be registered using the configurator method
 {meth}`add_renderer <fastlife.config.configurator.GenericConfigurator.add_renderer>`
