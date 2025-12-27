@@ -97,7 +97,14 @@ disallow_any_generics = true
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = ["venusian", "docutils"]
+module = [
+  "venusian",
+  "docutils",
+  "apscheduler.schedulers.asyncio",
+  "apscheduler.schedulers.base",
+  "apscheduler.triggers.base",
+  "apscheduler.util",
+]
 ignore_missing_imports = true
 
 [tool.ruff]

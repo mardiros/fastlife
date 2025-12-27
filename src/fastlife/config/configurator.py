@@ -15,6 +15,7 @@ import logging
 from asyncio import iscoroutine
 from collections import defaultdict
 from collections.abc import Callable, Coroutine, Sequence
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
@@ -41,6 +42,7 @@ from fastlife.domain.model.template import InlineTemplate
 from fastlife.middlewares.base import AbstractMiddleware
 from fastlife.service.check_permission import check_permission
 from fastlife.service.csrf import check_csrf
+from fastlife.service.job import AbstractJob, JobSchedulerTrigger, Undefined, undefined
 from fastlife.service.registry import DefaultRegistry, TRegistry
 from fastlife.settings import Settings
 from fastlife.shared_utils.infer import is_inline_template_returned
@@ -718,6 +720,38 @@ class GenericConfigurator(Generic[TRegistry]):
     def register_xfunction(self, name: str, func: Function) -> Self:
         self._xcomponent_registry.register_xfunction(name, func)
         return self
+
+    def register_job(
+        self,
+        job: type[AbstractJob[TRegistry]],
+        /,
+        *,
+        trigger: JobSchedulerTrigger,
+        id: str | None = None,
+        name: str | None = None,
+        misfire_grace_time: int | Undefined = undefined,
+        coalesce: Undefined = undefined,
+        max_instances: int | Undefined = undefined,
+        next_run_time: datetime | Undefined = undefined,
+        jobstore: str = "default",
+        executor: str = "default",
+        replace_existing: bool = False,
+        **trigger_args: Any,
+    ) -> None:
+        self.registry.job_scheduler.register_job(
+            job,
+            trigger=trigger,
+            id=id,
+            name=name,
+            misfire_grace_time=misfire_grace_time,
+            coalesce=coalesce,
+            max_instances=max_instances,
+            next_run_time=next_run_time,
+            jobstore=jobstore,
+            executor=executor,
+            replace_existing=replace_existing,
+            **trigger_args,
+        )
 
 
 class Configurator(GenericConfigurator[DefaultRegistry]):
