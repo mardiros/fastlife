@@ -17,7 +17,7 @@ from pydantic.fields import FieldInfo
 from pydantic.v1.typing import get_origin
 
 from fastlife import Request, Response
-from fastlife.adapters.fastapi.form import FormModel
+from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import InlineTemplate
 
 TInlineTemplate = TypeVar("TInlineTemplate", bound=InlineTemplate)
