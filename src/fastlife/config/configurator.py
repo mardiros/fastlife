@@ -509,6 +509,12 @@ class GenericConfigurator(Generic[TRegistry]):
     ) -> None:
         """
         Register a websocket route.
+
+        :param name: name of the route, used to build route from the helper
+            {meth}`fastlife.request.request.Request.url_for` in order to create links.
+        :param path: path of the route, use `{curly_brace}` to inject FastAPI Path
+            parameters.
+        :param endpoint: the function that will handle the websocket.
         """
         self._current_api_router.add_api_websocket_route(path, endpoint, name)
 
