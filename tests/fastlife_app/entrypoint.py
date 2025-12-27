@@ -10,6 +10,7 @@ def build_app():
     conf.include(".views.api", route_prefix="/api")
     conf.include(".views.app.admin", route_prefix="/admin")
     conf.include(".static")
+    conf.include(".jobs")
     return conf.build_asgi_app()
 
 

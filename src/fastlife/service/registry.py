@@ -40,6 +40,7 @@ class GenericRegistry(Generic[TSettings]):
     request_factory: "RequestFactory"
 
     def __init__(self, settings: TSettings) -> None:
+        from fastlife.service.job import JobScheduler
         from fastlife.service.locale_negociator import default_negociator
         from fastlife.service.request_factory import default_request_factory
         from fastlife.service.translations import LocalizerFactory
@@ -49,6 +50,7 @@ class GenericRegistry(Generic[TSettings]):
         self.renderers = {}
         self.localizer = LocalizerFactory()
         self.request_factory = default_request_factory(self)
+        self.job_scheduler = JobScheduler(self)
 
     def get_renderer(
         self, template: InlineTemplate
@@ -63,15 +65,16 @@ class GenericRegistry(Generic[TSettings]):
     @asynccontextmanager
     async def lifespan(self, app: FastAPI) -> AsyncIterator[Any]:
         """
-        hook to override the lifespan of the starlette app.
-
         The [lifespan](https://asgi.readthedocs.io/en/latest/specs/lifespan.html)
-        is used to initialized and dispose the application state.
+        is used to start the job scheduler.
 
         In fastlife the application state is the registry, it has to be overriden
         to add an implementation.
         """
+        self.job_scheduler.start()
         yield
+        # FIXME: make the wait statement comming from the settings
+        self.job_scheduler.shutdown(wait=True)
 
 
 DefaultRegistry = GenericRegistry[Settings]

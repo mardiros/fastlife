@@ -95,3 +95,8 @@ class Settings(BaseSettings):
     """
     HTTP Header for the {class}`fastlife.middlewares.backend_tag.XBackendTag`
     """
+
+    scheduler_class: str = Field(
+        default="apscheduler.schedulers.asyncio:AsyncIOScheduler"
+    )
+    """Implementation class of the job scheduler."""
