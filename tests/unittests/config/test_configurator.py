@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, cast
 
 import pytest
 from fastapi import FastAPI
@@ -8,21 +8,16 @@ from fastlife.config.configurator import (
     ConfigurationError,
     Configurator,
     OpenApiTag,
-    Settings,
 )
 from fastlife.domain.model.asgi import ASGIRequest
 from fastlife.domain.model.request import GenericRequest
 from fastlife.service.registry import DefaultRegistry
 from fastlife.service.request_factory import RequestFactory
 from fastlife.testing.testclient import WebTestClient
+from tests.fastlife_app.adapters.schedulers import DummyScheduler
 from tests.fastlife_app.config import MySettings
 
 # from fastlife.service.registry import cleanup_registry
-
-
-@pytest.fixture
-def conf(settings: Settings) -> Configurator:
-    return Configurator(settings)
 
 
 async def test_app(conf: Configurator):
@@ -175,3 +170,16 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
         "pgettext": lczr.pgettext,
         "request": dummy_request_param,
     }
+
+
+def test_register_interval_job(conf: Configurator):
+    async def dummy_task(registry: DefaultRegistry) -> None: ...
+
+    conf.register_job(dummy_task, trigger="interval", seconds=42)
+
+    scheduler = cast(DummyScheduler, conf.registry.job_scheduler.scheduler)
+    assert len(scheduler.jobs) == 1
+    assert scheduler.jobs[0]["job"] is dummy_task
+    assert scheduler.jobs[0]["kwargs"] == {"registry": conf.registry}
+    assert scheduler.jobs[0]["trigger"] == "interval"
+    assert scheduler.jobs[0]["seconds"] == 42

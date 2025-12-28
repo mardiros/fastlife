@@ -7,14 +7,12 @@ A simple usage:
 from typing import Annotated
 
 from fastapi import Response
-from fastlife import Template, template, view_config
+from fastlife import view_config
 
 
 @view_config("hello_world", "/", methods=["GET"])
-async def hello_world(
-    template: Annotated[Template, template("HelloWorld.jinja")],
-) -> Response:
-    return template()
+async def hello_world() -> Response:
+    return Response("Hello World")
 ```
 """
 
