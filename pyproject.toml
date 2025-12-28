@@ -58,6 +58,7 @@ dev = [
   "jinjax >=0.48,<0.49",
   "lastuuid>=0.2.2",
   "mypy >= 1.4.0,<2",
+  "playwright ==1.56.0",
   "pytailwindcss >= 0.2.0,<0.3",
   "pytest >= 8.2.0,<9",
   "pytest-asyncio >=0.26.0",
