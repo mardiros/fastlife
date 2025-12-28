@@ -1,3 +1,6 @@
+## 0.38.1  - Released on 2025-12-28
+* Fix scheduled job decorator name and documentation.
+
 ## 0.38.0  - Released on 2025-12-28
 * Implement sheduled jobs using apscheduled.
   * The [@scheduled_job](#fastlife.scheduled_job) decorator can be used to configure
