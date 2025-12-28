@@ -11,10 +11,10 @@ Exemple of usage:
 from typing import Annotated
 
 from fastapi import Response
-from fastlife import sheduled_job
+from fastlife import scheduled_job
 
 
-@sheduled_job(trigger="interval", seconds=60)
+@scheduled_job(trigger="interval", seconds=60)
 async def cleanup():
     with self.registry.uow_factory() as t:
         await t.uow.tokens.remove_expired_sessions()
@@ -25,7 +25,7 @@ Note that if the trigger parameter is comming from a settings,
 the usage of a {func}`fastlife.config.configurator.configure` decorator
 is more appropriate in order to inject it using the underlying method
 {func}`fastlife.config.configurator.register_job` consumed by the
-sheduled_job decorator.
+scheduled_job decorator.
 """
 
 from collections.abc import Callable
@@ -35,13 +35,13 @@ from typing import Any
 import venusian
 from apscheduler.util import undefined
 
-from fastlife.service.job import JobHook, JobSchedulerTrigger, Undefined
+from fastlife.service.job import JobHandler, JobSchedulerTrigger, Undefined
 from fastlife.service.registry import TRegistry
 
 from .configurator import VENUSIAN_CATEGORY, GenericConfigurator
 
 
-def sheduled_job(
+def scheduled_job(
     *,
     trigger: JobSchedulerTrigger,
     id: str | None = None,
@@ -54,22 +54,37 @@ def sheduled_job(
     executor: str = "default",
     replace_existing: bool = False,
     **trigger_args: Any,
-) -> Callable[..., JobHook[TRegistry]]:
+) -> Callable[..., JobHandler[TRegistry]]:
     """
     A decorator function to register a job in the
-    {class}`Configurator <fastlife.config.configurator.GenericConfigurator>`
+    {func}`Configurator <fastlife.config.configurator.GenericConfigurator.register_job>`
     while scaning a module using {func}`include
     <fastlife.config.configurator.GenericConfigurator.include>`.
 
+    :param trigger: the way the job is triggered.
+    :param id: optional identifier for the job.
+    :param name: optional name for the job.
+    :param misfire_grace_time: seconds after the designated runtime that the job is still
+        allowed to be run (or `None` to allow the job to run no matter how late it is)
+    :param coalesce: run once instead of many times if the scheduler determines that the
+        job should be run more than once in succession
+    :param max_instances: maximum number of concurrently running instances allowed for this
+        job
+    :param next_run_time: when to first run the job, regardless of the trigger (pass
+        `None` to add the job as paused)
+    :param jobstore: alias of the job store to store the job in
+    :param executor: alias of the executor to run the job with
+    :param replace_existing: `True` to replace an existing job with the same `id`
+        (but retain the number of runs from the existing one)
     :return: the configuration callback.
     """
     job_name = name
 
     def configure(
-        wrapped: JobHook[TRegistry],
-    ) -> JobHook[TRegistry]:
+        wrapped: JobHandler[TRegistry],
+    ) -> JobHandler[TRegistry]:
         def callback(
-            scanner: venusian.Scanner, name: str, ob: JobHook[TRegistry]
+            scanner: venusian.Scanner, name: str, ob: JobHandler[TRegistry]
         ) -> None:
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore

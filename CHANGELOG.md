@@ -1,8 +1,9 @@
 ## 0.38.0  - Released on 2025-12-28
 * Implement sheduled jobs using apscheduled.
-  * The {func}`fastlife.sheduled_job` decorator can be used to configure
+  * The [@scheduled_job](#fastlife.scheduled_job) decorator can be used to configure
     scheduled jobs that start and stop using the starlette lifespan.
-    Alternatively, {method}`fastlife.Configurator.register_job` can be use to
+    Alternatively, [Configurator.register_job](#fastlife.config.configurator.GenericConfigurator.register_job)
+    can be use to
     configure jobs form the settings of the app.
 * Drop python 3.9 support
 

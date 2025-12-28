@@ -13,7 +13,7 @@ configurator = Configurator(Settings())
 configurator.include("fastlife.adapters.xcomponent.functions")
 configurator.include("fastlife.adapters.xcomponent.html")
 configurator.include("fastlife.adapters.xcomponent.icons")
-catalog = configurator.build_catalog()
+catalog = configurator.build_catalogs()["app"]
 
 
 def intro():

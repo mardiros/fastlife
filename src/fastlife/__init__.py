@@ -38,7 +38,7 @@ from .config import (
     exception_handler,
     resource,
     resource_view,
-    sheduled_job,
+    scheduled_job,
     view_config,
     websocket_view,
 )
@@ -151,5 +151,5 @@ __all__ = [
     "Localizer",
     "TranslatableStringFactory",
     # scheduled jobs
-    "sheduled_job",
+    "scheduled_job",
 ]
