@@ -11,12 +11,11 @@ from fastlife.config.configurator import (
 )
 from fastlife.domain.model.asgi import ASGIRequest
 from fastlife.domain.model.request import GenericRequest
-from fastlife.service.job import AbstractJob
 from fastlife.service.registry import DefaultRegistry
 from fastlife.service.request_factory import RequestFactory
 from fastlife.testing.testclient import WebTestClient
 from tests.fastlife_app.adapters.schedulers import DummyScheduler
-from tests.fastlife_app.config import MyRegistry, MySettings
+from tests.fastlife_app.config import MySettings
 
 # from fastlife.service.registry import cleanup_registry
 
@@ -174,14 +173,13 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
 
 
 def test_register_interval_job(conf: Configurator):
-    class DummyTask(AbstractJob[MyRegistry]):
-        async def run(self) -> None: ...
+    async def dummy_task(registry: DefaultRegistry) -> None: ...
 
-    conf.register_job(DummyTask, trigger="interval", seconds=42)
+    conf.register_job(dummy_task, trigger="interval", seconds=42)
 
     scheduler = cast(DummyScheduler, conf.registry.job_scheduler.scheduler)
     assert len(scheduler.jobs) == 1
-    assert scheduler.jobs[0]["job"].__self__.__class__ is DummyTask
-    assert scheduler.jobs[0]["job"].__self__.registry is conf.registry
+    assert scheduler.jobs[0]["job"] is dummy_task
+    assert scheduler.jobs[0]["kwargs"] == {"registry": conf.registry}
     assert scheduler.jobs[0]["trigger"] == "interval"
     assert scheduler.jobs[0]["seconds"] == 42

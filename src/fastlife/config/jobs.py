@@ -1,21 +1,31 @@
 """
-Configure views using a decorator.
+Configure scheduled job using a decorator.
 
-A simple usage:
+Scheduled jobs are useful for handling application lifecycle tasks,
+such as database cleanup, cache population, and other asynchronous
+operations that aren't tied to user requests.
+
+Exemple of usage:
 
 ```python
 from typing import Annotated
 
 from fastapi import Response
-from fastlife import Template, template, view_config
+from fastlife import sheduled_job_config
 
 
-@view_config("hello_world", "/", methods=["GET"])
-async def hello_world(
-    template: Annotated[Template, template("HelloWorld.jinja")],
-) -> Response:
-    return template()
+@sheduled_job_config(trigger="interval", seconds=60)
+async def cleanup():
+    with self.registry.uow_factory() as t:
+        await t.uow.tokens.remove_expired_sessions()
+        await t.commit()
 ```
+
+Note that if the trigger parameter is comming from a settings,
+the usage of a {func}`fastlife.config.configurator.configure` decorator
+is more appropriate in order to inject it using the underlying method
+{func}`fastlife.config.configurator.register_job` consumed by the
+sheduled_job_config decorator.
 """
 
 from collections.abc import Callable
@@ -25,7 +35,7 @@ from typing import Any
 import venusian
 from apscheduler.util import undefined
 
-from fastlife.service.job import AbstractJob, JobSchedulerTrigger, Undefined
+from fastlife.service.job import JobHook, JobSchedulerTrigger, Undefined
 from fastlife.service.registry import TRegistry
 
 from .configurator import VENUSIAN_CATEGORY, GenericConfigurator
@@ -44,7 +54,7 @@ def sheduled_job_config(
     executor: str = "default",
     replace_existing: bool = False,
     **trigger_args: Any,
-) -> Callable[..., type[AbstractJob[TRegistry]]]:
+) -> Callable[..., JobHook[TRegistry]]:
     """
     A decorator function to register a job in the
     {class}`Configurator <fastlife.config.configurator.GenericConfigurator>`
@@ -56,10 +66,10 @@ def sheduled_job_config(
     job_name = name
 
     def configure(
-        wrapped: type[AbstractJob[TRegistry]],
-    ) -> type[AbstractJob[TRegistry]]:
+        wrapped: JobHook[TRegistry],
+    ) -> JobHook[TRegistry]:
         def callback(
-            scanner: venusian.Scanner, name: str, ob: type[AbstractJob[TRegistry]]
+            scanner: venusian.Scanner, name: str, ob: JobHook[TRegistry]
         ) -> None:
             if not hasattr(scanner, VENUSIAN_CATEGORY):
                 return  # coverage: ignore

@@ -3,7 +3,7 @@ Base class for scheduled job.
 
 """
 
-import abc
+from collections.abc import Awaitable, Callable
 from datetime import datetime
 from typing import Any, Generic, Literal, TypeAlias
 
@@ -16,7 +16,7 @@ from fastlife.service.registry import TRegistry
 from fastlife.shared_utils.resolver import resolve
 
 __all__ = [
-    "AbstractJob",
+    "JobHook",
     "JobScheduler",
     "JobSchedulerTrigger",
     "Undefined",
@@ -27,21 +27,7 @@ JobSchedulerTriggerLiteral = Literal["interval", "cron", "date"]
 JobSchedulerTrigger: TypeAlias = JobSchedulerTriggerLiteral | BaseTrigger
 
 
-class AbstractJob(abc.ABC, Generic[TRegistry]):
-    """Base class for the job"""
-
-    registry: TRegistry
-    """Access to the configured registry."""
-
-    def __init__(self, registry: TRegistry) -> None:
-        self.registry = registry
-
-    @abc.abstractmethod
-    async def run(self) -> None:
-        """Implement the job."""
-
-    async def __call__(self) -> None:
-        await self.run()
+JobHook = Callable[[TRegistry], None] | Callable[[TRegistry], Awaitable[None]]
 
 
 class JobScheduler(Generic[TRegistry]):
@@ -55,7 +41,7 @@ class JobScheduler(Generic[TRegistry]):
 
     def register_job(
         self,
-        job: type[AbstractJob[TRegistry]],
+        job: JobHook[TRegistry],
         /,
         *,
         trigger: JobSchedulerTrigger,
@@ -71,7 +57,8 @@ class JobScheduler(Generic[TRegistry]):
         **trigger_args: Any,
     ) -> None:
         self.scheduler.add_job(  # type: ignore
-            job(self.registry).run,
+            job,
+            kwargs={"registry": self.registry},
             trigger=trigger,
             id=id,
             name=name,

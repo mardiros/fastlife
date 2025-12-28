@@ -1,7 +1,7 @@
 from typing import Any
 
 from fastlife import TRegistry
-from fastlife.service.job import AbstractJob
+from fastlife.service.job import JobHook
 
 
 class DummyScheduler:
@@ -10,7 +10,7 @@ class DummyScheduler:
 
     def add_job(
         self,
-        job: type[AbstractJob[TRegistry]],
+        job: JobHook[TRegistry],
         **kwargs: Any,
     ) -> None:
         self.jobs.append({"job": job, **kwargs})

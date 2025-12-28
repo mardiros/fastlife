@@ -25,7 +25,6 @@ from tests.fastlife_app.service.uow import AbstractUnitOfWork
 class MySettings(Settings):
     registry_class: str = "tests.fastlife_app.config:MyRegistry"
     uow: str = "tests.fastlife_app.adapters.inmemory_uow:UnitOfWork"
-    scheduler_class: str = "tests.fastlife_app.adapters.schedulers:DummyScheduler"
 
 
 class MyRegistry(GenericRegistry[MySettings]):
