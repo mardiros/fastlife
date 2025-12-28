@@ -2,6 +2,7 @@
 
 from .configurator import Configurator, GenericConfigurator, configure
 from .exceptions import exception_handler
+from .jobs import sheduled_job
 from .resources import resource, resource_view
 from .views import view_config
 from .websockets import websocket_view
@@ -11,6 +12,7 @@ __all__ = [
     "GenericConfigurator",
     "configure",
     "exception_handler",
+    "sheduled_job",
     "resource",
     "resource_view",
     "view_config",

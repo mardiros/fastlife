@@ -11,10 +11,10 @@ Exemple of usage:
 from typing import Annotated
 
 from fastapi import Response
-from fastlife import sheduled_job_config
+from fastlife import sheduled_job
 
 
-@sheduled_job_config(trigger="interval", seconds=60)
+@sheduled_job(trigger="interval", seconds=60)
 async def cleanup():
     with self.registry.uow_factory() as t:
         await t.uow.tokens.remove_expired_sessions()
@@ -25,7 +25,7 @@ Note that if the trigger parameter is comming from a settings,
 the usage of a {func}`fastlife.config.configurator.configure` decorator
 is more appropriate in order to inject it using the underlying method
 {func}`fastlife.config.configurator.register_job` consumed by the
-sheduled_job_config decorator.
+sheduled_job decorator.
 """
 
 from collections.abc import Callable
@@ -41,7 +41,7 @@ from fastlife.service.registry import TRegistry
 from .configurator import VENUSIAN_CATEGORY, GenericConfigurator
 
 
-def sheduled_job_config(
+def sheduled_job(
     *,
     trigger: JobSchedulerTrigger,
     id: str | None = None,
