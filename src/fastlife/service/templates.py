@@ -10,11 +10,10 @@ More template engine can be registered using the configurator method
 
 import abc
 from collections.abc import Mapping
-from typing import Any, Generic, TypeVar, get_args
+from typing import Any, Generic, TypeVar, get_args, get_origin
 
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
-from pydantic.v1.typing import get_origin
 
 from fastlife import Request, Response
 from fastlife.domain.model.form import FormModel
