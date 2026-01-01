@@ -43,7 +43,7 @@ from .configurator import VENUSIAN_CATEGORY, GenericConfigurator
 
 def scheduled_job(
     *,
-    trigger: JobSchedulerTrigger,
+    trigger: JobSchedulerTrigger | None = None,
     id: str | None = None,
     name: str | None = None,
     misfire_grace_time: int | Undefined = undefined,

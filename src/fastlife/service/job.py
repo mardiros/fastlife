@@ -43,7 +43,7 @@ class JobScheduler(Generic[TRegistry]):
         job: JobHandler[TRegistry],
         /,
         *,
-        trigger: JobSchedulerTrigger,
+        trigger: JobSchedulerTrigger | None = None,
         id: str | None = None,
         name: str | None = None,
         misfire_grace_time: int | Undefined = undefined,
