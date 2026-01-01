@@ -183,7 +183,7 @@ class WidgetFactory:
                     return ret
 
         if is_newtype(typ):
-            typ = typ = typ.__supertype__
+            typ = typ.__supertype__
         type_origin = get_origin(typ)
         for builder in self.builders:
             if builder.accept(typ, type_origin):
