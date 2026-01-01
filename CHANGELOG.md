@@ -1,3 +1,7 @@
+## 0.38.2  - Released on 2026-01-01
+* Accept scheduled job without trigger to get init job.
+* Update Select xcomponent template for HTMX attributes.
+
 ## 0.38.1  - Released on 2025-12-28
 * Fix scheduled job decorator name and documentation.
 
