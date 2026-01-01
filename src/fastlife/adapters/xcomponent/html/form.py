@@ -346,6 +346,11 @@ def Select(
     id: str | None = None,
     class_: str | None = None,
     multiple: bool = False,
+    hx_get: str | None = None,
+    hx_trigger: str | None = None,
+    hx_target: str | None = None,
+    hx_include: str | None = None,
+    hx_swap: str | None = None,
 ) -> str:
     """
     Create html ``<select>`` node.
@@ -355,10 +360,21 @@ def Select(
     :param class_: css class for the node, defaults to
                   :attr:`fastlife.template_globals.Globals.SELECT_CLASS`
     :param multiple: Mark as multiple
+    :param hx_get: HTMX attribute to specify a GET request
+    :param hx_trigger: HTMX attribute to specify when the request should be triggered
+    :param hx_target: HTMX attribute to specify the target element for the response
+    :param hx_include: HTMX attribute to specify which elements to include in the request
+    :param hx_swap: HTMX attribute to specify the swap mode
     """
     return """
     <select name={name} id={id} class={class_ or globals.SELECT_CLASS}
-            multiple={multiple}>
+            multiple={multiple}
+            hx-get={hx_get}
+            hx-trigger={hx_trigger}
+            hx-target={hx_target}
+            hx-include={hx_include}
+            hx-swap={hx_swap}
+            >
         {children}
     </select>
     """
