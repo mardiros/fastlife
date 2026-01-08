@@ -24,6 +24,7 @@ class User(BaseModel):
 class MyWidget(Widget[str]):
     template = """
     <>
+        <h6>{custom_title}</title>
         <div id={id} contenteditable>{value}</div>
         {
             if error {
@@ -32,6 +33,7 @@ class MyWidget(Widget[str]):
         }
     </>
     """
+    custom_title: str
 
 
 class Flavor(Enum):
@@ -58,11 +60,19 @@ class DummyOptional(BaseModel):
     foobar: str | None = Field()
 
 
+class DummyCustomized(BaseModel):
+    dummy: Annotated[str, CustomWidget(MyWidget, custom_title="my dummy")] = Field(
+        min_length=2
+    )
+
+
 class DummyModel(BaseModel):
     identifier: UUID = Field(default=uuidgen(1))
     category: Literal["dummy"] = Field()
     name: str = Field()
-    description: Annotated[str, CustomWidget(MyWidget)] = Field(min_length=2)
+    description: Annotated[str, CustomWidget(MyWidget, custom_title="title")] = Field(
+        min_length=2
+    )
     private: str = Field(exclude=True)
     type: Literal["foo", "bar"] = Field()
     flavor: Flavor = Field()
@@ -117,6 +127,11 @@ class MultiSet(BaseModel):
     foobarz: set[Literal["foo", "bar", "baz"]] = Field(default_factory=set)
 
 
+DummyFormModel = FormModel[
+    DummyModel | Banger | MultiSet | DummyOptional | DummyCustomized
+]
+
+
 class DummyForm(XTemplate):
     template = """
     <Form>
@@ -124,7 +139,7 @@ class DummyForm(XTemplate):
       <Button>Submit</Button>
     </Form>
     """
-    model: FormModel[DummyModel | Banger | MultiSet | DummyOptional]
+    model: DummyFormModel
     token: str
 
 
@@ -154,9 +169,7 @@ def test_render_template(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
-            "payload", DummyModel
-        ),
+        model=DummyFormModel.default("payload", DummyModel),
         token="tkt",
     )
     result = renderer.render_template(form)
@@ -293,9 +306,7 @@ def test_render_template(
 
 def test_render_fatal_error(renderer: AbstractTemplateRenderer):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
-            "payload", DummyModel
-        ),
+        model=DummyFormModel.default("payload", DummyModel),
         token="tkt",
     )
     result = renderer.render_template(form)
@@ -311,7 +322,7 @@ def test_render_template_values(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
+        model=DummyFormModel.from_payload(
             "payload",
             DummyModel,
             {
@@ -410,7 +421,7 @@ def test_render_custom_list(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
+        model=DummyFormModel.from_payload(
             "payload",
             Banger,
             {
@@ -438,9 +449,7 @@ def test_render_set(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
-            "payload", MultiSet
-        ),
+        model=DummyFormModel.default("payload", MultiSet),
         token="tkt",
     )
 
@@ -472,7 +481,7 @@ def test_render_set_checked(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].from_payload(
+        model=DummyFormModel.from_payload(
             "payload",
             MultiSet,
             {"payload": {"flavors": ["Vanilla"], "foobarz": ["foo"]}},
@@ -514,9 +523,7 @@ def test_render_optional(
     renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
-        model=FormModel[DummyModel | Banger | MultiSet | DummyOptional].default(
-            "payload", DummyOptional
-        ),
+        model=DummyFormModel.default("payload", DummyOptional),
         token="tkt",
     )
 
@@ -606,3 +613,22 @@ def test_render_new_type(
     result = renderer.render_template(form)
     html = soup(result)
     assert html.find("input", attrs={"name": "x.user_id", "type": "hidden"})
+
+
+def test_render_parametrized_custom_widget(
+    renderer: AbstractTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    cust = DummyCustomized.model_construct()
+
+    model = FormModel[DummyCustomized].default("x", DummyCustomized)
+    model.edit(cust)
+    form = DummyForm(
+        model=model,
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    h6 = html.find("h6")
+    assert h6 and h6.text == "my dummy"
