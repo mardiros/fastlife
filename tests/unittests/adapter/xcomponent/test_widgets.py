@@ -11,6 +11,7 @@ from fastlife.adapters.xcomponent.pydantic_form.widgets.checklist import (
     Checkable,
     ChecklistWidget,
 )
+from fastlife.adapters.xcomponent.pydantic_form.widgets.date import DateWidget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.dropdown import DropDownWidget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.hidden import HiddenWidget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.mfa_code import MFACodeWidget
@@ -22,15 +23,15 @@ from fastlife.adapters.xcomponent.pydantic_form.widgets.text import (
     TextWidget,
 )
 from fastlife.adapters.xcomponent.pydantic_form.widgets.union import UnionWidget
+from fastlife.adapters.xcomponent.renderer import XTemplateRenderer
 from fastlife.domain.model.types import Builtins
-from fastlife.service.templates import AbstractTemplateRenderer
 
 
 class Foo(BaseModel): ...
 
 
 def test_render_boolean(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     boolean = BooleanWidget(name="foo", title="Foo", token="XxX")
     result = boolean.to_html(renderer)
@@ -41,13 +42,24 @@ def test_render_boolean(
 
 
 def test_render_boolean_removable(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     boolean = BooleanWidget(name="foo", title="Foo", token="XxX", removable=True)
     result = boolean.to_html(renderer)
     html = soup(result)
     assert html.find("label", attrs={"for": "foo-XxX"})
     assert html.find("input", attrs={"id": "foo-XxX", "name": "foo"})
+    assert html.find("button", attrs={"type": "button"})
+
+
+def test_render_date(
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    boolean = DateWidget(name="foo", title="Foo", token="XxX", removable=True)
+    result = boolean.to_html(renderer)
+    html = soup(result)
+    assert html.find("label", attrs={"for": "foo-XxX"})
+    assert html.find("input", attrs={"id": "foo-XxX", "name": "foo", "type": "date"})
     assert html.find("button", attrs={"type": "button"})
 
 
@@ -78,7 +90,7 @@ def test_render_boolean_removable(
 )
 def test_render_dropdown(
     params: Mapping[str, Any],
-    renderer: AbstractTemplateRenderer,
+    renderer: XTemplateRenderer,
     soup: Callable[[str], bs4.BeautifulSoup],
 ):
     boolean = DropDownWidget(
@@ -97,7 +109,7 @@ def test_render_dropdown(
 
 
 def test_render_hidden(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = HiddenWidget(name="foo", value="bar", token="x")
     result = hid.to_html(renderer)
@@ -108,7 +120,7 @@ def test_render_hidden(
 
 
 def test_render_text(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = TextWidget(name="foo", title="Foo", value="bar", token="x")
     result = hid.to_html(renderer)
@@ -119,7 +131,7 @@ def test_render_text(
 
 
 def test_render_text_help(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     hid = TextWidget(
         name="foo", title="Foo", value="bar", token="x", hint="This is foobar"
@@ -135,7 +147,7 @@ def test_render_text_help(
 
 
 def test_render_text_removable(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     text = TextWidget(name="foo", title="Foo", token="x", removable=True)
     result = text.to_html(renderer)
@@ -144,7 +156,7 @@ def test_render_text_removable(
 
 
 def test_render_password(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     text = PasswordWidget(name="foo", title="Foo", token="x", hint="This is foobar")
     result = text.to_html(renderer)
@@ -164,7 +176,7 @@ def test_render_password(
 
 
 def test_render_mfa_code(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     text = MFACodeWidget(name="foo", title="Foo", token="x", hint="This is foobar")
     result = text.to_html(renderer)
@@ -186,7 +198,7 @@ def test_render_mfa_code(
 
 
 def test_render_mfa_code_no_focus(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     text = MFACodeWidget(name="foo", title="Foo", token="x", autofocus=False)
     result = text.to_html(renderer)
@@ -211,7 +223,7 @@ def test_render_mfa_code_no_focus(
     ],
 )
 def test_render_textarea(
-    renderer: AbstractTemplateRenderer,
+    renderer: XTemplateRenderer,
     soup: Callable[[str], bs4.BeautifulSoup],
     value: str | Sequence[str],
     expected: str,
@@ -225,7 +237,7 @@ def test_render_textarea(
 
 
 def test_render_model(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ModelWidget[TextWidget](
         name="foo",
@@ -242,7 +254,7 @@ def test_render_model(
 
 
 def test_render_nested_model(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ModelWidget[Widget[Builtins]](
         name="foo",
@@ -260,7 +272,7 @@ def test_render_nested_model(
 
 
 def test_render_sequence(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = SequenceWidget[TextWidget](
         name="foo",
@@ -282,7 +294,7 @@ def test_render_sequence(
 
 
 def test_render_checklist(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     model = ChecklistWidget(
         name="foobar",
@@ -313,7 +325,7 @@ def test_render_checklist(
 
 
 def test_render_union(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     class Foo(BaseModel):
         foo: str
@@ -335,7 +347,7 @@ def test_render_union(
 
 
 def test_render_custom(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     class CustomWidget(Widget[Any]):
         template = """
@@ -458,7 +470,7 @@ def test_render_custom(
     ],
 )
 def test_render_text_error(
-    renderer: AbstractTemplateRenderer,
+    renderer: XTemplateRenderer,
     soup: Callable[[str], bs4.BeautifulSoup],
     widget: Widget[Any],
 ):
