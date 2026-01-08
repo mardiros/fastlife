@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+from datetime import date
 from typing import Literal
 
 from xcomponent import XNode
@@ -52,7 +53,30 @@ def CsrfToken(globals: dict[str, str]) -> str:
 def Input(
     name: str,
     value: str = "",
-    type: str = "text",
+    type: Literal[
+        "button",
+        "checkbox",
+        "color",
+        "date",
+        "datetime-local",
+        "email",
+        "file",
+        "hidden",
+        "image",
+        "month",
+        "number",
+        "password",
+        "radio",
+        "range",
+        "reset",
+        "search",
+        "submit",
+        "tel",
+        "text",
+        "time",
+        "url",
+        "week",
+    ] = "text",
     id: str | None = None,
     class_: str | None = None,
     aria_label: str | None = None,
@@ -114,6 +138,81 @@ def Input(
         autofocus={autofocus}
     />
     """
+
+
+@x_component(namespace=BUILTINS_CATALOG_NS)
+def Date(
+    name: str,
+    value: str = "",
+    type: Literal["date"] = "date",
+    id: str | None = None,
+    class_: str | None = None,
+    aria_label: str | None = None,
+    min: date | None = None,
+    max: date | None = None,
+) -> str:
+    """
+    Generate an HTML `<input>` element for date.
+
+    :param name: Name attribute for the date input element
+    :param value: Initial value of the date input element in ISO format (YYYY-MM-DD)
+    :param type: Type of input element (always "date" for this component)
+    :param id: Unique identifier for the date input element
+    :param class_: CSS class for the date input element
+    :param aria_label: Accessible label for the date input element
+    :param min: Minimum allowed date (as date object)
+    :param max: Maximum allowed date (as date object)
+    """
+
+    return """
+    <input
+        type={type}
+        name={name}
+        value={value}
+        min={isoformat(min)}
+        max={isoformat(max)}
+        id={id}
+        aria-label={aria_label}
+        class={class_ or globals.INPUT_CLASS}
+    />
+    """
+
+@x_component(namespace=BUILTINS_CATALOG_NS)
+def Datetime(
+    name: str,
+    value: str = "",
+    type: Literal["datetime-local"] = "datetime-local",
+    id: str | None = None,
+    class_: str | None = None,
+    aria_label: str | None = None,
+    min: date | None = None,
+    max: date | None = None,
+) -> str:
+    """
+    Generate an HTML `<input>` element for datetime-local.
+
+    :param name: Name attribute for the datetime input element
+    :param value: Initial value of the datetime input element in ISO format (YYYY-MM-DDTHH:MM)
+    :param type: Type of input element (always "datetime-local" for this component)
+    :param id: Unique identifier for the datetime input element
+    :param class_: CSS class for the datetime input element
+    :param aria_label: Accessible label for the datetime input element
+    :param min: Minimum allowed datetime (as date object)
+    :param max: Maximum allowed datetime (as date object)
+    """
+    return """
+    <input
+        type={type}
+        name={name}
+        value={value}
+        min={isoformat(min)}
+        max={isoformat(max)}
+        id={id}
+        aria-label={aria_label}
+        class={class_ or globals.INPUT_CLASS}
+    />
+    """
+
 
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
