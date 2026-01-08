@@ -66,6 +66,10 @@ class DummyCustomized(BaseModel):
     )
 
 
+class DummyIntEnum(BaseModel):
+    dummy: Score = Field(default=Score.deux)
+
+
 class DummyModel(BaseModel):
     identifier: UUID = Field(default=uuidgen(1))
     category: Literal["dummy"] = Field()
@@ -128,7 +132,7 @@ class MultiSet(BaseModel):
 
 
 DummyFormModel = FormModel[
-    DummyModel | Banger | MultiSet | DummyOptional | DummyCustomized
+    DummyModel | Banger | MultiSet | DummyOptional | DummyCustomized | DummyIntEnum
 ]
 
 
@@ -632,3 +636,22 @@ def test_render_parametrized_custom_widget(
     html = soup(result)
     h6 = html.find("h6")
     assert h6 and h6.text == "my dummy"
+
+
+def test_render_intenum(
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    intenum = DummyIntEnum.model_construct()
+
+    model = FormModel[DummyIntEnum].default("x", DummyIntEnum)
+    model.edit(intenum)
+    form = DummyForm(
+        model=model,  # type: ignore
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    select = html.find("select")
+    assert select and select.text == "123"

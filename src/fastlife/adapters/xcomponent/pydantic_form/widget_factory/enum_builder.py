@@ -31,7 +31,10 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
         removable: bool,
     ) -> Widget[Enum]:
         """Build the widget."""
-        options = [(str(item.value), item.value) for item in field_type]  # type: ignore
+        options = [
+            (str(item.value), str(item.value))  # type: ignore
+            for item in field_type  # type: ignore
+        ]
         if isinstance(value, str):
             # if the form was invalid, we rebuild the enum with a model
             # that has not been validate, so we rebuild the type here.
@@ -52,6 +55,6 @@ class EnumBuilder(BaseWidgetBuilder[Enum]):
                 else None
             ),
             token=self.factory.token,
-            value=value.value if value else "",
+            value=str(value.value) if value else "",
             error=form_errors.get(field_name),
         )
