@@ -10,9 +10,9 @@ from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
 
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
+from fastlife.adapters.xcomponent.renderer import XTemplateRenderer
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
-from fastlife.service.templates import AbstractTemplateRenderer
 
 UserId = NewType("UserId", UUID)
 
@@ -64,6 +64,10 @@ class DummyCustomized(BaseModel):
     dummy: Annotated[str, CustomWidget(MyWidget, custom_title="my dummy")] = Field(
         min_length=2
     )
+
+
+class DummyIntEnum(BaseModel):
+    dummy: Score = Field(default=Score.deux)
 
 
 class DummyModel(BaseModel):
@@ -128,7 +132,7 @@ class MultiSet(BaseModel):
 
 
 DummyFormModel = FormModel[
-    DummyModel | Banger | MultiSet | DummyOptional | DummyCustomized
+    DummyModel | Banger | MultiSet | DummyOptional | DummyCustomized | DummyIntEnum
 ]
 
 
@@ -166,7 +170,7 @@ class UserForm(XTemplate):
 
 
 def test_render_template(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
         model=DummyFormModel.default("payload", DummyModel),
@@ -304,7 +308,7 @@ def test_render_template(
     )
 
 
-def test_render_fatal_error(renderer: AbstractTemplateRenderer):
+def test_render_fatal_error(renderer: XTemplateRenderer):
     form = DummyForm(
         model=DummyFormModel.default("payload", DummyModel),
         token="tkt",
@@ -319,7 +323,7 @@ def test_render_fatal_error(renderer: AbstractTemplateRenderer):
 
 
 def test_render_template_values(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
         model=DummyFormModel.from_payload(
@@ -418,7 +422,7 @@ def test_render_template_values(
 
 
 def test_render_custom_list(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
         model=DummyFormModel.from_payload(
@@ -446,7 +450,7 @@ def test_render_custom_list(
 
 
 def test_render_set(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
         model=DummyFormModel.default("payload", MultiSet),
@@ -478,7 +482,7 @@ def test_render_set(
 
 
 def test_render_set_checked(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
         model=DummyFormModel.from_payload(
@@ -520,7 +524,7 @@ def test_render_set_checked(
 
 
 def test_render_optional(
-    renderer: AbstractTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
 ):
     form = DummyForm(
         model=DummyFormModel.default("payload", DummyOptional),
@@ -575,7 +579,7 @@ def test_render_optional(
     ],
 )
 def test_render_invalid_payload(
-    renderer: AbstractTemplateRenderer,
+    renderer: XTemplateRenderer,
     amount: str,
     currency: str,
     expected: dict[str, str],
@@ -598,7 +602,7 @@ def test_render_invalid_payload(
 
 
 def test_render_new_type(
-    renderer: AbstractTemplateRenderer,
+    renderer: XTemplateRenderer,
     soup: Callable[[str], bs4.BeautifulSoup],
 ):
     new_user = User.model_construct()
@@ -616,7 +620,7 @@ def test_render_new_type(
 
 
 def test_render_parametrized_custom_widget(
-    renderer: AbstractTemplateRenderer,
+    renderer: XTemplateRenderer,
     soup: Callable[[str], bs4.BeautifulSoup],
 ):
     cust = DummyCustomized.model_construct()
@@ -624,7 +628,7 @@ def test_render_parametrized_custom_widget(
     model = FormModel[DummyCustomized].default("x", DummyCustomized)
     model.edit(cust)
     form = DummyForm(
-        model=model,
+        model=model,  # type: ignore
         token="tkt",
     )
 
@@ -632,3 +636,22 @@ def test_render_parametrized_custom_widget(
     html = soup(result)
     h6 = html.find("h6")
     assert h6 and h6.text == "my dummy"
+
+
+def test_render_intenum(
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    intenum = DummyIntEnum.model_construct()
+
+    model = FormModel[DummyIntEnum].default("x", DummyIntEnum)
+    model.edit(intenum)
+    form = DummyForm(
+        model=model,  # type: ignore
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    select = html.find("select")
+    assert select and select.text == "123"
