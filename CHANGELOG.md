@@ -1,3 +1,7 @@
+## 0.39.0  - Released on 2026-01-08
+* Implement kwargs parameter for CustomWidget
+* Fix IntEnum rendering
+
 ## 0.38.2  - Released on 2026-01-01
 * Accept scheduled job without trigger to get init job.
 * Update Select xcomponent template for HTMX attributes.
