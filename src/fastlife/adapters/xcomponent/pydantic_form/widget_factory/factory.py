@@ -9,6 +9,9 @@ from typing import TYPE_CHECKING, Any, get_origin
 from markupsafe import Markup
 from pydantic.fields import FieldInfo
 
+from fastlife.adapters.xcomponent.pydantic_form.widget_factory.date_builder import (
+    DateBuilder,
+)
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS
 from fastlife.domain.model.form import FormModel
@@ -76,6 +79,7 @@ class WidgetFactory:
             SecretStrBuilder(self),
             UuidBuilder(self),
             IpAddrBuilder(self),
+            DateBuilder(self),
             # we keep simple types, str, int at the end
             SimpleTypeBuilder(self),
         ]

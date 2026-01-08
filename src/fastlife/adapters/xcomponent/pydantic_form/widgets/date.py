@@ -5,7 +5,7 @@ from pydantic import Field
 from .base import Widget
 
 
-class DateWidget(Widget[Builtins]):
+class DateWidget(Widget[date]):
     """
     Widget for text like field (email, ...).
     """
