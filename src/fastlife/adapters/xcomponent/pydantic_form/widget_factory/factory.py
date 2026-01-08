@@ -179,6 +179,7 @@ class WidgetFactory:
                         ),
                         token=self.token,
                         error=form_errors.get(name),
+                        **widget.kwargs,
                     )
                     return ret
 

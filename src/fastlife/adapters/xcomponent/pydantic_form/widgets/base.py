@@ -93,8 +93,9 @@ class CustomWidget(Generic[TWidget]):
 
     typ: type[Any]
 
-    def __init__(self, typ: type[TWidget]) -> None:
+    def __init__(self, typ: type[TWidget], **kwargs: Any) -> None:
         self.typ = typ
+        self.kwargs = kwargs or {}
 
 
 class TypeWrapper:
