@@ -205,7 +205,7 @@ def Date(
     <input
         type={type}
         name={name}
-        value={value}
+        value={isoformat(value)}
         min={isoformat(min)}
         max={isoformat(max)}
         id={id}
@@ -242,7 +242,7 @@ def DateTime(
     <input
         type={type}
         name={name}
-        value={value}
+        value={isoformat(value)}
         min={isoformat(min)}
         max={isoformat(max)}
         id={id}

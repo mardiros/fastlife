@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import Field
 
@@ -28,7 +28,7 @@ class DateWidget(Widget[date]):
     max: date | None = Field(default=None)
 
 
-class DateTimeWidget(Widget[date]):
+class DateTimeWidget(Widget[datetime]):
     """
     Widget for text like field (email, ...).
     """

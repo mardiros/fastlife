@@ -50,7 +50,7 @@ class DateBuilder(BaseWidgetBuilder[date]):
         )
 
 
-class DateTimeBuilder(BaseWidgetBuilder[date]):
+class DateTimeBuilder(BaseWidgetBuilder[datetime]):
     """Builder for datetime."""
 
     def accept(self, typ: type[Any], origin: type[Any] | None) -> bool:
@@ -63,7 +63,7 @@ class DateTimeBuilder(BaseWidgetBuilder[date]):
         field_name: str,
         field_type: type[Any],
         field: FieldInfo | None,
-        value: date | None,
+        value: datetime | None,
         form_errors: Mapping[str, Any],
         removable: bool,
     ) -> DateTimeWidget:

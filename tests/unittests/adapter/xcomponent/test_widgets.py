@@ -1,4 +1,5 @@
 from collections.abc import Callable, Mapping, Sequence
+from datetime import UTC, date, datetime
 from typing import Any
 
 import bs4
@@ -55,27 +56,60 @@ def test_render_boolean_removable(
     assert html.find("button", attrs={"type": "button"})
 
 
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        pytest.param(None, None, id="none"),
+        pytest.param(date(2000, 1, 1), "2000-01-01", id="date"),
+    ],
+)
 def test_render_date(
-    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+    value: date | None,
+    expected: str,
 ):
-    boolean = DateWidget(name="foo", title="Foo", token="XxX", removable=True)
+    boolean = DateWidget(
+        name="foo", title="Foo", token="XxX", removable=True, value=value
+    )
     result = boolean.to_html(renderer)
     html = soup(result)
     assert html.find("label", attrs={"for": "foo-XxX"})
-    assert html.find("input", attrs={"id": "foo-XxX", "name": "foo", "type": "date"})
+    input = html.find("input", attrs={"id": "foo-XxX", "name": "foo", "type": "date"})
+    assert isinstance(input, bs4.Tag)
+    assert input.attrs.get("value") == expected
     assert html.find("button", attrs={"type": "button"})
 
 
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        pytest.param(None, None, id="none"),
+        pytest.param(datetime(2000, 1, 1), "2000-01-01T00:00:00", id="datetime"),
+        pytest.param(
+            datetime(2000, 1, 1, tzinfo=UTC),
+            "2000-01-01T00:00:00",
+            id="datetime tzaware",
+        ),
+    ],
+)
 def test_render_datetime(
-    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+    value: datetime | None,
+    expected: str,
 ):
-    boolean = DateTimeWidget(name="foo", title="Foo", token="XxX", removable=True)
+    boolean = DateTimeWidget(
+        name="foo", title="Foo", token="XxX", removable=True, value=value
+    )
     result = boolean.to_html(renderer)
     html = soup(result)
     assert html.find("label", attrs={"for": "foo-XxX"})
-    assert html.find(
+    input = html.find(
         "input", attrs={"id": "foo-XxX", "name": "foo", "type": "datetime-local"}
     )
+    assert isinstance(input, bs4.Tag)
+    assert input.attrs.get("value") == expected
     assert html.find("button", attrs={"type": "button"})
 
 

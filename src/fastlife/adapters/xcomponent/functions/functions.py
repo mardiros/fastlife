@@ -26,7 +26,9 @@ def isoformat(value: str | date | datetime | None) -> str | None:
 
     In case its not a date or a datetime, the value is preserved.
     """
-    if isinstance(value, (date, datetime)):
+    if isinstance(value, datetime):
+        return value.replace(tzinfo=None).isoformat()
+    if isinstance(value, date):
         return value.isoformat()
     return value
 
