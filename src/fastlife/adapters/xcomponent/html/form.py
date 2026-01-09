@@ -1,3 +1,4 @@
+"""HTML Form elements."""
 from collections.abc import Mapping
 from datetime import date
 from typing import Literal
@@ -21,6 +22,21 @@ def Form(
     hx_post: str | Literal[True] | None = None,
     hx_disable: Literal[True] | None = None,
 ) -> str:
+    """
+    Generate the html `<form>` element.
+
+    :param children: Child elements to be included within the form
+    :param globals: Global template variables including default CSS classes
+    :param id: Unique identifier for the form element
+    :param class_: CSS class for the form element
+    :param method: HTTP method for form submission (get or post)
+    :param action: URL where the form data will be submitted
+    :param hx_target: HTMX target element selector
+    :param hx_select: HTMX element selector for content swapping
+    :param hx_swap: HTMX swap strategy
+    :param hx_post: HTMX POST request URL or True to submit to current URL
+    :param hx_disable: HTMX attribute to disable HTMX processing
+    """
     return """
         <form
             id={id}
@@ -41,6 +57,7 @@ def Form(
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def CsrfToken(globals: dict[str, str]) -> str:
+    """Generate the html hidden field for CSRF validation."""
     return """
         <Hidden
             name={globals.request.csrf_token.name}
@@ -123,6 +140,25 @@ def Input(
     | None = None,
     autofocus: bool = False,
 ) -> str:
+    """
+    Generate an HTML `<input>` element.
+
+    Note that all types, inputmode, autocomplete mode are declared,
+    but specific input element should be used for password, checkbox,
+    radio button, date, datetimes.
+
+    :param name: Name attribute for the input element
+    :param value: Initial value of the input element
+    :param type: Type of input element (e.g., text, password, email)
+    :param id: Unique identifier for the input element
+    :param class_: CSS class for the input element
+    :param aria_label: Accessible label for the input element
+    :param placeholder: Hint text displayed in the input field
+    :param pattern: Regular expression pattern for input validation
+    :param inputmode: Hint for virtual keyboard configuration
+    :param autocomplete: Browser autocomplete behavior for the input
+    :param autofocus: Whether the input should automatically receive focus
+    """
     return """
     <input
         type={type}
@@ -221,10 +257,19 @@ def Hidden(
     value: str,
     id: str | None = None,
 ) -> str:
+    """
+    Generate an HTML hidden input element.
+
+    Hidden inputs are used to include data in a form that should not be visible
+    or editable by the user, but needs to be submitted with the form.
+
+    :param name: Name attribute for the hidden input element
+    :param value: Value of the hidden input element
+    :param id: Unique identifier for the hidden input element
+    """
     return """
         <input name={name} value={value} type="hidden" id={id} />
     """
-
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Button(
@@ -253,6 +298,38 @@ def Button(
     hx_push_url: bool = False,
     full_width: bool = False,
 ) -> str:
+    """
+    Generate an HTML `<button>` element with HTMX support.
+
+    This component creates a button element that can be used in forms or as standalone
+    interactive elements. It supports various button types, HTMX attributes for dynamic
+    behavior, and styling options.
+
+    :param children: Child elements to be included within the button
+    :param globals: Global template variables including default CSS classes
+    :param type: Button type (submit, button, or reset)
+    :param id: Unique identifier for the button element
+    :param class_: CSS class for the button element
+    :param name: Name attribute for the button (used in form submission)
+    :param value: Value associated with the button (used in form submission)
+    :param hidden: Whether the button should be hidden
+    :param aria_label: Accessible label for the button
+    :param onclick: JavaScript to execute when the button is clicked
+    :param hx_target: HTMX target element selector
+    :param hx_swap: HTMX swap strategy
+    :param hx_select: HTMX element selector for content swapping
+    :param hx_on_after_request: HTMX event handler for after request completion
+    :param hx_vals: HTMX values to include in the request
+    :param hx_confirm: HTMX confirmation message before request
+    :param hx_get: HTMX GET request URL
+    :param hx_post: HTMX POST request URL
+    :param hx_put: HTMX PUT request URL
+    :param hx_patch: HTMX PATCH request URL
+    :param hx_delete: HTMX DELETE request URL
+    :param hx_params: HTMX parameters to include in the request
+    :param hx_push_url: Whether to push the URL to the browser's history
+    :param full_width: Whether the button should span the full width of its container
+    """
     return """
     <button
         type={type}
@@ -304,14 +381,18 @@ def Checkbox(
     checked: bool = False,
 ) -> str:
     """
-    Create html ``<input type="checkbox" />`` node.
+    Generate an HTML `<input type="checkbox">` element.
 
-    :param name: Name of the checkbox
-    :param id: unique identifier of the element
-    :param class_: css class for the node, defaults to
+    This component creates a checkbox input element that can be used in forms.
+    Checkboxes allow users to select one or more options from a set.
+
+    :param name: Name attribute for the checkbox element (used in form submission)
+    :param globals: Global template variables including default CSS classes
+    :param id: Unique identifier for the checkbox element
+    :param class_: CSS class for the checkbox element, defaults to
                   :attr:`fastlife.template_globals.Globals.CHECKBOX_CLASS`
-    :param value: http submitted value if the checkbox is checked
-    :param checked: Initialized the checkbox as ticked
+    :param value: Value that will be submitted if the checkbox is checked
+    :param checked: Whether the checkbox should be initially checked
     """
     return """
         <input
@@ -354,23 +435,28 @@ def Password(
     readonly: bool = False,
 ) -> str:
     """
-    Produce ``<input type="password">`` node.
+    Generate an HTML password input element.
 
-    :param name: submitted name in the form
-    :param id: unique identifier of the element
-    :param class_: css class for the node, defaults to
+    This component creates a secure password input field that masks user input.
+    It's commonly used in login forms, registration forms, and any other context
+    where sensitive information needs to be collected.
+
+    :param name: Name attribute for the password input element (used in form submission)
+    :param globals: Global template variables including default CSS classes
+    :param id: Unique identifier for the password input element
+    :param class_: CSS class for the password input element, defaults to
                   :attr:`fastlife.template_globals.Globals.INPUT_CLASS`
-    :param aria_label: aria-label
-    :param placeholder: brief hint to the user as to what kind of information
-                        is expected in the field
-    :param autocomplete: Define autocomplete mode
-    :param inputmode: Define a virtual keyboard layout
-    :param minlength: Minimum length
-    :param maxlength: Maximum length
-    :param pattern: Must match a pattern
-    :param autofocus: Give the focus
-    :param required: Mark as required field
-    :param readonly: Mark as readonly field
+    :param aria_label: Accessible label for the password input element
+    :param placeholder: Hint text displayed in the password field
+    :param autocomplete: Browser autocomplete behavior for the password field
+                         (on, off, current-password, new-password)
+    :param inputmode: Hint for virtual keyboard configuration (none, text, numeric)
+    :param minlength: Minimum number of characters required
+    :param maxlength: Maximum number of characters allowed
+    :param pattern: Regular expression pattern for password validation
+    :param autofocus: Whether the password field should automatically receive focus
+    :param required: Whether the password field is mandatory
+    :param readonly: Whether the password field is read-only
     """
     return """
     <input
@@ -401,12 +487,18 @@ def Label(
     class_: str | None = None,
 ) -> str:
     """
-    Produce ``<label>`` node.
+    Generate an HTML `<label>` element.
 
-    :param for_: unique identifier of the target element.
-    :param id: unique identifier of the element.
-    :param class_: css class for the node, defaults to
-                  :attr:`fastlife.template_globals.Globals.LABEL_CLASS`.
+    Labels provide accessible descriptions for form elements, improving usability
+    and screen reader compatibility. The label can be associated with an input
+    element using the `for_` attribute.
+
+    :param children: Content to be displayed within the label element
+    :param globals: Global template variables including default CSS classes
+    :param for_: ID of the form element this label is associated with
+    :param id: Unique identifier for the label element
+    :param class_: CSS class for the label element, defaults to
+                  :attr:`fastlife.template_globals.Globals.LABEL_CLASS`
     """
     return """
     <label for={for_} class={class_ or globals.LABEL_CLASS} id={id}>
@@ -414,21 +506,23 @@ def Label(
     </label>
     """
 
-
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Option(
     children: XNode,
-    globals: Mapping[str, str],
     value: str,
     id: str | None = None,
     selected: bool = False,
 ) -> str:
     """
-    Produce ``<option>`` node.
+    Generate an HTML `<option>` element for use in select dropdowns.
 
-    :param value: posted value after submitted the selected value
-    :param id: unique identifier of the element
-    :param selected: Used to select the option while rendering the form
+    This component creates an option element that can be used within a select element
+    to provide choices for user selection in forms.
+
+    :param children: Content to be displayed as the option label
+    :param value: Value that will be submitted when this option is selected
+    :param id: Unique identifier for the option element
+    :param selected: Whether this option should be pre-selected when the form renders
     """
     return """
     <option value={value} id={id} selected={selected}>
@@ -440,7 +534,6 @@ def Option(
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Select(
     children: XNode,
-    globals: Mapping[str, str],
     name: str,
     id: str | None = None,
     class_: str | None = None,
@@ -452,18 +545,23 @@ def Select(
     hx_swap: str | None = None,
 ) -> str:
     """
-    Create html ``<select>`` node.
+    Generate an HTML `<select>` dropdown element with HTMX support.
 
-    :param name: name of the submitted
-    :param id: unique identifier of the element
-    :param class_: css class for the node, defaults to
+    This component creates a select dropdown that allows users to choose from a list of options.
+    It supports both single and multiple selection modes and includes HTMX attributes for
+    dynamic behavior.
+
+    :param children: Child elements (typically Option components) to populate the dropdown
+    :param name: Name attribute for the select element (used in form submission)
+    :param id: Unique identifier for the select element
+    :param class_: CSS class for the select element, defaults to
                   :attr:`fastlife.template_globals.Globals.SELECT_CLASS`
-    :param multiple: Mark as multiple
-    :param hx_get: HTMX attribute to specify a GET request
+    :param multiple: Whether to allow multiple selections
+    :param hx_get: HTMX attribute to specify a GET request URL for dynamic content loading
     :param hx_trigger: HTMX attribute to specify when the request should be triggered
     :param hx_target: HTMX attribute to specify the target element for the response
     :param hx_include: HTMX attribute to specify which elements to include in the request
-    :param hx_swap: HTMX attribute to specify the swap mode
+    :param hx_swap: HTMX attribute to specify how the response content should be swapped
     """
     return """
     <select name={name} id={id} class={class_ or globals.SELECT_CLASS}
@@ -481,7 +579,6 @@ def Select(
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Radio(
-    globals: Mapping[str, str],
     label: str,
     name: str,
     value: str,
@@ -494,20 +591,24 @@ def Radio(
     label_class: str | None = None,
 ) -> str:
     """
-    Produce a ``<input type="radio">`` with its associated label inside a div.
+    Generate an HTML radio button input with its associated label wrapped in a div container.
 
-    :param label: label text associated to the radio
-    :param name: name of the submitted
-    :param value: value that will be submitted if selected
-    :param id: unique identifier of the element
-    :param checked: Tick the radio button
-    :param disabled: Mark the radio button as disabled
-    :param onclick: execute some javascript while clicking
-    :param div_class: css class for the div node, defaults to
+    This component creates a radio button input element with a label, providing a complete
+    radio button option that can be used in forms. The radio button and label are wrapped
+    in a div container for better styling and layout control.
+
+    :param label: Text to display as the label for the radio button
+    :param name: Name attribute for the radio button (used in form submission)
+    :param value: Value that will be submitted if this radio button is selected
+    :param id: Unique identifier for the radio button element
+    :param checked: Whether the radio button should be initially checked
+    :param disabled: Whether the radio button should be disabled
+    :param onclick: JavaScript code to execute when the radio button is clicked
+    :param div_class: CSS class for the wrapping div element, defaults to
                      :attr:`fastlife.template_globals.Globals.RADIO_DIV_CLASS`
-    :param class_: css class for the input node, defaults to
+    :param class_: CSS class for the radio input element, defaults to
                    :attr:`fastlife.template_globals.Globals.RADIO_INPUT_CLASS`
-    :param label_class: css class for the label node, defaults to
+    :param label_class: CSS class for the label element, defaults to
                         :attr:`fastlife.template_globals.Globals.RADIO_LABEL_CLASS`
     """
 
@@ -526,6 +627,7 @@ def Radio(
 
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
+@x_component(namespace=BUILTINS_CATALOG_NS)
 def Textarea(
     children: XNode,
     globals: Mapping[str, str],
@@ -537,15 +639,21 @@ def Textarea(
     readonly: bool = False,
 ) -> str:
     """
-    html ``<textarea>`` node.
+    Generate an HTML `<textarea>` element.
 
-    :param name: name of the submitted
-    :param id: unique identifier of the element
-    :param class_: css class for the node, defaults to
-                   :attr:`fastlife.template_globals.Globals.INPUT_CLASS`
-    :param aria_label: aria-label
-    :param placeholder: brief hint to the user as to what kind of information
-                        is expected in the field
+    This component creates a multi-line text input field that allows users to enter longer
+    text content. Textareas are commonly used in forms for collecting user feedback,
+    descriptions, or any other multi-line text input.
+
+    :param children: Initial content to be displayed within the textarea
+    :param globals: Global template variables including default CSS classes
+    :param name: Name attribute for the textarea element (used in form submission)
+    :param id: Unique identifier for the textarea element
+    :param class_: CSS class for the textarea element, defaults to
+                  :attr:`fastlife.template_globals.Globals.INPUT_CLASS`
+    :param aria_label: Accessible label for the textarea element
+    :param placeholder: Hint text displayed in the textarea when empty
+    :param readonly: Whether the textarea should be read-only
     """
 
     return """
