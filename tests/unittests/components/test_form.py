@@ -312,7 +312,7 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
     "template_string,expected_string",
     [
         pytest.param(
-            """<Datetime name="key" value="2000-01-01"/>""",
+            """<DateTime name="key" value="2000-01-01"/>""",
             """<input name="key" value="2000-01-01" type="datetime-local"
                 class="bg-neutral-50 block border border-neutral-300 p-2.5
                 rounded-lg text-base text-neutral-900 w-full dark:bg-neutral-700
@@ -320,10 +320,10 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
                 dark:focus:ring-primary-500 dark:placeholder-neutral-400
                 dark:text-white focus:border-primary-500 focus:ring-primary-500"
                 />""",
-            id="Datetime",
+            id="DateTime",
         ),
         pytest.param(
-            """<Datetime id="k" class="dt" name="key" value="2000-01-01"/>""",
+            """<DateTime id="k" class="dt" name="key" value="2000-01-01"/>""",
             """
             <input id="k"
                 class="dt"
@@ -335,7 +335,7 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
         ),
         pytest.param(
             """
-            <Datetime
+            <DateTime
                 class="dt"
                 name="key"
                 value="2000-01-01"
@@ -355,7 +355,7 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
         ),
     ],
 )
-def test_render_Datetime(soup_rendered: PageElement, soup_expected: PageElement):
+def test_render_DateTime(soup_rendered: PageElement, soup_expected: PageElement):
     assert soup_rendered == soup_expected
 
 

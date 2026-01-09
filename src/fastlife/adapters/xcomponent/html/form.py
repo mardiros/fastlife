@@ -1,4 +1,5 @@
 """HTML Form elements."""
+
 from collections.abc import Mapping
 from datetime import date
 from typing import Literal
@@ -213,8 +214,9 @@ def Date(
     />
     """
 
+
 @x_component(namespace=BUILTINS_CATALOG_NS)
-def Datetime(
+def DateTime(
     name: str,
     value: str = "",
     type: Literal["datetime-local"] = "datetime-local",
@@ -250,7 +252,6 @@ def Datetime(
     """
 
 
-
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Hidden(
     name: str,
@@ -270,6 +271,7 @@ def Hidden(
     return """
         <input name={name} value={value} type="hidden" id={id} />
     """
+
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Button(
@@ -505,6 +507,7 @@ def Label(
         {children}
     </label>
     """
+
 
 @x_component(namespace=BUILTINS_CATALOG_NS)
 def Option(

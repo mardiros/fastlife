@@ -694,3 +694,24 @@ def test_render_date(
     assert input is not None, result
     input = html.find("input", attrs={"type": "date", "name": "x.ended_on"})
     assert input is not None, result
+
+
+def test_render_datetime(
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    fieldset = DummyDateTime.model_construct()
+
+    model = FormModel[DummyDateTime].default("x", DummyDateTime)
+    model.edit(fieldset)
+    form = DummyForm(
+        model=model,  # type: ignore
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    input = html.find("input", attrs={"type": "datetime-local", "name": "x.started_at"})
+    assert input is not None, result
+    input = html.find("input", attrs={"type": "datetime-local", "name": "x.ended_at"})
+    assert input is not None, result

@@ -11,7 +11,10 @@ from fastlife.adapters.xcomponent.pydantic_form.widgets.checklist import (
     Checkable,
     ChecklistWidget,
 )
-from fastlife.adapters.xcomponent.pydantic_form.widgets.date import DateWidget
+from fastlife.adapters.xcomponent.pydantic_form.widgets.date import (
+    DateTimeWidget,
+    DateWidget,
+)
 from fastlife.adapters.xcomponent.pydantic_form.widgets.dropdown import DropDownWidget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.hidden import HiddenWidget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.mfa_code import MFACodeWidget
@@ -60,6 +63,19 @@ def test_render_date(
     html = soup(result)
     assert html.find("label", attrs={"for": "foo-XxX"})
     assert html.find("input", attrs={"id": "foo-XxX", "name": "foo", "type": "date"})
+    assert html.find("button", attrs={"type": "button"})
+
+
+def test_render_datetime(
+    renderer: XTemplateRenderer, soup: Callable[[str], bs4.BeautifulSoup]
+):
+    boolean = DateTimeWidget(name="foo", title="Foo", token="XxX", removable=True)
+    result = boolean.to_html(renderer)
+    html = soup(result)
+    assert html.find("label", attrs={"for": "foo-XxX"})
+    assert html.find(
+        "input", attrs={"id": "foo-XxX", "name": "foo", "type": "datetime-local"}
+    )
     assert html.find("button", attrs={"type": "button"})
 
 
