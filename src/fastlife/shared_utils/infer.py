@@ -10,18 +10,33 @@ from pydantic import BaseModel
 from fastlife.domain.model.template import InlineTemplate
 
 
+def is_newtype(typ: type[Any]) -> bool:
+    """Check tha a type is a typing.NewType"""
+    return callable(typ) and hasattr(typ, "__supertype__")
+
+
+def get_runtime_type(typ: type[Any]) -> type[Any]:
+    """
+    Unwrap the NewType if exists and return the wrapped type in that case.
+    """
+    if is_newtype(typ):
+        typ = typ.__supertype__
+    return typ
+
+
 def is_complex_type(typ: type[Any]) -> bool:
     """
     Used to detect complex type such as Mapping, Sequence and pydantic BaseModel.
 
     This method cannot be used outside pydantic serialization.
     """
+    typ = get_runtime_type(typ)
     return bool(get_origin(typ) or issubclass(typ, BaseModel))
 
 
 def is_union(typ: type[Any]) -> bool:
     """Used to detect unions like Optional[T], Union[T, U] or T | U."""
-    type_origin = get_origin(typ)
+    type_origin = get_origin(get_runtime_type(typ))
     if type_origin:
         if type_origin is Union:  # Optional[T]
             return True
@@ -29,11 +44,6 @@ def is_union(typ: type[Any]) -> bool:
         if type_origin is UnionType:  # T | U
             return True
     return False
-
-
-def is_newtype(typ: type[Any]) -> bool:
-    """Check tha a type is a typing.NewType"""
-    return callable(typ) and hasattr(typ, "__supertype__")
 
 
 def is_inline_template_returned(endpoint: Callable[..., Any]) -> bool:

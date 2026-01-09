@@ -13,7 +13,7 @@ from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget
 from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
-from fastlife.shared_utils.infer import is_newtype
+from fastlife.shared_utils.infer import get_runtime_type
 
 if TYPE_CHECKING:
     from fastlife.service.templates import AbstractTemplateRenderer
@@ -183,8 +183,7 @@ class WidgetFactory:
                     )
                     return ret
 
-        if is_newtype(typ):
-            typ = typ.__supertype__
+        typ = get_runtime_type(typ)
         type_origin = get_origin(typ)
         for builder in self.builders:
             if builder.accept(typ, type_origin):
