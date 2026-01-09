@@ -267,6 +267,102 @@ def test_render_Password(soup_rendered: PageElement, soup_expected: PageElement)
     "template_string,expected_string",
     [
         pytest.param(
+            """<Date name="key" value="2000-01-01"/>""",
+            """<input name="key" value="2000-01-01" type="date"
+                class="bg-neutral-50 block border border-neutral-300 p-2.5
+                rounded-lg text-base text-neutral-900 w-full dark:bg-neutral-700
+                dark:border-neutral-600 dark:focus:border-primary-500
+                dark:focus:ring-primary-500 dark:placeholder-neutral-400
+                dark:text-white focus:border-primary-500 focus:ring-primary-500"
+                />""",
+            id="Date",
+        ),
+        pytest.param(
+            """<Date id="k" class="dt" name="key" value="2000-01-01"/>""",
+            """<input id="k" class="dt" name="key" value="2000-01-01" type="date" />""",
+            id="Date-css",
+        ),
+        pytest.param(
+            """
+            <Date
+                class="dt"
+                name="key"
+                value="2000-01-01"
+                min="1998-01-01"
+                max="2002-01-01"
+                />""",
+            """
+            <input
+                class="dt"
+                name="key"
+                type="date"
+                value="2000-01-01"
+                min="1998-01-01"
+                max="2002-01-01"
+                />""",
+            id="Date-range",
+        ),
+    ],
+)
+def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
+            """<DateTime name="key" value="2000-01-01"/>""",
+            """<input name="key" value="2000-01-01" type="datetime-local"
+                class="bg-neutral-50 block border border-neutral-300 p-2.5
+                rounded-lg text-base text-neutral-900 w-full dark:bg-neutral-700
+                dark:border-neutral-600 dark:focus:border-primary-500
+                dark:focus:ring-primary-500 dark:placeholder-neutral-400
+                dark:text-white focus:border-primary-500 focus:ring-primary-500"
+                />""",
+            id="DateTime",
+        ),
+        pytest.param(
+            """<DateTime id="k" class="dt" name="key" value="2000-01-01"/>""",
+            """
+            <input id="k"
+                class="dt"
+                name="key"
+                value="2000-01-01"
+                type="datetime-local"
+                />""",
+            id="Date-css",
+        ),
+        pytest.param(
+            """
+            <DateTime
+                class="dt"
+                name="key"
+                value="2000-01-01"
+                min="1998-01-01"
+                max="2002-01-01"
+                />""",
+            """
+            <input
+                class="dt"
+                name="key"
+                type="datetime-local"
+                value="2000-01-01"
+                min="1998-01-01"
+                max="2002-01-01"
+                />""",
+            id="Date-range",
+        ),
+    ],
+)
+def test_render_DateTime(soup_rendered: PageElement, soup_expected: PageElement):
+    assert soup_rendered == soup_expected
+
+
+@pytest.mark.parametrize(
+    "template_string,expected_string",
+    [
+        pytest.param(
             """<Label for="y">yoyo</Label>""",
             """<label class="block font-bold mb-2 text-base text-neutral-900
                              dark:text-white"

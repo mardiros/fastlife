@@ -1,4 +1,5 @@
 from collections.abc import Callable, Sequence
+from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum, IntEnum
 from typing import Annotated, Any, Literal, NewType
@@ -58,6 +59,16 @@ class Bar(BaseModel):
 
 class DummyOptional(BaseModel):
     foobar: str | None = Field()
+
+
+class DummyDate(BaseModel):
+    started_on: date = Field()
+    ended_on: date = Field()
+
+
+class DummyDateTime(BaseModel):
+    started_at: datetime = Field()
+    ended_at: datetime = Field()
 
 
 class DummyCustomized(BaseModel):
@@ -132,7 +143,14 @@ class MultiSet(BaseModel):
 
 
 DummyFormModel = FormModel[
-    DummyModel | Banger | MultiSet | DummyOptional | DummyCustomized | DummyIntEnum
+    DummyModel
+    | Banger
+    | MultiSet
+    | DummyOptional
+    | DummyCustomized
+    | DummyIntEnum
+    | DummyDate
+    | DummyDateTime
 ]
 
 
@@ -655,3 +673,45 @@ def test_render_intenum(
     html = soup(result)
     select = html.find("select")
     assert select and select.text == "123"
+
+
+def test_render_date(
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    fieldset = DummyDate.model_construct()
+
+    model = FormModel[DummyDate].default("x", DummyDate)
+    model.edit(fieldset)
+    form = DummyForm(
+        model=model,  # type: ignore
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    input = html.find("input", attrs={"type": "date", "name": "x.started_on"})
+    assert input is not None, result
+    input = html.find("input", attrs={"type": "date", "name": "x.ended_on"})
+    assert input is not None, result
+
+
+def test_render_datetime(
+    renderer: XTemplateRenderer,
+    soup: Callable[[str], bs4.BeautifulSoup],
+):
+    fieldset = DummyDateTime.model_construct()
+
+    model = FormModel[DummyDateTime].default("x", DummyDateTime)
+    model.edit(fieldset)
+    form = DummyForm(
+        model=model,  # type: ignore
+        token="tkt",
+    )
+
+    result = renderer.render_template(form)
+    html = soup(result)
+    input = html.find("input", attrs={"type": "datetime-local", "name": "x.started_at"})
+    assert input is not None, result
+    input = html.find("input", attrs={"type": "datetime-local", "name": "x.ended_at"})
+    assert input is not None, result

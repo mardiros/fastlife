@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from typing import Any
 
 from fastlife.adapters.xcomponent.registry import x_function
@@ -16,6 +17,20 @@ def is_bool(i: Any) -> bool:
 @x_function()
 def is_str(value: Any) -> bool:
     return isinstance(value, str)
+
+
+@x_function()
+def isoformat(value: str | date | datetime | None) -> str | None:
+    """
+    Cast a date or a datetime to isoformat representation.
+
+    In case its not a date or a datetime, the value is preserved.
+    """
+    if isinstance(value, datetime):
+        return value.replace(tzinfo=None).isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    return value
 
 
 @x_function(name="str")
