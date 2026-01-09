@@ -4,7 +4,12 @@ from uuid import UUID
 import pytest
 from pydantic import BaseModel
 
-from fastlife.shared_utils.infer import is_complex_type, is_newtype, is_union
+from fastlife.shared_utils.infer import (
+    get_runtime_type,
+    is_complex_type,
+    is_newtype,
+    is_union,
+)
 
 UserId = NewType("UserId", UUID)
 
@@ -40,6 +45,7 @@ def test_is_complex_type(typ: type[Any], expected: bool):
         pytest.param(Union[str, int], True, id="Union[str, int]"),  # noqa: UP007
         pytest.param(str | None, True, id="str|None"),
         pytest.param(Optional[str], True, id="Optional[str]"),  # noqa: UP045
+        pytest.param(Optional[UserId], True, id="Optional[UserId]"),  # noqa: UP045
         pytest.param(DummyModel, False, id="DummyModel"),
         pytest.param(DummyModel | None, True, id="DummyModel|None"),
         pytest.param(DummyModel | str, True, id="DummyModel|str"),
@@ -50,11 +56,22 @@ def test_is_union(typ: type[Any], expected: bool):
 
 
 @pytest.mark.parametrize(
-    "type,expected",
+    "typ,expected",
     [
         pytest.param(UUID, False, id="false"),
         pytest.param(UserId, True, id="true"),
     ],
 )
-def test_is_newtype(type: type[Any], expected: bool):
-    assert is_newtype(type) is expected
+def test_is_newtype(typ: type[Any], expected: bool):
+    assert is_newtype(typ) is expected
+
+
+@pytest.mark.parametrize(
+    "typ,expected",
+    [
+        pytest.param(UUID, UUID, id="unwrapped"),
+        pytest.param(UserId, UUID, id="wrapped"),
+    ],
+)
+def test_get_runtime_type(typ: type[Any], expected: type[Any]):
+    assert get_runtime_type(typ) == expected
