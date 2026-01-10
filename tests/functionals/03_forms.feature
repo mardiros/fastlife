@@ -46,11 +46,11 @@ Feature: Pydantic Form Generation
 
   Scenario: date
       Given anonymous user on "/form/datefield"
-      When the user fills the field "rendez-vous" with "2024-01-02"
+      When the user fills the field "rendez-vous" with "2026-01-10"
       And the user clicks on the button "submit" with response info
       Then the user sees the json
         """json
-        {"rdv": "2024-01-02"}
+        {"rdv": "2026-01-10"}
         """
 
   Scenario: datetime
