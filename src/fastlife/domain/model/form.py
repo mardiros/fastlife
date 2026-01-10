@@ -63,6 +63,7 @@ class FormModel(Generic[T]):
             return ret
         except ValidationError as exc:
             errors: dict[str, str] = {}
+            breakpoint()
             for error in exc.errors():
                 loc = prefix
                 typ: Any = get_runtime_type(pydantic_type)
@@ -84,12 +85,12 @@ class FormModel(Generic[T]):
                             loc = f"{loc}.{part}"
                         else:
                             raise NotImplementedError from exc  # coverage: ignore
-
+                    elif isinstance(part, int):
+                        # we are in a sequence
+                        loc = f"{loc}.{part}"
+                        assert isinstance(typ, Sequence)
+                        typ = typ.__args__[0]
                     else:
-                        # this line was used by jinjax but no test requires it using
-                        # xcomponent pydantic_form helper
-                        # loc = f"{loc}.{part}"
-                        # raising to get the use case back later ?
                         raise NotImplementedError from exc  # coverage: ignore
 
                 if loc in errors:

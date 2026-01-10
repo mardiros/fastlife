@@ -29,7 +29,7 @@ class UnionWidget(Widget[TWidget]):
             <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
             <OptionalErrorText text={error} />
           </Summary>
-          <div hx-sync="this" id={"id" + child}>
+          <div hx-sync="this" id={"id" + child} class="flex flex-row gap-2 mt-2">
             {
               if child {
                 child
@@ -47,11 +47,13 @@ class UnionWidget(Widget[TWidget]):
               }
             }
           </div>
-          <Button type="button" id={id + '-remove-btn'} hx-target={'#' + id}
-            hx-vals={parent_type.params} hx-get={parent_type.url} hidden={not child}
-            class={globals.SECONDARY_BUTTON_CLASS}>
-            Remove
-          </Button>
+          <div class="ml-4 my-2">
+            <Button type="button" id={id + '-remove-btn'} hx-target={'#' + id}
+              hx-vals={parent_type.params} hx-get={parent_type.url} hidden={not child}
+              class={globals.SECONDARY_BUTTON_CLASS}>
+              {globals.gettext("Remove")}
+            </Button>
+          </div>
         </Details>
       </div>
     </Widget>
