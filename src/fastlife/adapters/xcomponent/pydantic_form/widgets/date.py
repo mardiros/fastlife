@@ -31,7 +31,11 @@ class DateWidget(Widget[date]):
 
 class DateTimeWidget(Widget[datetime]):
     """
-    Widget for text like field (email, ...).
+    Widget for datetime.
+
+    Important, is uses datetime-local from HTML5,
+    which is not timezone aware.
+    It also does not handle seconds in forms.
     """
 
     template = """
