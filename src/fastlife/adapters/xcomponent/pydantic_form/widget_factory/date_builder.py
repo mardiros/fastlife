@@ -46,7 +46,7 @@ class DateBuilder(BaseWidgetBuilder[date]):
             token=self.factory.token,
             value=value,
             error=form_errors.get(field_name),
-            # FIXME convert annoation to have min and max here
+            # FIXME convert annotation to have min and max here
         )
 
 
@@ -81,5 +81,5 @@ class DateTimeBuilder(BaseWidgetBuilder[datetime]):
             token=self.factory.token,
             value=value,
             error=form_errors.get(field_name),
-            # FIXME convert annoation to have min and max here
+            # FIXME convert annotation to have min and max here
         )
