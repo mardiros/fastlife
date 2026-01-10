@@ -63,12 +63,12 @@ class DummyOptional(BaseModel):
 
 class DummyDate(BaseModel):
     started_on: date = Field()
-    ended_on: date = Field()
+    ended_on: date | None = Field()
 
 
 class DummyDateTime(BaseModel):
     started_at: datetime = Field()
-    ended_at: datetime = Field()
+    ended_at: datetime | None = Field()
 
 
 class DummyCustomized(BaseModel):
