@@ -43,16 +43,26 @@ Feature: Pydantic Form Generation
         "fm": 103.3
       }
       """
-  # # not implemented yet
-  # # Scenario: datetime
-  # #   Given anonymous user on "/form/datetimefield"
-  # #   When the user fills the field "rendez-vous" with "2024-01-02"
-  # #   Then the user sees the json
-  # #     """json
-  # #     {"rdv": "2024-01-02T00:00:00Z"}
-  # #     """
 
-  Scenario: Bool
+  Scenario: date
+      Given anonymous user on "/form/datefield"
+      When the user fills the field "rendez-vous" with "2024-01-02"
+      And the user clicks on the button "submit" with response info
+      Then the user sees the json
+        """json
+        {"rdv": "2024-01-02"}
+        """
+
+  Scenario: datetime
+     Given anonymous user on "/form/datetimefield"
+     When the user fills the field "rendez-vous" with "2024-01-02T00:00"
+     And the user clicks on the button "submit" with response info
+     Then the user sees the json
+       """json
+       {"rdv": "2024-01-02T00:00:00"}
+       """
+
+  Scenario: bool
     Given anonymous user on "/form/booleanfield"
     When the user clicks on the checkbox "Accept contract"
     And the user clicks on the button "submit" with response info
