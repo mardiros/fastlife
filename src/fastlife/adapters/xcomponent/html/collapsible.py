@@ -65,10 +65,14 @@ def Summary(
       <Icon name="chevron-right" id={id + '-icon'}
         class={
             if open {
-                "w-8 h-8 transform transition-transform duration-300 rotate-90"
+                <>
+                    {globals.SUMMARY_OPEN_ICON_CLASS}
+                </>
             }
             else {
-                "w-8 h-8 transform transition-transform duration-300"
+                <>
+                    {globals.SUMMARY_CLOSED_ICON_CLASS}
+                </>
             }
         } />
         { children }
