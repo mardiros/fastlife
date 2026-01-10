@@ -62,6 +62,14 @@ Feature: Pydantic Form Generation
        {"rdv": "2024-01-02T00:00:00"}
        """
 
+  Scenario: optional datetime
+    Given anonymous user on "/form/datetime_optional_field"
+    When the user clicks on the button "submit" with response info
+    Then the user sees the json
+      """json
+      {"rdv": null}
+      """
+
   Scenario: bool
     Given anonymous user on "/form/booleanfield"
     When the user clicks on the checkbox "Accept contract"
