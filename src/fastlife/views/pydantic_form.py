@@ -20,7 +20,6 @@ async def show_widget(
     title: str | None = Query(None),
     name: str | None = Query(None),
     token: str | None = Query(None),
-    format: Literal["jinjax", "xcomponent"] | str = Query("jinjax"),
     removable: bool = Query(False),
 ) -> Response:
     """

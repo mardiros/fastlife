@@ -2,7 +2,7 @@
 Widget for field of type Union.
 """
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Union
 
 from markupsafe import Markup
@@ -59,7 +59,7 @@ class UnionWidget(Widget[TWidget]):
     </Widget>
     """
 
-    children_types: Sequence[type[BaseModel]]
+    children_types: Mapping[str, type[BaseModel]]
     parent_type: TypeWrapper | None = Field(default=None)
 
     types: Sequence[TypeWrapper] | None = Field(default=None)
@@ -68,16 +68,17 @@ class UnionWidget(Widget[TWidget]):
     def build_types(self, route_prefix: str) -> Sequence[TypeWrapper]:
         """Wrap types in the union in order to get the in their own widgets."""
         return [
-            TypeWrapper(typ, route_prefix, self.name, self.token)
-            for typ in self.children_types
+            TypeWrapper(typ, route_prefix, self.name, self.token, title)
+            for title, typ in self.children_types.items()
         ]
 
     def to_html(self, renderer: "AbstractTemplateRenderer[XTemplate]") -> Markup:
         """Return the html version."""
         self.child = Markup(self.value.to_html(renderer)) if self.value else ""
         self.types = self.build_types(renderer.route_prefix)
+
         self.parent_type = TypeWrapper(
-            Union[tuple(self.children_types)],  # type: ignore # noqa: UP007
+            Union[tuple(self.children_types.values())],  # type: ignore # noqa: UP007
             renderer.route_prefix,
             self.name,
             self.token,

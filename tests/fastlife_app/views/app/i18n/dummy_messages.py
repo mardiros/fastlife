@@ -7,7 +7,7 @@ from fastapi import Path, Response
 
 from fastlife import Localizer, TranslatableStringFactory, view_config
 
-_ = TranslatableStringFactory(domain="fastlife_test")
+gettext = _ = TranslatableStringFactory(domain="fastlife_test")
 lazy_dog = _("lazy dog")
 quick_brown_fox = _("quick brown fox")
 

@@ -31,13 +31,13 @@ class TestFormPage(XTemplate):
     model: FormModel[Any]
 
 
-@view_config("form", "/form/{type}", methods=["GET", "POST"])
-async def testform(
+@view_config("i18nform", "/{locale}/forms/{type}", methods=["GET", "POST"])
+async def i18nform(
     request: Request,
     type: Annotated[str, Path],
     data: MappingFormData,
 ) -> TestFormPage | Response:
-    cls = resolve(f"tests.fastlife_app.views.app.forms.{type}:Form")
+    cls = resolve(f"tests.fastlife_app.views.app.i18n.form.{type}:Form")
     if request.method == "POST":
         model = FormModel[BaseModel].from_payload(
             request.registry.settings.form_data_model_prefix, cls, data

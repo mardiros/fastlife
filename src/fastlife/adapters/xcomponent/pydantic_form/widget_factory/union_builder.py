@@ -2,7 +2,7 @@
 
 from collections.abc import Mapping
 from types import NoneType
-from typing import Any
+from typing import Annotated, Any, get_args, get_origin
 
 from pydantic import ValidationError
 from pydantic.fields import FieldInfo
@@ -33,22 +33,34 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
         removable: bool,
     ) -> Widget[Any]:
         """Build the widget."""
-        types: list[type[Any]] = []
+        title = ""
+        types: dict[str, type[Any]] = {}
         # required = True
+        # breakpoint()
         for typ in field_type.__args__:  # type: ignore
             if typ is NoneType:
                 # required = False
                 continue
-            types.append(typ)  # type: ignore
+
+            title = typ.__name__
+            if get_origin(typ) is Annotated:
+                base, *meta = get_args(typ)
+                title = base.__name__
+                for arg in meta:
+                    if isinstance(arg, str):
+                        title = arg
+                        break
+                typ = base
+            types[title] = typ  # type: ignore
 
         if (
             not removable
             and len(types) == 1
             # if the optional type is a complex type,
-            and not is_complex_type(types[0])
+            and not is_complex_type(types[title])
         ):
             return self.factory.build(  # coverage: ignore
-                types[0],
+                types[title],
                 name=field_name,
                 field=field,
                 value=value,
@@ -57,7 +69,7 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
             )
         child = None
         if value:
-            for typ in types:
+            for typ in types.values():
                 try:
                     typ(**value)
                 except ValidationError:
@@ -72,11 +84,15 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
                         removable=False,
                     )
 
+        # FIXME Union[Sequence[FooModel]]
+        # if isinstance(child, Sequence):
+        #     child = child.__args__[0]
+
         widget = UnionWidget[Any](
             name=field_name,
             # we assume those types are BaseModel
             value=child,
-            children_types=types,  # type: ignore
+            children_types=types,
             title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(

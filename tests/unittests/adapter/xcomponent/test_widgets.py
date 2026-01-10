@@ -387,7 +387,7 @@ def test_render_union(
         name="foobar",
         title="foobar",
         value=None,
-        children_types=[Foo, Bar],
+        children_types={"Foo": Foo, "Bar": Bar},
         removable=False,
         token="x",
     )
@@ -499,7 +499,7 @@ def test_render_custom(
                 title="foo",
                 value=None,
                 error="It did not work",
-                children_types=[Foo],
+                children_types={"Foo": Foo},
                 removable=False,
                 token="x",
             ),
