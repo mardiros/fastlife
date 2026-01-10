@@ -1,11 +1,11 @@
 """HTTP Form serialization."""
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, Generic, TypeVar, get_origin
 
 from pydantic import BaseModel, ValidationError
 
-from fastlife.shared_utils.infer import is_union
+from fastlife.shared_utils.infer import get_runtime_type, is_union
 
 T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
@@ -65,7 +65,7 @@ class FormModel(Generic[T]):
             errors: dict[str, str] = {}
             for error in exc.errors():
                 loc = prefix
-                typ: Any = pydantic_type
+                typ: Any = get_runtime_type(pydantic_type)
                 for part in error["loc"]:
                     if isinstance(part, str):
                         type_origin = get_origin(typ)
