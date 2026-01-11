@@ -111,22 +111,30 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
             DynamicModel = create_model("DynamicModel", value=(field.annotation, field))
             try:
                 submod = DynamicModel(value=value)
-                discriminator = getattr(submod, field.discriminator)
+                discriminator = getattr(submod.value, field.discriminator)  # type: ignore
+                value = submod.value.model_dump()  # type: ignore
             except ValidationError as exc:
                 submod = DynamicModel.model_construct(value=value)
-                discriminator = exc.errors()[0]["loc"][1]
-                typ = get_type_from_discriminator(discriminator, field)
+                loc = exc.errors()[0]["loc"]
+                if len(loc) > 1:
+                    discriminator = loc[1]
+                    typ = get_type_from_discriminator(discriminator, field)
+                else:
+                    # the discriminator failed, is there
+                    # a better option that just drop the value ?
+                    value = None
 
-            child = self.factory.build(
-                typ,
-                name=field_name,
-                field=FieldInfo(
-                    title=get_title_from_discriminator(discriminator, field)
-                ),
-                value=submod.value,  # type: ignore
-                form_errors=form_errors,
-                removable=False,
-            )
+            if value:
+                child = self.factory.build(
+                    typ,
+                    name=field_name,
+                    field=FieldInfo(
+                        title=get_title_from_discriminator(discriminator, field)
+                    ),
+                    value=value,  # type: ignore
+                    form_errors=form_errors,
+                    removable=False,
+                )
 
         # FIXME Union[Sequence[FooModel]]
         # if isinstance(child, Sequence):

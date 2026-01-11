@@ -169,8 +169,7 @@ def test_from_payload(
             False,
             {"x": {"pet": {"type": "cat"}}},
             {
-                "x.pet.nick": "Field required, Field required",
-                "x.pet.type": "Input should be 'dog'",  # FIXME
+                "x.pet.nick": "Field required",
             },
             id="missing field",
         ),

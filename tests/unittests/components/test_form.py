@@ -319,6 +319,7 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
                 dark:border-neutral-600 dark:focus:border-primary-500
                 dark:focus:ring-primary-500 dark:placeholder-neutral-400
                 dark:text-white focus:border-primary-500 focus:ring-primary-500"
+                step="1"
                 />""",
             id="DateTime",
         ),
@@ -330,6 +331,7 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
                 name="key"
                 value="2000-01-01"
                 type="datetime-local"
+                step="1"
                 />""",
             id="Date-css",
         ),
@@ -350,6 +352,7 @@ def test_render_Date(soup_rendered: PageElement, soup_expected: PageElement):
                 value="2000-01-01"
                 min="1998-01-01"
                 max="2002-01-01"
+                step="1"
                 />""",
             id="Date-range",
         ),

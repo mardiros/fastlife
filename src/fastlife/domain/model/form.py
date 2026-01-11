@@ -26,9 +26,10 @@ def serialize_error(
     exc: ValidationError, prefix: str, pydantic_type: type[Any]
 ) -> dict[str, str]:
     errors: dict[str, str] = {}
-    typ: Any = get_runtime_type(pydantic_type)
+    runtime_type: Any = get_runtime_type(pydantic_type)
     for error in exc.errors():
         loc = prefix
+        typ = runtime_type
         locations = iter(error["loc"])
         while True:
             part = next(locations, None)
@@ -41,12 +42,15 @@ def serialize_error(
                 if type_origin:
                     if is_union(typ):
                         loc = f"{loc}.{part}"
-                        part = next(locations)
-                        typ = get_type_by_discriminator(part, field.discriminator, typ)
+                        part = next(locations, None)
+                        if part is not None:
+                            typ = get_type_by_discriminator(
+                                part, field.discriminator, typ
+                            )
                     else:
-                        raise NotImplementedError from exc  # coverage: ignore
+                        loc = f"{loc}.{part}"
+                        break
                 elif issubclass(typ, BaseModel):
-                    typ = typ.model_fields[part].annotation
                     loc = f"{loc}.{part}"
                 else:
                     loc = f"{loc}.{part}"

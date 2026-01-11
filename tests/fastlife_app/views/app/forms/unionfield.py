@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Dog(BaseModel):
@@ -14,4 +14,4 @@ class Cat(BaseModel):
 
 
 class Form(BaseModel):
-    pet: Dog | Cat
+    pet: Dog | Cat = Field(discriminator="type")
