@@ -61,10 +61,9 @@ class UnionWidget(Widget[TWidget]):
                 function resetUnion(id) {
                     const child = document.getElementById(id + "-child");
                     const defaultBtns = document.getElementById(id + "-default-buttons");
-                    const btn = document.getElementById(id + '-remove-btn');
+                    const btn = document.getElementById(id + 'remove-btn');
                     child.innerHTML = defaultBtns.innerHTML;
                     btn.hidden = true;
-                    htmx.process(child);
                 }
             </script>
           </div>

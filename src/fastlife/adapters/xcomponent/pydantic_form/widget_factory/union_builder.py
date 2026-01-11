@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from types import NoneType
 from typing import Annotated, Any, get_args, get_origin
 
-from pydantic import ValidationError
+from pydantic import ValidationError, create_model
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.base import (
@@ -13,6 +13,48 @@ from fastlife.adapters.xcomponent.pydantic_form.widget_factory.base import (
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import Widget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.union import UnionWidget
 from fastlife.shared_utils.infer import is_complex_type, is_union
+
+
+def get_title(typ: type[Any]) -> str:
+    title = typ.__name__
+    if get_origin(typ) is Annotated:
+        base, *meta = get_args(typ)
+        title = base.__name__
+        for arg in meta:
+            if isinstance(arg, str):
+                title = arg
+                break
+    return title
+
+
+def get_title_from_discriminator(discriminator: str, unionfield: FieldInfo) -> str:
+    # we assume we have unionfield.discriminator here,
+    # and we may have not
+    child_name = discriminator
+    for child_typ in unionfield.annotation.__args__:
+        title = get_title(child_typ)
+        if get_origin(child_typ) is Annotated:
+            child_typ = get_args(child_typ)[0]
+        if (
+            discriminator
+            in child_typ.model_fields[unionfield.discriminator].annotation.__args__
+        ):
+            child_name = title
+    return child_name
+
+
+def get_type_from_discriminator(discriminator: str, unionfield: FieldInfo) -> Any:
+    # we assume we have unionfield.discriminator here,
+    # and we may have not
+    for child_typ in unionfield.annotation.__args__:
+        if get_origin(child_typ) is Annotated:
+            child_typ = get_args(child_typ)[0]
+        if (
+            discriminator
+            in child_typ.model_fields[unionfield.discriminator].annotation.__args__
+        ):
+            return child_typ
+    return None
 
 
 class UnionBuilder(BaseWidgetBuilder[Any]):
@@ -33,34 +75,28 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
         removable: bool,
     ) -> Widget[Any]:
         """Build the widget."""
-        title = ""
-        types: dict[str, type[Any]] = {}
+        types: dict[type[Any], str] = {}
         # required = True
-        # breakpoint()
+        # # breakpoint()
         for typ in field_type.__args__:  # type: ignore
             if typ is NoneType:
                 # required = False
                 continue
 
-            title = typ.__name__
+            title = get_title(typ)
             if get_origin(typ) is Annotated:
-                base, *meta = get_args(typ)
-                title = base.__name__
-                for arg in meta:
-                    if isinstance(arg, str):
-                        title = arg
-                        break
-                typ = base
-            types[title] = typ  # type: ignore
+                typ = get_args(typ)[0]
+
+            types[typ] = title
 
         if (
             not removable
             and len(types) == 1
             # if the optional type is a complex type,
-            and not is_complex_type(types[title])
+            and not is_complex_type(next(iter(types.keys())))
         ):
             return self.factory.build(  # coverage: ignore
-                types[title],
+                next(iter(types.keys())),
                 name=field_name,
                 field=field,
                 value=value,
@@ -69,30 +105,33 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
             )
         child = None
         if value:
-            for typ in types.values():
-                try:
-                    typ(**value)
-                except ValidationError:
-                    pass
-                else:
-                    child = self.factory.build(
-                        typ,
-                        name=field_name,
-                        field=field,
-                        value=value,
-                        form_errors=form_errors,
-                        removable=False,
-                    )
+            DynamicModel = create_model("DynamicModel", value=(field.annotation, field))
+            try:
+                submod = DynamicModel(value=value)
+                discriminator = getattr(submod, field.discriminator)
+            except ValidationError as exc:
+                submod = DynamicModel.model_construct(value=value)
+                discriminator = exc.errors()[0]["loc"][1]
+                breakpoint()
+                typ = get_type_from_discriminator(discriminator, field)
+
+            child = self.factory.build(
+                typ,
+                name=field_name,
+                field=field,
+                value=submod.value,
+                form_errors=form_errors,
+                removable=False,
+            )
 
         # FIXME Union[Sequence[FooModel]]
         # if isinstance(child, Sequence):
         #     child = child.__args__[0]
-
         widget = UnionWidget[Any](
             name=field_name,
             # we assume those types are BaseModel
             value=child,
-            children_types=types,
+            children_types={v: k for k, v in types.items()},
             title=field.title or "" if field else "",
             hint=field.description if field else None,
             aria_label=(

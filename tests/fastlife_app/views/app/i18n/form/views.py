@@ -42,10 +42,13 @@ async def i18nform(
         model = FormModel[BaseModel].from_payload(
             request.registry.settings.form_data_model_prefix, cls, data
         )
-        return Response(
-            model.model.model_dump_json(), headers={"Content-Type": "application/json"}
+        if model.is_valid:
+            return Response(
+                model.model.model_dump_json(),
+                headers={"Content-Type": "application/json"},
+            )
+    else:
+        model = FormModel[Any].default(
+            request.registry.settings.form_data_model_prefix, cls
         )
-    model = FormModel[Any].default(
-        request.registry.settings.form_data_model_prefix, cls
-    )
     return TestFormPage(model=model)
