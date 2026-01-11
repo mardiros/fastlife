@@ -87,7 +87,6 @@ class UnionWidget(Widget[TWidget]):
     """
 
     children_types: Mapping[str, type[BaseModel]]
-    parent_type: TypeWrapper | None = Field(default=None)
 
     types: Sequence[TypeWrapper] | None = Field(default=None)
     child: str = Field(default="")
@@ -103,12 +102,4 @@ class UnionWidget(Widget[TWidget]):
         """Return the html version."""
         self.child = Markup(self.value.to_html(renderer)) if self.value else ""
         self.types = self.build_types(renderer.route_prefix)
-
-        self.parent_type = TypeWrapper(
-            Union[tuple(self.children_types.values())],  # type: ignore # noqa: UP007
-            renderer.route_prefix,
-            self.name,
-            self.token,
-            title=self.title,
-        )
         return Markup(renderer.render_template(self))
