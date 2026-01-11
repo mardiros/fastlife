@@ -4,8 +4,6 @@ Views for pydantic form.
 Pydantic form generate form that may contains fields that requires some ajax query.
 """
 
-from typing import Literal
-
 from fastapi import Query
 from pydantic.fields import FieldInfo
 
@@ -20,7 +18,6 @@ async def show_widget(
     title: str | None = Query(None),
     name: str | None = Query(None),
     token: str | None = Query(None),
-    format: Literal["jinjax", "xcomponent"] | str = Query("jinjax"),
     removable: bool = Query(False),
 ) -> Response:
     """

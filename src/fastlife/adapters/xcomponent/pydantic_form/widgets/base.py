@@ -17,14 +17,6 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 
-def get_title(typ: type[Any]) -> str:
-    return getattr(
-        getattr(typ, "__meta__", None),
-        "title",
-        getattr(typ, "__name__", ""),
-    )
-
-
 class Widget(XTemplate, Generic[T]):
     """
     Base class for widget of pydantic fields.
@@ -121,7 +113,7 @@ class TypeWrapper:
         self.typ = typ
         self.route_prefix = route_prefix
         self.name = name
-        self.title = title or get_title(typ)
+        self.title = title or typ.__name__
         self.token = token
 
     @property
@@ -139,14 +131,12 @@ class TypeWrapper:
     @property
     def params(self) -> str:
         """Params for the widget to render."""
-        return json.dumps(
-            {
-                "name": self.name,
-                "token": self.token,
-                "title": self.title,
-                "format": "xcomponent",
-            }
-        )
+        params = {
+            "name": self.name,
+            "token": self.token,
+            "title": self.title,
+        }
+        return json.dumps(params)
 
     @property
     def url(self) -> str:

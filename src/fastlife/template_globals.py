@@ -340,3 +340,14 @@ class Globals(BaseModel):
 
     FATAL_ERROR_TEXT_CLASS: str = "sm:inline text-xl"
     """Default css class for `pydantic_form.FatalError` text."""
+
+    SUMMARY_OPEN_ICON_CLASS: str = (
+        "w-8 h-8 transform transition-transform duration-300 rotate-90"
+    )
+    """Default css class for the svg icon of the open details/summary."""
+    SUMMARY_CLOSED_ICON_CLASS: str = (
+        "w-8 h-8 transform transition-transform duration-300"
+    )
+    """
+    Default css class for the svg icon of the closed (collapsed) details/summary.
+    """

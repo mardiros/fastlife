@@ -1,14 +1,73 @@
 """HTTP Form serialization."""
 
-from collections.abc import Mapping
-from typing import Any, Generic, TypeVar, get_origin
+from collections.abc import Mapping, Sequence
+from typing import Annotated, Any, Generic, TypeVar, get_args, get_origin
 
 from pydantic import BaseModel, ValidationError
 
-from fastlife.shared_utils.infer import is_union
+from fastlife.shared_utils.infer import get_runtime_type, is_union
 
 T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
+
+
+def get_type_by_discriminator(
+    discriminant: str | int, discriminator: str, typ: type[Any]
+) -> type[Any]:
+    for child_typ in get_args(typ):
+        if discriminant in child_typ.model_fields[discriminator].annotation.__args__:
+            if get_origin(child_typ) is Annotated:
+                child_typ = get_args(child_typ)[0]
+            return child_typ
+    raise ValueError(f"{discriminator} not found in {typ}")
+
+
+def serialize_error(
+    exc: ValidationError, prefix: str, pydantic_type: type[Any]
+) -> dict[str, str]:
+    errors: dict[str, str] = {}
+    runtime_type: Any = get_runtime_type(pydantic_type)
+    for error in exc.errors():
+        loc = prefix
+        typ = runtime_type
+        locations = iter(error["loc"])
+        while True:
+            part = next(locations, None)
+            if part is None:
+                break
+            if isinstance(part, str):
+                field = typ.model_fields[part]
+                typ = field.annotation
+                type_origin = get_origin(typ)
+                if type_origin:
+                    if is_union(typ):
+                        loc = f"{loc}.{part}"
+                        part = next(locations, None)
+                        if part is not None:
+                            typ = get_type_by_discriminator(
+                                part, field.discriminator, typ
+                            )
+                    else:
+                        loc = f"{loc}.{part}"
+                        break
+                elif issubclass(typ, BaseModel):
+                    loc = f"{loc}.{part}"
+                else:
+                    loc = f"{loc}.{part}"
+                    break
+            elif isinstance(part, int):
+                # we are in a sequence
+                loc = f"{loc}.{part}"
+                assert isinstance(typ, Sequence)
+                typ = typ.__args__[0]  # type: ignore
+            else:
+                raise NotImplementedError from exc  # coverage: ignore
+
+        if loc in errors:
+            errors[loc] = f"{errors[loc]}, {error['msg']}"
+        else:
+            errors[loc] = error["msg"]
+    return errors
 
 
 class FormModel(Generic[T]):
@@ -62,39 +121,7 @@ class FormModel(Generic[T]):
             ret = cls(prefix, ptyp, {}, True)
             return ret
         except ValidationError as exc:
-            errors: dict[str, str] = {}
-            for error in exc.errors():
-                loc = prefix
-                typ: Any = pydantic_type
-                for part in error["loc"]:
-                    if isinstance(part, str):
-                        type_origin = get_origin(typ)
-                        if type_origin:
-                            if is_union(typ):
-                                args = typ.__args__
-                                for arg in args:
-                                    if arg.__name__ == part:
-                                        typ = arg
-                                        continue
-
-                            else:
-                                raise NotImplementedError from exc  # coverage: ignore
-                        elif issubclass(typ, BaseModel):
-                            typ = typ.model_fields[part].annotation
-                            loc = f"{loc}.{part}"
-                        else:
-                            raise NotImplementedError from exc  # coverage: ignore
-
-                    else:
-                        # this line was used by jinjax but no test requires it using
-                        # xcomponent pydantic_form helper
-                        # loc = f"{loc}.{part}"
-                        # raising to get the use case back later ?
-                        raise NotImplementedError from exc  # coverage: ignore
-
-                if loc in errors:
-                    errors[loc] = f"{errors[loc]}, {error['msg']}"
-                else:
-                    errors[loc] = error["msg"]
+            errors: dict[str, str] = serialize_error(exc, prefix, pydantic_type)
+            # breakpoint()
             model = pydantic_type.model_construct(**data.get(prefix, {}))
             return cls(prefix, model, errors)

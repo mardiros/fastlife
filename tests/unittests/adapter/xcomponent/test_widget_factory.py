@@ -49,11 +49,13 @@ class Score(IntEnum):
 
 
 class Foo(BaseModel):
+    type: Literal["foo"] = "foo"
     bar: str = Field()
     # private: str = Field(exclude=True)
 
 
 class Bar(BaseModel):
+    type: Literal["bar"] = "bar"
     foo: str = Field()
 
 
@@ -63,12 +65,12 @@ class DummyOptional(BaseModel):
 
 class DummyDate(BaseModel):
     started_on: date = Field()
-    ended_on: date = Field()
+    ended_on: date | None = Field()
 
 
 class DummyDateTime(BaseModel):
     started_at: datetime = Field()
-    ended_at: datetime = Field()
+    ended_at: datetime | None = Field()
 
 
 class DummyCustomized(BaseModel):
@@ -98,7 +100,7 @@ class DummyModel(BaseModel):
     vegan: bool = Field()
     tags: list[str] = Field()
     foo: Foo = Field()
-    foobar: Foo | Bar = Field()
+    foobar: Foo | Bar = Field(discriminator="type")
     address: IPvAnyAddress = Field()
 
 
@@ -354,7 +356,7 @@ def test_render_template_values(
                     "type": "bar",
                     "vegan": True,
                     "tags": ["blue", "green"],
-                    "foobar": {"foo": "totally"},
+                    "foobar": {"type": "bar", "foo": "totally"},
                     "address": "192.168.3.4",
                 }
             },
