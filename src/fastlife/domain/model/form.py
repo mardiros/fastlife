@@ -12,7 +12,7 @@ T = TypeVar("T", bound=BaseModel)
 
 
 def get_type_by_discriminator(
-    discriminant: str, discriminator: str, typ: type[Any]
+    discriminant: str | int, discriminator: str, typ: type[Any]
 ) -> type[Any]:
     for child_typ in get_args(typ):
         if discriminant in child_typ.model_fields[discriminator].annotation.__args__:
@@ -55,7 +55,7 @@ def serialize_error(
                 # we are in a sequence
                 loc = f"{loc}.{part}"
                 assert isinstance(typ, Sequence)
-                typ = typ.__args__[0]
+                typ = typ.__args__[0]  # type: ignore
             else:
                 raise NotImplementedError from exc  # coverage: ignore
 

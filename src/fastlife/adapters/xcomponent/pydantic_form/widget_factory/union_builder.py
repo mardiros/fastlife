@@ -30,6 +30,7 @@ def get_title(typ: type[Any]) -> str:
 def get_title_from_discriminator(discriminator: str, unionfield: FieldInfo) -> str:
     # we assume we have unionfield.discriminator here,
     # and we may have not
+    assert unionfield.annotation
     child_name = discriminator
     for child_typ in unionfield.annotation.__args__:
         title = get_title(child_typ)
@@ -43,9 +44,10 @@ def get_title_from_discriminator(discriminator: str, unionfield: FieldInfo) -> s
     return child_name
 
 
-def get_type_from_discriminator(discriminator: str, unionfield: FieldInfo) -> Any:
+def get_type_from_discriminator(discriminator: str | int, unionfield: FieldInfo) -> Any:
     # we assume we have unionfield.discriminator here,
     # and we may have not
+    assert unionfield.annotation
     for child_typ in unionfield.annotation.__args__:
         if get_origin(child_typ) is Annotated:
             child_typ = get_args(child_typ)[0]
@@ -105,6 +107,7 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
             )
         child = None
         if value:
+            assert field and field.annotation and isinstance(field.discriminator, str)
             DynamicModel = create_model("DynamicModel", value=(field.annotation, field))
             try:
                 submod = DynamicModel(value=value)
@@ -120,7 +123,7 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
                 field=FieldInfo(
                     title=get_title_from_discriminator(discriminator, field)
                 ),
-                value=submod.value,
+                value=submod.value,  # type: ignore
                 form_errors=form_errors,
                 removable=False,
             )
