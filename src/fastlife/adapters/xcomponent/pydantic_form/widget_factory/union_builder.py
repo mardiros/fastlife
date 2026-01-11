@@ -112,13 +112,14 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
             except ValidationError as exc:
                 submod = DynamicModel.model_construct(value=value)
                 discriminator = exc.errors()[0]["loc"][1]
-                breakpoint()
                 typ = get_type_from_discriminator(discriminator, field)
 
             child = self.factory.build(
                 typ,
                 name=field_name,
-                field=field,
+                field=FieldInfo(
+                    title=get_title_from_discriminator(discriminator, field)
+                ),
                 value=submod.value,
                 form_errors=form_errors,
                 removable=False,
