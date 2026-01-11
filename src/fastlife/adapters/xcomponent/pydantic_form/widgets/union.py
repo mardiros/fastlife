@@ -3,7 +3,7 @@ Widget for field of type Union.
 """
 
 from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from markupsafe import Markup
 from pydantic import BaseModel, Field
