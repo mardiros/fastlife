@@ -15,7 +15,7 @@ T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
 
 
-def serialize_error(
+def flatten_error(
     exc: ValidationError, prefix: str, pydantic_type: type[Any]
 ) -> dict[str, str]:
     errors: dict[str, str] = {}
@@ -117,7 +117,7 @@ class FormModel(Generic[T]):
             ret = cls(prefix, ptyp, {}, True)
             return ret
         except ValidationError as exc:
-            errors: dict[str, str] = serialize_error(exc, prefix, pydantic_type)
+            errors: dict[str, str] = flatten_error(exc, prefix, pydantic_type)
             # breakpoint()
             model = pydantic_type.model_construct(**data.get(prefix, {}))
             return cls(prefix, model, errors)
