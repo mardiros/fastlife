@@ -1,4 +1,4 @@
-from typing import Any, NewType, Optional, Union
+from typing import Annotated, Any, Literal, NewType, Optional, Union
 from uuid import UUID
 
 import pytest
@@ -6,10 +6,12 @@ from pydantic import BaseModel
 
 from fastlife.shared_utils.infer import (
     get_runtime_type,
+    get_type_by_discriminator,
     is_complex_type,
     is_newtype,
     is_union,
 )
+from tests.fastlife_app.views.app.i18n.dummy_messages import gettext
 
 UserId = NewType("UserId", UUID)
 
@@ -75,3 +77,39 @@ def test_is_newtype(typ: type[Any], expected: bool):
 )
 def test_get_runtime_type(typ: type[Any], expected: type[Any]):
     assert get_runtime_type(typ) == expected
+
+
+class Cat(BaseModel):
+    pet_type: Literal["cat"]
+    meows: int
+
+
+class Dog(BaseModel):
+    pet_type: Literal["dog"]
+    barks: float
+
+
+class Lizard(BaseModel):
+    pet_type: Literal["reptile", "lizard"]
+    scales: bool
+
+
+@pytest.mark.parametrize(
+    "discriminant,discriminator,typ,expected",
+    [
+        pytest.param("cat", "pet_type", Cat | Dog, Cat, id="one"),
+        pytest.param("lizard", "pet_type", Cat | Dog | Lizard, Lizard, id="multi"),
+        pytest.param("cow", "pet_type", Cat | Dog, None, id="not found"),
+        pytest.param(
+            "dog",
+            "pet_type",
+            Annotated[Cat, gettext("The Cat")] | Annotated[Dog, gettext("The Dog")],  # type: ignore
+            Dog,
+            id="not found",
+        ),
+    ],
+)
+def test_get_type_by_discriminator(
+    discriminant: str | int, discriminator: str, typ: type[Any], expected: type[Any]
+):
+    assert get_type_by_discriminator(discriminant, discriminator, typ) is expected

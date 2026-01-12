@@ -1,25 +1,18 @@
 """HTTP Form serialization."""
 
 from collections.abc import Mapping, Sequence
-from typing import Annotated, Any, Generic, TypeVar, get_args, get_origin
+from typing import Any, Generic, TypeVar, get_origin
 
 from pydantic import BaseModel, ValidationError
 
-from fastlife.shared_utils.infer import get_runtime_type, is_union
+from fastlife.shared_utils.infer import (
+    get_runtime_type,
+    get_type_by_discriminator,
+    is_union,
+)
 
 T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
-
-
-def get_type_by_discriminator(
-    discriminant: str | int, discriminator: str, typ: type[Any]
-) -> type[Any]:
-    for child_typ in get_args(typ):
-        if discriminant in child_typ.model_fields[discriminator].annotation.__args__:
-            if get_origin(child_typ) is Annotated:
-                child_typ = get_args(child_typ)[0]
-            return child_typ
-    raise ValueError(f"{discriminator} not found in {typ}")
 
 
 def serialize_error(
@@ -47,6 +40,9 @@ def serialize_error(
                             typ = get_type_by_discriminator(
                                 part, field.discriminator, typ
                             )
+                            if not typ:
+                                raise ValueError(f"{part} not found in {field}")
+
                     else:
                         loc = f"{loc}.{part}"
                         break

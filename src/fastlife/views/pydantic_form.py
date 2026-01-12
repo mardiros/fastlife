@@ -5,7 +5,6 @@ Pydantic form generate form that may contains fields that requires some ajax que
 """
 
 from fastapi import Query
-from pydantic.fields import FieldInfo
 
 from fastlife import Configurator, Request, Response, XTemplate, configure
 from fastlife.domain.model.template import InlineTemplate
