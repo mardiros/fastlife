@@ -39,7 +39,8 @@ def flatten_error(
         while True:
             part = next(locations, None)
             if part is None:
-                break
+                # safety break that should not happen
+                break  # coverage: ignore
             if isinstance(part, str):
                 assert isclass(typ) and issubclass(typ, BaseModel)  # type: ignore
                 field = typ.model_fields[part]
@@ -50,18 +51,16 @@ def flatten_error(
                         assert isinstance(field.discriminator, str)
                         loc = f"{loc}.{part}"
                         part = next(locations, None)
-                        if part is not None:
-                            typ = get_type_by_discriminator(
-                                part, field.discriminator, typ
-                            )
-                            if not typ:
-                                raise ValueError(f"{part} not found in {field}")
-
+                        if part is None:
+                            break
+                        typ = get_type_by_discriminator(part, field.discriminator, typ)
+                        assert typ is not None  # pydantic never let you get None here
                     else:
                         loc = f"{loc}.{part}"
                 elif issubclass(typ, BaseModel):
                     loc = f"{loc}.{part}"
                 else:
+                    # the last attribute
                     loc = f"{loc}.{part}"
                     break
             else:

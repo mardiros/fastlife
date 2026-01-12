@@ -1,69 +1,14 @@
 """HTTP Form serialization."""
 
-from collections.abc import Mapping, Sequence
-from typing import Any, Generic, TypeVar, get_origin
+from collections.abc import Mapping
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from fastlife.shared_utils.infer import (
-    get_runtime_type,
-    get_type_by_discriminator,
-    is_union,
-)
+from fastlife.shared_utils.form import flatten_error
 
 T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
-
-
-def flatten_error(
-    exc: ValidationError, prefix: str, pydantic_type: type[Any]
-) -> dict[str, str]:
-    errors: dict[str, str] = {}
-    runtime_type: Any = get_runtime_type(pydantic_type)
-    for error in exc.errors():
-        loc = prefix
-        typ = runtime_type
-        locations = iter(error["loc"])
-        while True:
-            part = next(locations, None)
-            if part is None:
-                break
-            if isinstance(part, str):
-                field = typ.model_fields[part]
-                typ = field.annotation
-                type_origin = get_origin(typ)
-                if type_origin:
-                    if is_union(typ):
-                        loc = f"{loc}.{part}"
-                        part = next(locations, None)
-                        if part is not None:
-                            typ = get_type_by_discriminator(
-                                part, field.discriminator, typ
-                            )
-                            if not typ:
-                                raise ValueError(f"{part} not found in {field}")
-
-                    else:
-                        loc = f"{loc}.{part}"
-                        break
-                elif issubclass(typ, BaseModel):
-                    loc = f"{loc}.{part}"
-                else:
-                    loc = f"{loc}.{part}"
-                    break
-            elif isinstance(part, int):
-                # we are in a sequence
-                loc = f"{loc}.{part}"
-                assert isinstance(typ, Sequence)
-                typ = typ.__args__[0]  # type: ignore
-            else:
-                raise NotImplementedError from exc  # coverage: ignore
-
-        if loc in errors:
-            errors[loc] = f"{errors[loc]}, {error['msg']}"
-        else:
-            errors[loc] = error["msg"]
-    return errors
 
 
 class FormModel(Generic[T]):
