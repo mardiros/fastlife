@@ -15,7 +15,6 @@ from fastlife.shared_utils.resolver import resolve_extended
 async def show_widget(
     typ: str,
     request: Request,
-    title: str | None = Query(None),
     name: str | None = Query(None),
     token: str | None = Query(None),
     removable: bool = Query(False),
@@ -24,9 +23,6 @@ async def show_widget(
     This views is used by pydantic_form to generate a nested field asynchronously.
     """
     model_cls = resolve_extended(typ)
-    field = None
-    if title:
-        field = FieldInfo(title=title)
 
     template: InlineTemplate = XTemplate()
 
@@ -38,7 +34,7 @@ async def show_widget(
         name=name,
         token=token,
         removable=removable,
-        field=field,
+        field=None,
     )
     return Response(data, headers={"Content-Type": "text/html"})
 
