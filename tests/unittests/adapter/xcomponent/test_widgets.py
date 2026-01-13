@@ -87,6 +87,10 @@ def test_render_date(
         pytest.param(None, None, id="none"),
         pytest.param(datetime(2000, 1, 1), "2000-01-01T00:00:00", id="datetime"),
         pytest.param(
+            "2000-01-01T00:00:00", "2000-01-01T00:00:00", id="datetime step=1"
+        ),
+        pytest.param("2000-01-01T00:00", "2000-01-01T00:00:00", id="datetime step=2"),
+        pytest.param(
             datetime(2000, 1, 1, tzinfo=UTC),
             "2000-01-01T00:00:00",
             id="datetime tzaware",

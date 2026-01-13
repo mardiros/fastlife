@@ -35,7 +35,6 @@ class DateTimeWidget(Widget[datetime]):
 
     Important, is uses datetime-local from HTML5,
     which is not timezone aware.
-    It also does not handle seconds in forms.
     """
 
     template = """
