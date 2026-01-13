@@ -110,11 +110,13 @@ def Widget(
       {children}
       {
         if removable {
-          <Button type="button"
-            onclick={"document.getElementById('" + widget_id + "-container').remove()"}
-            >
-            Remove
-         </Button>
+          <div class="my-4">
+            <Button type="button"
+                onclick={"document.getElementById('" + widget_id + "-container').remove()"}
+                >
+                Remove
+            </Button>
+         </div>
         }
       }
     </div>
