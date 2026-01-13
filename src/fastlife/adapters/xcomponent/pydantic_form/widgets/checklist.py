@@ -62,7 +62,7 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
             <H3 class={globals.H3_SUMMARY_CLASS}>{globals.gettext(title)}</H3>
             <OptionalErrorText text={error} />
           </Summary>
-          <div>
+          <div class="p-4">
             {
               for v in value {
                 <PydanticFormChecklistItem value={v} />
