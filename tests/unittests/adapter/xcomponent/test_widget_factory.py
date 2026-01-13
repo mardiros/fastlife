@@ -12,6 +12,7 @@ from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
 from pydantic.fields import FieldInfo
 
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.union_builder import (
+    get_child_widget,
     get_title,
     get_title_from_discriminator,
     get_type_from_discriminator,
@@ -196,6 +197,11 @@ class UserForm(XTemplate):
     token: str
 
 
+@pytest.fixture
+def factory(renderer: XTemplateRenderer):
+    return WidgetFactory(renderer, "x")
+
+
 @pytest.mark.parametrize(
     "typ,expected",
     [
@@ -222,6 +228,89 @@ def test_get_title_from_discriminator(
     discriminant: str, field: FieldInfo, expected: str
 ):
     assert get_title_from_discriminator(discriminant, field) == expected
+
+
+@pytest.mark.parametrize(
+    "field,value,expected",
+    [
+        pytest.param(None, None, None, id="none"),
+        pytest.param(
+            DummyModel.model_fields["foobar"],
+            {"type": "foo", "bar": "foobar"},
+            {
+                "name": "dummy_name",
+                "id": "dummy-name-x",
+                "value": [
+                    {
+                        "name": "dummy_name.type",
+                        "id": "dummy-name-type-x",
+                        "value": "foo",
+                        "title": "type",
+                        "token": "x",
+                    },
+                    {
+                        "name": "dummy_name.bar",
+                        "id": "dummy-name-bar-x",
+                        "value": "foobar",
+                        "title": "bar",
+                        "token": "x",
+                    },
+                ],
+                "title": "Foo",
+                "token": "x",
+                "nested": True,
+            },
+            id="value",
+        ),
+        pytest.param(
+            DummyModel.model_fields["foobar"],
+            {"type": "foo"},
+            {
+                "id": "dummy-name-x",
+                "name": "dummy_name",
+                "nested": True,
+                "title": "Foo",
+                "token": "x",
+                "value": [
+                    {
+                        "id": "dummy-name-type-x",
+                        "name": "dummy_name.type",
+                        "title": "type",
+                        "token": "x",
+                        "value": "foo",
+                    },
+                    {
+                        "id": "dummy-name-bar-x",
+                        "name": "dummy_name.bar",
+                        "title": "bar",
+                        "token": "x",
+                        "value": "",
+                    },
+                ],
+            },
+            id="invalid",
+        ),
+    ],
+)
+def test_get_child_widget(
+    factory: WidgetFactory,
+    field: FieldInfo | None,
+    value: Any,
+    expected: Widget[Any] | None,
+):
+    widget = get_child_widget(
+        field,
+        value,
+        factory,
+        "dummy_name",
+        {},
+    )
+    dump = None
+    if widget != None:
+        dump = widget.model_dump(
+            exclude_none=True, exclude_defaults=True, exclude_unset=True
+        )
+    assert dump == expected
 
 
 @pytest.mark.parametrize(

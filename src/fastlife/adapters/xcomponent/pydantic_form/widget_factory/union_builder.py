@@ -91,7 +91,7 @@ def get_child_widget(
             else:
                 # the discriminator failed, is there
                 # a better option that just drop the value ?
-                value = None
+                value = None  # coverage: ignore
 
         if isinstance(discriminant, str) and value:
             child = factory.build(
