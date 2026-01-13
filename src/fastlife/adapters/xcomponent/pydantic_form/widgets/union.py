@@ -47,7 +47,7 @@ class UnionWidget(Widget[TWidget]):
               }
             }
           </div>
-          <div class="ml-4 my-2">
+          <div class="p-4">
             <Button
                 type="button"
                 id={id + '-remove-btn'}
