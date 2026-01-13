@@ -11,9 +11,14 @@ from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
 
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
+from fastlife.adapters.xcomponent.pydantic_form.widget_factory.union_builder import (
+    get_title,
+)
 from fastlife.adapters.xcomponent.renderer import XTemplateRenderer
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
+
+from tests.fastlife_app.views.app.i18n.dummy_messages import gettext
 
 UserId = NewType("UserId", UUID)
 
@@ -187,6 +192,18 @@ class UserForm(XTemplate):
     """
     model: FormModel[User]
     token: str
+
+
+@pytest.mark.parametrize(
+    "typ,expected",
+    [
+        (Foo, "Foo"),
+        (Annotated[Foo, "the foo"], "the foo"),
+        (Annotated[Foo, gettext("the foo")], "the foo"),
+    ],
+)
+def test_get_title(typ: type[Any], expected: str):
+    assert get_title(typ) == expected
 
 
 def test_render_template(
