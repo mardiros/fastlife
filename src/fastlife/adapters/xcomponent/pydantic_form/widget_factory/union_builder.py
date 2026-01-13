@@ -2,7 +2,7 @@
 
 from collections.abc import Mapping
 from types import NoneType
-from typing import Annotated, Any, get_args, get_origin
+from typing import TYPE_CHECKING, Annotated, Any, get_args, get_origin
 
 from pydantic import ValidationError, create_model
 from pydantic.fields import FieldInfo
@@ -13,6 +13,11 @@ from fastlife.adapters.xcomponent.pydantic_form.widget_factory.base import (
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import Widget
 from fastlife.adapters.xcomponent.pydantic_form.widgets.union import UnionWidget
 from fastlife.shared_utils.infer import is_complex_type, is_union
+
+if TYPE_CHECKING:
+    from fastlife.adapters.xcomponent.pydantic_form.widget_factory.factory import (
+        WidgetFactory,
+    )
 
 
 def get_title(typ: type[Any]) -> str:
@@ -57,6 +62,49 @@ def get_type_from_discriminator(discriminator: str | int, unionfield: FieldInfo)
         ):
             return child_typ
     return None
+
+
+def get_child_widget(
+    field: FieldInfo | None,
+    value: Any,
+    factory: "WidgetFactory",
+    field_name: str,
+    form_errors: Mapping[str, Any],
+) -> Widget[Any] | None:
+    child = None
+    if value:
+        discriminant: Any = None
+        dicriminated_type: Any = None
+        assert field and field.annotation and isinstance(field.discriminator, str)
+        DynamicModel = create_model("DynamicModel", value=(field.annotation, field))
+        try:
+            submod = DynamicModel(value=value)
+            discriminant = getattr(submod.value, field.discriminator)  # type: ignore
+            dicriminated_type = type(submod.value)  # type: ignore
+            value = submod.value.model_dump()  # type: ignore
+        except ValidationError as exc:
+            submod = DynamicModel.model_construct(value=value)
+            loc = exc.errors()[0]["loc"]
+            if len(loc) > 1:
+                discriminant = loc[1]
+                dicriminated_type = get_type_from_discriminator(discriminant, field)
+            else:
+                # the discriminator failed, is there
+                # a better option that just drop the value ?
+                value = None
+
+        if isinstance(discriminant, str) and value:
+            child = factory.build(
+                dicriminated_type,
+                name=field_name,
+                field=FieldInfo(
+                    title=get_title_from_discriminator(discriminant, field)
+                ),
+                value=value,  # type: ignore
+                form_errors=form_errors,
+                removable=False,
+            )
+    return child
 
 
 class UnionBuilder(BaseWidgetBuilder[Any]):
