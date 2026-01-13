@@ -2,8 +2,8 @@
 Widget for field of type Union.
 """
 
-from collections.abc import Sequence
-from typing import TYPE_CHECKING, Union
+from collections.abc import Mapping, Sequence
+from typing import TYPE_CHECKING
 
 from markupsafe import Markup
 from pydantic import BaseModel, Field
@@ -29,7 +29,7 @@ class UnionWidget(Widget[TWidget]):
             <H3 class={globals.H3_SUMMARY_CLASS}>{ globals.gettext(title) }</H3>
             <OptionalErrorText text={error} />
           </Summary>
-          <div hx-sync="this" id={"id" + child}>
+          <div hx-sync="this" id={id + "-child"} class="flex flex-row gap-2 mt-2">
             {
               if child {
                 child
@@ -47,18 +47,46 @@ class UnionWidget(Widget[TWidget]):
               }
             }
           </div>
-          <Button type="button" id={id + '-remove-btn'} hx-target={'#' + id}
-            hx-vals={parent_type.params} hx-get={parent_type.url} hidden={not child}
-            class={globals.SECONDARY_BUTTON_CLASS}>
-            Remove
-          </Button>
+          <div class="ml-4 my-2">
+            <Button
+                type="button"
+                id={id + '-remove-btn'}
+                hidden={not child}
+                class={globals.SECONDARY_BUTTON_CLASS}
+                onclick={'resetUnion("' + id + '")'}
+                >
+                {globals.gettext("Remove")}
+            </Button>
+            <script>
+                function resetUnion(id) {
+                    const child = document.getElementById(id + "-child");
+                    const defaultBtns = document.getElementById(id + "-default-buttons");
+                    const btn = document.getElementById(id + '-remove-btn');
+                    child.innerHTML = defaultBtns.innerHTML;
+                    htmx.process(child);
+                    btn.hidden = true;
+                }
+            </script>
+          </div>
+          <div class="hidden" id={id + "-default-buttons"}>
+            {
+              for typ in types {
+                <Button type="button"
+                  hx-target="closest div"
+                  hx-get={typ.url}
+                  hx-vals={typ.params}
+                  id={typ.id}
+                  onclick={"document.getElementById('" + id + "-remove-btn').hidden=false"}
+                  class={globals.SECONDARY_BUTTON_CLASS}>{globals.gettext(typ.title)}</Button>
+              }
+            }
+          </div>
         </Details>
       </div>
     </Widget>
     """
 
-    children_types: Sequence[type[BaseModel]]
-    parent_type: TypeWrapper | None = Field(default=None)
+    children_types: Mapping[str, type[BaseModel]]
 
     types: Sequence[TypeWrapper] | None = Field(default=None)
     child: str = Field(default="")
@@ -66,19 +94,12 @@ class UnionWidget(Widget[TWidget]):
     def build_types(self, route_prefix: str) -> Sequence[TypeWrapper]:
         """Wrap types in the union in order to get the in their own widgets."""
         return [
-            TypeWrapper(typ, route_prefix, self.name, self.token)
-            for typ in self.children_types
+            TypeWrapper(typ, route_prefix, self.name, self.token, title)
+            for title, typ in self.children_types.items()
         ]
 
     def to_html(self, renderer: "AbstractTemplateRenderer[XTemplate]") -> Markup:
         """Return the html version."""
         self.child = Markup(self.value.to_html(renderer)) if self.value else ""
         self.types = self.build_types(renderer.route_prefix)
-        self.parent_type = TypeWrapper(
-            Union[tuple(self.children_types)],  # type: ignore # noqa: UP007
-            renderer.route_prefix,
-            self.name,
-            self.token,
-            title=self.title,
-        )
         return Markup(renderer.render_template(self))

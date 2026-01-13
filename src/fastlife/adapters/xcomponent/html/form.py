@@ -225,6 +225,7 @@ def DateTime(
     aria_label: str | None = None,
     min: date | None = None,
     max: date | None = None,
+    step: int = 1,
 ) -> str:
     """
     Generate an HTML `<input>` element for datetime-local.
@@ -237,6 +238,7 @@ def DateTime(
     :param aria_label: Accessible label for the datetime input element
     :param min: Minimum allowed datetime (as date object)
     :param max: Maximum allowed datetime (as date object)
+    :param step: define amplification factor, break iso date format.
     """
     return """
     <input
@@ -245,6 +247,7 @@ def DateTime(
         value={isoformat(value)}
         min={isoformat(min)}
         max={isoformat(max)}
+        step={step}
         id={id}
         aria-label={aria_label}
         class={class_ or globals.INPUT_CLASS}

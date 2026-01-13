@@ -1,11 +1,11 @@
 """HTTP Form serialization."""
 
 from collections.abc import Mapping
-from typing import Any, Generic, TypeVar, get_origin
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from fastlife.shared_utils.infer import is_union
+from fastlife.shared_utils.form import flatten_error
 
 T = TypeVar("T", bound=BaseModel)
 """Template type for form serialized model"""
@@ -62,39 +62,7 @@ class FormModel(Generic[T]):
             ret = cls(prefix, ptyp, {}, True)
             return ret
         except ValidationError as exc:
-            errors: dict[str, str] = {}
-            for error in exc.errors():
-                loc = prefix
-                typ: Any = pydantic_type
-                for part in error["loc"]:
-                    if isinstance(part, str):
-                        type_origin = get_origin(typ)
-                        if type_origin:
-                            if is_union(typ):
-                                args = typ.__args__
-                                for arg in args:
-                                    if arg.__name__ == part:
-                                        typ = arg
-                                        continue
-
-                            else:
-                                raise NotImplementedError from exc  # coverage: ignore
-                        elif issubclass(typ, BaseModel):
-                            typ = typ.model_fields[part].annotation
-                            loc = f"{loc}.{part}"
-                        else:
-                            raise NotImplementedError from exc  # coverage: ignore
-
-                    else:
-                        # this line was used by jinjax but no test requires it using
-                        # xcomponent pydantic_form helper
-                        # loc = f"{loc}.{part}"
-                        # raising to get the use case back later ?
-                        raise NotImplementedError from exc  # coverage: ignore
-
-                if loc in errors:
-                    errors[loc] = f"{errors[loc]}, {error['msg']}"
-                else:
-                    errors[loc] = error["msg"]
+            errors: dict[str, str] = flatten_error(exc, prefix, pydantic_type)
+            # breakpoint()
             model = pydantic_type.model_construct(**data.get(prefix, {}))
             return cls(prefix, model, errors)

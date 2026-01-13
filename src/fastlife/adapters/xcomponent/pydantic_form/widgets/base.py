@@ -9,20 +9,11 @@ from pydantic import Field, model_validator
 
 from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS
 from fastlife.domain.model.template import XTemplate
-from fastlife.shared_utils.infer import is_union
 
 if TYPE_CHECKING:
     from fastlife.service.templates import AbstractTemplateRenderer
 
 T = TypeVar("T")
-
-
-def get_title(typ: type[Any]) -> str:
-    return getattr(
-        getattr(typ, "__meta__", None),
-        "title",
-        getattr(typ, "__name__", ""),
-    )
 
 
 class Widget(XTemplate, Generic[T]):
@@ -78,13 +69,6 @@ class Widget(XTemplate, Generic[T]):
         return Markup(renderer.render_template(self))
 
 
-def _get_fullname(typ: type[Any]) -> str:
-    if is_union(typ):
-        typs = [_get_fullname(t) for t in typ.__args__]  # type: ignore
-        return "|".join(typs)  # type: ignore
-    return f"{typ.__module__}:{typ.__name__}"
-
-
 TWidget = TypeVar("TWidget", bound=Widget[Any])
 
 
@@ -121,13 +105,13 @@ class TypeWrapper:
         self.typ = typ
         self.route_prefix = route_prefix
         self.name = name
-        self.title = title or get_title(typ)
+        self.title = title or typ.__name__
         self.token = token
 
     @property
     def fullname(self) -> str:
         """Full name for the type."""
-        return _get_fullname(self.typ)
+        return f"{self.typ.__module__}:{self.typ.__name__}"
 
     @property
     def id(self) -> str:
@@ -139,14 +123,12 @@ class TypeWrapper:
     @property
     def params(self) -> str:
         """Params for the widget to render."""
-        return json.dumps(
-            {
-                "name": self.name,
-                "token": self.token,
-                "title": self.title,
-                "format": "xcomponent",
-            }
-        )
+        params = {
+            "name": self.name,
+            "token": self.token,
+            "title": self.title,
+        }
+        return json.dumps(params)
 
     @property
     def url(self) -> str:

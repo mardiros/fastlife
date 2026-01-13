@@ -9,11 +9,22 @@ import bs4
 import pytest
 from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
+from pydantic.fields import FieldInfo
 
+from fastlife.adapters.xcomponent.pydantic_form.widget_factory.factory import (
+    WidgetFactory,
+)
+from fastlife.adapters.xcomponent.pydantic_form.widget_factory.union_builder import (
+    get_child_widget,
+    get_title,
+    get_title_from_discriminator,
+    get_type_from_discriminator,
+)
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.adapters.xcomponent.renderer import XTemplateRenderer
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
+from tests.fastlife_app.views.app.i18n.dummy_messages import gettext
 
 UserId = NewType("UserId", UUID)
 
@@ -49,11 +60,13 @@ class Score(IntEnum):
 
 
 class Foo(BaseModel):
+    type: Literal["foo"] = "foo"
     bar: str = Field()
     # private: str = Field(exclude=True)
 
 
 class Bar(BaseModel):
+    type: Literal["bar"] = "bar"
     foo: str = Field()
 
 
@@ -63,12 +76,12 @@ class DummyOptional(BaseModel):
 
 class DummyDate(BaseModel):
     started_on: date = Field()
-    ended_on: date = Field()
+    ended_on: date | None = Field()
 
 
 class DummyDateTime(BaseModel):
     started_at: datetime = Field()
-    ended_at: datetime = Field()
+    ended_at: datetime | None = Field()
 
 
 class DummyCustomized(BaseModel):
@@ -98,7 +111,7 @@ class DummyModel(BaseModel):
     vegan: bool = Field()
     tags: list[str] = Field()
     foo: Foo = Field()
-    foobar: Foo | Bar = Field()
+    foobar: Foo | Annotated[Bar, "the bar"] = Field(discriminator="type")
     address: IPvAnyAddress = Field()
 
 
@@ -185,6 +198,138 @@ class UserForm(XTemplate):
     """
     model: FormModel[User]
     token: str
+
+
+@pytest.fixture
+def factory(renderer: XTemplateRenderer):
+    return WidgetFactory(renderer, "x")
+
+
+@pytest.mark.parametrize(
+    "typ,expected",
+    [
+        (Foo, "Foo"),
+        (Annotated[Foo, "the foo"], "the foo"),
+        (Annotated[Foo, gettext("the foo")], "the foo"),
+    ],
+)
+def test_get_title(typ: type[Any], expected: str):
+    assert get_title(typ) == expected
+
+
+@pytest.mark.parametrize(
+    "discriminant,field,expected",
+    [
+        pytest.param("foo", DummyModel.model_fields["foobar"], "Foo", id="type"),
+        pytest.param(
+            "bar", DummyModel.model_fields["foobar"], "the bar", id="annotated type"
+        ),
+        pytest.param("baz", DummyModel.model_fields["foobar"], "baz", id="unknown"),
+    ],
+)
+def test_get_title_from_discriminator(
+    discriminant: str, field: FieldInfo, expected: str
+):
+    assert get_title_from_discriminator(discriminant, field) == expected
+
+
+@pytest.mark.parametrize(
+    "field,value,expected",
+    [
+        pytest.param(None, None, None, id="none"),
+        pytest.param(
+            DummyModel.model_fields["foobar"],
+            {"type": "foo", "bar": "foobar"},
+            {
+                "name": "dummy_name",
+                "id": "dummy-name-x",
+                "value": [
+                    {
+                        "name": "dummy_name.type",
+                        "id": "dummy-name-type-x",
+                        "value": "foo",
+                        "title": "type",
+                        "token": "x",
+                    },
+                    {
+                        "name": "dummy_name.bar",
+                        "id": "dummy-name-bar-x",
+                        "value": "foobar",
+                        "title": "bar",
+                        "token": "x",
+                    },
+                ],
+                "title": "Foo",
+                "token": "x",
+                "nested": True,
+            },
+            id="value",
+        ),
+        pytest.param(
+            DummyModel.model_fields["foobar"],
+            {"type": "foo"},
+            {
+                "id": "dummy-name-x",
+                "name": "dummy_name",
+                "nested": True,
+                "title": "Foo",
+                "token": "x",
+                "value": [
+                    {
+                        "id": "dummy-name-type-x",
+                        "name": "dummy_name.type",
+                        "title": "type",
+                        "token": "x",
+                        "value": "foo",
+                    },
+                    {
+                        "id": "dummy-name-bar-x",
+                        "name": "dummy_name.bar",
+                        "title": "bar",
+                        "token": "x",
+                        "value": "",
+                    },
+                ],
+            },
+            id="invalid",
+        ),
+    ],
+)
+def test_get_child_widget(
+    factory: WidgetFactory,
+    field: FieldInfo | None,
+    value: Any,
+    expected: Widget[Any] | None,
+):
+    widget = get_child_widget(
+        field,
+        value,
+        factory,
+        "dummy_name",
+        {},
+    )
+    dump = None
+    if widget != None:
+        dump = widget.model_dump(
+            exclude_none=True, exclude_defaults=True, exclude_unset=True
+        )
+    assert dump == expected
+
+
+@pytest.mark.parametrize(
+    "discriminant,field,expected",
+    [
+        pytest.param("foo", DummyModel.model_fields["foobar"], Foo, id="type"),
+        pytest.param(
+            "bar", DummyModel.model_fields["foobar"], Bar, id="annotated type"
+        ),
+        pytest.param("baz", DummyModel.model_fields["foobar"], None, id="unknown"),
+    ],
+)
+def test_get_type_from_discriminator(
+    discriminant: str, field: FieldInfo, expected: Any
+):
+    assert get_type_from_discriminator(discriminant, field) == expected
 
 
 def test_render_template(
@@ -354,7 +499,7 @@ def test_render_template_values(
                     "type": "bar",
                     "vegan": True,
                     "tags": ["blue", "green"],
-                    "foobar": {"foo": "totally"},
+                    "foobar": {"type": "bar", "foo": "totally"},
                     "address": "192.168.3.4",
                 }
             },

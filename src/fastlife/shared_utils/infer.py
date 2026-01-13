@@ -3,7 +3,7 @@
 import inspect
 from collections.abc import Callable
 from types import UnionType
-from typing import Any, Union, get_args, get_origin
+from typing import Annotated, Any, Union, get_args, get_origin
 
 from pydantic import BaseModel
 
@@ -22,6 +22,25 @@ def get_runtime_type(typ: type[Any]) -> type[Any]:
     if is_newtype(typ):
         typ = typ.__supertype__
     return typ
+
+
+def get_type_by_discriminator(
+    discriminant: str | int, discriminator: str, typ: type[Any]
+) -> type[Any] | None:
+    """
+    Find a type from a union using a discriminator.
+
+    :param discriminant: the value searched in the discriminator attribute.
+    :param discriminator: the type attribute name, must be a literal.
+    :param typ: a union type
+    :return: The type of the union or None
+    """
+    for child_typ in get_args(typ):
+        if discriminant in child_typ.model_fields[discriminator].annotation.__args__:
+            if get_origin(child_typ) is Annotated:
+                child_typ = get_args(child_typ)[0]
+            return child_typ
+    return None
 
 
 def is_complex_type(typ: type[Any]) -> bool:
