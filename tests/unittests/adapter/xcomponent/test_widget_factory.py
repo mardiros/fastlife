@@ -9,15 +9,16 @@ import bs4
 import pytest
 from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
+from pydantic.fields import FieldInfo
 
-from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.union_builder import (
     get_title,
+    get_title_from_discriminator,
 )
+from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.adapters.xcomponent.renderer import XTemplateRenderer
 from fastlife.domain.model.form import FormModel
 from fastlife.domain.model.template import XTemplate
-
 from tests.fastlife_app.views.app.i18n.dummy_messages import gettext
 
 UserId = NewType("UserId", UUID)
@@ -105,7 +106,7 @@ class DummyModel(BaseModel):
     vegan: bool = Field()
     tags: list[str] = Field()
     foo: Foo = Field()
-    foobar: Foo | Bar = Field(discriminator="type")
+    foobar: Foo | Annotated[Bar, "the bar"] = Field(discriminator="type")
     address: IPvAnyAddress = Field()
 
 
@@ -204,6 +205,22 @@ class UserForm(XTemplate):
 )
 def test_get_title(typ: type[Any], expected: str):
     assert get_title(typ) == expected
+
+
+@pytest.mark.parametrize(
+    "discriminant,field,expected",
+    [
+        pytest.param("foo", DummyModel.model_fields["foobar"], "Foo", id="type"),
+        pytest.param(
+            "bar", DummyModel.model_fields["foobar"], "the bar", id="annotated type"
+        ),
+        pytest.param("baz", DummyModel.model_fields["foobar"], "baz", id="unknown"),
+    ],
+)
+def test_get_title_from_discriminator(
+    discriminant: str, field: FieldInfo, expected: str
+):
+    assert get_title_from_discriminator(discriminant, field) == expected
 
 
 def test_render_template(

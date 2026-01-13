@@ -27,17 +27,17 @@ def get_title(typ: type[Any]) -> str:
     return title
 
 
-def get_title_from_discriminator(discriminator: str, unionfield: FieldInfo) -> str:
+def get_title_from_discriminator(discriminant: str, unionfield: FieldInfo) -> str:
     # we assume we have unionfield.discriminator here,
     # and we may have not
     assert unionfield.annotation
-    child_name = discriminator
+    child_name = discriminant
     for child_typ in unionfield.annotation.__args__:
         title = get_title(child_typ)
         if get_origin(child_typ) is Annotated:
             child_typ = get_args(child_typ)[0]
         if (
-            discriminator
+            discriminant
             in child_typ.model_fields[unionfield.discriminator].annotation.__args__
         ):
             child_name = title
@@ -105,36 +105,14 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
                 form_errors=form_errors,
                 removable=False,
             )
-        child = None
-        if value:
-            assert field and field.annotation and isinstance(field.discriminator, str)
-            DynamicModel = create_model("DynamicModel", value=(field.annotation, field))
-            try:
-                submod = DynamicModel(value=value)
-                discriminator = getattr(submod.value, field.discriminator)  # type: ignore
-                value = submod.value.model_dump()  # type: ignore
-            except ValidationError as exc:
-                submod = DynamicModel.model_construct(value=value)
-                loc = exc.errors()[0]["loc"]
-                if len(loc) > 1:
-                    discriminator = loc[1]
-                    typ = get_type_from_discriminator(discriminator, field)
-                else:
-                    # the discriminator failed, is there
-                    # a better option that just drop the value ?
-                    value = None
 
-            if value:
-                child = self.factory.build(
-                    typ,
-                    name=field_name,
-                    field=FieldInfo(
-                        title=get_title_from_discriminator(discriminator, field)
-                    ),
-                    value=value,  # type: ignore
-                    form_errors=form_errors,
-                    removable=False,
-                )
+        child = get_child_widget(
+            field,
+            value,
+            self.factory,
+            field_name,
+            form_errors,
+        )
 
         # FIXME Union[Sequence[FooModel]]
         # if isinstance(child, Sequence):
