@@ -14,6 +14,7 @@ from pydantic.fields import FieldInfo
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.union_builder import (
     get_title,
     get_title_from_discriminator,
+    get_type_from_discriminator,
 )
 from fastlife.adapters.xcomponent.pydantic_form.widgets.base import CustomWidget, Widget
 from fastlife.adapters.xcomponent.renderer import XTemplateRenderer
@@ -221,6 +222,22 @@ def test_get_title_from_discriminator(
     discriminant: str, field: FieldInfo, expected: str
 ):
     assert get_title_from_discriminator(discriminant, field) == expected
+
+
+@pytest.mark.parametrize(
+    "discriminant,field,expected",
+    [
+        pytest.param("foo", DummyModel.model_fields["foobar"], Foo, id="type"),
+        pytest.param(
+            "bar", DummyModel.model_fields["foobar"], Bar, id="annotated type"
+        ),
+        pytest.param("baz", DummyModel.model_fields["foobar"], None, id="unknown"),
+    ],
+)
+def test_get_type_from_discriminator(
+    discriminant: str, field: FieldInfo, expected: Any
+):
+    assert get_type_from_discriminator(discriminant, field) == expected
 
 
 def test_render_template(
