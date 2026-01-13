@@ -9,7 +9,6 @@ from pydantic import Field, model_validator
 
 from fastlife.adapters.xcomponent.registry import PYDANTICFORM_CATALOG_NS
 from fastlife.domain.model.template import XTemplate
-from fastlife.shared_utils.infer import is_union
 
 if TYPE_CHECKING:
     from fastlife.service.templates import AbstractTemplateRenderer
@@ -70,13 +69,6 @@ class Widget(XTemplate, Generic[T]):
         return Markup(renderer.render_template(self))
 
 
-def _get_fullname(typ: type[Any]) -> str:
-    if is_union(typ):
-        typs = [_get_fullname(t) for t in typ.__args__]  # type: ignore
-        return "|".join(typs)  # type: ignore
-    return f"{typ.__module__}:{typ.__name__}"
-
-
 TWidget = TypeVar("TWidget", bound=Widget[Any])
 
 
@@ -119,7 +111,7 @@ class TypeWrapper:
     @property
     def fullname(self) -> str:
         """Full name for the type."""
-        return _get_fullname(self.typ)
+        return f"{self.typ.__module__}:{self.typ.__name__}"
 
     @property
     def id(self) -> str:
