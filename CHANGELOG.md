@@ -1,3 +1,10 @@
+## 0.40.0  - Released on 2026-01-13
+* Refactor Union type rendering, now requires a pydantic discriminator.
+  * This api break simplify the rendering of union type, this is an acceptable constraint.
+  * The type inside the union can be annotated to customize the label of the button.
+* Fix nested sequence at form serialization.
+* Improve datetime rendering.
+
 ## 0.39.0  - Released on 2026-01-08
 * Implement kwargs parameter for CustomWidget
 * Fix IntEnum rendering
