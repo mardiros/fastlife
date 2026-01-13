@@ -11,6 +11,9 @@ from lastuuid.dummies import uuidgen
 from pydantic import BaseModel, EmailStr, Field, IPvAnyAddress, SecretStr
 from pydantic.fields import FieldInfo
 
+from fastlife.adapters.xcomponent.pydantic_form.widget_factory.factory import (
+    WidgetFactory,
+)
 from fastlife.adapters.xcomponent.pydantic_form.widget_factory.union_builder import (
     get_child_widget,
     get_title,
