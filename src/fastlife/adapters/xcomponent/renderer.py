@@ -5,9 +5,11 @@ More template engine can be registered using the configurator method
 {meth}`add_renderer <fastlife.config.configurator.GenericConfigurator.add_renderer>`
 """
 
+from collections.abc import Mapping
 from typing import Any
 
 from markupsafe import Markup
+from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 from xcomponent import Catalog
 
@@ -75,13 +77,17 @@ class XTemplateRenderer(AbstractTemplateRenderer[XTemplate]):
         :param field: only render this particular field for the model.
         :return: HTML Markup.
         """
+        prefix = name or self.request.registry.settings.form_data_model_prefix
+        form_data: Mapping[str, Any] = {}
+        if issubclass(model, BaseModel):
+            form_data = FormModel[Any].default(prefix, model).form_data
         return (
             WidgetFactory(self, token)
             .get_widget(
                 model,
-                form_data={},
+                form_data=form_data,
                 form_errors={},
-                prefix=(name or self.request.registry.settings.form_data_model_prefix),
+                prefix=prefix,
                 removable=removable,
                 field=field,
             )
