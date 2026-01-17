@@ -44,7 +44,8 @@ def flatten_error(
             if isinstance(part, str):
                 assert isclass(typ) and issubclass(typ, BaseModel)  # type: ignore
                 field = typ.model_fields[part]
-                typ = field.annotation
+                assert field.annotation
+                typ = get_runtime_type(field.annotation)
                 type_origin = get_origin(typ)
                 if type_origin:
                     if is_union(typ):
