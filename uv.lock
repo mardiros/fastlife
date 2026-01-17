@@ -586,7 +586,7 @@ dev = [
     { name = "pytest-cov", specifier = ">=4.1.0,<5" },
     { name = "pytest-playwright-asyncio", specifier = ">=0.7.0,<0.8" },
     { name = "sphinx", specifier = ">=7.0.1,<8" },
-    { name = "tursu", specifier = ">=0.16.0,<1" },
+    { name = "tursu", specifier = ">=1,<2" },
     { name = "types-beautifulsoup4", specifier = ">=4.12.0.6,<5" },
     { name = "uvicorn", specifier = ">=0.34.0,<1.0" },
 ]
@@ -2000,7 +2000,7 @@ wheels = [
 
 [[package]]
 name = "tursu"
-version = "0.17.2"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "gherkin-official" },
@@ -2008,9 +2008,9 @@ dependencies = [
     { name = "pytest" },
     { name = "venusian" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a3/de/5dc2843c350eae3f2fc9bcf548ff999369e468b747f45131dbe13db3aa1e/tursu-0.17.2.tar.gz", hash = "sha256:38d3aa7dd502b8abcf884c42c3ae390ce7ca0acb22a5bbf5cf90e69f8a2ce0ec", size = 31291, upload-time = "2025-05-05T14:28:09.001Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5a/10/4cd35344712194c849a36bb1911169a44aebd8f024a6e0af1625b8b0f512/tursu-1.0.2.tar.gz", hash = "sha256:6f5ea0fc5161ef959e65cc62bf696a71d1089041b5aea4b8567aba95aebc38f3", size = 31761, upload-time = "2026-01-17T08:27:39.315Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/69/8738c3101a821a84b43821822f131566175d2cad97b61bd6255eb8996b4a/tursu-0.17.2-py3-none-any.whl", hash = "sha256:ee4482e389f6e041f2f5ac261f837c80faed3fab6a465a916bc0d2b3ff6bd8b1", size = 35347, upload-time = "2025-05-05T14:28:06.118Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/36/224b16db3f8ba64a8bc3f6f8ed2c293972ad71be87332491283cc109c054/tursu-1.0.2-py3-none-any.whl", hash = "sha256:6bd697c8671ba7e39c8e14a4988d8a827a27f2b159996c7b8ffedbc3c6dc7866", size = 35775, upload-time = "2026-01-17T08:27:38.393Z" },
 ]
 
 [[package]]
