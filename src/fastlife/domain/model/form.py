@@ -63,6 +63,5 @@ class FormModel(Generic[T]):
             return ret
         except ValidationError as exc:
             errors: dict[str, str] = flatten_error(exc, prefix, pydantic_type)
-            # breakpoint()
             model = pydantic_type.model_construct(**data.get(prefix, {}))
             return cls(prefix, model, errors)

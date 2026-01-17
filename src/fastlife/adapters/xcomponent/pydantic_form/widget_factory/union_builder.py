@@ -127,7 +127,6 @@ class UnionBuilder(BaseWidgetBuilder[Any]):
         """Build the widget."""
         types: dict[type[Any], str] = {}
         # required = True
-        # # breakpoint()
         for typ in field_type.__args__:  # type: ignore
             if typ is NoneType:
                 # required = False
