@@ -9,6 +9,7 @@ from typing import (
 )
 
 from fastapi import Depends
+from starlette.datastructures import UploadFile
 
 from fastlife.adapters.fastapi.request import Request
 
@@ -83,7 +84,14 @@ async def unflatten_mapping_form_data(request: Request) -> Mapping[str, Any]:
     registry = request.registry
     form_data = await request.form()
     form_data_decode_list: MutableMapping[str, Any] = {}
+    val: str | UploadFile | None
     for key, val in form_data.multi_items():
+        if val == "":
+            # form data can't handle None values
+            # so we need to make the choice to consider empty string
+            # as None values to avoit typing error on UUID datetime
+            # and any type that cannot be deserialized from an empty string.
+            val = val or None
         if key.endswith("[]"):
             key = key[:-2]
             if key not in form_data_decode_list:
