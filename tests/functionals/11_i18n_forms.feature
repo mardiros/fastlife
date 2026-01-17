@@ -1,7 +1,6 @@
 @asyncio
 Feature: Pydantic Form Generation
 
-  @wip
   Scenario: Union
     Given anonymous user on "/fr/forms/discriminator_unionfield"
     When the user clicks on the button "The Dog"

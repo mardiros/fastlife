@@ -65,7 +65,7 @@ dev = [
   "pytest-cov >= 4.1.0,<5",
   "pytest-playwright-asyncio >= 0.7.0,<0.8",
   "sphinx >=7.0.1,<8",
-  "tursu >=0.16.0,<1",
+  "tursu >=1,<2",
   "types-beautifulsoup4 >=4.12.0.6,<5",
   "uvicorn >=0.34.0,<1.0",
 ]

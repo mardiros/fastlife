@@ -123,6 +123,15 @@ Feature: Pydantic Form Generation
       {"lazy dog","crazy cat"}
       """
 
+  @wip
+  Scenario: Set[Enum] defaults
+    Given anonymous user on "/form/enumsfielddefault"
+    When the user clicks on the button "submit" with response info
+    Then the user sees the python set in "days"
+      """python
+      {"monday", "tuesday", "wednesday", "thursday", "friday"}
+      """
+
   Scenario: Sequence[str]
     Given anonymous user on "/form/string_sequence"
     When the user clicks on the button "Add"

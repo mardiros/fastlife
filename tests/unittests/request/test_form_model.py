@@ -1,8 +1,9 @@
 from collections.abc import Mapping
+from enum import Enum
 from typing import Any
 
 import pytest
-from pydantic import SecretStr
+from pydantic import BaseModel, Field, SecretStr
 
 from fastlife.domain.model.form import FormModel
 from tests.fastlife_app.models import Account
@@ -14,6 +15,33 @@ MyModelForm = FormModel[ModelForm]
 AccountForm = FormModel[Account]
 
 
+class Weekday(Enum):
+    MONDAY = "monday"
+    TUESDAY = "tuesday"
+    WEDNESDAY = "wednesday"
+    THURSDAY = "thursday"
+    FRIDAY = "friday"
+    SATURDAY = "saturday"
+    SUNDAY = "sunday"
+
+
+class WeekdayEvent(BaseModel):
+    name: str = Field(default="new event")
+    days: set[Weekday] = Field(
+        title="Weekay",
+        default={
+            Weekday.MONDAY,
+            Weekday.TUESDAY,
+            Weekday.WEDNESDAY,
+            Weekday.THURSDAY,
+            Weekday.FRIDAY,
+        },
+    )
+
+
+WeekdayEventForm = FormModel[WeekdayEvent]
+
+
 def test_default():
     account = AccountForm.default("p", Account)
     assert account.is_valid is False
@@ -22,6 +50,25 @@ def test_default():
     }
     assert account.fatal_error == ""
     assert account.errors == {}
+
+
+def test_default_values():
+    wef = WeekdayEventForm.default("w", WeekdayEvent)
+    assert wef.is_valid is False
+    assert wef.form_data == {
+        "w": {
+            "days": {
+                Weekday.MONDAY,
+                Weekday.TUESDAY,
+                Weekday.FRIDAY,
+                Weekday.WEDNESDAY,
+                Weekday.THURSDAY,
+            },
+            "name": "new event",
+        }
+    }
+    assert wef.fatal_error == ""
+    assert wef.errors == {}
 
 
 def test_fatal_error():
