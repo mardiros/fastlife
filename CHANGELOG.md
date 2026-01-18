@@ -1,3 +1,10 @@
+## 0.41.0  - Released on 2026-01-18
+* Change deserialization of empty string from www-form-urlencoded
+  to None value instead of empty string.
+  It's avoid to write field_validator that cleanup empty values
+  to None for all non string types.
+* Fix defaults values loaded while loading async union fields.
+
 ## 0.40.0  - Released on 2026-01-13
 * Refactor Union type rendering, now requires a pydantic discriminator.
   * This api break simplify the rendering of union type, this is an acceptable constraint.
