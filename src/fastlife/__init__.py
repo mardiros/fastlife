@@ -2,7 +2,6 @@ from importlib import metadata
 
 __version__ = metadata.version("fastlifeweb")
 
-
 from .adapters.fastapi.form import form_model
 from .adapters.fastapi.localizer import Localizer
 from .adapters.fastapi.request import (
@@ -42,6 +41,7 @@ from .config import (
     view_config,
     websocket_view,
 )
+from .config.cli_command import cli_command
 from .domain.model.asgi import ASGIRequest, ASGIResponse
 from .domain.model.form import FormModel
 from .domain.model.request import GenericRequest
@@ -152,4 +152,6 @@ __all__ = [
     "TranslatableStringFactory",
     # scheduled jobs
     "scheduled_job",
+    # cli command
+    "cli_command",
 ]
