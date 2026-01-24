@@ -1,3 +1,7 @@
+"""
+CLI Application Integration
+"""
+
 import inspect
 from asyncio import run
 from collections.abc import Callable
@@ -8,28 +12,23 @@ from typer import Typer
 from typer.core import DEFAULT_MARKUP_MODE, MarkupMode, TyperCommand, TyperGroup
 from typer.models import Default
 
-from fastlife import TRegistry, TSettings
-from fastlife.shared_utils.resolver import resolve
-
-Command = Callable[..., Any]
+from fastlife import TRegistry
+from fastlife.adapters.typer.model import CLIHook
 
 
-class AsyncTyper(Typer, Generic[TSettings, TRegistry]):
+class AsyncTyper(Typer, Generic[TRegistry]):
     """
     An typer class made for fastlife application.
 
     Look at the Typer documentation for the details, this class inherits from it.
     """
 
-    settings: TSettings
-    """Access to settings."""
-
     registry: TRegistry
     """Access to the application registry."""
 
     def __init__(
         self,
-        settings: TSettings,
+        registry: TRegistry,
         *,
         name: str | None = Default(None),
         cls: type[TyperGroup] | None = Default(None),  # noqa: B008
@@ -57,9 +56,7 @@ class AsyncTyper(Typer, Generic[TSettings, TRegistry]):
         pretty_exceptions_show_locals: bool = True,
         pretty_exceptions_short: bool = True,
     ):
-        self.settings = settings
-        registry_cls = resolve(settings.registry_class)
-        self.registry = registry_cls(settings)
+        self.registry = registry
         super().__init__(
             name=name,
             cls=cls,
@@ -101,13 +98,48 @@ class AsyncTyper(Typer, Generic[TSettings, TRegistry]):
         hidden: bool = False,
         deprecated: bool = False,
         rich_help_panel: str | None = Default(None),
-    ) -> Command:
+    ) -> CLIHook:
         """Override the Typer command to accept async functions."""
 
-        def decorator(cmd: Command) -> Command:
-            @wraps(cmd)
-            def run_command(*cli_args: Any, **cli_kwargs: Any) -> Any:
-                res = cmd(*cli_args, **cli_kwargs)
+        def decorator(cmd: CLIHook) -> CLIHook:
+            # Get the original command signature
+            sig = inspect.signature(cmd)
+            # Remove the registry parameter from the signature
+            has_registry = False
+            new_params: list[inspect.Parameter] = []
+            for param_name, param in sig.parameters.items():
+                if param_name == "registry":
+                    has_registry = True
+                else:
+                    new_params.append(param)
+
+            def get_wrapped_signature(
+                original_func: Callable[..., Any], new_params: list[inspect.Parameter]
+            ) -> inspect.Signature:
+                """
+                Create a new signature for the wrapped function for typer.
+
+                We remove the registry if exists and then
+                """
+                return inspect.Signature(
+                    parameters=new_params,
+                    return_annotation=original_func.__annotations__.get("return"),
+                )
+
+            @wraps(
+                cmd,
+                assigned=(
+                    "__module__",
+                    "__name__",
+                    "__qualname__",
+                    "__doc__",
+                    "__annotations__",
+                ),
+            )
+            def run_command(**cli_kwargs: Any) -> Any:
+                if has_registry:
+                    cli_kwargs["registry"] = self.registry
+                res = cmd(**cli_kwargs)
                 if inspect.iscoroutine(res):
                     res = run(res)
                 return res

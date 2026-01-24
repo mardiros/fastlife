@@ -14,4 +14,12 @@ def build_app():
     return conf.build_asgi_app()
 
 
+def build_cli():
+    conf = MyConfigurator(MySettings(session_secret_key="supasickret"))
+    conf.include(".bin")
+    return conf.build_cli()
+
+
 app = build_app()
+
+cli = build_cli()

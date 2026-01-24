@@ -1,9 +1,9 @@
 from typer.testing import CliRunner
 
-from fastlife.adapters.typer import AsyncTyper
+from fastlife.adapters.typer.cli import AsyncTyper
 from tests.fastlife_app.config import MyRegistry, MySettings
 
-dummycli = AsyncTyper[MySettings, MyRegistry](MySettings(), name="dummycli")
+dummycli = AsyncTyper[MyRegistry](MyRegistry(MySettings()), name="dummycli")
 
 
 @dummycli.command(name="print-user-id")
