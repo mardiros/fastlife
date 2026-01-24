@@ -5,7 +5,7 @@ from functools import wraps
 from typing import Any, Generic
 
 from typer import Typer
-from typer.core import DEFAULT_MARKUP_MODE, MarkupMode, TyperGroup
+from typer.core import DEFAULT_MARKUP_MODE, MarkupMode, TyperCommand, TyperGroup
 from typer.models import Default
 
 from fastlife import TRegistry, TSettings
@@ -86,7 +86,22 @@ class AsyncTyper(Typer, Generic[TSettings, TRegistry]):
             pretty_exceptions_short=pretty_exceptions_short,
         )
 
-    def command(self, *args: Any, **kwargs: Any) -> Command:
+    def command(
+        self,
+        name: str | None = None,
+        *,
+        cls: type[TyperCommand] | None = None,
+        context_settings: dict[Any, Any] | None = None,
+        help: str | None = None,
+        epilog: str | None = None,
+        short_help: str | None = None,
+        options_metavar: str | None = None,
+        add_help_option: bool = True,
+        no_args_is_help: bool = False,
+        hidden: bool = False,
+        deprecated: bool = False,
+        rich_help_panel: str | None = Default(None),
+    ) -> Command:
         """Override the Typer command to accept async functions."""
 
         def decorator(cmd: Command) -> Command:
@@ -97,7 +112,22 @@ class AsyncTyper(Typer, Generic[TSettings, TRegistry]):
                     res = run(res)
                 return res
 
-            super(AsyncTyper, self).command(*args, **kwargs)(run_command)
+            run_command.__signature__ = get_wrapped_signature(cmd, new_params)
+
+            super(AsyncTyper, self).command(
+                name=name,
+                cls=cls,
+                context_settings=context_settings,
+                help=help,
+                epilog=epilog,
+                short_help=short_help,
+                options_metavar=options_metavar,
+                add_help_option=add_help_option,
+                no_args_is_help=no_args_is_help,
+                hidden=hidden,
+                deprecated=deprecated,
+                rich_help_panel=rich_help_panel,
+            )(run_command)
             return cmd
 
         return decorator

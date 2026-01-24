@@ -7,8 +7,8 @@ from fastlife.adapters.fastapi.request import AnyRequest
 from fastlife.config.configurator import (
     ConfigurationError,
     Configurator,
-    OpenApiTag,
 )
+from fastlife.config.openapiextra import OpenApiTag
 from fastlife.domain.model.asgi import ASGIRequest
 from fastlife.domain.model.request import GenericRequest
 from fastlife.service.registry import DefaultRegistry
