@@ -113,7 +113,7 @@ class AsyncTyper(Typer, Generic[TRegistry]):
                 else:
                     new_params.append(param)
 
-            def get_wrapped_signature(
+            def build_signature(
                 original_func: Callable[..., Any], new_params: list[inspect.Parameter]
             ) -> inspect.Signature:
                 """
@@ -144,7 +144,9 @@ class AsyncTyper(Typer, Generic[TRegistry]):
                     res = run(res)
                 return res
 
-            run_command.__signature__ = get_wrapped_signature(cmd, new_params)
+            run_command.__signature__ = build_signature(  # type: ignore
+                cmd, new_params
+            )
 
             super(AsyncTyper, self).command(
                 name=name,
