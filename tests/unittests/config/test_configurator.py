@@ -2,13 +2,14 @@ from typing import Any, cast
 
 import pytest
 from fastapi import FastAPI
+from typer.testing import CliRunner
 
 from fastlife.adapters.fastapi.request import AnyRequest
 from fastlife.config.configurator import (
     ConfigurationError,
     Configurator,
-    OpenApiTag,
 )
+from fastlife.config.openapiextra import OpenApiTag
 from fastlife.domain.model.asgi import ASGIRequest
 from fastlife.domain.model.request import GenericRequest
 from fastlife.service.registry import DefaultRegistry
@@ -16,6 +17,7 @@ from fastlife.service.request_factory import RequestFactory
 from fastlife.testing.testclient import WebTestClient
 from tests.fastlife_app.adapters.schedulers import DummyScheduler
 from tests.fastlife_app.config import MySettings
+from tests.fastlife_app.entrypoint import cli
 
 # from fastlife.service.registry import cleanup_registry
 
@@ -23,6 +25,20 @@ from tests.fastlife_app.config import MySettings
 async def test_app(conf: Configurator):
     app = conf.build_asgi_app()
     assert isinstance(app, FastAPI)
+
+
+async def test_cli(conf: Configurator):
+    runner = CliRunner()
+    result = runner.invoke(cli, ["hello-world"])
+    assert result.exit_code == 0
+    assert result.stdout == "Hello World!\n"
+
+
+def test_cli_registry(conf: Configurator):
+    runner = CliRunner()
+    result = runner.invoke(cli, ["print-user-id", "Bob"])
+    assert result.exit_code == 0
+    assert result.stdout == "00000000-0000-0000-0000-000000000001\n"
 
 
 def test_include(conf: Configurator):

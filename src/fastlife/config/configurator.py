@@ -28,11 +28,14 @@ from fastapi.params import Depends as DependsType
 from fastapi.routing import APIWebSocketRoute
 from fastapi.staticfiles import StaticFiles
 from fastapi.types import IncEx
+from typer.core import DEFAULT_MARKUP_MODE, MarkupMode, TyperGroup
+from typer.models import Default
 from xcomponent import Catalog, Component, Function
 
 from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
 from fastlife.adapters.fastapi.routing.router import Router
+from fastlife.adapters.typer.model import CLICommand
 from fastlife.adapters.xcomponent.registry import (
     DEFAULT_CATALOG_NS,
     XComponentRegistry,
@@ -52,6 +55,7 @@ from fastlife.shared_utils.resolver import (
 )
 
 if TYPE_CHECKING:
+    from fastlife.adapters.typer.cli import AsyncTyper  # coverage: ignore
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
     from fastlife.service.request_factory import (
         RequestFactoryBuilder,  # coverage: ignore
@@ -168,6 +172,8 @@ class GenericConfigurator(Generic[TRegistry]):
 
         self._renderer_globals: dict[str, Any] = {}
         self._xcomponent_registry = XComponentRegistry()
+        self._cli_commands: list[CLICommand] = []
+
         self.scanner = venusian.Scanner(fastlife=self)
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
@@ -236,6 +242,79 @@ class GenericConfigurator(Generic[TRegistry]):
         for route_path, directory, name in self.mounts:
             app.mount(route_path, StaticFiles(directory=directory), name=name)
         return app
+
+    def build_cli(
+        self,
+        name: str | None = Default(None),
+        cls: type[TyperGroup] | None = Default(None),  # noqa: B008
+        invoke_without_command: bool = Default(False),
+        no_args_is_help: bool = Default(False),
+        subcommand_metavar: str | None = Default(None),
+        chain: bool = Default(False),
+        result_callback: Callable[..., Any] | None = Default(None),  # noqa: B008
+        # Command
+        context_settings: dict[Any, Any] | None = Default(None),  # noqa: B008
+        callback: Callable[..., Any] | None = Default(None),  # noqa: B008
+        help: str | None = Default(None),
+        epilog: str | None = Default(None),
+        short_help: str | None = Default(None),
+        options_metavar: str = Default("[OPTIONS]"),
+        add_help_option: bool = Default(True),
+        hidden: bool = Default(False),
+        deprecated: bool = Default(False),
+        add_completion: bool = True,
+        # Rich settings
+        rich_markup_mode: MarkupMode = DEFAULT_MARKUP_MODE,
+        rich_help_panel: str | None = Default(None),
+        suggest_commands: bool = True,
+        pretty_exceptions_enable: bool = True,
+        pretty_exceptions_show_locals: bool = True,
+        pretty_exceptions_short: bool = True,
+    ) -> "AsyncTyper[TRegistry]":
+        from fastlife.adapters.typer.cli import AsyncTyper
+
+        typer = AsyncTyper(
+            registry=self.registry,
+            name=name,
+            cls=cls,
+            invoke_without_command=invoke_without_command,
+            no_args_is_help=no_args_is_help,
+            subcommand_metavar=subcommand_metavar,
+            chain=chain,
+            result_callback=result_callback,
+            context_settings=context_settings,
+            callback=callback,
+            help=help,
+            epilog=epilog,
+            short_help=short_help,
+            options_metavar=options_metavar,
+            add_help_option=add_help_option,
+            hidden=hidden,
+            deprecated=deprecated,
+            add_completion=add_completion,
+            rich_markup_mode=rich_markup_mode,
+            rich_help_panel=rich_help_panel,
+            suggest_commands=suggest_commands,
+            pretty_exceptions_enable=pretty_exceptions_enable,
+            pretty_exceptions_show_locals=pretty_exceptions_show_locals,
+            pretty_exceptions_short=pretty_exceptions_short,
+        )
+        for command in self._cli_commands:
+            typer.command(
+                name=command.cmd.name,
+                cls=command.cmd.cls,
+                context_settings=command.cmd.context_settings,
+                help=command.cmd.help,
+                epilog=command.cmd.epilog,
+                short_help=command.cmd.short_help,
+                options_metavar=command.cmd.options_metavar,
+                add_help_option=command.cmd.add_help_option,
+                no_args_is_help=command.cmd.no_args_is_help,
+                hidden=command.cmd.hidden,
+                deprecated=command.cmd.deprecated,
+                rich_help_panel=command.cmd.rich_help_panel,
+            )(command.hook)
+        return typer
 
     def include(
         self,
@@ -308,6 +387,10 @@ class GenericConfigurator(Generic[TRegistry]):
         :param locales_dir: the directory contains local inside a python package.
         """
         self.registry.localizer.load(locales_dir)
+        return self
+
+    def add_cli_command(self, command: CLICommand) -> Self:
+        self._cli_commands.append(command)
         return self
 
     def set_api_documentation_info(
