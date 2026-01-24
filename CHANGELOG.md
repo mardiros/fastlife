@@ -1,3 +1,7 @@
+## 0.42.0  - Released on 2026-01-24
+* Add Command Line Interface (CLI) helpers.
+* Upgrade FastAPI dependency.
+
 ## 0.41.0  - Released on 2026-01-18
 * Change deserialization of empty string from www-form-urlencoded
   to None value instead of empty string.
