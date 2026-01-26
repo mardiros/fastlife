@@ -3,9 +3,9 @@
 from collections.abc import Callable
 from typing import Any
 
-import venusian
+import tamahagane as th
 
-from .configurator import VENUSIAN_CATEGORY, Configurator
+from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
 
 
 def exception_handler(
@@ -21,22 +21,15 @@ def exception_handler(
     :return: the configuration callback.
     """
 
-    def configure(
-        wrapped: Callable[..., Any],
-    ) -> Callable[..., Any]:
-        def callback(
-            scanner: venusian.Scanner, name: str, ob: Callable[..., Any]
-        ) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
-            config.add_exception_handler(
+    def configure(wrapped: Callable[..., Any]) -> Callable[..., Any]:
+        def callback(registry: THRegistry) -> None:
+            registry.fastlife.add_exception_handler(
                 exception,
                 wrapped,
                 **({} if status_code is None else {"status_code": status_code}),
             )
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return configure

@@ -11,17 +11,17 @@ API Resources declaration using a decorator.
 from collections.abc import Callable
 from typing import Any
 
-import venusian
+import tamahagane as th
 from fastapi.types import IncEx
 
+from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
 from fastlife.config.openapiextra import ExternalDocs
 
 from .configurator import (
-    VENUSIAN_CATEGORY,
     ConfigurationError,
-    Configurator,
-    OpenApiTag,
+    GenericConfigurator,
 )
+from .openapiextra import OpenApiTag
 
 
 def resource(
@@ -62,22 +62,18 @@ def resource(
     def configure(
         wrapped: Callable[..., Any],
     ) -> Callable[..., Any]:
-        def callback(scanner: venusian.Scanner, name: str, ob: type[Any]) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-
-            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
+        def callback(registry: THRegistry) -> None:
             if description:
-                config.add_openapi_tag(
+                registry.fastlife.add_openapi_tag(
                     OpenApiTag(
                         name=tag, description=description, externalDocs=external_docs
                     )
                 )
 
-            api = ob()
+            api = wrapped()
 
             def bind_config(
-                bind_config: Configurator,
+                bind_config: GenericConfigurator[Any],
                 method: str,
                 bind_path: str | None,
                 endpoint: Any,
@@ -110,7 +106,7 @@ def resource(
                     openapi_extra=endpoint.openapi_extra,
                 )
 
-            for method in dir(ob):
+            for method in dir(wrapped):
                 match method:
                     case (
                         "collection_get"
@@ -122,16 +118,21 @@ def resource(
                         | "collection_options"
                     ):
                         bind_config(
-                            config, method, collection_path, getattr(api, method)
+                            registry.fastlife,
+                            method,
+                            collection_path,
+                            getattr(api, method),
                         )
                     case (
                         "get" | "post" | "put" | "patch" | "delete" | "head" | "options"
                     ):
-                        bind_config(config, method, path, getattr(api, method))
+                        bind_config(
+                            registry.fastlife, method, path, getattr(api, method)
+                        )
                     case _:
                         ...
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return configure

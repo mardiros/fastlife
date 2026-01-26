@@ -86,6 +86,11 @@ Tailwind CSS
 
   Website: https://tailwindcss.com/docs/
 
+Tamahagane
+  A library used to populated application registries.
+
+  Website: https://mardiros.github.io/tamahagane/
+
 Widget
   A widget in fastlife refer to a {term}`JinjaX` compoment made for handling data input
   in a form for a {term}`Pydantic` field.

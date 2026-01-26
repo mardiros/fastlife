@@ -32,13 +32,12 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any
 
-import venusian
+import tamahagane as th
 from apscheduler.util import undefined
 
+from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
 from fastlife.service.job import JobHandler, JobSchedulerTrigger, Undefined
 from fastlife.service.registry import TRegistry
-
-from .configurator import VENUSIAN_CATEGORY, GenericConfigurator
 
 
 def scheduled_job(
@@ -83,13 +82,8 @@ def scheduled_job(
     def configure(
         wrapped: JobHandler[TRegistry],
     ) -> JobHandler[TRegistry]:
-        def callback(
-            scanner: venusian.Scanner, name: str, ob: JobHandler[TRegistry]
-        ) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-            config: GenericConfigurator[TRegistry] = getattr(scanner, VENUSIAN_CATEGORY)
-            config.register_job(
+        def callback(registry: THRegistry) -> None:
+            registry.fastlife.register_job(
                 wrapped,
                 trigger=trigger,
                 id=id,
@@ -104,7 +98,7 @@ def scheduled_job(
                 **trigger_args,
             )
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return configure

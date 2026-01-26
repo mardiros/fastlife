@@ -21,7 +21,7 @@ from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Annotated, Any, Generic, Self, TypeVar
 
-import venusian
+import tamahagane as th
 from fastapi import Depends, FastAPI, Response
 from fastapi import Request as BaseRequest
 from fastapi.params import Depends as DependsType
@@ -35,6 +35,7 @@ from xcomponent import Catalog, Component, Function
 from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
 from fastlife.adapters.fastapi.routing.router import Router
+from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
 from fastlife.adapters.typer.model import CLICommand
 from fastlife.adapters.xcomponent.registry import (
     DEFAULT_CATALOG_NS,
@@ -66,9 +67,6 @@ if TYPE_CHECKING:
     )
 
 log = logging.getLogger(__name__)
-VENUSIAN_CATEGORY = "fastlife"
-
-venusian_ignored_item = str | Callable[[str], bool]
 
 
 class ConfigurationError(Exception):
@@ -174,7 +172,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self._xcomponent_registry = XComponentRegistry()
         self._cli_commands: list[CLICommand] = []
 
-        self.scanner = venusian.Scanner(fastlife=self)
+        self.scanner = th.Scanner[THRegistry](THRegistry(fastlife=self))
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
 
@@ -202,14 +200,10 @@ class GenericConfigurator(Generic[TRegistry]):
         :return: FastAPI application.
         """
 
-        # register our main template renderer at then end, to ensure that
+        # register template renderer at then end, to ensure that
         # if settings have been manipulated, everything is taken into account.
-        # and that all the components has been registered to the catalog.
-        for optional_adapter in ("jinjax", "xcomponent"):
-            try:
-                self.include(f"fastlife.adapters.{optional_adapter}")
-            except (ModuleNotFoundError, ConfigurationError):  # coverage: ignore
-                pass  # coverage: ignore
+        # and that all the components are registered into its catalog.
+        self.include("fastlife.adapters.xcomponent")
 
         app = FastAPI(
             title=self.api_title,
@@ -320,7 +314,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self,
         module: str | ModuleType,
         route_prefix: str = "",
-        ignore: venusian_ignored_item | Sequence[venusian_ignored_item] | None = None,
+        ignore: Sequence[str] = (),
     ) -> Self:
         """
         Include a module in order to load its configuration.
@@ -346,7 +340,6 @@ class GenericConfigurator(Generic[TRegistry]):
 
         :param module: a module to include.
         :param route_prefix: prepend all included route with a prefix
-        :param ignore: ignore submodules
         """
         if isinstance(module, str):
             try:
@@ -355,12 +348,10 @@ class GenericConfigurator(Generic[TRegistry]):
                 raise ConfigurationError(f"Can't resolve {module}") from exc
 
         old, self._route_prefix = self._route_prefix, route_prefix
+        if isinstance(ignore, str):
+            ignore = [ignore]
         try:
-            self.scanner.scan(  # type: ignore
-                module,
-                categories=[VENUSIAN_CATEGORY],
-                ignore=ignore,
-            )
+            self.scanner.scan(module, ignore=ignore)
         finally:
             self._route_prefix = old
         return self
@@ -809,7 +800,7 @@ class GenericConfigurator(Generic[TRegistry]):
         job: JobHandler[TRegistry],
         /,
         *,
-        trigger: JobSchedulerTrigger,
+        trigger: JobSchedulerTrigger | None,
         id: str | None = None,
         name: str | None = None,
         misfire_grace_time: int | Undefined = undefined,
@@ -868,18 +859,13 @@ class Configurator(GenericConfigurator[DefaultRegistry]):
 TConfigurator = TypeVar("TConfigurator", bound=GenericConfigurator[Any])
 
 
-def configure(
-    wrapped: Callable[[TConfigurator], None],
-) -> Callable[[Any], None]:
+def configure(wrapped: Callable[[TConfigurator], None]) -> Callable[[Any], None]:
     """
     Decorator used to attach route in a submodule while using the configurator.include.
     """
 
-    def callback(
-        scanner: venusian.Scanner, name: str, ob: Callable[[venusian.Scanner], None]
-    ) -> None:
-        if hasattr(scanner, "fastlife"):
-            ob(scanner.fastlife)  # type: ignore
+    def callback(registry: THRegistry) -> None:
+        wrapped(registry.fastlife)  # type: ignore
 
-    venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+    th.attach(wrapped, callback, category=TH_CATEGORY)
     return wrapped
