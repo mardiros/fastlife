@@ -122,9 +122,6 @@ select = [
 ]
 ignore = ["RUF022"]
 
-[tool.isort]
-profile = "black"
-
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "session"
 asyncio_default_test_loop_scope = "session"
