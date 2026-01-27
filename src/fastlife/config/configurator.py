@@ -52,7 +52,6 @@ from fastlife.settings import Settings
 from fastlife.shared_utils.infer import is_inline_template_returned
 from fastlife.shared_utils.resolver import (
     resolve,
-    resolve_maybe_relative,
 )
 
 if TYPE_CHECKING:
@@ -341,15 +340,10 @@ class GenericConfigurator(Generic[TRegistry]):
         :param module: a module to include.
         :param route_prefix: prepend all included route with a prefix
         """
-        if isinstance(module, str):
-            try:
-                module = resolve_maybe_relative(module, stack_depth=2)
-            except ModuleNotFoundError as exc:
-                raise ConfigurationError(f"Can't resolve {module}") from exc
 
         old, self._route_prefix = self._route_prefix, route_prefix
         try:
-            self.scanner.scan(module, ignore=ignore)
+            self.scanner.scan(module, ignore=ignore, stack_depth=3)
         finally:
             self._route_prefix = old
         return self

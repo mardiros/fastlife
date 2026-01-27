@@ -51,34 +51,6 @@ def test_include_relative(conf: Configurator):
     assert len(conf.build_asgi_app().routes) != 0
 
 
-@pytest.mark.parametrize(
-    "module,expected_error",
-    [
-        pytest.param(
-            "_random_module_that_dont_exists",
-            "Can't resolve _random_module_that_dont_exists",
-            id="unexisting module",
-        ),
-        pytest.param(
-            ".random_module_that_dont_exists",
-            "Can't resolve .random_module_that_dont_exists",
-            id="unexisting relative module",
-        ),
-        pytest.param(
-            ".my_broken_collection.subtruc",
-            "Can't resolve .my_broken_collection.subtruc",
-            id="unexisting relative sub module",
-        ),
-    ],
-)
-def test_include_raises_configuration_error(
-    conf: Configurator, module: str, expected_error: str
-):
-    with pytest.raises(ConfigurationError) as exc:
-        conf.include(module)
-    assert str(exc.value) == expected_error
-
-
 def test_add_openapi_tag(conf: Configurator):
     conf.add_openapi_tag(OpenApiTag(name="foo", description="Foos foo"))
 
