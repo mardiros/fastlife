@@ -21,9 +21,9 @@ async def hello_world(
 from collections.abc import Callable
 from typing import Any
 
-import venusian
+import tamahagane as th
 
-from .configurator import VENUSIAN_CATEGORY, Configurator
+from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
 
 
 def websocket_view(
@@ -51,19 +51,14 @@ def websocket_view(
     def configure(
         wrapped: Callable[..., Any],
     ) -> Callable[..., Any]:
-        def callback(
-            scanner: venusian.Scanner, name: str, ob: Callable[..., Any]
-        ) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
-            config.add_websocket_route(
+        def callback(registry: THRegistry) -> None:
+            registry.fastlife.add_websocket_route(
                 name=view_name,
                 path=path,
-                endpoint=ob,
+                endpoint=wrapped,
             )
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return configure

@@ -20,13 +20,12 @@ async def hello_world(
 
 from typing import Any
 
-import venusian
+import tamahagane as th
 from typer.core import TyperCommand
 from typer.models import Default
 
+from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
 from fastlife.adapters.typer.model import CLICommand, CLIHook
-
-from .configurator import VENUSIAN_CATEGORY, Configurator
 
 
 def cli_command(
@@ -57,11 +56,8 @@ def cli_command(
     def configure(
         wrapped: CLIHook,
     ) -> CLIHook:
-        def callback(scanner: venusian.Scanner, name: str, ob: CLIHook) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-            config: Configurator = getattr(scanner, VENUSIAN_CATEGORY)
-            config.add_cli_command(
+        def callback(registry: THRegistry) -> None:
+            registry.fastlife.add_cli_command(
                 CLICommand(
                     hook=wrapped,
                     name=command_name,
@@ -79,7 +75,7 @@ def cli_command(
                 )
             )
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return configure

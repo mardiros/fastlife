@@ -1,11 +1,12 @@
 from collections import defaultdict
 from collections.abc import Callable
 
-import venusian
+import tamahagane as th
 from xcomponent import Catalog
 from xcomponent.service.catalog import Component, Function
 
-VENUSIAN_CATEGORY = "fastlife"  # copy/pasta from configurator
+from fastlife.adapters.tamahagane import TH_CATEGORY, THRegistry
+
 DEFAULT_CATALOG_NS = "app"
 BUILTINS_CATALOG_NS = "builtins"
 PYDANTICFORM_CATALOG_NS = "pydantic_form"
@@ -18,10 +19,10 @@ NSCatalogDict = dict[str, CatalogDict]
 
 class XComponentRegistry:
     """
-    Build the XComponent catalog using venusian.
+    Build the XComponent catalog using tamahagane.
 
     To avoid a global catalog, we generate the catalog by scanning using
-    venusian.
+    tamahagane.
     """
 
     components: NSCatalogDict
@@ -97,23 +98,16 @@ def x_component(
         name.
     :param use: import a catalog as a namespace components.
     """
-    component_name = name
 
     def decorator(wrapped: Component) -> Component:
-        def callback(
-            scanner: venusian.Scanner,
-            name: str,
-            ob: Component,
-        ) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-            scanner.fastlife.register_xcomponent(  # type: ignore
-                component_name or name,
-                ob,
+        def callback(registry: THRegistry) -> None:
+            registry.fastlife.register_xcomponent(
+                name or wrapped.__name__,
+                wrapped,
                 namespace=namespace,
             )
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return decorator
@@ -133,16 +127,12 @@ def x_function(name: str | None = None) -> Callable[[Function], Function]:
     function_name = name
 
     def decorator(wrapped: Function) -> Function:
-        def callback(
-            scanner: venusian.Scanner,
-            name: str,
-            ob: Component,
-        ) -> None:
-            if not hasattr(scanner, VENUSIAN_CATEGORY):
-                return  # coverage: ignore
-            scanner.fastlife.register_xfunction(function_name or name, ob)  # type: ignore
+        def callback(registry: THRegistry) -> None:
+            registry.fastlife.register_xfunction(
+                function_name or wrapped.__name__, wrapped
+            )
 
-        venusian.attach(wrapped, callback, category=VENUSIAN_CATEGORY)  # type: ignore
+        th.attach(wrapped, callback, category=TH_CATEGORY)
         return wrapped
 
     return decorator

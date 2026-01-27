@@ -18,7 +18,7 @@ The `AsyncTyper` class extends Typer to:
 2. Enable native async command execution
 3. Maintain compatibility with Typer's existing feature set
 
-As for web routes, Fastlife configurator use venusian to inject CLI commands.
+As for web routes, Fastlife configurator use {term}`Tamahagane` to inject CLI commands.
 
 To inject CLI command, the decorator cli_command register the command in
 a registry, the command hello_world is testable without modifification.
