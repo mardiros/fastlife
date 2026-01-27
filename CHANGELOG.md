@@ -1,3 +1,6 @@
+## 0.42.1  - Released on 2026-01-27
+* Replace venusian by tamahagane.
+
 ## 0.42.0  - Released on 2026-01-24
 * Add Command Line Interface (CLI) helpers.
 * Upgrade FastAPI dependency.
