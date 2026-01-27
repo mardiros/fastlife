@@ -348,8 +348,6 @@ class GenericConfigurator(Generic[TRegistry]):
                 raise ConfigurationError(f"Can't resolve {module}") from exc
 
         old, self._route_prefix = self._route_prefix, route_prefix
-        if isinstance(ignore, str):
-            ignore = [ignore]
         try:
             self.scanner.scan(module, ignore=ignore)
         finally:
