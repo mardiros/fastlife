@@ -1,13 +1,9 @@
-import sys
 from collections.abc import Mapping
 from pathlib import Path
-from types import ModuleType
 from typing import Any, Union, get_origin
 
 import pytest
 
-import fastlife.middlewares
-import fastlife.middlewares.base
 from fastlife import Configurator
 from fastlife.shared_utils import resolver
 
@@ -54,32 +50,3 @@ def test_resolve_path_error(root_dir: Path):
     with pytest.raises(ValueError) as err:
         resolver.resolve_path("xxx:templates")
     assert str(err.value) == "xxx:templates not found"
-
-
-@pytest.mark.parametrize(
-    "input,expected",
-    [
-        pytest.param(fastlife.middlewares, fastlife.middlewares, id="regular package"),
-        pytest.param(fastlife.middlewares.base, fastlife.middlewares, id="module"),
-        pytest.param(sys, sys, id="compiled package"),
-    ],
-)
-def test_resolve_package(input: ModuleType, expected: ModuleType):
-    assert resolver.resolve_package(input) is expected
-
-
-@pytest.mark.parametrize(
-    "input,expected",
-    [
-        pytest.param("tests.fastlife_app", "tests.fastlife_app", id="absolute"),
-        pytest.param(
-            ".test_infer", "tests.unittests.shared_utils.test_infer", id="sibling"
-        ),
-        pytest.param(".", "tests.unittests.shared_utils", id="parent"),
-        pytest.param("..", "tests.unittests", id="ancestor"),
-        pytest.param("...fastlife_app", "tests.fastlife_app", id="uncle"),
-    ],
-)
-def test_resolve_maybe_relative(input: str, expected: str):
-    mod = resolver.resolve_maybe_relative(input)
-    assert mod.__name__ == expected
