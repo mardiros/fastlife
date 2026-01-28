@@ -32,10 +32,9 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any
 
-import tamahagane as th
 from apscheduler.util import undefined
 
-from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
+from fastlife.adapters.tamahagane import RegistryHub, th_attach
 from fastlife.service.job import JobHandler, JobSchedulerTrigger, Undefined
 from fastlife.service.registry import TRegistry
 
@@ -82,7 +81,7 @@ def scheduled_job(
     def configure(
         wrapped: JobHandler[TRegistry],
     ) -> JobHandler[TRegistry]:
-        def callback(registry: THRegistry) -> None:
+        def callback(registry: RegistryHub) -> None:
             registry.fastlife.register_job(
                 wrapped,
                 trigger=trigger,
@@ -98,7 +97,7 @@ def scheduled_job(
                 **trigger_args,
             )
 
-        th.attach(wrapped, callback, category=TH_CATEGORY)
+        th_attach(wrapped, callback)
         return wrapped
 
     return configure

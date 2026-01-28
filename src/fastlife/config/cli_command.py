@@ -20,11 +20,10 @@ async def hello_world(
 
 from typing import Any
 
-import tamahagane as th
 from typer.core import TyperCommand
 from typer.models import Default
 
-from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
+from fastlife.adapters.tamahagane import RegistryHub, th_attach
 from fastlife.adapters.typer.model import CLICommand, CLIHook
 
 
@@ -56,7 +55,7 @@ def cli_command(
     def configure(
         wrapped: CLIHook,
     ) -> CLIHook:
-        def callback(registry: THRegistry) -> None:
+        def callback(registry: RegistryHub) -> None:
             registry.fastlife.add_cli_command(
                 CLICommand(
                     hook=wrapped,
@@ -75,7 +74,7 @@ def cli_command(
                 )
             )
 
-        th.attach(wrapped, callback, category=TH_CATEGORY)
+        th_attach(wrapped, callback)
         return wrapped
 
     return configure

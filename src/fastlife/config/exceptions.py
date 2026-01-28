@@ -3,9 +3,7 @@
 from collections.abc import Callable
 from typing import Any
 
-import tamahagane as th
-
-from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
+from fastlife.adapters.tamahagane import RegistryHub, th_attach
 
 
 def exception_handler(
@@ -22,14 +20,14 @@ def exception_handler(
     """
 
     def configure(wrapped: Callable[..., Any]) -> Callable[..., Any]:
-        def callback(registry: THRegistry) -> None:
+        def callback(registry: RegistryHub) -> None:
             registry.fastlife.add_exception_handler(
                 exception,
                 wrapped,
                 **({} if status_code is None else {"status_code": status_code}),
             )
 
-        th.attach(wrapped, callback, category=TH_CATEGORY)
+        th_attach(wrapped, callback)
         return wrapped
 
     return configure
