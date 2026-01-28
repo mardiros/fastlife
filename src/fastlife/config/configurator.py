@@ -21,7 +21,6 @@ from pathlib import Path
 from types import ModuleType
 from typing import TYPE_CHECKING, Annotated, Any, Generic, Self, TypeVar
 
-import tamahagane as th
 from fastapi import Depends, FastAPI, Response
 from fastapi import Request as BaseRequest
 from fastapi.params import Depends as DependsType
@@ -35,7 +34,11 @@ from xcomponent import Catalog, Component, Function
 from fastlife.adapters.fastapi.request import Request
 from fastlife.adapters.fastapi.routing.route import Route
 from fastlife.adapters.fastapi.routing.router import Router
-from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
+from fastlife.adapters.tamahagane.registry import (
+    FastlifeScanner,
+    RegistryHub,
+    th_attach,
+)
 from fastlife.adapters.typer.model import CLICommand
 from fastlife.adapters.xcomponent.registry import (
     DEFAULT_CATALOG_NS,
@@ -171,7 +174,7 @@ class GenericConfigurator(Generic[TRegistry]):
         self._xcomponent_registry = XComponentRegistry()
         self._cli_commands: list[CLICommand] = []
 
-        self.scanner = th.Scanner[THRegistry](THRegistry(fastlife=self))
+        self.scanner = FastlifeScanner(RegistryHub(fastlife=self))
         self.include("fastlife.views")
         self.include("fastlife.middlewares")
 
@@ -856,8 +859,8 @@ def configure(wrapped: Callable[[TConfigurator], None]) -> Callable[[Any], None]
     Decorator used to attach route in a submodule while using the configurator.include.
     """
 
-    def callback(registry: THRegistry) -> None:
+    def callback(registry: RegistryHub) -> None:
         wrapped(registry.fastlife)  # type: ignore
 
-    th.attach(wrapped, callback, category=TH_CATEGORY)
+    th_attach(wrapped, callback)
     return wrapped

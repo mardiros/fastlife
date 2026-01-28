@@ -11,10 +11,9 @@ API Resources declaration using a decorator.
 from collections.abc import Callable
 from typing import Any
 
-import tamahagane as th
 from fastapi.types import IncEx
 
-from fastlife.adapters.tamahagane.registry import TH_CATEGORY, THRegistry
+from fastlife.adapters.tamahagane import RegistryHub, th_attach
 from fastlife.config.openapiextra import ExternalDocs
 
 from .configurator import (
@@ -62,7 +61,7 @@ def resource(
     def configure(
         wrapped: Callable[..., Any],
     ) -> Callable[..., Any]:
-        def callback(registry: THRegistry) -> None:
+        def callback(registry: RegistryHub) -> None:
             if description:
                 registry.fastlife.add_openapi_tag(
                     OpenApiTag(
@@ -132,7 +131,7 @@ def resource(
                     case _:
                         ...
 
-        th.attach(wrapped, callback, category=TH_CATEGORY)
+        th_attach(wrapped, callback)
         return wrapped
 
     return configure

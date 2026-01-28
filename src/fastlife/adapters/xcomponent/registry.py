@@ -1,11 +1,10 @@
 from collections import defaultdict
 from collections.abc import Callable
 
-import tamahagane as th
 from xcomponent import Catalog
 from xcomponent.service.catalog import Component, Function
 
-from fastlife.adapters.tamahagane import TH_CATEGORY, THRegistry
+from fastlife.adapters.tamahagane import RegistryHub, th_attach
 
 DEFAULT_CATALOG_NS = "app"
 BUILTINS_CATALOG_NS = "builtins"
@@ -100,14 +99,14 @@ def x_component(
     """
 
     def decorator(wrapped: Component) -> Component:
-        def callback(registry: THRegistry) -> None:
+        def callback(registry: RegistryHub) -> None:
             registry.fastlife.register_xcomponent(
                 name or wrapped.__name__,
                 wrapped,
                 namespace=namespace,
             )
 
-        th.attach(wrapped, callback, category=TH_CATEGORY)
+        th_attach(wrapped, callback)
         return wrapped
 
     return decorator
@@ -127,12 +126,12 @@ def x_function(name: str | None = None) -> Callable[[Function], Function]:
     function_name = name
 
     def decorator(wrapped: Function) -> Function:
-        def callback(registry: THRegistry) -> None:
+        def callback(registry: RegistryHub) -> None:
             registry.fastlife.register_xfunction(
                 function_name or wrapped.__name__, wrapped
             )
 
-        th.attach(wrapped, callback, category=TH_CATEGORY)
+        th_attach(wrapped, callback)
         return wrapped
 
     return decorator

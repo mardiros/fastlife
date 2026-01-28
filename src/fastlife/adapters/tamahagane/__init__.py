@@ -1,3 +1,3 @@
-from .registry import TH_CATEGORY, THRegistry
+from .registry import TH_CATEGORY, RegistryHub, th_attach
 
-__all__ = ["TH_CATEGORY", "THRegistry"]
+__all__ = ["TH_CATEGORY", "RegistryHub", "th_attach"]
