@@ -1,7 +1,7 @@
 import pytest
 from bs4 import PageElement
 
-details_css = "border border-neutral-100 p-4 rounded-m"
+details_css = "border border-neutral-100 mt-4 p-4 rounded-m"
 
 summary_css = "flex items-center items-center font-medium cursor-pointer"
 

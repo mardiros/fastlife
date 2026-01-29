@@ -17,7 +17,7 @@ from .base import TWidget, Widget
 class ModelWidget(Widget[Sequence[TWidget]]):
     template = """
     <Widget widget_id={id} removable={removable}>
-    <div id={id} class={if nested {"m-4"}}>
+    <div id={id}>
         {
           if nested {
             <Details>

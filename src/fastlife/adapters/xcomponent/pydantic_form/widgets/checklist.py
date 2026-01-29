@@ -56,20 +56,18 @@ class ChecklistWidget(Widget[Sequence[Checkable]]):
 
     template = """
     <Widget widget_id={id} removable={removable}>
-      <div class="pt-4">
-        <Details>
-          <Summary id={id + '-summary'}>
-            <H3 class={globals.H3_SUMMARY_CLASS}>{globals.gettext(title)}</H3>
-            <OptionalErrorText text={error} />
-          </Summary>
-          <div class="p-4">
-            {
-              for v in value {
-                <PydanticFormChecklistItem value={v} />
-              }
+      <Details>
+        <Summary id={id + '-summary'}>
+          <H3 class={globals.H3_SUMMARY_CLASS}>{globals.gettext(title)}</H3>
+          <OptionalErrorText text={error} />
+        </Summary>
+        <div class="p-4">
+          {
+            for v in value {
+            <PydanticFormChecklistItem value={v} />
             }
-          </div>
-        </Details>
-      </div>
+          }
+        </div>
+      </Details>
     </Widget>
     """

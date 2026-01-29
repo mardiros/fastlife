@@ -49,7 +49,7 @@ class Globals(BaseModel):
     )
     """Default css class for `Button`."""
 
-    DETAILS_CLASS: str = "border border-neutral-100 p-4 rounded-m"
+    DETAILS_CLASS: str = "border border-neutral-100 mt-4 p-4 rounded-m"
     """Default css class for `Details`."""
 
     SECONDARY_BUTTON_CLASS: str = space_join(
