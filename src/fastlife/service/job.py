@@ -1,5 +1,12 @@
 """
 Service for scheduled jobs.
+
+By default, scheduled jobs are disabled,
+to start scheduled job based on {term}`APScheduler`
+the scheduler must be installed using the configurator
+method {meth}`fastlife.config.configurator.GenericConfigurator.set_job_scheduler`
+during the bootstrap and before scanning installed jobs using the decorator
+{function}`fastlife.config.jobs.scheduled_job`.
 """
 
 import abc
@@ -28,6 +35,20 @@ JobHandler = Callable[[TRegistry], None] | Callable[[TRegistry], Awaitable[None]
 
 
 class AbstractJobScheduler(abc.ABC, Generic[TRegistry]):
+    """
+    Devine the job scheduler interface.
+
+    fastlife rely on {term}`APScheduler` and {term}`Starlette`'s lifespan
+    to start the scheduler.
+    By default, it is disabled, the job scheduler based on APScheduler
+    as to be installed to get it working.
+
+    This avoids to run APScheduler for the application that don't requires it.
+    At the moment. the signature of the registration job relies on APScheduler
+    definition so the library needs to be always installed event if the scheduler
+    does not run.
+    """
+
     def __init__(self, registry: TRegistry) -> None:
         self.registry = registry
 
@@ -88,7 +109,7 @@ class AbstractJobScheduler(abc.ABC, Generic[TRegistry]):
 
 
 class SinkholeJobScheduler(AbstractJobScheduler[TRegistry]):
-    """A job scheduler that ignore everything."""
+    """The default job scheduler that never scheduled jobs."""
 
     def register_job(
         self,

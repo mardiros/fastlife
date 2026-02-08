@@ -367,7 +367,11 @@ class GenericConfigurator(Generic[TRegistry]):
     def set_job_scheduler(
         self, scheduler: "type[AbstractJobScheduler[TRegistry]]"
     ) -> Self:
-        """Install the job scheduler."""
+        """
+        Install the job scheduler.
+
+        See {mod}`fastlife.adapters.apscheduler`.
+        """
         self.registry.job_scheduler = scheduler(self.registry)
         return self
 

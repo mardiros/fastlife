@@ -3,6 +3,12 @@
 
 ```{glossary}
 
+APScheduler
+  Advanced Python Scheduler is a Python library for scheduling and running
+  tasks periodically or at specific times.
+
+  Website: https://apscheduler.readthedocs.io/en/3.x/
+
 FastAPI
   FastAPI is micro frameword based on ASGI.
 
