@@ -163,11 +163,14 @@ async def test_global_vars(conf: Configurator, dummy_request_param: Any):
 def test_register_interval_job(conf: Configurator):
     async def dummy_task(registry: DefaultRegistry) -> None: ...
 
+    conf.set_job_scheduler(DummyScheduler)
     conf.register_job(dummy_task, trigger="interval", seconds=42)
 
-    scheduler = cast(DummyScheduler, conf.registry.job_scheduler.scheduler)
+    scheduler = cast(
+        DummyScheduler,
+        conf.registry.job_scheduler,
+    )
     assert len(scheduler.jobs) == 1
     assert scheduler.jobs[0]["job"] is dummy_task
-    assert scheduler.jobs[0]["kwargs"] == {"registry": conf.registry}
     assert scheduler.jobs[0]["trigger"] == "interval"
     assert scheduler.jobs[0]["seconds"] == 42

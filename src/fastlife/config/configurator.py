@@ -59,6 +59,7 @@ from fastlife.shared_utils.resolver import (
 
 if TYPE_CHECKING:
     from fastlife.adapters.typer.cli import AsyncTyper  # coverage: ignore
+    from fastlife.service.job import AbstractJobScheduler
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
     from fastlife.service.request_factory import (
         RequestFactoryBuilder,  # coverage: ignore
@@ -361,6 +362,13 @@ class GenericConfigurator(Generic[TRegistry]):
     def set_locale_negociator(self, locale_negociator: "LocaleNegociator") -> Self:
         """Install a locale negociator for the app."""
         self.registry.locale_negociator = locale_negociator
+        return self
+
+    def set_job_scheduler(
+        self, scheduler: "type[AbstractJobScheduler[TRegistry]]"
+    ) -> Self:
+        """Install the job scheduler."""
+        self.registry.job_scheduler = scheduler(self.registry)
         return self
 
     def add_translation_dirs(self, locales_dir: str) -> Self:

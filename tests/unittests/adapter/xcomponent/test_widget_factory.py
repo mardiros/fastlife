@@ -1,7 +1,7 @@
 from collections.abc import Callable, Sequence
 from datetime import date, datetime
 from decimal import Decimal
-from enum import Enum, IntEnum
+from enum import Enum, IntEnum, StrEnum
 from typing import Annotated, Any, Literal, NewType
 from uuid import UUID
 
@@ -48,7 +48,7 @@ class MyWidget(Widget[str]):
     custom_title: str
 
 
-class Flavor(Enum):
+class Flavor(StrEnum):
     VANILLA = "Vanilla"
     CHOCOLATE = "Chocolate"
 
@@ -120,7 +120,7 @@ class Tempo(BaseModel):
     name: str = Field()
 
 
-class Currency(str, Enum):
+class Currency(Enum):
     EUR = "EUR"
     USD = "USD"
     GBP = "GBP"

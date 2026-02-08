@@ -1,37 +1,24 @@
-"""
-Service for scheduled jobs.
-"""
-
-import abc
-from collections.abc import Awaitable, Callable
 from datetime import datetime
-from typing import Any, Generic, Literal, TypeAlias
+from typing import Any
 
-from apscheduler.triggers.base import BaseTrigger
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.base import BaseScheduler
 from apscheduler.util import _Undefined as Undefined  # type: ignore
 from apscheduler.util import undefined
 
+from fastlife.service.job import AbstractJobScheduler, JobHandler, JobSchedulerTrigger
 from fastlife.service.registry import TRegistry
 
-__all__ = [
-    "JobHandler",
-    "JobSchedulerTrigger",
-    "Undefined",
-    "undefined",
-]
 
-JobSchedulerTriggerLiteral = Literal["interval", "cron", "date"]
-JobSchedulerTrigger: TypeAlias = JobSchedulerTriggerLiteral | BaseTrigger
+class JobScheduler(AbstractJobScheduler[TRegistry]):
+    """
+    Job scheduler based on apscheduler using the AsyncIOScheduler scheduler.
+    """
 
-
-JobHandler = Callable[[TRegistry], None] | Callable[[TRegistry], Awaitable[None]]
-
-
-class AbstractJobScheduler(abc.ABC, Generic[TRegistry]):
     def __init__(self, registry: TRegistry) -> None:
-        self.registry = registry
+        super().__init__(registry)
+        self.scheduler: BaseScheduler = AsyncIOScheduler()
 
-    @abc.abstractmethod
     def register_job(
         self,
         job: JobHandler[TRegistry],
@@ -69,48 +56,34 @@ class AbstractJobScheduler(abc.ABC, Generic[TRegistry]):
         :param replace_existing: `True` to replace an existing job with the same `id`
             (but retain the number of runs from the existing one)
         """
+        self.scheduler.add_job(  # type: ignore
+            job,
+            kwargs={"registry": self.registry},
+            trigger=trigger,
+            id=id,
+            name=name,
+            misfire_grace_time=misfire_grace_time,
+            coalesce=coalesce,
+            max_instances=max_instances,
+            next_run_time=next_run_time,
+            jobstore=jobstore,
+            executor=executor,
+            replace_existing=replace_existing,
+            **trigger_args,
+        )
 
-    @abc.abstractmethod
     def start(self) -> None:
         """
         Start the scheduler.
 
         This will have no effect until the settings enable_scheduler is enabled.
         """
+        self.scheduler.start()
 
-    @abc.abstractmethod
     def shutdown(self, *, wait: bool) -> None:
         """
         Shutdown the scheduler.
 
         This will have no effect until the settings enable_scheduler is enabled.
         """
-
-
-class SinkholeJobScheduler(AbstractJobScheduler[TRegistry]):
-    """A job scheduler that ignore everything."""
-
-    def register_job(
-        self,
-        job: JobHandler[TRegistry],
-        /,
-        *,
-        trigger: JobSchedulerTrigger | None = None,
-        id: str | None = None,
-        name: str | None = None,
-        misfire_grace_time: int | Undefined = undefined,
-        coalesce: Undefined = undefined,
-        max_instances: int | Undefined = undefined,
-        next_run_time: datetime | Undefined = undefined,
-        jobstore: str = "default",
-        executor: str = "default",
-        replace_existing: bool = False,
-        **trigger_args: Any,
-    ) -> None:
-        """Do nothing."""
-
-    def start(self) -> None:
-        """Do nothing."""
-
-    def shutdown(self, *, wait: bool) -> None:
-        """Do nothing."""
+        self.scheduler.shutdown(wait=wait)

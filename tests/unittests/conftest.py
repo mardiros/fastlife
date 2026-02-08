@@ -33,7 +33,6 @@ def settings() -> MySettings:
         domain_name="testserver.local",
         session_cookie_domain="testserver.local",
         backend_tag_header_value="dummy-server",
-        scheduler_class="tests.fastlife_app.adapters.schedulers:DummyScheduler",
     )
 
 
