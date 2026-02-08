@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any, Generic, TypeVar
 from fastapi import FastAPI
 
 if TYPE_CHECKING:
+    from fastlife.service.job import AbstractJobScheduler  # coverage: ignore
     from fastlife.service.locale_negociator import LocaleNegociator  # coverage: ignore
     from fastlife.service.request_factory import RequestFactory  # coverage: ignore
     from fastlife.service.templates import (  # coverage: ignore
@@ -38,9 +39,10 @@ class GenericRegistry(Generic[TSettings]):
     localizer: "LocalizerFactory"
     """Used to localized message."""
     request_factory: "RequestFactory"
+    job_scheduler: "AbstractJobScheduler[GenericRegistry[TSettings]]"
 
     def __init__(self, settings: TSettings) -> None:
-        from fastlife.service.job import JobScheduler
+        from fastlife.service.job import SinkholeJobScheduler
         from fastlife.service.locale_negociator import default_negociator
         from fastlife.service.request_factory import default_request_factory
         from fastlife.service.translations import LocalizerFactory
@@ -50,7 +52,7 @@ class GenericRegistry(Generic[TSettings]):
         self.renderers = {}
         self.localizer = LocalizerFactory()
         self.request_factory = default_request_factory(self)
-        self.job_scheduler = JobScheduler(self)
+        self.job_scheduler = SinkholeJobScheduler(self)
 
     def get_renderer(
         self, template: InlineTemplate
