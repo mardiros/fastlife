@@ -11,8 +11,8 @@ from fastlife.service.registry import DefaultRegistry
 class DuckScheduler:
     def __init__(self) -> None:
         self.jobs: list[dict[str, Any]] = []
-        self.started = None
-        self.wait_shutdown = None
+        self.started: bool | None = None
+        self.wait_shutdown: bool | None = None
 
     def add_job(
         self,
