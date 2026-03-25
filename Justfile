@@ -128,8 +128,7 @@ black: fmt
     echo "$(tput setaf 3)Warning: Use 'just fmt' instead$(tput setaf 7)"
 
 release major_minor_patch: buildcss test && changelog
-    uvx --with=pdm,pdm-bump --python-preference system pdm bump {{major_minor_patch}}
-    uv sync --frozen --group dev
+    uv version --bump {{major_minor_patch}}
 
 changelog:
     uv run python scripts/write_changelog.py
@@ -139,7 +138,7 @@ changelog:
     $EDITOR CHANGELOG.md
 
 publish:
-    git commit -am "Release $(uv run scripts/get_version.py)"
-    git tag "v$(uv run scripts/get_version.py)"
+    git commit -am "Release $(uv version --short --color=never)"
+    git tag "v$(uv version --short --color=never)"
     git push
-    git push origin "v$(uv run scripts/get_version.py)"
+    git push origin "v$(uv version --short --color=never)"
