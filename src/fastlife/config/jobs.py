@@ -11,12 +11,12 @@ Exemple of usage:
 from typing import Annotated
 
 from fastapi import Response
-from fastlife import scheduled_job
+from fastlife import scheduled_job, DefaultRegistry
 
 
 @scheduled_job(trigger="interval", seconds=60)
-async def cleanup():
-    with self.registry.uow_factory() as t:
+async def cleanup(registry: DefaultRegistry):
+    with registry.uow_factory() as t:
         await t.uow.tokens.remove_expired_sessions()
         await t.commit()
 ```
