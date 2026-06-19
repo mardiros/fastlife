@@ -1,6 +1,6 @@
 ## 0.43.0  - Released on 2026-02-08
 * Breaking change: Don't run the job scheduler based on APScheduler by default.
-  * now, it must be installed using the new configuration method {func}`Configurator.set_scheduled_job`
+  * now, it must be installed using the new configuration method {func}`Configurator.set_job_scheduler`
 * The settings `scheduler_class` has been removed.
 
 ## 0.42.1  - Released on 2026-01-27
