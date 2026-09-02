@@ -212,7 +212,7 @@ cat << 'EOF' > src/myapp/templates/HelloWorld.jinja
 {# def person #}
 <html>
     <head>
-    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@4.0.0/dist/htmx.min.js" integrity="sha384-BvJpBiO8Kh31EqtJe5DRIeWrHWnCGkwytKs9NKFi86Hhw96dEqdEMzZDeK9iEGTc" crossorigin="anonymous"></script>
     </head>
     <body>
       <Form hx-post="{globals.request.url_for('hx-hello')}" hx-target="#hello-world">
@@ -278,4 +278,4 @@ In the real world, we may reuse the same route for the GET and the POST,
 event with HTMX, and do a embed the response in different layout depending
 it is a HTMX request or not. The alternative is to use the hx-target
 attribute. All of this is well documented at HTMX website to lean more
-about HTMX at https://htmx.org/.
+about HTMX at https://four.htmx.org/.

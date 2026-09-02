@@ -345,7 +345,7 @@ def Button(
         hx-swap={hx_swap}
         hx-select={hx_select}
         onclick={onclick}
-        hx-on::after-request={hx_on_after_request}
+        hx-on::after:request={hx_on_after_request}
         hx-vals={hx_vals}
         hx-confirm={hx_confirm}
         hx-get={hx_get}
