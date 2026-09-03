@@ -1,3 +1,6 @@
+## 0.44.0  - Released on 2026-09-03
+* Replace htmx 2 to htmx 4 in the XComponent library
+
 ## 0.43.0  - Released on 2026-02-08
 * Breaking change: Don't run the job scheduler based on APScheduler by default.
   * now, it must be installed using the new configuration method {func}`Configurator.set_job_scheduler`
