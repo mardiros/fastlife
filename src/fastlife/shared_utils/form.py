@@ -45,7 +45,8 @@ def flatten_error(
                 assert isclass(typ) and issubclass(typ, BaseModel)  # type: ignore
                 field = typ.model_fields[part]
                 assert field.annotation
-                typ = get_runtime_type(field.annotation)
+                # filed.annotation is a TypeForm[T] and its experimental until python 3.15
+                typ = get_runtime_type(field.annotation)  # type: ignore
                 type_origin = get_origin(typ)
                 if type_origin:
                     if is_union(typ):

@@ -136,11 +136,14 @@ markers = [
 
 filterwarnings = [
   "error",
-  'ignore:.*import python_multipart',                                                # starlette
-  'ignore:.*websockets.legacy is deprecated.*',                                      # uvicorn
-  'ignore:.*WebSocketServerProtocol.*',                                              # uvicorn
+  'ignore:.*import python_multipart',                                           # starlette
+  'ignore:.*websockets.legacy is deprecated.*',                                 # uvicorn
+  'ignore:.*WebSocketServerProtocol.*',                                         # uvicorn
   'ignore:.*Pydantic serializer warnings.*:UserWarning',
   'ignore:.*__get_pydantic_core_schema__.*:DeprecationWarning',
+  'ignore:.*click\.utils\.get_binary_stream.*:DeprecationWarning',  # click from typer
+  'ignore:.*click\.utils\.get_text_stream.*:DeprecationWarning',  # click from typer
+  'ignore:.*BlockingPortal.*:DeprecationWarning',  # starlette
 ]
 testpaths = ["tests"]
 
