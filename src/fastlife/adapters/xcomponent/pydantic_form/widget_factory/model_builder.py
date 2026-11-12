@@ -42,7 +42,8 @@ class ModelBuilder(BaseWidgetBuilder[Mapping[str, Any]]):
                     f"Missing annotation for {child_field} in {child_key}"
                 )
             ret[key] = self.factory.build(
-                child_field.annotation,
+                # TypeForm from python 3.15 here
+                child_field.annotation,  # type: ignore
                 name=child_key,
                 field=child_field,
                 value=value.get(key),

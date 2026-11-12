@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 
 import pytest
-from httpx import Response
+from httpx2 import Response
 
 from fastlife.testing.testclient import WebResponse, WebTestClient
 

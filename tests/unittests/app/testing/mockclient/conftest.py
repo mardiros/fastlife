@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from typing import Any, Literal
 
-import httpx
+import httpx2
 import pytest
 from fastapi import FastAPI
 from multidict import MultiDict
@@ -10,8 +10,8 @@ from fastlife.domain.model.asgi import ASGIApp
 from fastlife.settings import Settings
 from fastlife.testing.testclient import WebResponse, WebTestClient
 
-CookieTypes = httpx._types.CookieTypes  # type: ignore
-Cookies = httpx._models.Cookies  # type: ignore
+CookieTypes = httpx2._types.CookieTypes  # type: ignore
+Cookies = httpx2._models.Cookies  # type: ignore
 
 
 @pytest.fixture()
@@ -45,7 +45,7 @@ def client(app: FastAPI, settings: Settings):
                 return WebResponse(
                     self,
                     url,
-                    httpx.Response(
+                    httpx2.Response(
                         303,
                         headers={"location": f"{url}/deleted"},
                     ),
@@ -61,7 +61,7 @@ def client(app: FastAPI, settings: Settings):
             return WebResponse(
                 self,
                 url,
-                httpx.Response(
+                httpx2.Response(
                     200,
                     html=f"""<html><form>{form}</form></html>""",
                 ),

@@ -5,7 +5,7 @@ from typing import Any, Literal, Self
 from urllib.parse import urlencode
 
 import bs4
-import httpx
+import httpx2
 from fastapi.testclient import TestClient
 from multidict import MultiDict
 
@@ -17,14 +17,14 @@ from fastlife.testing.dom import Element
 from fastlife.testing.form import WebForm
 from fastlife.testing.session import Session
 
-CookieTypes = httpx._types.CookieTypes  # type: ignore
-Cookies = httpx._models.Cookies  # type: ignore
+CookieTypes = httpx2._types.CookieTypes  # type: ignore
+Cookies = httpx2._models.Cookies  # type: ignore
 
 
 class WebResponse:
     """Represent an http response made by the WebTestClient browser."""
 
-    def __init__(self, client: "WebTestClient", origin: str, response: httpx.Response):
+    def __init__(self, client: "WebTestClient", origin: str, response: httpx2.Response):
         self._client = client
         self._response = response
         self._origin = origin
@@ -47,7 +47,7 @@ class WebResponse:
         return self._response.headers.get("content-type", "").split(";").pop(0)
 
     @property
-    def headers(self) -> httpx.Headers:
+    def headers(self) -> httpx2.Headers:
         """All http headers of the response."""
         return self._response.headers
 
@@ -119,7 +119,7 @@ class WebTestClient:
             settings = Settings()
             settings.domain_name = settings.domain_name or "testserver.local"
         self.testclient = TestClient(
-            app, base_url=f"http://{settings.domain_name}", cookies=cookies or {}
+            app, base_url=f"http://{settings.domain_name}", cookies=cookies
         )
         self.settings = settings
         self.session_serializer: AbsractSessionSerializer = resolve(
@@ -166,7 +166,7 @@ class WebTestClient:
                 method = "GET"
                 headers = None
                 content = None
-            url = resp.headers.get("location")
+            url = resp.headers.get("location", "")
             if "HX-Redirect" in resp.headers:
                 # Redirection requested to the browser from an AJAX request.
                 url = resp.headers["HX-Redirect"]

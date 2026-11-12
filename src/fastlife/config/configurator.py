@@ -685,10 +685,9 @@ class GenericConfigurator(Generic[TRegistry]):
             dependencies.append(Depends(check_permission(permission)))
 
         if is_inline_template_returned(endpoint):
-
             async def render(
                 request: Request,
-                resp: Annotated["Response | InlineTemplate", Depends(endpoint)],
+                resp: Annotated[Response | InlineTemplate, Depends(endpoint)],
             ) -> Response:
                 if isinstance(resp, Response):
                     return resp
@@ -699,17 +698,25 @@ class GenericConfigurator(Generic[TRegistry]):
                     params=resp,
                     globals=globs,
                 )
-
-            endpoint = render
-        self._current_router.add_api_route(
-            path,
-            endpoint,
-            status_code=status_code,
-            dependencies=dependencies,
-            methods=methods,
-            include_in_schema=False,
-            name=name,
-        )
+            self._current_router.add_api_route(
+                path,
+                render,
+                status_code=status_code,
+                dependencies=dependencies,
+                methods=methods,
+                include_in_schema=False,
+                name=name,
+            )
+        else:
+            self._current_router.add_api_route(
+                path,
+                endpoint,
+                status_code=status_code,
+                dependencies=dependencies,
+                methods=methods,
+                include_in_schema=False,
+                name=name,
+            )
         return self
 
     def add_static_route(

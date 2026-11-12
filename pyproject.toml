@@ -17,16 +17,16 @@ version = "0.44.0"
 requires-python = ">=3.11"
 dependencies = [
   "apscheduler >=3.11.2,<4",
-  "fastapi[standard] >=0.128.0,<0.129.0",
+  "fastapi[standard] >=0.162.5,<0.163",
   "itsdangerous >=2.1.2,<3",
   "markupsafe >=2.1.3,<3",
   "multidict >=6.0.5,<7",
-  "pydantic >=2.7.0,<3",
+  "pydantic >=2.14.0,<3",
   "pydantic-settings >=2.0.3,<3",
   "python-multipart >=0.0.13,<1",
   "tamahagane>=0.4.3,<0.5",
   "typer >=0.21.1,<0.22.0",
-  "xcomponent >=0.11.0,<1",
+  "xcomponent >=0.12.0,<1",
 ]
 
 [project.urls]
@@ -136,11 +136,14 @@ markers = [
 
 filterwarnings = [
   "error",
-  'ignore:.*import python_multipart',                                                # starlette
-  'ignore:.*websockets.legacy is deprecated.*',                                      # uvicorn
-  'ignore:.*WebSocketServerProtocol.*',                                              # uvicorn
+  'ignore:.*import python_multipart',                                           # starlette
+  'ignore:.*websockets.legacy is deprecated.*',                                 # uvicorn
+  'ignore:.*WebSocketServerProtocol.*',                                         # uvicorn
   'ignore:.*Pydantic serializer warnings.*:UserWarning',
   'ignore:.*__get_pydantic_core_schema__.*:DeprecationWarning',
+  'ignore:.*click\.utils\.get_binary_stream.*:DeprecationWarning',  # click from typer
+  'ignore:.*click\.utils\.get_text_stream.*:DeprecationWarning',  # click from typer
+  'ignore:.*BlockingPortal.*:DeprecationWarning',  # starlette
 ]
 testpaths = ["tests"]
 
