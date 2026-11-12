@@ -8,7 +8,7 @@ export RUST_BACKTRACE := "1"
 export RUST_LOG := "xcore=warn"
 
 install:
-    uv sync --group dev
+    uv sync --group dev --frozen
 
 update:
     uv sync --all-groups
